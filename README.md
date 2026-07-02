@@ -4,6 +4,10 @@ Phoenix LiveView wrapper for [`@keenmate/web-multiselect`](https://github.com/ke
 
 One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundled, so no `npm install` is required.
 
+## What's New in v1.0.0-rc.2
+
+- **Docs — every component attribute is now documented** — The `web_multiselect/1` reference gained descriptions for the 46 attributes that previously rendered with a blank Description column in hexdocs (the behavior, badges, search, member, and virtual-scroll groups), each noting the relevant upstream default where useful, plus a short "Attribute defaults" preamble explaining the `nil`-means-omit convention. The install snippet was also corrected from the stale `~> 0.1` to `~> 1.0` (with a note on requiring `~> 1.0.0-rc` to opt into the current release candidate). Documentation-only — no code or behavior change.
+
 ## What's New in v1.0.0-rc.1
 
 - **Component — `<.web_multiselect>` covers the full upstream API as a pure render** — `Keenmate.WebMultiselect.Components.web_multiselect/1` declares a typed `attr/3` for every documented `<web-multiselect>` attribute (booleans, `values:`-whitelisted enums, integers, JSON option lists), mapping snake_case in HEEx to kebab-case on the element (`search_placeholder` → `search-placeholder`). Booleans render as explicit `"true"`/`"false"` because several upstream booleans default to `true` and need a real opt-out, not HTML presence. No GenServer, no state — the same call works identically in a dead view and a LiveView.
@@ -20,10 +24,18 @@ One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundl
 ```elixir
 def deps do
   [
-    {:keen_web_multiselect, "~> 0.1"}
+    {:keen_web_multiselect, "~> 1.0"}
   ]
 end
 ```
+
+> **Currently a release candidate.** Only `1.0.0-rc.*` is published so far, and Mix
+> skips pre-releases for a plain `~> 1.0` constraint. Until `1.0.0` is final, opt in by
+> requiring the pre-release explicitly:
+>
+> ```elixir
+> {:keen_web_multiselect, "~> 1.0.0-rc"}
+> ```
 
 ## Wire up the assets
 
