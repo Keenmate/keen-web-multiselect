@@ -1,0 +1,29 @@
+/_build/
+/cover/
+/deps/
+/doc/
+/.fetch
+erl_crash.dump
+*.ez
+keen_web_multiselect-*.tar
+/tmp/
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Local overrides
+config/.local.exs
+config/*.local.exs
+
+# Node / Playwright (e2e harness)
+node_modules/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# test_app artifacts (the host app shares deps/_build with the parent)
+/test_app/_build/
+/test_app/deps/
