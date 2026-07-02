@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0-rc.2] - 2026-07-02
+
+Documentation completeness pass over the component's attribute table.
+
+### Changed
+
+- **Every `web_multiselect/1` attribute now carries a `doc:` description.** rc.1 documented the 24 non-obvious attrs (`hook`, `search_event`, the option-tooltip family, the placeholder overrides, etc.) but left 46 — the "obvious from the name" behaviour / badge / search / member / virtual-scroll attrs — with no inline docs, so they rendered in the generated attributes table with an empty Description column. All 46 now have concise one-line descriptions (noting the relevant upstream default, e.g. `multiple` defaults to `true`), plus a short "Attribute defaults" preamble in the `web_multiselect/1` `@doc` explaining the `nil`-means-omit convention. No code or behaviour change — hexdocs only.
+
 ## [1.0.0-rc.1] - 2026-07-02 [PUBLISHED]
 
 Tracks `@keenmate/web-multiselect` v1.12.0-rc05 (option hover tooltips, action-button positioning/alignment, smart built-in action defaults, `beforeSelect`/`beforeDeselect` veto interceptors, and the breaking `*Callback`→`on*` notification rename — on top of rc04's placeholder ergonomics for non-searchable pickers and cascade multiselects, batch `setAttributes`, debounced async search, and `AbortSignal` in `searchCallback`), plus two wrapper-level extensions to support patterns the core `phx-update="ignore"` semantics can't reach: a server→client update channel for option/selection mutation, and a declarative server-side `searchCallback`. A subsequent code-level audit against upstream's `FEATURES.md` produced a wave of typed-attr completions, two enum bug fixes, an unconditional canonical-member-default change in `OptionHelpers`, and a major e2e expansion targeting wrapper-only behaviour. A later visual-parity pass then walked every `/examples/*` page against its upstream `examples-*.html` mirror (diffing the pages changed since rc04): it ported the rc05 demos that hadn't been mirrored (action-button positioning/rows/alignment, the classic→events cross-link), added one more typed attr (`show_select_all`) surfaced by the diff, and shipped the document-level Font Awesome `<link>` the icon demo's own instructions require.

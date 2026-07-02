@@ -31,6 +31,13 @@ defmodule Keenmate.WebMultiselect.Components do
 
   To push option or selection changes back from the server, use
   `Keenmate.WebMultiselect.push_update/3`.
+
+  ## Attribute defaults
+
+  Every attribute defaults to `nil`, which means "don't emit it" — the underlying
+  component's own default then applies. The docs below note the upstream default where
+  it's useful to know. See the [upstream usage docs](https://github.com/keenmate/web-multiselect/blob/main/docs/usage.md)
+  for the full behavior of each option.
   """
 
   # -- Form integration ------------------------------------------------------
@@ -71,11 +78,26 @@ defmodule Keenmate.WebMultiselect.Components do
 
   # -- Behaviour -------------------------------------------------------------
 
-  attr :multiple, :boolean, default: nil
-  attr :search_placeholder, :string, default: nil
-  attr :search_hint, :string, default: nil
-  attr :allow_groups, :boolean, default: nil
-  attr :show_checkboxes, :boolean, default: nil
+  attr :multiple, :boolean,
+    default: nil,
+    doc:
+      "Allow selecting more than one option. Defaults to `true` upstream — set `false` for a single-select."
+
+  attr :search_placeholder, :string,
+    default: nil,
+    doc: "Placeholder text for the search/filter input inside the dropdown."
+
+  attr :search_hint, :string,
+    default: nil,
+    doc: "Hint line shown near the search input to guide the user (e.g. \"Type to filter…\")."
+
+  attr :allow_groups, :boolean,
+    default: nil,
+    doc: "Render options grouped by their `group_member` (optgroup-style headers). Off by default."
+
+  attr :show_checkboxes, :boolean,
+    default: nil,
+    doc: "Render a checkbox in each option row. Off by default."
 
   attr :show_select_all, :boolean,
     default: nil,
@@ -85,13 +107,34 @@ defmodule Keenmate.WebMultiselect.Components do
     finer control over the button row use the `action_buttons` API instead.
     """
 
-  attr :checkbox_align, :string, default: nil, values: [nil, "top", "center", "bottom"]
-  attr :close_on_select, :boolean, default: nil
-  attr :dropdown_min_width, :string, default: nil
-  attr :dropdown_max_width, :string, default: nil
-  attr :max_height, :string, default: nil
-  attr :empty_message, :string, default: nil
-  attr :loading_message, :string, default: nil
+  attr :checkbox_align, :string,
+    default: nil,
+    values: [nil, "top", "center", "bottom"],
+    doc: "Vertical alignment of each option's checkbox within its row."
+
+  attr :close_on_select, :boolean,
+    default: nil,
+    doc: "Close the dropdown after a selection is made (typical for single-select)."
+
+  attr :dropdown_min_width, :string,
+    default: nil,
+    doc: "Minimum width of the dropdown panel, as a CSS length (e.g. `\"320px\"`)."
+
+  attr :dropdown_max_width, :string,
+    default: nil,
+    doc: "Maximum width of the dropdown panel, as a CSS length."
+
+  attr :max_height, :string,
+    default: nil,
+    doc: "Maximum height of the option list before it scrolls, as a CSS length."
+
+  attr :empty_message, :string,
+    default: nil,
+    doc: "Message shown when there are no options to display."
+
+  attr :loading_message, :string,
+    default: nil,
+    doc: "Message shown while async options are loading."
 
   attr :select_placeholder, :string,
     default: nil,
@@ -114,18 +157,35 @@ defmodule Keenmate.WebMultiselect.Components do
 
   attr :badges_display_mode, :string,
     default: nil,
-    values: [nil, "badges", "count", "compact", "partial", "none"]
+    values: [nil, "badges", "count", "compact", "partial", "none"],
+    doc:
+      "How selected items appear in the control: `badges` (default), `count`, `compact`, `partial`, or `none`."
 
-  attr :badges_threshold, :integer, default: nil
-  attr :badges_threshold_mode, :string, default: nil, values: [nil, "count", "partial"]
-  attr :badges_max_visible, :integer, default: nil
+  attr :badges_threshold, :integer,
+    default: nil,
+    doc: "Selected-count at which the display collapses to the `badges_threshold_mode` summary."
+
+  attr :badges_threshold_mode, :string,
+    default: nil,
+    values: [nil, "count", "partial"],
+    doc: "How to summarize once `badges_threshold` is exceeded — `count` or `partial`."
+
+  attr :badges_max_visible, :integer,
+    default: nil,
+    doc: "Maximum number of badges rendered before the remainder collapse into a summary."
 
   attr :badges_position, :string,
     default: nil,
-    values: [nil, "top", "bottom", "left", "right"]
+    values: [nil, "top", "bottom", "left", "right"],
+    doc: "Where the badges render relative to the input."
 
-  attr :show_counter, :boolean, default: nil
-  attr :enable_badge_tooltips, :boolean, default: nil
+  attr :show_counter, :boolean,
+    default: nil,
+    doc: "Show a count of the selected items."
+
+  attr :enable_badge_tooltips, :boolean,
+    default: nil,
+    doc: "Show a tooltip with the full label when hovering a badge. Off by default."
 
   attr :badge_tooltip_placement, :string,
     default: nil,
@@ -143,10 +203,16 @@ defmodule Keenmate.WebMultiselect.Components do
       "right",
       "right-start",
       "right-end"
-    ]
+    ],
+    doc: "Placement of the badge tooltip (a Floating-UI placement)."
 
-  attr :badge_tooltip_delay, :integer, default: nil
-  attr :badge_tooltip_offset, :integer, default: nil
+  attr :badge_tooltip_delay, :integer,
+    default: nil,
+    doc: "Show/hide delay for badge tooltips, in milliseconds."
+
+  attr :badge_tooltip_offset, :integer,
+    default: nil,
+    doc: "Distance of the badge tooltip from the badge, in pixels."
 
   attr :remove_button_tooltip_text, :string,
     default: nil,
@@ -198,13 +264,37 @@ defmodule Keenmate.WebMultiselect.Components do
 
   # -- Search ---------------------------------------------------------------
 
-  attr :enable_search, :boolean, default: nil
-  attr :search_input_mode, :string, default: nil, values: [nil, "normal", "readonly", "hidden"]
-  attr :search_mode, :string, default: nil, values: [nil, "filter", "navigate"]
-  attr :min_search_length, :integer, default: nil
-  attr :keep_options_on_search, :boolean, default: nil
-  attr :should_keep_search_on_close, :boolean, default: nil
-  attr :allow_add_new, :boolean, default: nil
+  attr :enable_search, :boolean,
+    default: nil,
+    doc: "Show the search/filter input inside the dropdown. On by default upstream."
+
+  attr :search_input_mode, :string,
+    default: nil,
+    values: [nil, "normal", "readonly", "hidden"],
+    doc:
+      "Search input behavior: `normal`, `readonly`, or `hidden`. When not usable, `select_placeholder` shows."
+
+  attr :search_mode, :string,
+    default: nil,
+    values: [nil, "filter", "navigate"],
+    doc:
+      "What typing does: `filter` narrows the list, `navigate` jumps to matching rows without hiding others."
+
+  attr :min_search_length, :integer,
+    default: nil,
+    doc: "Minimum number of characters before searching/filtering kicks in."
+
+  attr :keep_options_on_search, :boolean,
+    default: nil,
+    doc: "Keep the full option list visible while searching instead of filtering it down."
+
+  attr :should_keep_search_on_close, :boolean,
+    default: nil,
+    doc: "Preserve the search text when the dropdown closes instead of clearing it."
+
+  attr :allow_add_new, :boolean,
+    default: nil,
+    doc: "Allow creating a new option from the search text when nothing matches."
 
   attr :search_debounce, :integer,
     default: nil,
@@ -217,8 +307,14 @@ defmodule Keenmate.WebMultiselect.Components do
 
   # -- Actions / placement --------------------------------------------------
 
-  attr :sticky_actions, :boolean, default: nil
-  attr :actions_layout, :string, default: nil, values: [nil, "nowrap", "wrap"]
+  attr :sticky_actions, :boolean,
+    default: nil,
+    doc: "Keep the action-buttons row pinned while the option list scrolls."
+
+  attr :actions_layout, :string,
+    default: nil,
+    values: [nil, "nowrap", "wrap"],
+    doc: "Whether action buttons stay on a single row (`nowrap`) or wrap onto multiple rows (`wrap`)."
 
   attr :actions_position, :string,
     default: nil,
@@ -231,21 +327,48 @@ defmodule Keenmate.WebMultiselect.Components do
     doc:
       ~s(Horizontal arrangement of buttons within a row. `"stretch"` \(default\) keeps full-width; the others size buttons to content and distribute them.)
 
-  attr :lock_placement, :boolean, default: nil
+  attr :lock_placement, :boolean,
+    default: nil,
+    doc: "Lock the dropdown's placement instead of auto-flipping/shifting to fit the viewport."
 
   # -- Data extraction members ----------------------------------------------
 
-  attr :value_member, :string, default: nil
-  attr :display_value_member, :string, default: nil
-  attr :search_value_member, :string, default: nil
-  attr :icon_member, :string, default: nil
-  attr :subtitle_member, :string, default: nil
-  attr :group_member, :string, default: nil
-  attr :disabled_member, :string, default: nil
+  attr :value_member, :string,
+    default: nil,
+    doc: ~s(Object key to read each option's value from. The wrapper defaults this to `"value"`.)
+
+  attr :display_value_member, :string,
+    default: nil,
+    doc: ~s(Object key for each option's display label. The wrapper defaults this to `"label"`.)
+
+  attr :search_value_member, :string,
+    default: nil,
+    doc:
+      "Object key for the text search matches against. Not defaulted — falls back to the display value upstream."
+
+  attr :icon_member, :string,
+    default: nil,
+    doc: ~s(Object key for an option's icon. The wrapper defaults this to `"icon"`.)
+
+  attr :subtitle_member, :string,
+    default: nil,
+    doc: ~s(Object key for an option's secondary line. The wrapper defaults this to `"subtitle"`.)
+
+  attr :group_member, :string,
+    default: nil,
+    doc:
+      ~s(Object key for an option's group name \(used when `allow_groups`\). The wrapper defaults this to `"group"`.)
+
+  attr :disabled_member, :string,
+    default: nil,
+    doc: ~s(Object key marking an option disabled. The wrapper defaults this to `"disabled"`.)
 
   # -- Form value serialization ---------------------------------------------
 
-  attr :value_format, :string, default: nil, values: [nil, "json", "csv", "array"]
+  attr :value_format, :string,
+    default: nil,
+    values: [nil, "json", "csv", "array"],
+    doc: "How selected values are serialized into the hidden form input: `json`, `csv`, or `array`."
 
   attr :initial_values, :any,
     default: nil,
@@ -253,15 +376,25 @@ defmodule Keenmate.WebMultiselect.Components do
 
   # -- Virtual scroll -------------------------------------------------------
 
-  attr :enable_virtual_scroll, :boolean, default: nil
-  attr :virtual_scroll_threshold, :integer, default: nil
-  attr :option_height, :integer, default: nil
+  attr :enable_virtual_scroll, :boolean,
+    default: nil,
+    doc: "Enable windowed rendering of the option list so large datasets stay fast."
+
+  attr :virtual_scroll_threshold, :integer,
+    default: nil,
+    doc: "Option count above which virtual scrolling activates automatically."
+
+  attr :option_height, :integer,
+    default: nil,
+    doc: "Fixed pixel height of each option row — required for the virtual-scroll offset math."
 
   attr :badge_height, :integer,
     default: nil,
     doc: "Pixel height per badge row in the popover virtual-scroll list. Defaults to `36` upstream."
 
-  attr :virtual_scroll_buffer, :integer, default: nil
+  attr :virtual_scroll_buffer, :integer,
+    default: nil,
+    doc: "Extra rows rendered above and below the viewport while virtual-scrolling."
 
   # -- Passthrough ----------------------------------------------------------
 
@@ -269,8 +402,8 @@ defmodule Keenmate.WebMultiselect.Components do
     default: nil,
     doc: "Placeholder shown when no item is selected (passthrough)."
 
-  attr :class, :string, default: nil
-  attr :style, :string, default: nil
+  attr :class, :string, default: nil, doc: "CSS class(es) applied to the `<web-multiselect>` element."
+  attr :style, :string, default: nil, doc: "Inline `style` applied to the `<web-multiselect>` element."
 
   attr :show_debug_info, :boolean,
     default: nil,
