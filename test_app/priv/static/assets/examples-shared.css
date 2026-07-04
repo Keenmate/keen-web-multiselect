@@ -367,3 +367,77 @@ footer a {
         padding: 1.5rem;
     }
 }
+
+/* Floating "server round-trip" monitor (ServerEventsPanel LiveComponent).
+   Listens for select/deselect/change on every <web-multiselect> and proves the
+   LiveView wrapper does a real client -> server -> re-render round-trip. */
+.server-monitor {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    width: 300px;
+    z-index: 9999;
+    background: #fff;
+    border: 2px solid #667eea;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    padding: 0.85rem 1rem;
+    font-family: system-ui, sans-serif;
+}
+
+.server-monitor__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.server-monitor__head > strong {
+    color: #4a5568;
+}
+
+.server-monitor__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.server-monitor__count {
+    background: #667eea;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.1rem 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    min-width: 1.5rem;
+    text-align: center;
+}
+
+.server-monitor__clear {
+    background: #edf2f7;
+    color: #4a5568;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.72rem;
+    cursor: pointer;
+}
+
+.server-monitor__desc {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin-top: 0.3rem;
+    line-height: 1.4;
+}
+
+.server-monitor__log {
+    margin-top: 0.5rem;
+    font-size: 0.7rem;
+    background: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.5rem;
+    max-height: 22vh;
+    overflow: auto;
+    white-space: pre-wrap;
+}

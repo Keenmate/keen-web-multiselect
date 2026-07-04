@@ -25,6 +25,7 @@ defmodule TestAppWeb.Examples.SharedComponents do
       </header>
       {render_slot(@inner_block)}
     </div>
+    <.live_component module={TestAppWeb.Examples.ServerEventsPanel} id="server-events-panel" />
     """
   end
 
