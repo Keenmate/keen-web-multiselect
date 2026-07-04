@@ -1,0 +1,61 @@
+DEAD VIEWS AND SSR (no LiveView required)
+=========================================
+
+The SAME <.web_multiselect> works in a plain controller-rendered template (a
+"dead view") with no LiveView and no hook. The component upgrades itself in the
+browser; the server just renders HTML.
+
+MINIMAL DEAD-VIEW USAGE
+-----------------------
+    # in your HTML module: import Keenmate.WebMultiselect.Components
+
+    <.web_multiselect id="answer" multiple={false}>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </.web_multiselect>
+
+or with options from the assigns:
+
+    <.web_multiselect id="langs" options={@langs} value={["py"]} />
+
+You only need multiselect.js + multiselect.css loaded (getting-started.txt). The
+hook JS is NOT required unless you use LiveView features.
+
+FORMS WITHOUT LIVEVIEW
+----------------------
+The element writes a hidden input, so a normal <form> POST submits the selection
+like a native <select multiple>. Use field={@form[:tags]} (forms.txt) or set
+name= yourself.
+
+WHAT THE WRAPPER HANDLES AUTOMATICALLY (LiveView morph safety)
+-------------------------------------------------------------
+Dropping a self-rendering custom element into LiveView needs three fixes; the
+wrapper applies all three for you, so it "just works" in a LiveView too:
+
+1. phx-update="ignore" — emitted whenever id is set. Keeps morphdom out of the
+   component's shadow-managed children (otherwise LV would fight the component
+   over its own DOM). CONSEQUENCE: LV can't push option/selection changes by
+   re-rendering — use push_update/3 for that (server-updates.txt).
+
+2. data-ready="" — pre-emitted so the placeholder doesn't flash before the JS
+   upgrades on WebSocket connect.
+
+3. a `.form` getter is polyfilled onto the element — without it, Phoenix's
+   phx-change delegation silently drops the component's CustomEvents. Installed
+   even if you never opt into the hook.
+
+You don't configure any of this; it's automatic when the component has an id.
+
+SSR SAFETY
+----------
+The component is SSR-safe: server-rendered HTML is valid and inert until the
+browser upgrades the element. Nothing crashes during render; there is no server
+runtime for the widget itself (no GenServer/process).
+
+WHEN YOU DO WANT LIVEVIEW
+-------------------------
+Add hook={true} to get select/deselect/change events (liveview-events.txt),
+push_update/3 (server-updates.txt), and search_event (server-search.txt). Those
+are the only features that need the hook JS.
+
+See also: getting-started.txt, forms.txt, server-updates.txt.

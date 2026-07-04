@@ -1,6 +1,19 @@
 # Changelog
 
-## [1.0.0-rc.2] - 2026-07-02
+## [1.0.0-rc.3] - 2026-07-04 [PUBLISHED]
+
+Documentation-focused release — a dedicated theming guide (the primary source of knowledge for how the component is styled) and package links to the live examples site. No component code or behaviour change.
+
+### Added
+
+- **Theming guide — `guides/theming.md`, shipped in the package and rendered on hexdocs.** The wrapper had no theming documentation, yet the component is styled entirely through CSS custom properties, so this is core knowledge. The guide documents the two-tier cascade (each `--ms-*` component token is defined as `var(--base-*, <fallback>)`, verified against the bundled `multiselect.css`) and walks the three integration paths a consumer hits: (1) **with pure-admin** — it populates the `--base-*` tokens the component already reads, so the multiselect matches palette and dark mode with zero configuration; (2) **with other KeenMate components, no pure-admin** — you own the `--base-*` layer as a single source of truth (the layer is the components' own token contract and predates pure-admin); (3) **standalone** — the built-in `light-dark()` fallbacks give a working light/dark theme with nothing set, and `--ms-*` overrides (scoped to `web-multiselect` or per-instance via the forwarded `class`/`style`) restyle just the multiselect. Also covers the five dark-mode signals, `--ms-rem` proportional sizing, and the unlayered-reset cascade-layer footgun. Wired into `mix.exs` `extras:` (hexdocs) and `files:` (Hex tarball).
+- **LLM / coding-agent docs — an `ai/` folder shipped in the package.** A flat-text knowledge base modelled on the upstream component's `ai/` layout but written for the wrapper (HEEx, the LiveView hook, the helpers): an `INDEX.txt` (file overview + keyword index + common-questions + features-by-category) plus topic files for getting-started, the `<.web_multiselect>` attribute reference, LiveView events, `push_update/3`, `search_event`, forms, option data shapes, theming, dead-view/SSR, and the installer — and a `cookbook.txt` of 12 copy-paste recipes (single-select, grouped, form field, server-authoritative max-N, grouped cascade, async search, reset, lazy load, custom member keys, dead-view POST, per-instance theming). Grounded in the real API (exact event names/payloads, `push_update/3` opts, `{value, label}` tuple order, the six defaulted member attrs). Ships in the tarball (`files:` now includes `ai` and a root `AGENTS.md`) so a consumer's coding agent can read them from `deps/keen_web_multiselect/`. `AGENTS.md` is also surfaced on hexdocs as a **Using with AI agents** guide (in `extras:`), and ex_doc's generated `llms.txt` (served by hexdocs, the llms.txt convention) indexes every page — so agents get a machine-readable table of contents for free.
+
+### Changed
+
+- **Package metadata now links the live examples site.** Added `homepage_url` (renders as the package **Homepage** on hex.pm) and an `"Examples site"` entry in the `links` map — both pointing at <https://keen-web-multiselect.keenmate.dev> — plus a short **Theming** section in the README linking to the new guide.
+
+## [1.0.0-rc.2] - 2026-07-02 [PUBLISHED]
 
 Documentation completeness pass over the component's attribute table.
 

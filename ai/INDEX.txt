@@ -1,0 +1,200 @@
+DOCUMENTATION INDEX — keen_web_multiselect (Phoenix LiveView wrapper)
+=====================================================================
+
+LLM-oriented reference for `keen_web_multiselect`, the Elixir/Phoenix wrapper
+around the `@keenmate/web-multiselect` custom element. This folder documents the
+WRAPPER surface (HEEx component, LiveView hook, helpers). For the underlying web
+component's own API, see the upstream package's `ai/` folder and
+https://github.com/keenmate/web-multiselect.
+
+CRITICAL FACTS
+--------------
+- The component is `<.web_multiselect>`, a Phoenix function component. It renders
+  the `<web-multiselect>` custom element. No GenServer, no process state.
+- The SAME call works in a dead view (plain HEEx) and a LiveView. LiveView event
+  wiring is OPT-IN via `hook={true}`.
+- snake_case HEEx attrs map to kebab-case element attributes
+  (`search_placeholder` -> `search-placeholder`).
+- Bundled assets: no `npm install`. The upstream JS+CSS ship in the Hex package's
+  `priv/static/`. Wire them with the installer, an esbuild import, or Plug.Static.
+- Import the component with: `import Keenmate.WebMultiselect.Components`
+
+FILE OVERVIEW
+-------------
+getting-started.txt       - Install (Hex), wire assets, import, first render
+component-reference.txt   - The <.web_multiselect> attribute surface (snake->kebab)
+liveview-events.txt       - hook={true}; select/deselect/change -> handle_event/3
+server-updates.txt        - push_update/3: change options/selection from the server
+server-search.txt         - search_event: async server-side search over the LV channel
+forms.txt                 - field={@form[:tags]}, FormField, hidden input, params
+data-and-options.txt      - option shapes (maps/tuples), member attrs, groups
+theming.txt               - CSS variables (--ms-* / --base-*), 3 integration paths
+dead-views-and-ssr.txt    - Plain HEEx / dead views; the LiveView morph quirks handled
+installer.txt             - mix keen_web_multiselect.install (assets wiring)
+cookbook.txt              - Copy-paste recipes for common tasks
+theming (full)            - see guides/theming.md in the repo / on hexdocs
+
+PUBLIC API SURFACE (Elixir)
+---------------------------
+Keenmate.WebMultiselect.Components.web_multiselect/1   - the HEEx component
+Keenmate.WebMultiselect.push_update/3                  - server -> client mutation
+Keenmate.WebMultiselect.upstream_version/0            - bundled upstream version
+Keenmate.WebMultiselect.asset_path/1                  - on-disk path to a priv asset
+Keenmate.WebMultiselect.OptionHelpers                 - option encoding (internal-ish)
+Keenmate.WebMultiselect.FormHelpers.assign_from_field/1 - FormField -> assigns
+mix keen_web_multiselect.install                      - one-command asset installer
+
+JS hook: KeenWebMultiselectHook (in priv/static/keen_web_multiselect_hook.js)
+Server->client event listened for: "web_multiselect:update"
+Client->server events emitted:     "web_multiselect:select" | ":deselect" | ":change"
+
+KEYWORD INDEX
+=============
+
+A
+-
+allow_groups -> component-reference.txt, data-and-options.txt
+asset_path/1 -> getting-started.txt
+async search -> server-search.txt, cookbook.txt
+attributes -> component-reference.txt
+
+B
+-
+badges_display_mode -> component-reference.txt
+booleans (true/false rendering) -> component-reference.txt
+
+C
+-
+cascade (dependent selects) -> server-updates.txt, cookbook.txt
+class / style -> component-reference.txt, theming.txt
+change event -> liveview-events.txt
+
+D
+-
+dead view / SSR -> dead-views-and-ssr.txt
+data-theme (dark mode) -> theming.txt
+disabled_member -> data-and-options.txt
+
+E
+-
+events (select/deselect/change) -> liveview-events.txt
+
+F
+-
+field={@form[:tags]} -> forms.txt
+FormField -> forms.txt
+FormHelpers.assign_from_field/1 -> forms.txt
+
+G
+-
+groups -> data-and-options.txt
+getting started -> getting-started.txt
+
+H
+-
+handle_event/3 -> liveview-events.txt, server-search.txt
+hook={true} -> liveview-events.txt
+
+I
+-
+initial_values -> forms.txt, data-and-options.txt
+install (Hex) -> getting-started.txt
+installer (mix task) -> installer.txt
+import Keenmate.WebMultiselect.Components -> getting-started.txt
+
+M
+-
+member attrs (value_member, ...) -> data-and-options.txt
+multiple={false} (single-select) -> component-reference.txt, cookbook.txt
+
+O
+-
+options={...} -> data-and-options.txt, component-reference.txt
+OptionHelpers -> data-and-options.txt
+
+P
+-
+phx-update="ignore" -> dead-views-and-ssr.txt, server-updates.txt
+Plug.Static (serve assets) -> getting-started.txt
+push_update/3 -> server-updates.txt, cookbook.txt
+
+S
+-
+search_event -> server-search.txt
+search_debounce -> server-search.txt
+single-select -> component-reference.txt, cookbook.txt
+SSR / dead view -> dead-views-and-ssr.txt
+
+T
+-
+theming -> theming.txt, guides/theming.md
+tuples ({value, label}) -> data-and-options.txt
+
+U
+-
+upstream_version/0 -> getting-started.txt
+
+V
+-
+value={[...]} -> data-and-options.txt, forms.txt
+value_member -> data-and-options.txt
+
+COMMON QUESTIONS
+================
+
+Q: How do I install and render one?
+A: -> getting-started.txt
+
+Q: Which attributes exist and how do I pass them from HEEx?
+A: -> component-reference.txt
+
+Q: How do I react to a selection change in LiveView?
+A: -> liveview-events.txt  (set hook={true}, match "web_multiselect:change")
+
+Q: How do I change the options or selection from the server (cascades, resets)?
+A: -> server-updates.txt  (push_update/3)
+
+Q: How do I implement server-side / async search with zero JavaScript?
+A: -> server-search.txt  (search_event)
+
+Q: How do I use it inside a Phoenix form?
+A: -> forms.txt  (field={@form[:tags]})
+
+Q: What shape should my options be? How do I use my own keys?
+A: -> data-and-options.txt
+
+Q: How do I change colors / dark mode / sizing?
+A: -> theming.txt  (and guides/theming.md)
+
+Q: Can I use it without LiveView (dead view / SSR)?
+A: -> dead-views-and-ssr.txt  (yes; hook is optional)
+
+Q: Is there a one-command asset setup?
+A: -> installer.txt  (mix keen_web_multiselect.install)
+
+Q: I need a worked example for X (cascade, max-N, async, form, reset).
+A: -> cookbook.txt
+
+FEATURES BY CATEGORY
+====================
+
+GETTING STARTED
+- Hex dependency + asset wiring -> getting-started.txt
+- One-command installer -> installer.txt
+
+RENDERING
+- Component attributes -> component-reference.txt
+- Option data shapes -> data-and-options.txt
+- Dead view / SSR -> dead-views-and-ssr.txt
+
+LIVEVIEW INTEGRATION
+- Events -> liveview-events.txt
+- Server-driven updates -> server-updates.txt
+- Server-side search -> server-search.txt
+- Forms -> forms.txt
+
+CUSTOMIZATION
+- Theming / CSS variables -> theming.txt, guides/theming.md
+
+RECIPES
+- cookbook.txt

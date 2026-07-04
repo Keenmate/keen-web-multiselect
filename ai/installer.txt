@@ -1,0 +1,46 @@
+INSTALLER — mix keen_web_multiselect.install
+============================================
+
+A dependency-free Mix task that wires the bundled assets into a standard esbuild
+Phoenix app. It's plain text patching (no Igniter/AST) because the friction here
+is JS/CSS text, not Elixir.
+
+    mix keen_web_multiselect.install
+    mix keen_web_multiselect.install --dry-run   # preview, write nothing
+
+WHAT IT EDITS
+-------------
+assets/js/app.js:
+  - adds:  import KeenWebMultiselectHook from ".../priv/static/keen_web_multiselect_hook.js";
+  - adds:  import ".../priv/static/multiselect.js";
+  - registers KeenWebMultiselectHook on your LiveSocket hooks
+
+assets/css/app.css:
+  - adds:  @import ".../priv/static/multiselect.css";
+
+It is IDEMPOTENT — re-running is safe; already-present lines are left alone.
+
+HOW IT REGISTERS THE HOOK (conservative)
+----------------------------------------
+- Already registered -> left as-is.
+- hooks: { ...colocatedHooks } (object literal) -> merges in KeenWebMultiselectHook.
+- new LiveSocket(..., { ... }) with no hooks: key -> adds hooks: { KeenWebMultiselectHook }.
+- Any OTHER hooks: shape (e.g. hooks: Hooks, a variable) -> LEFT UNTOUCHED and
+  printed as a manual step (it won't risk a bad edit).
+- No assets/js/app.js at all (importmap apps) -> prints manual instructions.
+
+Anything it can't confidently patch is reported so you can do it by hand — see
+getting-started.txt Option B/C for the manual wiring.
+
+AFTER RUNNING
+-------------
+Rebuild assets as usual (mix assets.build / your esbuild watcher). Then hook={true}
+components, push_update/3, and search_event will work.
+
+WHEN YOU DON'T NEED IT
+----------------------
+- Plain HEEx / dead views without LiveView features: you can skip the hook import
+  and just load multiselect.js + multiselect.css.
+- Non-esbuild setups (importmap, custom bundler): wire manually (getting-started.txt).
+
+See also: getting-started.txt, liveview-events.txt.

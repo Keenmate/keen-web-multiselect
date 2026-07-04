@@ -1,0 +1,82 @@
+SERVER-DRIVEN UPDATES — push_update/3
+=====================================
+
+WHY THIS EXISTS
+---------------
+The wrapper auto-emits phx-update="ignore" on the element whenever it has an id
+(it must, to keep morphdom out of the component's shadow-managed children). A
+side effect: LiveView's DOM patcher will NOT push new options or a new selection
+onto the element by re-rendering. To mutate the element from the server, send it
+an explicit event. push_update/3 is the sanctioned channel.
+
+SIGNATURE
+---------
+    Keenmate.WebMultiselect.push_update(socket, id, opts \\ [])
+
+  id   - the element id (string) to target (so it works when several are on a page)
+  opts - keyword list, any of:
+           options: [ ... ]   # replace the option list
+           value:   [ ... ]   # replace the current selection
+
+Only the keys you pass are sent:
+  - value: []            clears the selection, leaves options alone
+  - options: opts        swaps options, leaves the selection to the component
+  - options: .., value:  swaps both
+
+It sends the "web_multiselect:update" event that KeenWebMultiselectHook listens
+for. The TARGET element must have hook={true} (or a custom hook) and a matching id.
+
+Returns the socket (pipe-friendly).
+
+EXAMPLES
+--------
+Cascading selects — parent changed, swap the child's options and clear it:
+
+    def handle_event("web_multiselect:change", %{"id" => "country", "values" => [c]}, socket) do
+      {:noreply,
+       Keenmate.WebMultiselect.push_update(socket, "region", options: regions(c), value: [])}
+    end
+
+Server-authoritative rule — allow optimistically, then correct:
+
+    def handle_event("web_multiselect:change", %{"id" => "tags", "values" => v}, socket)
+        when length(v) > 3 do
+      {:noreply, Keenmate.WebMultiselect.push_update(socket, "tags", value: Enum.take(v, 3))}
+    end
+
+Reset button elsewhere on the page:
+
+    def handle_event("reset", _p, socket) do
+      {:noreply, Keenmate.WebMultiselect.push_update(socket, "tags", value: [])}
+    end
+
+Load options lazily after mount:
+
+    def handle_info(:load, socket) do
+      {:noreply, Keenmate.WebMultiselect.push_update(socket, "tags", options: fetch_tags())}
+    end
+
+PATTERN: keep server state in sync
+----------------------------------
+Since the change event and the push are separate, keep your own assign as the
+source of truth and push corrections from it:
+
+    def handle_event("web_multiselect:change", %{"id" => "tags", "values" => v}, socket) do
+      kept = Enum.take(v, 3)
+      socket = assign(socket, :tags, kept)
+      socket = if v != kept, do: Keenmate.WebMultiselect.push_update(socket, "tags", value: kept), else: socket
+      {:noreply, socket}
+    end
+
+GROUPED CASCADE (union of children, grouped by parent)
+------------------------------------------------------
+Build option maps with a `group` member and set allow_groups on the child:
+
+    options =
+      for code <- selected_countries, city <- cities(code),
+        do: %{value: city, label: city, group: country_label(code)}
+
+    Keenmate.WebMultiselect.push_update(socket, "city", options: options, value: kept)
+
+See cookbook.txt for the full cascade recipe. Related: liveview-events.txt,
+dead-views-and-ssr.txt (why phx-update="ignore" is there).

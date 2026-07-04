@@ -1,0 +1,78 @@
+LIVEVIEW EVENTS
+===============
+
+By default `<.web_multiselect>` is a pure render — no server events. Opt in by
+setting hook={true}; the KeenWebMultiselectHook then forwards the component's DOM
+events to your LiveView.
+
+    <.web_multiselect
+      id="tags"
+      hook={true}
+      options={@tag_options}
+      value={@selected_tags}
+    />
+
+hook VALUES
+-----------
+  hook={true}     -> resolves to the bundled "KeenWebMultiselectHook"
+  hook="MyHook"   -> a custom hook name you registered yourself
+  hook={false} / omitted -> no hook, no events (plain HEEx)
+
+Requires the hook JS to be loaded and registered on your LiveSocket (see
+getting-started.txt / installer.txt).
+
+EVENTS FORWARDED TO THE SERVER
+------------------------------
+Three events, each matched by name in handle_event/3. Match on "id" to route when
+a page has several multiselects.
+
+  "web_multiselect:change"   - fired on any selection change
+      payload: %{"id" => id, "values" => [ ...all selected values... ]}
+
+  "web_multiselect:select"   - fired when one option is added
+      payload: %{"id" => id, "value" => added_value}
+
+  "web_multiselect:deselect" - fired when one option is removed
+      payload: %{"id" => id, "value" => removed_value}
+
+USE "change" for authoritative state (it carries the full list). Use
+"select"/"deselect" when you care about the individual delta.
+
+HANDLING THEM
+-------------
+    # authoritative: whole selection
+    def handle_event("web_multiselect:change", %{"id" => "tags", "values" => values}, socket) do
+      {:noreply, assign(socket, :selected_tags, values)}
+    end
+
+    # per-item delta
+    def handle_event("web_multiselect:select", %{"id" => "tags", "value" => value}, socket) do
+      {:noreply, update(socket, :audit, &[{:added, value} | &1])}
+    end
+
+    def handle_event("web_multiselect:deselect", %{"id" => "tags", "value" => value}, socket) do
+      {:noreply, update(socket, :audit, &[{:removed, value} | &1])}
+    end
+
+ROUTING MULTIPLE WIDGETS
+------------------------
+Match different ids in separate clauses:
+
+    def handle_event("web_multiselect:change", %{"id" => "country", "values" => v}, socket), do: ...
+    def handle_event("web_multiselect:change", %{"id" => "city", "values" => v}, socket), do: ...
+
+A common catch-all to ignore the rest:
+
+    def handle_event("web_multiselect:" <> _kind, _payload, socket), do: {:noreply, socket}
+
+IMPORTANT
+---------
+- Updating an assign in handle_event does NOT push the new selection back to the
+  element — the element already reflects the user's action. To CHANGE what the
+  element shows (correct/reset/swap options) you must push explicitly with
+  push_update/3 (see server-updates.txt). This is because the element renders
+  phx-update="ignore".
+- For server-side SEARCH (fill the dropdown from the server) use search_event and
+  reply with {:reply, ...}, NOT these change events. See server-search.txt.
+
+See also: server-updates.txt, cookbook.txt (max-N enforcement, cascade).

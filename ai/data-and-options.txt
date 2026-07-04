@@ -1,0 +1,107 @@
+DATA AND OPTIONS
+================
+
+OPTION SHAPES accepted by `options={...}`
+-----------------------------------------
+1. Maps (canonical) — extra keys are preserved and passed through:
+
+    options={[
+      %{value: "js", label: "JavaScript"},
+      %{value: "ts", label: "TypeScript", icon: "🔷", subtitle: "Typed JS"},
+      %{value: "old", label: "Legacy", disabled: true}
+    ]}
+
+2. {value, label} tuples — normalized to %{value: value, label: label}:
+
+    options={[{"js", "JavaScript"}, {"ts", "TypeScript"}]}
+
+   NOTE THE ORDER: {value, label}. The first element is the value.
+
+3. Declarative <option> children (dead-view friendly, no options= needed):
+
+    <.web_multiselect id="a">
+      <option value="yes">Yes</option>
+      <option value="no" selected>No</option>
+    </.web_multiselect>
+
+Encoding is handled by Keenmate.WebMultiselect.OptionHelpers (encode_options/1);
+you normally never call it directly.
+
+CANONICAL KEYS (member roles)
+-----------------------------
+Each option can carry these roles. The wrapper emits the six member attrs on
+EVERY render defaulting to these canonical keys, so plain %{value:, label:}
+options work with no member config:
+
+  role            canonical key   member attr (default)
+  --------------  --------------  -----------------------------
+  value           value           value_member          ("value")
+  display label   label           display_value_member  ("label")
+  icon            icon            icon_member           ("icon")
+  subtitle        subtitle        subtitle_member       ("subtitle")
+  group           group           group_member          ("group")
+  disabled        disabled        disabled_member       ("disabled")
+  search text     (none)          search_value_member   (NOT defaulted)
+
+USING YOUR OWN KEYS
+-------------------
+If your data uses different keys, point the member attrs at them instead of
+reshaping the data:
+
+    <.web_multiselect
+      value_member="id"
+      display_value_member="name"
+      icon_member="emoji"
+      group_member="category"
+      options={[
+        %{id: 1, name: "Apple",  emoji: "🍎", category: "Fruits"},
+        %{id: 2, name: "Carrot", emoji: "🥕", category: "Vegetables"}
+      ]}
+    />
+
+Explicit member overrides always win over the defaults.
+
+search_value_member: set this to search against a field OTHER than the display
+label (e.g. search a hidden keyword string). It is intentionally NOT defaulted —
+defaulting it would silently change what text search matches.
+
+DISABLED OPTIONS
+----------------
+    %{value: "x", label: "Unavailable", disabled: true}
+(or point disabled_member at your own truthy key).
+
+GROUPS
+------
+Add a `group` member to each option and set allow_groups={true}:
+
+    <.web_multiselect
+      id="langs"
+      allow_groups={true}
+      options={[
+        %{value: "react", label: "React", group: "Frontend"},
+        %{value: "vue",   label: "Vue",   group: "Frontend"},
+        %{value: "phx",   label: "Phoenix", group: "Backend"}
+      ]}
+    />
+
+Use group_member if your grouping key isn't "group". Grouped option lists are the
+basis of the cascade recipe (see server-updates.txt, cookbook.txt).
+
+SELECTED VALUE
+--------------
+`value` is a LIST of the selected values (matched against value_member):
+
+    value={["js", "ts"]}
+
+For a form field, value comes from the FormField automatically (see forms.txt).
+For single-select (multiple={false}) still pass a list; the component takes the
+one entry.
+
+DYNAMIC OPTIONS
+---------------
+- At render: bind options={@opts} and re-render normally in a dead view.
+- In LiveView AFTER mount: because of phx-update="ignore", re-rendering won't
+  push new options — use push_update(socket, id, options: opts). See
+  server-updates.txt.
+
+See also: component-reference.txt, server-updates.txt, forms.txt.

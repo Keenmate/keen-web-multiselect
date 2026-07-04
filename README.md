@@ -4,20 +4,15 @@ Phoenix LiveView wrapper for [`@keenmate/web-multiselect`](https://github.com/ke
 
 One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundled, so no `npm install` is required.
 
+## What's New in v1.0.0-rc.3
+
+- **Docs — a dedicated Theming guide** — The component is styled entirely through CSS custom properties, so how those variables work is core knowledge — and the wrapper shipped none of it. The new [Theming guide](guides/theming.md) (in the Hex package and on hexdocs) explains the two-tier cascade where each component token `--ms-*` falls back to a shared design token `--base-*`, then walks the three integration paths: inheriting **pure-admin**'s tokens for free, defining your **own `--base-*` layer** shared across KeenMate components, or running **standalone** with the built-in `light-dark()` fallbacks and per-instance `--ms-*` overrides from HEEx `class`/`style`. Dark-mode signals, `--ms-rem` sizing, and the unlayered-reset footgun are covered too.
+- **Package — the live examples site is now linked from Hex** — `mix.exs` gained a `homepage_url` and an "Examples site" link pointing at [keen-web-multiselect.keenmate.dev](https://keen-web-multiselect.keenmate.dev), so the running demo gallery is one click from the package page and hexdocs sidebar.
+- **LLM / coding-agent docs — an `ai/` folder ships in the package** — A flat-text knowledge base (`ai/INDEX.txt` + topic files + a 12-recipe `ai/cookbook.txt`) written for the wrapper, so a coding agent can learn `<.web_multiselect>`, the LiveView hook, `push_update/3`, `search_event`, forms, and theming from `deps/keen_web_multiselect/ai/`. On hexdocs it's fronted by a **Using with AI agents** guide, plus ex_doc's generated `llms.txt` index.
+
 ## What's New in v1.0.0-rc.2
 
 - **Docs — every component attribute is now documented** — The `web_multiselect/1` reference gained descriptions for the 46 attributes that previously rendered with a blank Description column in hexdocs (the behavior, badges, search, member, and virtual-scroll groups), each noting the relevant upstream default where useful, plus a short "Attribute defaults" preamble explaining the `nil`-means-omit convention. The install snippet was also corrected from the stale `~> 0.1` to `~> 1.0` (with a note on requiring `~> 1.0.0-rc` to opt into the current release candidate). Documentation-only — no code or behavior change.
-
-## What's New in v1.0.0-rc.1
-
-- **Component — `<.web_multiselect>` covers the full upstream API as a pure render** — `Keenmate.WebMultiselect.Components.web_multiselect/1` declares a typed `attr/3` for every documented `<web-multiselect>` attribute (booleans, `values:`-whitelisted enums, integers, JSON option lists), mapping snake_case in HEEx to kebab-case on the element (`search_placeholder` → `search-placeholder`). Booleans render as explicit `"true"`/`"false"` because several upstream booleans default to `true` and need a real opt-out, not HTML presence. No GenServer, no state — the same call works identically in a dead view and a LiveView.
-- **One-command installer — `mix keen_web_multiselect.install`** — Wires a standard esbuild Phoenix app for you: imports the bundled `multiselect.js` + hook into `assets/js/app.js`, registers `KeenWebMultiselectHook` on your `LiveSocket` (merging into the stock `hooks: {...colocatedHooks}` object), and imports `multiselect.css` into `assets/css/app.css`. Idempotent and conservative — anything it can't confidently patch is left untouched and printed as a manual step. `--dry-run` previews.
-- **Bundled assets — no npm install** — The upstream `@keenmate/web-multiselect` build (currently 1.12.0-rc05) ships inside the Hex package's `priv/static/` alongside `multiselect.d.ts` and the LV hook; `Keenmate.WebMultiselect.upstream_version/0` reports which upstream you're getting. Wire it via the installer, an esbuild import from `deps/`, or a `Plug.Static` mount.
-- **LiveView events — opt in with `hook={true}`** — Set `hook={true}` and the hook forwards the component's `select`/`deselect`/`change` events to the server as `"web_multiselect:select"` / `":deselect"` / `":change"` with payload `{id, value, values}`, so `handle_event/3` matches by id. `hook={true}` resolves to the bundled `"KeenWebMultiselectHook"`; pass a string for a custom hook. Omit it for plain HEEx where the form's hidden input is enough.
-- **Server-driven updates — `Keenmate.WebMultiselect.push_update/3`** — Push new options or a new selection from the LiveView process: `push_update(socket, "region", options: opts, value: [])`. It's the sanctioned path across the `phx-update="ignore"` boundary (which otherwise blocks LV from morphing option changes onto the element); only the keys you pass are sent, so it covers cascades, resets, and server-authoritative corrections cleanly.
-- **Server-side search — `search_event`** — `<.web_multiselect search_event="search_repos" hook={true} />` installs an async `searchCallback` that tunnels each query to your LiveView; reply with `{:reply, %{results: [...]}, socket}` and the dropdown fills — zero JavaScript. Superseded queries are dropped client-side (the upstream `AbortSignal` contract), and `search_debounce` collapses keystroke bursts.
-- **Form integration — `field={@form[:tags]}`** — Pass a `Phoenix.HTML.FormField` and `FormHelpers.assign_from_field/1` fills `id`/`name`/value; explicit assigns win. The value flows into the upstream `initial-values` attribute, and the component writes a hidden input named after the field, so `phx-change`/`phx-submit` see the selection in `params[form_name]["tags"]` exactly like a native `<select multiple>`.
-- **LiveView morph compatibility — three quirks handled for you** — Putting a self-rendering custom element in LiveView needs three fixes the wrapper applies automatically: `phx-update="ignore"` is emitted whenever `:id` is set (keeps morphdom out of the component's shadow children); `data-ready=""` is pre-emitted so the placeholder doesn't flash on WS connect; and a `.form` getter is polyfilled onto the element (without it, Phoenix's `phx-change` delegation silently drops the component's CustomEvents). The polyfill installs even if you never opt into the hook.
 
 ## Install
 
@@ -223,6 +218,22 @@ Every documented attribute from the upstream component is exposed as a typed `at
 
 Snake_case in HEEx maps to kebab-case on the rendered element: `search_placeholder` → `search-placeholder`, `badges_display_mode` → `badges-display-mode`, etc.
 
+## Theming
+
+The component is styled entirely through CSS custom properties, in a two-tier
+cascade: component tokens (`--ms-*`) each fall back to a shared design token
+(`--base-*`), so it works out of the box, inherits a design system when one is
+present, and is overridable per-instance from HEEx via `class` / `style`.
+
+See the **[Theming guide](guides/theming.md)** for the three integration paths:
+
+- **With pure-admin** — the multiselect inherits the `--base-*` tokens pure-admin
+  provides, matching palette and dark mode with zero configuration.
+- **With other KeenMate components (no pure-admin)** — define the `--base-*` layer
+  yourself once as a single source of truth; every component reads it.
+- **Standalone** — built-in `light-dark()` fallbacks give a working light/dark
+  theme; override `--ms-*` to restyle just the multiselect.
+
 ## Versioning
 
 `keen_web_multiselect` versions are independent of `@keenmate/web-multiselect`. The bundled upstream version is reported by:
@@ -231,6 +242,21 @@ Snake_case in HEEx maps to kebab-case on the rendered element: `search_placehold
 Keenmate.WebMultiselect.upstream_version()
 #=> "1.12.0-rc05"
 ```
+
+## For LLMs and coding agents
+
+A flat-text knowledge base for coding agents ships in the package under the `ai/`
+folder — modelled on the upstream component's `ai/` layout but written for this
+wrapper. Browse it in the
+[repository](https://github.com/keenmate/keen-web-multiselect/tree/HEAD/ai), or
+read it from `deps/keen_web_multiselect/ai/` in a consuming app: start at
+`ai/INDEX.txt` (keyword index + common questions) or `ai/cookbook.txt`
+(copy-paste recipes).
+
+On hexdocs, see the **Using with AI agents** page. ex_doc also publishes a
+machine-readable `llms.txt` for the package (the [llms.txt](https://llmstxt.org)
+convention), so agents that fetch `hexdocs.pm/keen_web_multiselect/llms.txt` get a
+structured index of the docs.
 
 ## License
 

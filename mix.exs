@@ -1,7 +1,7 @@
 defmodule Keenmate.WebMultiselect.MixProject do
   use Mix.Project
 
-  @version "1.0.0-rc.2"
+  @version "1.0.0-rc.3"
   @source_url "https://github.com/keenmate/keen-web-multiselect"
 
   def project do
@@ -15,7 +15,8 @@ defmodule Keenmate.WebMultiselect.MixProject do
       package: package(),
       docs: docs(),
       name: "Keenmate.WebMultiselect",
-      source_url: @source_url
+      source_url: @source_url,
+      homepage_url: "https://keen-web-multiselect.keenmate.dev"
     ]
   end
 
@@ -42,10 +43,11 @@ defmodule Keenmate.WebMultiselect.MixProject do
       maintainers: ["Keenmate"],
       licenses: ["MIT"],
       links: %{
+        "Examples site" => "https://keen-web-multiselect.keenmate.dev",
         "GitHub" => @source_url,
         "Upstream web component" => "https://github.com/keenmate/web-multiselect"
       },
-      files: ~w(lib priv mix.exs README.md CHANGELOG.md LICENSE .formatter.exs),
+      files: ~w(lib priv guides ai AGENTS.md mix.exs README.md CHANGELOG.md LICENSE .formatter.exs),
       source_url: @source_url
     ]
   end
@@ -53,8 +55,16 @@ defmodule Keenmate.WebMultiselect.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "CHANGELOG.md"],
+      extras: [
+        "README.md",
+        "guides/theming.md",
+        {"AGENTS.md", [title: "Using with AI agents"]},
+        "CHANGELOG.md"
+      ],
       source_ref: "v#{@version}",
+      groups_for_extras: [
+        Guides: ["guides/theming.md", "AGENTS.md"]
+      ],
       groups_for_modules: [
         Components: [Keenmate.WebMultiselect.Components],
         Helpers: [Keenmate.WebMultiselect.OptionHelpers, Keenmate.WebMultiselect.FormHelpers]

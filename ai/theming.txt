@@ -1,0 +1,78 @@
+THEMING (CSS VARIABLES)
+=======================
+
+The component is styled entirely through CSS custom properties. Full guide:
+guides/theming.md (in the repo and on hexdocs). This is the condensed version.
+
+TWO-TIER CASCADE
+----------------
+Every visible color/size/effect is a `--ms-*` variable, and each `--ms-*` is
+defined as `var(--base-*, <fallback>)`. Example from the bundled CSS:
+
+    --ms-accent-color: var(--base-accent-color, #3b82f6);
+    --ms-input-bg:     var(--base-input-bg, light-dark(#ffffff, #1a1a1a));
+
+  --base-*  = shared design tokens (a cross-component contract). The multiselect
+              only READS them. This layer predates pure-admin; pure-admin fills
+              it in.
+  --ms-*    = component tokens; override to affect only the multiselect.
+
+Because --ms-* has a light-dark() fallback, the component works with NO variables
+set, in light AND dark.
+
+SHADOW DOM IS NOT A BARRIER
+---------------------------
+CSS custom properties inherit THROUGH the shadow boundary. Set them on :root, on
+`web-multiselect`, or inline on the element — all reach the internals. You never
+need ::part() for color/size theming.
+
+WHERE TO PUT RULES (Phoenix)
+----------------------------
+In assets/css/app.css, AFTER the component's stylesheet import:
+
+    @import "../../deps/keen_web_multiselect/priv/static/multiselect.css";
+    :root          { --base-accent-color: #7c3aed; }   /* all KeenMate components */
+    web-multiselect{ --ms-border-radius: 0.5rem; }      /* only multiselects */
+
+Per instance from HEEx (class/style pass through to the element):
+
+    <.web_multiselect id="c" class="compact" style="--ms-rem: 8px;" options={@o} />
+
+THREE INTEGRATION PATHS
+-----------------------
+A) WITH pure-admin — it populates --base-*; the multiselect matches palette and
+   dark mode with zero component config. Align sizing: web-multiselect{ --ms-rem: 1rem }.
+
+B) WITH other KeenMate components, no pure-admin — define your OWN --base-* layer
+   once at :root as the single source of truth; every component reads it
+   (--ms-accent-color, --drp-accent-color, ...). Change --base-accent-color once,
+   all update.
+
+C) STANDALONE — no --base-*; built-in light-dark() fallbacks give a working
+   light/dark theme. Override --ms-* (scoped to `web-multiselect` or one instance)
+   to restyle just the multiselect.
+
+SIZING
+------
+--ms-rem is the proportional base unit (default 10px). Scale the whole component:
+
+    web-multiselect.compact { --ms-rem: 8px;  }   /* 80%  */
+    web-multiselect.large   { --ms-rem: 12px; }   /* 120% */
+
+DARK MODE — five signals honored (pick one)
+--------------------------------------------
+1. html { color-scheme: light dark }   (OS preference)
+2. body { color-scheme: dark }         (whole page)
+3. ancestor data-attr: <html data-bs-theme="dark"> / <div data-theme="dark">
+4. ancestor class: <html class="dark">
+5. per instance: <.web_multiselect data-theme="dark" .../>
+Precedence: per-instance -> framework ancestor -> page color-scheme.
+Force one widget light on a dark page: data-theme="light".
+
+CASCADE-LAYER FOOTGUN
+---------------------
+The component's internal CSS uses @layer. A global unlayered reset
+(* { margin:0; padding:0 }) beats the component's layered defaults and breaks
+spacing. Wrap your reset: @layer reset { * { ... } }.
+
+Full details, tables, and per-variable notes: guides/theming.md.

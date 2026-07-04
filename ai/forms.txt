@@ -1,0 +1,66 @@
+FORM INTEGRATION
+================
+
+Pass a Phoenix.HTML.FormField and the component fills in id, name, and the
+initial value; the underlying element writes a hidden input named after the
+field, so phx-change / phx-submit see the selection like a native <select multiple>.
+
+    <.simple_form for={@form} phx-change="validate" phx-submit="save">
+      <.web_multiselect
+        field={@form[:tags]}
+        options={@tag_options}
+        hook={true}
+      />
+    </.simple_form>
+
+WHAT `field` DOES
+-----------------
+Keenmate.WebMultiselect.FormHelpers.assign_from_field/1 derives from the FormField:
+  - id    (from the field id)
+  - name  (the input name, e.g. "post[tags][]" style)
+  - value (the field's current value -> initial selection)
+
+Explicit assigns WIN over the field-derived ones — pass id=/name=/value= to
+override any single piece.
+
+WHERE THE VALUE SHOWS UP
+------------------------
+The component renders a hidden input named after the field. On phx-change /
+phx-submit the selection arrives in params under the form name + field, exactly
+like a native multi-select:
+
+    params[form_name]["tags"]   #=> ["elixir", "phoenix"]
+
+So Ecto changesets, cast/3, and validation work unchanged — treat it as an
+array field.
+
+VALUE ENCODING
+--------------
+value_format controls how the hidden input serializes the value (e.g. array vs
+CSV) when a plain array of param entries isn't what your backend expects. Default
+behaves like a native multi-select. Only set it if your form handling needs a
+different wire format.
+
+DO I NEED hook={true} IN A FORM?
+--------------------------------
+- For pure form submit (the hidden input carries the value), NO — the hidden
+  input is enough on submit.
+- Add hook={true} if you also want live server events on each change (e.g.
+  dependent fields, or to push_update another control). phx-change on the form
+  will already see the value via the hidden input without the hook.
+
+SINGLE-SELECT FIELD
+-------------------
+    <.web_multiselect field={@form[:category]} multiple={false} options={@categories} />
+
+Params then carry a single value string instead of a list.
+
+VALIDATION EXAMPLE
+------------------
+    def handle_event("validate", %{"post" => post_params}, socket) do
+      changeset = Post.changeset(%Post{}, post_params) |> Map.put(:action, :validate)
+      {:noreply, assign(socket, form: to_form(changeset))}
+    end
+
+See also: data-and-options.txt (option shapes), liveview-events.txt (change
+events), cookbook.txt (form recipe).

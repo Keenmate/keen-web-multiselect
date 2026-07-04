@@ -1,0 +1,119 @@
+GETTING STARTED
+===============
+
+keen_web_multiselect is a Phoenix LiveView wrapper for the @keenmate/web-multiselect
+custom element. One package covers plain HEEx AND LiveView. The upstream JS + CSS
+are bundled in the Hex package — no `npm install`.
+
+Bundled upstream version at runtime:
+  Keenmate.WebMultiselect.upstream_version()  #=> "1.12.0-rc05"
+
+1. INSTALL (Hex)
+----------------
+In mix.exs:
+
+    def deps do
+      [
+        {:keen_web_multiselect, "~> 1.0.0-rc"}
+      ]
+    end
+
+NOTE ON THE CONSTRAINT: only 1.0.0-rc.* is published so far. A plain `~> 1.0`
+SKIPS pre-releases (SemVer), so until 1.0.0 is final you must opt into the
+release candidate with `~> 1.0.0-rc` (or pin an exact version). Then:
+
+    mix deps.get
+
+2. WIRE UP THE ASSETS
+---------------------
+The bundled JS and CSS live in this library's priv/static/. Three ways to load
+them — pick ONE.
+
+OPTION A — the installer (recommended for standard esbuild Phoenix apps):
+
+    mix keen_web_multiselect.install
+
+It edits assets/js/app.js (imports + LiveSocket hook registration) and
+assets/css/app.css (stylesheet import), idempotently. Pass --dry-run to preview.
+See installer.txt.
+
+OPTION B — import from deps/ by hand (esbuild, the Phoenix default):
+
+    // assets/js/app.js
+    import KeenWebMultiselectHook from "../../deps/keen_web_multiselect/priv/static/keen_web_multiselect_hook.js";
+    import "../../deps/keen_web_multiselect/priv/static/multiselect.js";
+
+    let liveSocket = new LiveSocket("/live", Socket, {
+      hooks: { KeenWebMultiselectHook },
+      params: { _csrf_token: csrfToken }
+    });
+
+    /* assets/css/app.css */
+    @import "../../deps/keen_web_multiselect/priv/static/multiselect.css";
+
+OPTION C — serve straight from the dep's priv/static via Plug.Static:
+
+    # endpoint.ex
+    plug Plug.Static,
+      at: "/keen_web_multiselect",
+      from: {:keen_web_multiselect, "priv/static"},
+      gzip: false,
+      only: ~w(multiselect.js multiselect.css keen_web_multiselect_hook.js)
+
+Then reference /keen_web_multiselect/multiselect.js from a <script type="module">
+and the CSS from a <link>. (Keenmate.WebMultiselect.asset_path/1 gives the on-disk
+path of a bundled file if a setup task needs to copy it.)
+
+WHEN DO I NEED THE HOOK JS?
+- The hook (keen_web_multiselect_hook.js + registering KeenWebMultiselectHook) is
+  ONLY needed for LiveView features: hook={true} events, push_update/3, and
+  search_event. For plain HEEx / dead views you can load just multiselect.js +
+  multiselect.css.
+
+3. IMPORT THE COMPONENT
+-----------------------
+In the module that renders templates (a LiveView, a LiveComponent, or your
+MyAppWeb `html_helpers/0` so every template gets it):
+
+    import Keenmate.WebMultiselect.Components
+
+4. FIRST RENDER
+---------------
+Declarative (no JavaScript, works in a dead view):
+
+    <.web_multiselect id="answer" multiple={false}>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+      <option value="maybe" selected>Maybe</option>
+    </.web_multiselect>
+
+Programmatic (options from assigns):
+
+    <.web_multiselect
+      id="languages"
+      placeholder="Pick a language"
+      search_placeholder="Search..."
+      options={[
+        %{value: "js", label: "JavaScript", icon: "🟨"},
+        %{value: "ts", label: "TypeScript", icon: "🔷"},
+        %{value: "py", label: "Python", icon: "🐍"}
+      ]}
+      value={["py"]}
+    />
+
+LiveView-reactive (opt in with hook={true}):
+
+    <.web_multiselect id="tags" hook={true} options={@tag_options} value={@selected} />
+
+    # in the LiveView
+    def handle_event("web_multiselect:change", %{"id" => "tags", "values" => values}, socket) do
+      {:noreply, assign(socket, :selected, values)}
+    end
+
+See: component-reference.txt (attributes), liveview-events.txt (events),
+data-and-options.txt (option shapes), dead-views-and-ssr.txt (no-LiveView usage).
+
+VERSIONING
+----------
+keen_web_multiselect versions are INDEPENDENT of @keenmate/web-multiselect. The
+bundled upstream is reported by Keenmate.WebMultiselect.upstream_version/0.

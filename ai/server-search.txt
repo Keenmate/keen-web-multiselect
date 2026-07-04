@@ -1,0 +1,68 @@
+SERVER-SIDE SEARCH — search_event
+=================================
+
+Run each search query through your LiveView and fill the dropdown from the
+server — zero JavaScript. Set the search_event attribute; the hook installs an
+async searchCallback that tunnels queries to handle_event/3.
+
+    <.web_multiselect
+      id="repos"
+      hook={true}
+      search_event="search_repos"
+      search_placeholder="Search GitHub..."
+    />
+
+Requires the hook (hook={true} or a custom hook name). The attribute renders as
+data-search-event on the element; the hook reads it on mount.
+
+HANDLING THE QUERY
+------------------
+The handler name is whatever you passed to search_event. Payload carries the
+element id and the query string. You MUST reply with {:reply, %{results: [...]}, socket}
+(NOT {:noreply, ...}) — the hook resolves the pending search with reply.results.
+
+    def handle_event("search_repos", %{"id" => "repos", "query" => q}, socket) do
+      results =
+        q
+        |> MyApp.GitHub.search_repos()
+        |> Enum.map(&%{value: &1.id, label: &1.full_name})
+
+      {:reply, %{results: results}, socket}
+    end
+
+results is a list in the usual option shape (see data-and-options.txt): maps with
+value/label (+ optional icon/subtitle/group/disabled) or {value, label} tuples.
+
+SUPERSEDED QUERIES
+------------------
+Queries that are superseded by a newer keystroke are dropped client-side (the
+upstream AbortSignal contract), so a slow stale reply never overwrites fresher
+results. You don't need to handle cancellation on the server.
+
+DEBOUNCING
+----------
+Pair with search_debounce (milliseconds) to collapse keystroke bursts into a
+single round-trip:
+
+    <.web_multiselect id="repos" hook={true} search_event="search_repos" search_debounce={250} />
+
+EMPTY / MIN LENGTH
+------------------
+- Use min_search_length to avoid firing on 1-2 char queries.
+- Return [] for no matches; no_data_placeholder controls the empty text.
+- loading_message / empty_message tune the in-dropdown states.
+
+HYBRID (seed options + async search)
+------------------------------------
+Provide initial options AND a search_event; the seed shows before the user types,
+and each query replaces the list via the reply.
+
+    <.web_multiselect id="repos" hook={true} options={@recent} search_event="search_repos" />
+
+WHY {:reply} AND NOT push_update?
+---------------------------------
+search_event uses LiveView's request/reply: the hook holds a promise per query
+and resolves it with your reply. push_update/3 is a fire-and-forget mutation for
+non-search changes (cascades/resets). Don't mix them for search.
+
+See also: server-updates.txt, data-and-options.txt, cookbook.txt (async recipe).

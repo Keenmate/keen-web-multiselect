@@ -1,0 +1,134 @@
+COMPONENT REFERENCE — <.web_multiselect>
+========================================
+
+`Keenmate.WebMultiselect.Components.web_multiselect/1` declares a typed `attr/3`
+for every documented upstream attribute. For the authoritative, always-current
+list with per-attribute docs and defaults, see the generated hexdocs for
+`web_multiselect/1`. This file is the orientation map.
+
+HOW ATTRIBUTES MAP
+------------------
+1. snake_case in HEEx -> kebab-case on the element:
+     search_placeholder  -> search-placeholder
+     badges_display_mode -> badges-display-mode
+
+2. BOOLEANS render as explicit "true"/"false" strings, NOT HTML presence.
+   Reason: several upstream booleans default to true, so you need a real opt-out.
+     multiple={false}  ->  multiple="false"
+     show_checkboxes={true} -> show-checkboxes="true"
+
+3. nil means OMIT. Any attr left at its nil default is not emitted, so the
+   upstream default applies. Only pass what you want to change.
+
+4. `class`, `style`, and any `data-*` / `phx-*` attribute pass straight through
+   (`style` and `class` land on the <web-multiselect> element; use them for
+   per-instance CSS variables and dark-mode, see theming.txt).
+
+IDENTITY / DATA
+---------------
+  id            - element id; also triggers phx-update="ignore" (see server-updates.txt)
+  field         - a Phoenix.HTML.FormField; fills id/name/value (see forms.txt)
+  name          - hidden input name (usually from `field`)
+  value         - current selection, a list (e.g. ["py"]); flows to initial-values
+  options       - option list (maps or {value,label} tuples; see data-and-options.txt)
+  initial_values- explicit initial selection if not using `value`
+
+WRAPPER / LIVEVIEW (not upstream HTML attrs)
+--------------------------------------------
+  hook          - true | "CustomHook" | false. true => "KeenWebMultiselectHook".
+                  Enables select/deselect/change events. (liveview-events.txt)
+  search_event  - event name for server-side search over the LV channel. Requires
+                  the hook. (server-search.txt)
+
+BEHAVIOR
+--------
+  multiple            - allow multiple selection (upstream default true; false = single)
+  enable_search       - show the search box (default true)
+  search_mode         - filter vs navigate behavior
+  search_input_mode
+  min_search_length
+  keep_options_on_search
+  should_keep_search_on_close
+  allow_add_new       - allow creating a new option from the query
+  search_debounce     - ms to collapse keystroke bursts (server-search.txt)
+  close_on_select
+  allow_groups        - honor an option `group` member and render optgroup-style groups
+  show_checkboxes
+  show_select_all
+  checkbox_align      - top | center | bottom
+  lock_placement
+
+PLACEHOLDERS / MESSAGES
+-----------------------
+  placeholder
+  search_placeholder
+  search_hint
+  select_placeholder      - shown for non-searchable pickers
+  no_data_placeholder     - shown when the option list is empty
+  empty_message
+  loading_message
+
+BADGES / SELECTED DISPLAY
+-------------------------
+  badges_display_mode     - how selected items render (pills, count, etc.)
+  badges_threshold
+  badges_threshold_mode
+  badges_max_visible
+  badges_position
+  show_counter
+  remove_button_tooltip_text  (supports {0} interpolation)
+  enable_badge_tooltips, badge_tooltip_placement, badge_tooltip_delay, badge_tooltip_offset
+
+OPTION TOOLTIPS (rc05)
+----------------------
+  enable_option_tooltips
+  option_tooltip_placement    - Floating-UI placement, default top-start
+  option_tooltip_follow_cursor
+  option_tooltip_delay
+  option_tooltip_offset
+
+ACTION BUTTONS
+--------------
+  sticky_actions
+  actions_layout
+  actions_position   - top | bottom
+  actions_align      - stretch | left | right | center | space-between
+
+MEMBER MAPPING (map your data's keys -> component roles)
+--------------------------------------------------------
+  value_member          (wrapper default "value")
+  display_value_member  (wrapper default "label")
+  icon_member           (default "icon")
+  subtitle_member       (default "subtitle")
+  group_member          (default "group")
+  disabled_member       (default "disabled")
+  search_value_member   (NOT defaulted — set it to search a different field)
+See data-and-options.txt. Because the wrapper defaults the six canonical members
+on every render, plain %{value:, label:} options "just work".
+
+SIZING / LAYOUT
+---------------
+  max_height
+  dropdown_min_width, dropdown_max_width
+For proportional scaling use the CSS var --ms-rem (theming.txt), not an attr.
+
+VIRTUAL SCROLLING (large lists)
+-------------------------------
+  enable_virtual_scroll
+  virtual_scroll_threshold
+  virtual_scroll_buffer
+  option_height
+  badge_height
+
+FORM / VALUE ENCODING
+---------------------
+  value_format   - how the hidden input serializes the value (see forms.txt)
+
+STYLING PASSTHROUGH
+-------------------
+  class, style   - applied to the <web-multiselect> element
+  rest (:global) - any extra HTML / phx-* / data-* attribute, verbatim
+
+Full per-attribute descriptions + exact defaults: hexdocs `web_multiselect/1`.
+Upstream semantics for what each does:
+https://github.com/keenmate/web-multiselect/blob/main/docs/usage.md
