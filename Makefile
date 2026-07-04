@@ -2,7 +2,8 @@
         clean clean-build current-version last-published hex-build hex-build-inspect \
         publish-dry publish-rc publish \
         test-e2e test-e2e-ui test-e2e-headed test-e2e-install \
-        dev
+        dev \
+        container-build container-run container-shell container-push
 
 # ---------------------------------------------------------------------------
 # Variables
@@ -93,6 +94,42 @@ format: ## Format all sources
 
 format-check: ## Verify formatting without writing
 	mix format --check-formatted
+
+# ---------------------------------------------------------------------------
+# Container image — the examples app (test_app), for deploying to
+# keen-web-multiselect.keenmate.dev.
+#
+# The build context is the repo ROOT (not test_app/) because the examples app
+# pulls the wrapper via `path: ".."` and shares ../deps + ../mix.lock.
+#
+# CONTAINER defaults to podman; override for docker:
+#   make container-run CONTAINER=docker
+# SECRET_KEY_BASE is required at runtime and generated fresh per run (never
+# baked into the image). PORT/PHX_HOST default inside the image.
+# ---------------------------------------------------------------------------
+
+CONTAINER      ?= podman
+IMAGE          ?= keen-web-multiselect-examples
+HOST_PORT      ?= 4060
+# Registry target for `container-push`, e.g. registry.keenmate.dev/keen-web-multiselect-examples:latest
+IMAGE_REMOTE   ?=
+
+container-build: ## Build the examples app container image (context = repo root)
+	$(CONTAINER) build -t $(IMAGE) .
+
+container-run: container-build ## Build then run the image on http://localhost:$(HOST_PORT)
+	@echo "Serving examples on http://localhost:$(HOST_PORT)/ (Ctrl+C to stop) ..."
+	$(CONTAINER) run --rm -p $(HOST_PORT):4060 \
+		-e SECRET_KEY_BASE="$$(openssl rand -base64 48)" \
+		$(IMAGE)
+
+container-shell: container-build ## Open a shell in the built image (debugging)
+	$(CONTAINER) run --rm -it --entrypoint /bin/sh $(IMAGE)
+
+container-push: ## Tag + push the image to IMAGE_REMOTE (set IMAGE_REMOTE=registry/host:tag)
+	@test -n "$(IMAGE_REMOTE)" || { echo "ERROR: set IMAGE_REMOTE=registry.example.com/name:tag"; exit 1; }
+	$(CONTAINER) tag $(IMAGE) $(IMAGE_REMOTE)
+	$(CONTAINER) push $(IMAGE_REMOTE)
 
 # ---------------------------------------------------------------------------
 # State inspection — the "what version are we at vs registry?" answers

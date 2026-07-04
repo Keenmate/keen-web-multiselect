@@ -1,0 +1,40 @@
+# Keep the build context small and reproducible. Everything the release needs
+# is fetched/compiled inside the image; host artifacts must not leak in.
+
+# Build artifacts (parent + examples app) — rebuilt in the image
+/_build/
+/deps/
+/doc/
+/test_app/_build/
+/test_app/deps/
+erl_crash.dump
+*.ez
+keen_web_multiselect-*.tar
+
+# Node / Playwright e2e harness — not part of the deployed app
+node_modules/
+/test_app/node_modules/
+test-results/
+playwright-report/
+playwright/.cache/
+e2e/
+
+# Packaging / docs / VCS
+.git/
+.github/
+doc/
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+.elixir_ls/
+
+# Local config overrides
+config/.local.exs
+config/*.local.exs
+
+# The Docker files themselves
+Dockerfile
+.dockerignore
