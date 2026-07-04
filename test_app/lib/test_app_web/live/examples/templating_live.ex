@@ -22,6 +22,9 @@ defmodule TestAppWeb.Examples.TemplatingLive do
       </.note>
 
       <.card title="Option Rendering Examples">
+        <.tip>
+          JS callback (no attribute): set <code>el.renderOptionContentCallback</code> · size rows with <code>{"option_height={75}"}</code> · overflow badges with <code>{"badges_threshold={2}"}</code>
+        </.tip>
         <p>
           These examples demonstrate <code>renderOptionContentCallback</code>
           for customizing how options appear in the dropdown.
@@ -78,6 +81,9 @@ defmodule TestAppWeb.Examples.TemplatingLive do
       </.card>
 
       <.card title="Badge Rendering Examples">
+        <.tip>
+          JS callback (no attribute): set <code>el.renderBadgeContentCallback</code> — return compact vs detailed markup via <code>context.isInPopover</code>
+        </.tip>
         <p>
           These examples demonstrate <code>renderBadgeContentCallback</code>
           for customizing selected item badges.
@@ -99,6 +105,9 @@ defmodule TestAppWeb.Examples.TemplatingLive do
       </.card>
 
       <.card title="Single-Select Custom Rendering">
+        <.tip>
+          <code>{"multiple={false}"}</code> · JS callback (no attribute): set <code>el.renderSelectedContentCallback</code> for the closed-input text and <code>el.getDisplayValueCallback</code> for the dropdown label
+        </.tip>
         <p>
           These examples demonstrate <code>renderSelectedContentCallback</code>
           for customizing the selected value text in single-select mode.
@@ -120,6 +129,9 @@ defmodule TestAppWeb.Examples.TemplatingLive do
       </.card>
 
       <.card title="Combined Callbacks">
+        <.tip>
+          <code>{"badges_threshold={3}"}</code> · <code>badges_threshold_mode="partial"</code> · <code>{"enable_badge_tooltips={true}"}</code> — plus JS <code>el.renderOptionContentCallback</code> / <code>el.renderBadgeContentCallback</code> / <code>el.getBadgeDisplayCallback</code>
+        </.tip>
         <p>
           Examples demonstrating how to combine multiple rendering callbacks for sophisticated customization.
           These examples show how <code>renderOptionContentCallback</code>
@@ -171,6 +183,9 @@ defmodule TestAppWeb.Examples.TemplatingLive do
       </.card>
 
       <.card title="Advanced Layout Examples">
+        <.tip>
+          <code>checkbox_align="center | top"</code> · <code>{"option_height={90}"}</code> — CSS-grid/flex markup comes from JS <code>el.renderOptionContentCallback</code>
+        </.tip>
         <p>Examples demonstrating flex/grid layouts with checkbox alignment control.</p>
 
         <h3>13. Grid Layout with Centered Checkboxes</h3>

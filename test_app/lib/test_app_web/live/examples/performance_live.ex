@@ -67,6 +67,7 @@ defmodule TestAppWeb.Examples.PerformanceLive do
       </style>
 
       <.card title="🚀 Large Dataset Performance">
+        <.tip><code>{"enable_virtual_scroll={true}"}</code> · <code>{"virtual_scroll_threshold={100}"}</code> · <code>{"option_height={50}"}</code> · <code>{"virtual_scroll_buffer={10}"}</code></.tip>
         <p>This demo tests the component with 15,000 randomly generated options to evaluate performance under heavy load.</p>
 
         <div id="perf-stats" phx-update="ignore" class="stats">
@@ -124,6 +125,7 @@ defmodule TestAppWeb.Examples.PerformanceLive do
       </.card>
 
       <.card title="🎨 Rich Rendering with Virtual Scroll">
+        <.tip><code>{"badge_height={50}"}</code> sizes popover rows · <code>{"option_height={70}"}</code> · <code>{"enable_virtual_scroll={true}"}</code></.tip>
         <p>Testing custom rendering callbacks with 150 items to trigger virtual scrolling in the selected items popover (threshold: 100).</p>
 
         <.form_group style="margin-top: 1rem;">

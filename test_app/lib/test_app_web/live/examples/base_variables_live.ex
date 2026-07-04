@@ -193,6 +193,7 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
 
       <.grid>
         <.card title="Single Select">
+          <.tip><code>{"multiple={false}"}</code> — one value, no badges</.tip>
           <p>Basic single selection. Tests input styling and dropdown typography.</p>
           <.web_multiselect
             id="singleSelect"
@@ -203,6 +204,7 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
         </.card>
 
         <.card title="Multi Select with Badges">
+          <.tip><code>badges_display_mode="badges"</code> · <code>{"show_checkboxes={true}"}</code></.tip>
           <p>Multiple selection with badge display. Tests badge typography and sizing.</p>
           <.web_multiselect
             id="multiBadges"
@@ -215,6 +217,7 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
         </.card>
 
         <.card title="Multi Select with Count">
+          <.tip><code>badges_display_mode="count"</code> collapses badges into a counter</.tip>
           <p>Count display mode. Tests counter typography.</p>
           <.web_multiselect
             id="multiCount"
@@ -227,6 +230,7 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
         </.card>
 
         <.card title="Grouped Options">
+          <.tip><code>{"allow_groups={true}"}</code> renders <code>group</code>-keyed option headers</.tip>
           <p>Tests group label typography and styling.</p>
           <.web_multiselect
             id="grouped"

@@ -54,6 +54,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
       </style>
 
       <.card title="1. Baseline (no special ancestor CSS)">
+        <.tip>Ancestor CSS under test: <code>(none)</code> — dropdown anchors to the viewport</.tip>
         <p>
           The simplest case: no ancestor establishes a containing block for fixed positioning. The
           dropdown anchors to the viewport and sits under the input.
@@ -76,6 +77,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
       </.card>
 
       <.card title="2. Ancestor with <code>transform</code> (works correctly)">
+        <.tip>Ancestor CSS under test: <code>transform: translateZ(0)</code></.tip>
         <p>
           <code>transform</code>, <code>perspective</code>, <code>filter</code>, <code>backdrop-filter</code>,
           and qualifying <code>will-change</code>
@@ -101,6 +103,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
       </.card>
 
       <.card title="3. Ancestor with <code>container-type</code> (the heuristic-override case)">
+        <.tip>Ancestor CSS under test: <code>container-type: inline-size</code></.tip>
         <p>
           <code>container-type</code>
           establishes a containing block per spec, and Floating UI's default
@@ -140,6 +143,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
       </.card>
 
       <.card title="4. The drift-detection warning (interactive)">
+        <.tip>Ancestor CSS under test: <code>contain: paint</code> — toggle it to trigger a <code>console.warn</code></.tip>
         <p>
           The library's containing-block heuristic isn't bulletproof — an ancestor can genuinely anchor
           fixed positioning (per spec) without being on the library's reliable-properties list. Every

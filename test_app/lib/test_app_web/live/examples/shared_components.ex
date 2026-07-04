@@ -43,6 +43,25 @@ defmodule TestAppWeb.Examples.SharedComponents do
     """
   end
 
+  @doc """
+  A card for demos of features that exist ONLY in the LiveView wrapper (not
+  upstream). Renders with a dashed border and a "keen extra" badge so it's
+  obvious at a glance in a side-by-side diff against the upstream examples.
+  """
+  attr :title, :string, required: true
+  attr :badge, :string, default: "keen extra"
+  attr :rest, :global
+  slot :inner_block, required: true
+
+  def keen_card(assigns) do
+    ~H"""
+    <div class="card card--keen" {@rest}>
+      <h2>{@title} <span class="keen-badge">{@badge}</span></h2>
+      {render_slot(@inner_block)}
+    </div>
+    """
+  end
+
   attr :title, :string, default: nil
   attr :variant, :string, default: nil, values: [nil, "warning"]
   slot :inner_block, required: true
@@ -53,6 +72,20 @@ defmodule TestAppWeb.Examples.SharedComponents do
       <div :if={@title} class="note-title">{@title}</div>
       {render_slot(@inner_block)}
     </div>
+    """
+  end
+
+  @doc """
+  A compact one-line hint showing the wrapper attribute(s) for a demo card.
+  Shorter and lighter than `<.note>` — meant for a quick "here's how you'd do
+  this in HEEx".
+  """
+  attr :rest, :global
+  slot :inner_block, required: true
+
+  def tip(assigns) do
+    ~H"""
+    <p class="tip" {@rest}>{render_slot(@inner_block)}</p>
     """
   end
 

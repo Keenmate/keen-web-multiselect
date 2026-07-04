@@ -23,6 +23,7 @@ defmodule TestAppWeb.Examples.LoggingLive do
       </.note>
 
       <.card title="Example 1: Basic Logging Control">
+        <.tip>JS import (no attribute): call <code>enableLogging()</code> · <code>disableLogging()</code> · <code>setLogLevel("info")</code> from <code>@keenmate/web-multiselect</code></.tip>
         <p>Enable and disable logging at runtime. Watch the console as you interact with the multiselect.</p>
 
         <div class="controls">
@@ -41,6 +42,7 @@ defmodule TestAppWeb.Examples.LoggingLive do
       </.card>
 
       <.card title="Example 2: Category-Specific Logging">
+        <.tip>JS import (no attribute): <code>setCategoryLevel("DATA", "debug")</code> per category · <code>{"close_on_select={false}"}</code> keeps the panel open while you watch logs</.tip>
         <p>
           Enable logging for specific categories only. This example has async search enabled - type to see DATA logs.
           Try enabling different categories to see different types of logs.
@@ -64,6 +66,7 @@ defmodule TestAppWeb.Examples.LoggingLive do
       </.card>
 
       <.card title="Example 3: Hybrid Static + Dynamic Search">
+        <.tip><code>{"min_search_length={3}"}</code> gates the search · JS callback (no attribute): <code>el.beforeSearchCallback</code> strips accents before the query</.tip>
         <p>
           Show popular items initially, then switch to web service search. Demonstrates beforeSearchCallback for accent removal.
         </p>

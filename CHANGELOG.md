@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0-rc.4] - 2026-07-04
+
+Demo-site polish for the live examples (`test_app/`, excluded from the Hex package — no component code or behaviour change).
+
+### Internal — demo site
+
+- **Floating "server round-trip" monitor on every example page.** A `ServerEventsPanel` LiveComponent — wired once through the shared `example_page/1` shell, so it appears on all `/examples/*` pages without touching each one — pins a small card to the bottom-right that counts and logs every `select` / `deselect` / `change` the LiveView server receives from any `<web-multiselect>` on the page. It's visible proof the wrapper does a real client → server → re-render round-trip, not just standalone web-component state. Driven by a `ServerMonitor` JS hook (registered in the demo `app.js`) that forwards the DOM events to the component via `pushEventTo`. Ported from the sibling `keen_web_daterangepicker` demo.
+- **`<.tip>` code hints across all example pages, plus `<.keen_card>` and a shared keen-extras stylesheet.** Added `tip/1` (a compact one-line "here's the wrapper attribute" hint) and `keen_card/1` (dashed-border card + badge for wrapper-only features) to `TestAppWeb.Examples.SharedComponents`, backed by a new `priv/static/assets/examples-keen.css` (linked in the demo layout) that also absorbs the server-monitor styles — which restores `examples-shared.css` to a verbatim upstream mirror. Applied ~73 tips across the 12 `/examples/*` pages: each demo card now leads with the key `<.web_multiselect>` attribute(s) it showcases (e.g. `badges_display_mode="count"`, `enable_virtual_scroll={true}`, `actions_position="top"`), JS-only callbacks are labelled as such rather than mislabelled as attributes, and the three server-driven cards on the events-callbacks page became `<.keen_card>`s. Mirrors the note/hint conventions from the `keen_web_daterangepicker` demo.
+
 ## [1.0.0-rc.3] - 2026-07-04 [PUBLISHED]
 
 Documentation-focused release — a dedicated theming guide (the primary source of knowledge for how the component is styled) and package links to the live examples site. No component code or behaviour change.

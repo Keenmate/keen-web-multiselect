@@ -406,6 +406,7 @@ defmodule TestAppWeb.Examples.ThemingLive do
       </style>
 
       <.card title="📏 Input Sizes">
+        <.tip>Pick a preset with <code>input-size="xs | sm | md | lg | xl"</code>, all scaled off <code>--ms-rem: 10px</code></.tip>
         <p>
           Control input field dimensions with the <code>input-size</code>
           attribute. Five sizes available: xs, sm, md (default), lg, xl.
@@ -527,6 +528,7 @@ defmodule TestAppWeb.Examples.ThemingLive do
       </.card>
 
       <.card title="🎨 Theme Examples">
+        <.tip>Whole themes from CSS vars on the element: <code>--base-accent-color</code> · <code>--base-input-bg</code> · <code>--ms-input-border-radius</code></.tip>
         <div class="theme-grid">
           <div class="theme-card dark-theme">
             <h2>🌙 Dark Mode</h2>

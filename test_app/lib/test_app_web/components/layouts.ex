@@ -64,6 +64,7 @@ defmodule TestAppWeb.Layouts do
         {Application.get_env(:live_debugger, :live_debugger_tags)}
         <link rel="stylesheet" href="/keen_web_multiselect/multiselect.css" />
         <link rel="stylesheet" href="/assets/examples-shared.css" />
+        <link rel="stylesheet" href="/assets/examples-keen.css" />
         <link
           :if={assigns[:font_awesome]}
           rel="stylesheet"

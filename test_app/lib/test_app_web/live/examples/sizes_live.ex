@@ -106,6 +106,7 @@ defmodule TestAppWeb.Examples.SizesLive do
       </style>
 
       <.card title="Global Scaling with --ms-rem">
+        <.tip>Scale everything from one variable: <code>style="--ms-rem: 8px"</code> (default <code>10px</code>)</.tip>
         <p>
           The <code>--ms-rem</code>
           CSS variable (default: 10px) controls the base unit for all dimensions. Change it to scale the entire component proportionally.
@@ -136,6 +137,7 @@ defmodule TestAppWeb.Examples.SizesLive do
       </.card>
 
       <.card title="Fine-Grained Control">
+        <.tip>Target one dimension at a time: <code>--ms-input-font-size</code> · <code>--ms-input-padding</code> · <code>--ms-option-title-font-size</code></.tip>
         <p>Override individual CSS variables for precise control over specific dimensions.</p>
 
         <.code_block>{@fine_code}</.code_block>
@@ -166,6 +168,7 @@ defmodule TestAppWeb.Examples.SizesLive do
       </.card>
 
       <.card title="Narrow Input, Wide Dropdown">
+        <.tip><code>dropdown_min_width="18rem"</code> keeps the panel readable while <code>style="width: 6rem"</code> shrinks the input</.tip>
         <p>
           For dense forms where input space is limited: show just a code in the input, but use <code>dropdown-min-width</code>
           to ensure the dropdown is comfortable for selection.
@@ -222,6 +225,7 @@ defmodule TestAppWeb.Examples.SizesLive do
       </.card>
 
       <.card title="Scaled with Multiple Selection">
+        <.tip><code>style="--ms-rem: 8px"</code> · <code>{"show_checkboxes={true}"}</code> · <code>badges_display_mode="badges | count"</code></.tip>
         <p>All component parts (badges, options, checkboxes) scale together.</p>
 
         <.grid>
@@ -283,6 +287,7 @@ defmodule TestAppWeb.Examples.SizesLive do
       </.card>
 
       <.card title="Font Families">
+        <.tip><code>style="--base-font-family: 'Inter', sans-serif"</code> — any CSS font stack works</.tip>
         <p>
           Set <code>--base-font-family</code>
           on the element to change the font. Works with any CSS font stack.

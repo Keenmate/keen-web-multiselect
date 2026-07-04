@@ -492,6 +492,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.note>
 
       <.card title="1. Basic Built-in Actions">
+        <.tip>JS property (no attribute): set <code>el.actionButtons</code> with <code>action: 'select-all'</code> · <code>action: 'clear-all'</code></.tip>
         <p class="description">
           Simple select-all and clear-all buttons with default settings.
         </p>
@@ -504,6 +505,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="2. Static Properties">
+        <.tip>Per-button static props on <code>el.actionButtons</code>: <code>isVisible</code> · <code>isDisabled</code> · <code>cssClass</code> · <code>tooltip</code></.tip>
         <p class="description">
           Using static properties: <code>isVisible</code>, <code>isDisabled</code>,
           <code>cssClass</code>, and <code>tooltip</code>.
@@ -517,6 +519,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="3. Dynamic Visibility (getIsVisibleCallback)">
+        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getIsVisibleCallback: (ms) => …</code></.tip>
         <p class="description">
           Show/hide buttons based on current selection state using
           <code>getIsVisibleCallback</code>.
@@ -533,6 +536,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="4. Dynamic Disabled State (getIsDisabledCallback)">
+        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getIsDisabledCallback: (ms) => …</code></.tip>
         <p class="description">
           Enable/disable buttons based on conditions using <code>getIsDisabledCallback</code>.
         </p>
@@ -545,6 +549,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="5. Dynamic Text (getTextCallback)">
+        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getTextCallback: (ms) => …</code></.tip>
         <p class="description">
           Change button text based on current state using <code>getTextCallback</code>.
         </p>
@@ -560,6 +565,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="6. Dynamic CSS Classes (getClassCallback)">
+        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getClassCallback: (ms) => …</code> · classes injected via <code>el.customStylesCallback</code></.tip>
         <p class="description">
           Apply CSS classes dynamically based on state using <code>getClassCallback</code>.
           Custom styles are injected via <code>customStylesCallback</code> into the Shadow DOM.
@@ -578,6 +584,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="7. Dynamic Tooltip (getTooltipCallback)">
+        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getTooltipCallback: (ms) => …</code></.tip>
         <p class="description">
           Show contextual information in tooltips using <code>getTooltipCallback</code>.
         </p>
@@ -593,6 +600,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="8. Custom Actions with onClick">
+        <.tip>Per-button config on <code>el.actionButtons</code>: <code>action: 'custom'</code> + <code>onClick: (ms) => …</code></.tip>
         <p class="description">
           Create custom buttons with <code>action: 'custom'</code> and custom
           <code>onClick</code> handlers.
@@ -606,6 +614,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="9. Combined Features & Callback Priority">
+        <.tip>Callbacks on <code>el.actionButtons</code> override static props: <code>getTextCallback</code> · <code>getClassCallback</code> · <code>getIsVisibleCallback</code></.tip>
         <p class="description">
           Demonstrating multiple callbacks working together and callback priority
           over static properties.
@@ -624,6 +633,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="10. Actions Layout - Wrap Mode">
+        <.tip><code>actions_layout="wrap"</code> · <code>actions_layout="nowrap"</code> (default)</.tip>
         <p class="description">
           When you have many action buttons, use <code>actions-layout="wrap"</code>
           to allow buttons to wrap to multiple rows instead of being squeezed into a
@@ -656,6 +666,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="11. Font Awesome Icons in Buttons">
+        <.tip>Icon HTML in a button's <code>text</code> (JS <code>el.actionButtons</code>) · font-face at document level + rules via <code>el.customStylesCallback</code></.tip>
         <p class="description">
           Action buttons accept HTML, so Font Awesome icons work — but Font Awesome is
           <strong>font-based</strong>, which needs <strong>two</strong> things in a
@@ -717,6 +728,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="12. Lucide (SVG) Icons in Buttons">
+        <.tip>Inline SVG in a button's <code>text</code> (JS <code>el.actionButtons</code>) — no <code>customStylesCallback</code>, renders natively in Shadow DOM</.tip>
         <p class="description">
           Unlike font icons, <strong>inline SVG icons render natively inside Shadow DOM</strong>
           — no <code>@font-face</code>, no <code>&lt;head&gt;</code> link, no
@@ -760,6 +772,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
       </.card>
 
       <.card title="13. Positioning, Rows & Alignment">
+        <.tip><code>actions_position="top | bottom"</code> · <code>actions_align="right | space-between"</code> · per-button <code>row</code> (JS)</.tip>
         <p class="description">
           Place the actions block at the <code>top</code> (default) or <code>bottom</code> of the
           dropdown, arrange buttons across multiple rows with the per-button <code>row</code>

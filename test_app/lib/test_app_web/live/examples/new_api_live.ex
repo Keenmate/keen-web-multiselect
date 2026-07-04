@@ -231,6 +231,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       subtitle="Flexible data handling, form integration, and powerful new features"
     >
       <.card title="1. Custom Object Structure">
+        <.tip><code>value_member="userId"</code> · <code>display_value_member="fullName"</code> · <code>subtitle_member="email"</code></.tip>
         <p>
           Use your own data structure! Specify which properties to use for value, display, and other fields using <code>value_member</code>
           and <code>display_value_member</code>.
@@ -249,6 +250,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="2. [key, value] Tuple Arrays">
+        <.tip>Just pass tuples to <code>{"options={@languages}"}</code> — no <code>value_member</code>/<code>display_value_member</code> needed</.tip>
         <p>
           Auto-detected! Simply pass an array of <code>[key, value]</code>
           tuples. Perfect for simple key-value pairs without creating objects.
@@ -278,6 +280,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="4. Form Integration - JSON Format">
+        <.tip><code>name="skills"</code> + <code>value_format="json"</code> writes a hidden input the form submits</.tip>
         <p>
           Seamless HTML form integration! Hidden inputs are automatically created and updated. Choose from 3 formats: <code>json</code>, <code>csv</code>, or <code>array</code>.
         </p>
@@ -293,6 +296,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="5. Form Integration - CSV Format">
+        <.tip><code>value_format="csv"</code> submits a single comma-separated hidden input</.tip>
         <p>
           Use CSV format for traditional comma-separated values. Great for legacy systems.
         </p>
@@ -308,6 +312,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="6. Form Integration - Array Format">
+        <.tip><code>value_format="array"</code> emits one hidden input per value as <code>tags[]</code></.tip>
         <p>
           Use array format to create multiple hidden inputs. Standard HTML array handling with <code>name[]</code>.
         </p>
@@ -326,6 +331,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="7. New Public API Methods">
+        <.tip><code>{"multiple={false}"}</code> switches single-select mode (returns a scalar); omit it for multi-select</.tip>
         <p>
           New properties and methods for easier value access:
         </p>
@@ -350,6 +356,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="8. Async Search / Lookup">
+        <.tip><code>{"min_search_length={2}"}</code> · <code>{"search_debounce={300}"}</code> · <code>icon_member="flag"</code></.tip>
         <p>
           Load options dynamically as users type. Perfect for large datasets, API searches, or real-time filtering.
         </p>
@@ -439,6 +446,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="💬 Badge Tooltips">
+        <.tip><code>{"enable_badge_tooltips={true}"}</code> · <code>badge_tooltip_placement="top"</code></.tip>
         <p>
           Show informative tooltips when hovering over badges and remove buttons. Perfect for truncated text or additional context.
         </p>
@@ -596,6 +604,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
       </.card>
 
       <.card title="🧩 Wrapper-specific extras (not in upstream)">
+        <.tip><code>hook="KeenWebMultiselectHook"</code> · server-driven <code>{"options={@business_units}"}</code> · <code>search_event="github_search"</code></.tip>
         <.note>
           These examples go beyond upstream's example page — they show the same cascading and async-search
           features driven through Phoenix LiveView (server-side) instead of pure browser JavaScript.

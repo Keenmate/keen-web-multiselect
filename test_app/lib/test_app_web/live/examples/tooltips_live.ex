@@ -108,6 +108,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       subtitle="Hover tooltips on dropdown options and selected badges"
     >
       <.card title="1. Option Tooltips (default content)">
+        <.tip><code>{"enable_option_tooltips={true}"}</code> · <code>subtitle_member="description"</code> for a second line</.tip>
         <p class="description">
           Enable hover tooltips on the dropdown rows with <code>enable_option_tooltips</code>. With no
           callback, the tooltip shows the option's display value, plus its subtitle on a second line
@@ -129,6 +130,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       </.card>
 
       <.card title="2. Option Tooltips (custom getOptionTooltipCallback)">
+        <.tip><code>{"enable_option_tooltips={true}"}</code> + JS <code>el.getOptionTooltipCallback</code> for rich content</.tip>
         <p class="description">
           Build rich, per-option tooltip content with <code>getOptionTooltipCallback</code>. It receives
           the option object and returns a <code>string</code> or an <code>HTMLElement</code>. This is a
@@ -142,6 +144,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       </.card>
 
       <.card title="3. Option Tooltips with Virtual Scrolling">
+        <.tip><code>{"enable_option_tooltips={true}"}</code> — tooltips re-attach as virtual rows recycle</.tip>
         <p class="description">
           Tooltips re-attach as rows recycle into view, so they work seamlessly with the
           virtual-scrolled list (this one holds 1,000 options).
@@ -154,6 +157,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       </.card>
 
       <.card title="4. Full-Width Rows — Placement & Follow-Cursor">
+        <.tip><code>option_tooltip_placement="top-start"</code> (default anchor) · <code>{"option_tooltip_follow_cursor={true}"}</code> to track the pointer</.tip>
         <p class="description">
           On a wide multiselect, a row-centered tooltip lands in the middle of the screen. Two fixes:
           option tooltips default to <code>option_tooltip_placement="top-start"</code> (anchored to the
@@ -183,6 +187,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       </.card>
 
       <.card title="5. Narrow Multiselect — Side (start/end) Placement">
+        <.tip><code>option_tooltip_placement="right"</code> (end side) or <code>"left"</code> (start side)</.tip>
         <p class="description">
           For a small/narrow multiselect, show the tooltip on the side of the row instead of above it.
           Use <code>option_tooltip_placement="right"</code> (end side) or <code>"left"</code> (start
@@ -202,6 +207,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       </.card>
 
       <.card title="6. Independent Styling (--ms-option-tooltip-*)">
+        <.tip><code>{"enable_option_tooltips={true}"}</code> + <code>style="--ms-option-tooltip-bg: #4338ca"</code> to style independently</.tip>
         <p class="description">
           Option tooltips render with class <code>.ms__option-tooltip</code> and read their own
           <code>--ms-option-tooltip-*</code> variables, which default to the shared
@@ -221,6 +227,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       </.card>
 
       <.card title="7. Badge Tooltips">
+        <.tip><code>{"enable_badge_tooltips={true}"}</code> · <code>{~S(remove_button_tooltip_text="Remove {0}")}</code></.tip>
         <p class="description">
           The same tooltip engine drives the selected-badge tooltips. Enable with
           <code>enable_badge_tooltips</code>; customize content with <code>getBadgeTooltipCallback</code>

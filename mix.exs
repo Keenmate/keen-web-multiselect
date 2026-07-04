@@ -1,7 +1,7 @@
 defmodule Keenmate.WebMultiselect.MixProject do
   use Mix.Project
 
-  @version "1.0.0-rc.3"
+  @version "1.0.0-rc.4"
   @source_url "https://github.com/keenmate/keen-web-multiselect"
 
   def project do

@@ -303,6 +303,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       subtitle="Traditional multiselect demos showing basic functionality and common use cases."
     >
       <.card title="✨ Declarative Usage (No JavaScript Required!)">
+        <.tip>Pass inline <code>&lt;option&gt;</code>/<code>&lt;optgroup&gt;</code> children with <code>data-icon</code> · <code>data-subtitle</code> · <code>selected</code></.tip>
         <p>
           Use standard HTML <code>&lt;option&gt;</code>
           elements - no JavaScript needed for simple cases! The component reads <code>value</code>, <code>selected</code>, and <code>data-*</code> attributes from each option.
@@ -403,6 +404,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Single-Select Mode">
+        <.tip><code>{"multiple={false}"}</code> — a single-select (multiple defaults to <code>true</code> upstream)</.tip>
         <p>
           Only one item can be selected at a time. Use <code>{"multiple={false}"}</code>
         </p>
@@ -423,6 +425,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Single-Select: Keyboard Navigation Only">
+        <.tip><code>{"enable_search={false}"}</code> · <code>search_input_mode="readonly"</code></.tip>
         <p>
           No search - use arrow keys, PageUp/PageDown, Home/End to navigate. Press Enter to select.
         </p>
@@ -447,6 +450,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Basic MultiSelect">
+        <.tip><code>search_placeholder="Search technologies..."</code> · pre-select with <code>{"value={[\"js\", \"ts\"]}"}</code></.tip>
         <p>Simple multiselect with basic options</p>
 
         <.grid>
@@ -474,6 +478,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Rich Content with Icons">
+        <.tip>Options carry <code>icon</code>/<code>subtitle</code> keys — read via the default <code>icon_member="icon"</code> · <code>subtitle_member="subtitle"</code></.tip>
         <p>Options with icons, subtitles, and multiline content</p>
 
         <.grid>
@@ -490,6 +495,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Search Hint">
+        <.tip><code>search_hint="💡 Start typing to filter options"</code></.tip>
         <p>Display helpful text above the input to guide users</p>
 
         <.grid>
@@ -507,6 +513,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Display Modes">
+        <.tip><code>badges_display_mode="badges | count | compact | partial | none"</code> · pair with <code>{"show_counter={true}"}</code> · <code>{"badges_threshold={5}"}</code></.tip>
         <p>Different ways to display selected items</p>
 
         <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.2rem; color: #667eea;">
@@ -700,6 +707,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Badge Tooltips">
+        <.tip><code>{"enable_badge_tooltips={true}"}</code> · <code>badge_tooltip_placement="top | bottom"</code> · <code>{"badge_tooltip_delay={100}"}</code></.tip>
         <p>Display helpful tooltips when hovering over selected item badges</p>
 
         <.grid>
@@ -758,6 +766,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Badge Positioning">
+        <.tip><code>badges_position="bottom | top | left | right"</code></.tip>
         <p>
           Control where selected badges appear relative to the input: <code>badges-position</code>
         </p>
@@ -874,6 +883,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="RTL (Right-to-Left) Support">
+        <.tip><code>dir="rtl"</code> — passed through verbatim; auto-flips layout, alignment, and badge flow</.tip>
         <p>
           Full support for RTL languages (Arabic, Hebrew, Persian, etc.) with automatic detection from <code>dir="rtl"</code>
         </p>
@@ -974,6 +984,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Async Search / Lookup">
+        <.tip><code>{"min_search_length={2}"}</code> · <code>{"keep_options_on_search={true}"}</code> · map non-canonical keys with <code>value_member="id"</code> · <code>display_value_member="name"</code> · <code>subtitle_member="description"</code></.tip>
         <p>
           Load options dynamically as users type. Perfect for large datasets, API searches, or real-time filtering.
         </p>
@@ -1047,6 +1058,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Search Modes: Filter vs Navigate">
+        <.tip><code>search_mode="filter"</code> hides non-matches · <code>search_mode="navigate"</code> jumps to matches while keeping all rows visible</.tip>
         <p>
           Choose between <strong>filter</strong>
           mode (hide non-matches) or <strong>navigate</strong>
@@ -1113,6 +1125,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
       </.card>
 
       <.card title="Event Handling">
+        <.tip>DOM events (no attribute): <code>el.addEventListener("select" | "deselect" | "change", …)</code> — see the inline <code>&lt;script&gt;</code></.tip>
         <p>
           Listen to <code>select</code>, <code>deselect</code>, and <code>change</code> events
         </p>

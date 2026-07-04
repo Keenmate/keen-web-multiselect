@@ -133,6 +133,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
       subtitle="DOM events, the on* property twin, and before* veto interceptors"
     >
       <.card title="1 · Events — addEventListener & the on* twin">
+        <.tip>Client-only: DOM <code>change</code>/<code>select</code>/<code>deselect</code> events and their <code>on*</code> property twins — wired in JS, no wrapper attribute.</.tip>
         <p>
           Every notification is available two ways and <strong>both fire for the same action</strong>:
           the bubbling DOM events <code>select</code> / <code>deselect</code> / <code>change</code>,
@@ -159,6 +160,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
       </.card>
 
       <.card title="2 · beforeSelectCallback — block a selection">
+        <.tip>Client-only interceptor: set <code>el.beforeSelectCallback</code> in JS and return <code>false</code> to veto — no wrapper attribute.</.tip>
         <p>
           An <strong>interceptor</strong>: runs <em>before</em> an option is added and returns
           <code>false</code> to block it. Here <strong>Full-time</strong> and <strong>Part-time</strong>
@@ -180,6 +182,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
       </.card>
 
       <.card title="3 · beforeDeselectCallback — protect a required item">
+        <.tip>Client-only interceptor: set <code>el.beforeDeselectCallback</code> in JS and return <code>false</code> to protect an item — no wrapper attribute.</.tip>
         <p>
           The mirror interceptor on the way out. <strong>Team Lead</strong> is pre-selected and required
           — trying to remove it is vetoed, while the other members can be toggled freely. Note the veto
@@ -257,7 +260,8 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
         </.note>
       </.card>
 
-      <.card title="Live server state — derived on the server">
+      <.keen_card title="Live server state — derived on the server">
+        <.tip><code>{"hook={true}"}</code> forwards <code>change</code> to <code>handle_event("web_multiselect:change", …)</code> — the server owns the state.</.tip>
         <p>
           The server receives every <code>change</code>, keeps the selection in assigns, and renders
           data the client never had: a price lookup and total from a server-side catalog.
@@ -288,9 +292,10 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
           <summary>Show server code</summary>
           <.code_block lang="elixir">{@code_server_state}</.code_block>
         </details>
-      </.card>
+      </.keen_card>
 
-      <.card title="Server event log — select / deselect / change">
+      <.keen_card title="Server event log — select / deselect / change">
+        <.tip><code>{"hook={true}"}</code> — all three events land in <code>handle_event("web_multiselect:select|deselect|change", …)</code> on the server.</.tip>
         <p>
           All three events land in <code>handle_event/3</code>. Here the server stamps each with a
           sequence number and renders them newest-first — proof they're genuinely server-side, not
@@ -309,9 +314,10 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
             <code>{inspect(e.payload)}</code>
           </div>
         </div>
-      </.card>
+      </.keen_card>
 
-      <.card title="Server-authoritative rule — enforce &amp; correct via push_update/3">
+      <.keen_card title="Server-authoritative rule — enforce &amp; correct via push_update/3">
+        <.tip><code>{"hook={true}"}</code> forwards <code>change</code>; the server corrects the element with <code>Keenmate.WebMultiselect.push_update/3</code>.</.tip>
         <p>
           The closest thing to a server veto. The server allows the change optimistically, then if
           the rule is violated it corrects the element with
@@ -330,7 +336,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
           <summary>Show server code</summary>
           <.code_block lang="elixir">{@code_server_limit}</.code_block>
         </details>
-      </.card>
+      </.keen_card>
 
       <script type="module">
         const wait = (id) => new Promise((resolve) => {
