@@ -15,6 +15,11 @@ config :test_app, TestAppWeb.Endpoint,
 
 config :phoenix, :json_library, Jason
 
+# Plausible analytics on the public examples pages — off by default so dev,
+# test, and the e2e harness never emit tracking. runtime.exs flips it on for
+# prod (the deployed container).
+config :test_app, :analytics, false
+
 config :logger, level: :debug
 
 # Import environment specific config. This must remain at the bottom

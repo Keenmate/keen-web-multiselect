@@ -1,6 +1,26 @@
 defmodule TestAppWeb.Layouts do
   use TestAppWeb, :html
 
+  # Privacy-friendly analytics for the public examples site. Kept as a raw
+  # string (not inline HEEx) so the whole block — comment + both scripts — can
+  # be rendered conditionally with one `{raw(...)}`, and so the inline init
+  # script's literal `{ }` never risks HEEx interpolation. Only emitted when
+  # the :analytics flag is on (prod only — see config/config.exs + runtime.exs).
+  @plausible_snippet """
+  <!-- Privacy-friendly analytics by Plausible -->
+  <script async src="https://stats.keenmate.services/js/pa-mpFovW7Z1BGsoCR85-Z1m.js"></script>
+  <script>
+    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+    plausible.init()
+  </script>
+  """
+
+  defp analytics_html do
+    if Application.get_env(:test_app, :analytics, false),
+      do: raw(@plausible_snippet),
+      else: raw("")
+  end
+
   def root(assigns) do
     ~H"""
     <!DOCTYPE html>
@@ -60,6 +80,7 @@ defmodule TestAppWeb.Layouts do
           }
         </script>
         <script type="module" src="/assets/app.js"></script>
+        {analytics_html()}
       </head>
       <body>
         {@inner_content}

@@ -25,6 +25,10 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST", "keen-web-multiselect.keenmate.dev")
   port = String.to_integer(System.get_env("PORT", "4060"))
 
+  # Plausible analytics — on by default in the deployed build; set
+  # ANALYTICS_ENABLED=false to opt a given deploy out.
+  config :test_app, :analytics, System.get_env("ANALYTICS_ENABLED", "true") == "true"
+
   config :test_app, TestAppWeb.Endpoint,
     server: true,
     # TLS is terminated by the reverse proxy in front of the container; the app
