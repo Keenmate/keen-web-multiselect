@@ -1,78 +1,78 @@
-var ht = Object.defineProperty;
-var mt = (o, e, t) => e in o ? ht(o, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : o[e] = t;
-var d = (o, e, t) => mt(o, typeof e != "symbol" ? e + "" : e, t);
-const ie = Math.min, F = Math.max, re = Math.round, se = Math.floor, L = (o) => ({
+var vt = Object.defineProperty;
+var _t = (o, e, t) => e in o ? vt(o, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : o[e] = t;
+var h = (o, e, t) => _t(o, typeof e != "symbol" ? e + "" : e, t);
+const he = Math.min, X = Math.max, me = Math.round, ce = Math.floor, F = (o) => ({
   x: o,
   y: o
-}), pt = {
+}), kt = {
   left: "right",
   right: "left",
   bottom: "top",
   top: "bottom"
-}, ut = {
+}, yt = {
   start: "end",
   end: "start"
 };
-function De(o, e, t) {
-  return F(o, ie(e, t));
+function $e(o, e, t) {
+  return X(o, he(e, t));
 }
-function le(o, e) {
+function be(o, e) {
   return typeof o == "function" ? o(e) : o;
 }
-function N(o) {
+function J(o) {
   return o.split("-")[0];
 }
-function ce(o) {
+function ge(o) {
   return o.split("-")[1];
 }
-function Ge(o) {
+function Qe(o) {
   return o === "x" ? "y" : "x";
 }
-function Ke(o) {
+function et(o) {
   return o === "y" ? "height" : "width";
 }
-const bt = /* @__PURE__ */ new Set(["top", "bottom"]);
-function V(o) {
-  return bt.has(N(o)) ? "y" : "x";
+const wt = /* @__PURE__ */ new Set(["top", "bottom"]);
+function G(o) {
+  return wt.has(J(o)) ? "y" : "x";
 }
-function qe(o) {
-  return Ge(V(o));
+function tt(o) {
+  return Qe(G(o));
 }
-function gt(o, e, t) {
+function xt(o, e, t) {
   t === void 0 && (t = !1);
-  const s = ce(o), i = qe(o), r = Ke(i);
-  let n = i === "x" ? s === (t ? "end" : "start") ? "right" : "left" : s === "start" ? "bottom" : "top";
-  return e.reference[r] > e.floating[r] && (n = ne(n)), [n, ne(n)];
+  const s = ge(o), i = tt(o), r = et(i);
+  let a = i === "x" ? s === (t ? "end" : "start") ? "right" : "left" : s === "start" ? "bottom" : "top";
+  return e.reference[r] > e.floating[r] && (a = pe(a)), [a, pe(a)];
 }
-function ft(o) {
-  const e = ne(o);
-  return [fe(o), e, fe(e)];
+function Ct(o) {
+  const e = pe(o);
+  return [xe(o), e, xe(e)];
 }
-function fe(o) {
-  return o.replace(/start|end/g, (e) => ut[e]);
+function xe(o) {
+  return o.replace(/start|end/g, (e) => yt[e]);
 }
-const ze = ["left", "right"], Ve = ["right", "left"], vt = ["top", "bottom"], _t = ["bottom", "top"];
-function yt(o, e, t) {
+const Re = ["left", "right"], Fe = ["right", "left"], St = ["top", "bottom"], Tt = ["bottom", "top"];
+function It(o, e, t) {
   switch (o) {
     case "top":
     case "bottom":
-      return t ? e ? Ve : ze : e ? ze : Ve;
+      return t ? e ? Fe : Re : e ? Re : Fe;
     case "left":
     case "right":
-      return e ? vt : _t;
+      return e ? St : Tt;
     default:
       return [];
   }
 }
-function wt(o, e, t, s) {
-  const i = ce(o);
-  let r = yt(N(o), t === "start", s);
-  return i && (r = r.map((n) => n + "-" + i), e && (r = r.concat(r.map(fe)))), r;
+function Mt(o, e, t, s) {
+  const i = ge(o);
+  let r = It(J(o), t === "start", s);
+  return i && (r = r.map((a) => a + "-" + i), e && (r = r.concat(r.map(xe)))), r;
 }
-function ne(o) {
-  return o.replace(/left|right|bottom|top/g, (e) => pt[e]);
+function pe(o) {
+  return o.replace(/left|right|bottom|top/g, (e) => kt[e]);
 }
-function kt(o) {
+function Ot(o) {
   return {
     top: 0,
     right: 0,
@@ -81,15 +81,15 @@ function kt(o) {
     ...o
   };
 }
-function xt(o) {
-  return typeof o != "number" ? kt(o) : {
+function At(o) {
+  return typeof o != "number" ? Ot(o) : {
     top: o,
     right: o,
     bottom: o,
     left: o
   };
 }
-function ae(o) {
+function ue(o) {
   const {
     x: e,
     y: t,
@@ -107,23 +107,23 @@ function ae(o) {
     y: t
   };
 }
-function Be(o, e, t) {
+function He(o, e, t) {
   let {
     reference: s,
     floating: i
   } = o;
-  const r = V(e), n = qe(e), a = Ke(n), l = N(e), h = r === "y", c = s.x + s.width / 2 - i.width / 2, p = s.y + s.height / 2 - i.height / 2, u = s[a] / 2 - i[a] / 2;
+  const r = G(e), a = tt(e), n = et(a), l = J(e), c = r === "y", d = s.x + s.width / 2 - i.width / 2, p = s.y + s.height / 2 - i.height / 2, u = s[n] / 2 - i[n] / 2;
   let m;
   switch (l) {
     case "top":
       m = {
-        x: c,
+        x: d,
         y: s.y - i.height
       };
       break;
     case "bottom":
       m = {
-        x: c,
+        x: d,
         y: s.y + s.height
       };
       break;
@@ -145,123 +145,123 @@ function Be(o, e, t) {
         y: s.y
       };
   }
-  switch (ce(e)) {
+  switch (ge(e)) {
     case "start":
-      m[n] -= u * (t && h ? -1 : 1);
+      m[a] -= u * (t && c ? -1 : 1);
       break;
     case "end":
-      m[n] += u * (t && h ? -1 : 1);
+      m[a] += u * (t && c ? -1 : 1);
       break;
   }
   return m;
 }
-const Ct = async (o, e, t) => {
+const Pt = async (o, e, t) => {
   const {
     placement: s = "bottom",
     strategy: i = "absolute",
     middleware: r = [],
-    platform: n
-  } = t, a = r.filter(Boolean), l = await (n.isRTL == null ? void 0 : n.isRTL(e));
-  let h = await n.getElementRects({
+    platform: a
+  } = t, n = r.filter(Boolean), l = await (a.isRTL == null ? void 0 : a.isRTL(e));
+  let c = await a.getElementRects({
     reference: o,
     floating: e,
     strategy: i
   }), {
-    x: c,
+    x: d,
     y: p
-  } = Be(h, s, l), u = s, m = {}, b = 0;
-  for (let f = 0; f < a.length; f++) {
+  } = He(c, s, l), u = s, m = {}, b = 0;
+  for (let v = 0; v < n.length; v++) {
     const {
-      name: g,
-      fn: v
-    } = a[f], {
+      name: f,
+      fn: g
+    } = n[v], {
       x: _,
-      y: w,
-      data: C,
-      reset: k
-    } = await v({
-      x: c,
+      y,
+      data: w,
+      reset: M
+    } = await g({
+      x: d,
       y: p,
       initialPlacement: s,
       placement: u,
       strategy: i,
       middlewareData: m,
-      rects: h,
-      platform: n,
+      rects: c,
+      platform: a,
       elements: {
         reference: o,
         floating: e
       }
     });
-    c = _ ?? c, p = w ?? p, m = {
+    d = _ ?? d, p = y ?? p, m = {
       ...m,
-      [g]: {
-        ...m[g],
-        ...C
+      [f]: {
+        ...m[f],
+        ...w
       }
-    }, k && b <= 50 && (b++, typeof k == "object" && (k.placement && (u = k.placement), k.rects && (h = k.rects === !0 ? await n.getElementRects({
+    }, M && b <= 50 && (b++, typeof M == "object" && (M.placement && (u = M.placement), M.rects && (c = M.rects === !0 ? await a.getElementRects({
       reference: o,
       floating: e,
       strategy: i
-    }) : k.rects), {
-      x: c,
+    }) : M.rects), {
+      x: d,
       y: p
-    } = Be(h, u, l)), f = -1);
+    } = He(c, u, l)), v = -1);
   }
   return {
-    x: c,
+    x: d,
     y: p,
     placement: u,
     strategy: i,
     middlewareData: m
   };
 };
-async function Ye(o, e) {
+async function st(o, e) {
   var t;
   e === void 0 && (e = {});
   const {
     x: s,
     y: i,
     platform: r,
-    rects: n,
-    elements: a,
+    rects: a,
+    elements: n,
     strategy: l
   } = o, {
-    boundary: h = "clippingAncestors",
-    rootBoundary: c = "viewport",
+    boundary: c = "clippingAncestors",
+    rootBoundary: d = "viewport",
     elementContext: p = "floating",
     altBoundary: u = !1,
     padding: m = 0
-  } = le(e, o), b = xt(m), g = a[u ? p === "floating" ? "reference" : "floating" : p], v = ae(await r.getClippingRect({
-    element: (t = await (r.isElement == null ? void 0 : r.isElement(g))) == null || t ? g : g.contextElement || await (r.getDocumentElement == null ? void 0 : r.getDocumentElement(a.floating)),
-    boundary: h,
-    rootBoundary: c,
+  } = be(e, o), b = At(m), f = n[u ? p === "floating" ? "reference" : "floating" : p], g = ue(await r.getClippingRect({
+    element: (t = await (r.isElement == null ? void 0 : r.isElement(f))) == null || t ? f : f.contextElement || await (r.getDocumentElement == null ? void 0 : r.getDocumentElement(n.floating)),
+    boundary: c,
+    rootBoundary: d,
     strategy: l
   })), _ = p === "floating" ? {
     x: s,
     y: i,
-    width: n.floating.width,
-    height: n.floating.height
-  } : n.reference, w = await (r.getOffsetParent == null ? void 0 : r.getOffsetParent(a.floating)), C = await (r.isElement == null ? void 0 : r.isElement(w)) ? await (r.getScale == null ? void 0 : r.getScale(w)) || {
+    width: a.floating.width,
+    height: a.floating.height
+  } : a.reference, y = await (r.getOffsetParent == null ? void 0 : r.getOffsetParent(n.floating)), w = await (r.isElement == null ? void 0 : r.isElement(y)) ? await (r.getScale == null ? void 0 : r.getScale(y)) || {
     x: 1,
     y: 1
   } : {
     x: 1,
     y: 1
-  }, k = ae(r.convertOffsetParentRelativeRectToViewportRelativeRect ? await r.convertOffsetParentRelativeRectToViewportRelativeRect({
-    elements: a,
+  }, M = ue(r.convertOffsetParentRelativeRectToViewportRelativeRect ? await r.convertOffsetParentRelativeRectToViewportRelativeRect({
+    elements: n,
     rect: _,
-    offsetParent: w,
+    offsetParent: y,
     strategy: l
   }) : _);
   return {
-    top: (v.top - k.top + b.top) / C.y,
-    bottom: (k.bottom - v.bottom + b.bottom) / C.y,
-    left: (v.left - k.left + b.left) / C.x,
-    right: (k.right - v.right + b.right) / C.x
+    top: (g.top - M.top + b.top) / w.y,
+    bottom: (M.bottom - g.bottom + b.bottom) / w.y,
+    left: (g.left - M.left + b.left) / w.x,
+    right: (M.right - g.right + b.right) / w.x
   };
 }
-const St = function(o) {
+const Lt = function(o) {
   return o === void 0 && (o = {}), {
     name: "flip",
     options: o,
@@ -270,85 +270,85 @@ const St = function(o) {
       const {
         placement: i,
         middlewareData: r,
-        rects: n,
-        initialPlacement: a,
+        rects: a,
+        initialPlacement: n,
         platform: l,
-        elements: h
+        elements: c
       } = e, {
-        mainAxis: c = !0,
+        mainAxis: d = !0,
         crossAxis: p = !0,
         fallbackPlacements: u,
         fallbackStrategy: m = "bestFit",
         fallbackAxisSideDirection: b = "none",
-        flipAlignment: f = !0,
-        ...g
-      } = le(o, e);
+        flipAlignment: v = !0,
+        ...f
+      } = be(o, e);
       if ((t = r.arrow) != null && t.alignmentOffset)
         return {};
-      const v = N(i), _ = V(a), w = N(a) === a, C = await (l.isRTL == null ? void 0 : l.isRTL(h.floating)), k = u || (w || !f ? [ne(a)] : ft(a)), Y = b !== "none";
-      !u && Y && k.push(...wt(a, f, b, C));
-      const j = [a, ...k], ue = await Ye(e, g), te = [];
-      let U = ((s = r.flip) == null ? void 0 : s.overflows) || [];
-      if (c && te.push(ue[v]), p) {
-        const $ = gt(i, n, C);
-        te.push(ue[$[0]], ue[$[1]]);
+      const g = J(i), _ = G(n), y = J(n) === n, w = await (l.isRTL == null ? void 0 : l.isRTL(c.floating)), M = u || (y || !v ? [pe(n)] : Ct(n)), E = b !== "none";
+      !u && E && M.push(...Mt(n, v, b, w));
+      const j = [n, ...M], se = await st(e, f), I = [];
+      let C = ((s = r.flip) == null ? void 0 : s.overflows) || [];
+      if (d && I.push(se[g]), p) {
+        const k = xt(i, a, w);
+        I.push(se[k[0]], se[k[1]]);
       }
-      if (U = [...U, {
+      if (C = [...C, {
         placement: i,
-        overflows: te
-      }], !te.every(($) => $ <= 0)) {
-        var Pe, Le;
-        const $ = (((Pe = r.flip) == null ? void 0 : Pe.index) || 0) + 1, be = j[$];
-        if (be && (!(p === "alignment" ? _ !== V(be) : !1) || // We leave the current main axis only if every placement on that axis
+        overflows: I
+      }], !I.every((k) => k <= 0)) {
+        var x, S;
+        const k = (((x = r.flip) == null ? void 0 : x.index) || 0) + 1, P = j[k];
+        if (P && (!(p === "alignment" ? _ !== G(P) : !1) || // We leave the current main axis only if every placement on that axis
         // overflows the main axis.
-        U.every((O) => V(O.placement) === _ ? O.overflows[0] > 0 : !0)))
+        C.every((D) => G(D.placement) === _ ? D.overflows[0] > 0 : !0)))
           return {
             data: {
-              index: $,
-              overflows: U
+              index: k,
+              overflows: C
             },
             reset: {
-              placement: be
+              placement: P
             }
           };
-        let X = (Le = U.filter((R) => R.overflows[0] <= 0).sort((R, O) => R.overflows[1] - O.overflows[1])[0]) == null ? void 0 : Le.placement;
-        if (!X)
+        let oe = (S = C.filter((q) => q.overflows[0] <= 0).sort((q, D) => q.overflows[1] - D.overflows[1])[0]) == null ? void 0 : S.placement;
+        if (!oe)
           switch (m) {
             case "bestFit": {
-              var Ee;
-              const R = (Ee = U.filter((O) => {
-                if (Y) {
-                  const z = V(O.placement);
-                  return z === _ || // Create a bias to the `y` side axis due to horizontal
+              var A;
+              const q = (A = C.filter((D) => {
+                if (E) {
+                  const W = G(D.placement);
+                  return W === _ || // Create a bias to the `y` side axis due to horizontal
                   // reading directions favoring greater width.
-                  z === "y";
+                  W === "y";
                 }
                 return !0;
-              }).map((O) => [O.placement, O.overflows.filter((z) => z > 0).reduce((z, dt) => z + dt, 0)]).sort((O, z) => O[1] - z[1])[0]) == null ? void 0 : Ee[0];
-              R && (X = R);
+              }).map((D) => [D.placement, D.overflows.filter((W) => W > 0).reduce((W, ft) => W + ft, 0)]).sort((D, W) => D[1] - W[1])[0]) == null ? void 0 : A[0];
+              q && (oe = q);
               break;
             }
             case "initialPlacement":
-              X = a;
+              oe = n;
               break;
           }
-        if (i !== X)
+        if (i !== oe)
           return {
             reset: {
-              placement: X
+              placement: oe
             }
           };
       }
       return {};
     }
   };
-}, Tt = /* @__PURE__ */ new Set(["left", "top"]);
-async function Ot(o, e) {
+}, Et = /* @__PURE__ */ new Set(["left", "top"]);
+async function Vt(o, e) {
   const {
     placement: t,
     platform: s,
     elements: i
-  } = o, r = await (s.isRTL == null ? void 0 : s.isRTL(i.floating)), n = N(t), a = ce(t), l = V(t) === "y", h = Tt.has(n) ? -1 : 1, c = r && l ? -1 : 1, p = le(e, o);
+  } = o, r = await (s.isRTL == null ? void 0 : s.isRTL(i.floating)), a = J(t), n = ge(t), l = G(t) === "y", c = Et.has(a) ? -1 : 1, d = r && l ? -1 : 1, p = be(e, o);
   let {
     mainAxis: u,
     crossAxis: m,
@@ -362,15 +362,15 @@ async function Ot(o, e) {
     crossAxis: p.crossAxis || 0,
     alignmentAxis: p.alignmentAxis
   };
-  return a && typeof b == "number" && (m = a === "end" ? b * -1 : b), l ? {
-    x: m * c,
-    y: u * h
+  return n && typeof b == "number" && (m = n === "end" ? b * -1 : b), l ? {
+    x: m * d,
+    y: u * c
   } : {
-    x: u * h,
-    y: m * c
+    x: u * c,
+    y: m * d
   };
 }
-const It = function(o) {
+const Dt = function(o) {
   return o === void 0 && (o = 0), {
     name: "offset",
     options: o,
@@ -379,20 +379,20 @@ const It = function(o) {
       const {
         x: i,
         y: r,
-        placement: n,
-        middlewareData: a
-      } = e, l = await Ot(e, o);
-      return n === ((t = a.offset) == null ? void 0 : t.placement) && (s = a.arrow) != null && s.alignmentOffset ? {} : {
+        placement: a,
+        middlewareData: n
+      } = e, l = await Vt(e, o);
+      return a === ((t = n.offset) == null ? void 0 : t.placement) && (s = n.arrow) != null && s.alignmentOffset ? {} : {
         x: i + l.x,
         y: r + l.y,
         data: {
           ...l,
-          placement: n
+          placement: a
         }
       };
     }
   };
-}, At = function(o) {
+}, zt = function(o) {
   return o === void 0 && (o = {}), {
     name: "shift",
     options: o,
@@ -403,95 +403,95 @@ const It = function(o) {
         placement: i
       } = e, {
         mainAxis: r = !0,
-        crossAxis: n = !1,
-        limiter: a = {
-          fn: (g) => {
+        crossAxis: a = !1,
+        limiter: n = {
+          fn: (f) => {
             let {
-              x: v,
+              x: g,
               y: _
-            } = g;
+            } = f;
             return {
-              x: v,
+              x: g,
               y: _
             };
           }
         },
         ...l
-      } = le(o, e), h = {
+      } = be(o, e), c = {
         x: t,
         y: s
-      }, c = await Ye(e, l), p = V(N(i)), u = Ge(p);
-      let m = h[u], b = h[p];
+      }, d = await st(e, l), p = G(J(i)), u = Qe(p);
+      let m = c[u], b = c[p];
       if (r) {
-        const g = u === "y" ? "top" : "left", v = u === "y" ? "bottom" : "right", _ = m + c[g], w = m - c[v];
-        m = De(_, m, w);
+        const f = u === "y" ? "top" : "left", g = u === "y" ? "bottom" : "right", _ = m + d[f], y = m - d[g];
+        m = $e(_, m, y);
       }
-      if (n) {
-        const g = p === "y" ? "top" : "left", v = p === "y" ? "bottom" : "right", _ = b + c[g], w = b - c[v];
-        b = De(_, b, w);
+      if (a) {
+        const f = p === "y" ? "top" : "left", g = p === "y" ? "bottom" : "right", _ = b + d[f], y = b - d[g];
+        b = $e(_, b, y);
       }
-      const f = a.fn({
+      const v = n.fn({
         ...e,
         [u]: m,
         [p]: b
       });
       return {
-        ...f,
+        ...v,
         data: {
-          x: f.x - t,
-          y: f.y - s,
+          x: v.x - t,
+          y: v.y - s,
           enabled: {
             [u]: r,
-            [p]: n
+            [p]: a
           }
         }
       };
     }
   };
 };
-function de() {
+function fe() {
   return typeof window < "u";
 }
-function q(o) {
-  return Xe(o) ? (o.nodeName || "").toLowerCase() : "#document";
+function te(o) {
+  return ot(o) ? (o.nodeName || "").toLowerCase() : "#document";
 }
-function T(o) {
+function V(o) {
   var e;
   return (o == null || (e = o.ownerDocument) == null ? void 0 : e.defaultView) || window;
 }
-function D(o) {
+function N(o) {
   var e;
-  return (e = (Xe(o) ? o.ownerDocument : o.document) || window.document) == null ? void 0 : e.documentElement;
+  return (e = (ot(o) ? o.ownerDocument : o.document) || window.document) == null ? void 0 : e.documentElement;
 }
-function Xe(o) {
-  return de() ? o instanceof Node || o instanceof T(o).Node : !1;
+function ot(o) {
+  return fe() ? o instanceof Node || o instanceof V(o).Node : !1;
 }
-function A(o) {
-  return de() ? o instanceof Element || o instanceof T(o).Element : !1;
+function B(o) {
+  return fe() ? o instanceof Element || o instanceof V(o).Element : !1;
 }
-function E(o) {
-  return de() ? o instanceof HTMLElement || o instanceof T(o).HTMLElement : !1;
+function H(o) {
+  return fe() ? o instanceof HTMLElement || o instanceof V(o).HTMLElement : !1;
 }
-function $e(o) {
-  return !de() || typeof ShadowRoot > "u" ? !1 : o instanceof ShadowRoot || o instanceof T(o).ShadowRoot;
+function Ne(o) {
+  return !fe() || typeof ShadowRoot > "u" ? !1 : o instanceof ShadowRoot || o instanceof V(o).ShadowRoot;
 }
-const Mt = /* @__PURE__ */ new Set(["inline", "contents"]);
-function ee(o) {
+const Bt = /* @__PURE__ */ new Set(["inline", "contents"]);
+function le(o) {
   const {
     overflow: e,
     overflowX: t,
     overflowY: s,
     display: i
-  } = M(o);
-  return /auto|scroll|overlay|hidden|clip/.test(e + s + t) && !Mt.has(i);
+  } = $(o);
+  return /auto|scroll|overlay|hidden|clip/.test(e + s + t) && !Bt.has(i);
 }
-const Pt = /* @__PURE__ */ new Set(["table", "td", "th"]);
-function Lt(o) {
-  return Pt.has(q(o));
+const $t = /* @__PURE__ */ new Set(["table", "td", "th"]);
+function Rt(o) {
+  return $t.has(te(o));
 }
-const Et = [":popover-open", ":modal"];
-function he(o) {
-  return Et.some((e) => {
+const Ft = [":popover-open", ":modal"];
+function ve(o) {
+  return Ft.some((e) => {
     try {
       return o.matches(e);
     } catch {
@@ -499,34 +499,34 @@ function he(o) {
     }
   });
 }
-const Dt = ["transform", "translate", "scale", "rotate", "perspective"], zt = ["transform", "translate", "scale", "rotate", "perspective", "filter"], Vt = ["paint", "layout", "strict", "content"];
-function Te(o) {
-  const e = Oe(), t = A(o) ? M(o) : o;
-  return Dt.some((s) => t[s] ? t[s] !== "none" : !1) || (t.containerType ? t.containerType !== "normal" : !1) || !e && (t.backdropFilter ? t.backdropFilter !== "none" : !1) || !e && (t.filter ? t.filter !== "none" : !1) || zt.some((s) => (t.willChange || "").includes(s)) || Vt.some((s) => (t.contain || "").includes(s));
+const Ht = ["transform", "translate", "scale", "rotate", "perspective"], Nt = ["transform", "translate", "scale", "rotate", "perspective", "filter"], jt = ["paint", "layout", "strict", "content"];
+function Le(o) {
+  const e = Ee(), t = B(o) ? $(o) : o;
+  return Ht.some((s) => t[s] ? t[s] !== "none" : !1) || (t.containerType ? t.containerType !== "normal" : !1) || !e && (t.backdropFilter ? t.backdropFilter !== "none" : !1) || !e && (t.filter ? t.filter !== "none" : !1) || Nt.some((s) => (t.willChange || "").includes(s)) || jt.some((s) => (t.contain || "").includes(s));
 }
-function Bt(o) {
-  let e = B(o);
-  for (; E(e) && !K(e); ) {
-    if (Te(e))
+function Wt(o) {
+  let e = K(o);
+  for (; H(e) && !ee(e); ) {
+    if (Le(e))
       return e;
-    if (he(e))
+    if (ve(e))
       return null;
-    e = B(e);
+    e = K(e);
   }
   return null;
 }
-function Oe() {
+function Ee() {
   return typeof CSS > "u" || !CSS.supports ? !1 : CSS.supports("-webkit-backdrop-filter", "none");
 }
-const $t = /* @__PURE__ */ new Set(["html", "body", "#document"]);
-function K(o) {
-  return $t.has(q(o));
+const Ut = /* @__PURE__ */ new Set(["html", "body", "#document"]);
+function ee(o) {
+  return Ut.has(te(o));
 }
-function M(o) {
-  return T(o).getComputedStyle(o);
+function $(o) {
+  return V(o).getComputedStyle(o);
 }
-function me(o) {
-  return A(o) ? {
+function _e(o) {
+  return B(o) ? {
     scrollLeft: o.scrollLeft,
     scrollTop: o.scrollTop
   } : {
@@ -534,189 +534,189 @@ function me(o) {
     scrollTop: o.scrollY
   };
 }
-function B(o) {
-  if (q(o) === "html")
+function K(o) {
+  if (te(o) === "html")
     return o;
   const e = (
     // Step into the shadow DOM of the parent of a slotted node.
     o.assignedSlot || // DOM Element detected.
     o.parentNode || // ShadowRoot detected.
-    $e(o) && o.host || // Fallback.
-    D(o)
+    Ne(o) && o.host || // Fallback.
+    N(o)
   );
-  return $e(e) ? e.host : e;
+  return Ne(e) ? e.host : e;
 }
-function Je(o) {
-  const e = B(o);
-  return K(e) ? o.ownerDocument ? o.ownerDocument.body : o.body : E(e) && ee(e) ? e : Je(e);
+function it(o) {
+  const e = K(o);
+  return ee(e) ? o.ownerDocument ? o.ownerDocument.body : o.body : H(e) && le(e) ? e : it(e);
 }
-function Z(o, e, t) {
+function ae(o, e, t) {
   var s;
   e === void 0 && (e = []), t === void 0 && (t = !0);
-  const i = Je(o), r = i === ((s = o.ownerDocument) == null ? void 0 : s.body), n = T(i);
+  const i = it(o), r = i === ((s = o.ownerDocument) == null ? void 0 : s.body), a = V(i);
   if (r) {
-    const a = ve(n);
-    return e.concat(n, n.visualViewport || [], ee(i) ? i : [], a && t ? Z(a) : []);
+    const n = Ce(a);
+    return e.concat(a, a.visualViewport || [], le(i) ? i : [], n && t ? ae(n) : []);
   }
-  return e.concat(i, Z(i, [], t));
+  return e.concat(i, ae(i, [], t));
 }
-function ve(o) {
+function Ce(o) {
   return o.parent && Object.getPrototypeOf(o.parent) ? o.frameElement : null;
 }
-function Ze(o) {
-  const e = M(o);
+function rt(o) {
+  const e = $(o);
   let t = parseFloat(e.width) || 0, s = parseFloat(e.height) || 0;
-  const i = E(o), r = i ? o.offsetWidth : t, n = i ? o.offsetHeight : s, a = re(t) !== r || re(s) !== n;
-  return a && (t = r, s = n), {
+  const i = H(o), r = i ? o.offsetWidth : t, a = i ? o.offsetHeight : s, n = me(t) !== r || me(s) !== a;
+  return n && (t = r, s = a), {
     width: t,
     height: s,
-    $: a
+    $: n
   };
 }
-function Ie(o) {
-  return A(o) ? o : o.contextElement;
+function Ve(o) {
+  return B(o) ? o : o.contextElement;
 }
-function G(o) {
-  const e = Ie(o);
-  if (!E(e))
-    return L(1);
+function Q(o) {
+  const e = Ve(o);
+  if (!H(e))
+    return F(1);
   const t = e.getBoundingClientRect(), {
     width: s,
     height: i,
     $: r
-  } = Ze(e);
-  let n = (r ? re(t.width) : t.width) / s, a = (r ? re(t.height) : t.height) / i;
-  return (!n || !Number.isFinite(n)) && (n = 1), (!a || !Number.isFinite(a)) && (a = 1), {
-    x: n,
-    y: a
+  } = rt(e);
+  let a = (r ? me(t.width) : t.width) / s, n = (r ? me(t.height) : t.height) / i;
+  return (!a || !Number.isFinite(a)) && (a = 1), (!n || !Number.isFinite(n)) && (n = 1), {
+    x: a,
+    y: n
   };
 }
-const Rt = /* @__PURE__ */ L(0);
-function Qe(o) {
-  const e = T(o);
-  return !Oe() || !e.visualViewport ? Rt : {
+const Gt = /* @__PURE__ */ F(0);
+function at(o) {
+  const e = V(o);
+  return !Ee() || !e.visualViewport ? Gt : {
     x: e.visualViewport.offsetLeft,
     y: e.visualViewport.offsetTop
   };
 }
-function Ht(o, e, t) {
-  return e === void 0 && (e = !1), !t || e && t !== T(o) ? !1 : e;
+function Kt(o, e, t) {
+  return e === void 0 && (e = !1), !t || e && t !== V(o) ? !1 : e;
 }
-function W(o, e, t, s) {
+function Z(o, e, t, s) {
   e === void 0 && (e = !1), t === void 0 && (t = !1);
-  const i = o.getBoundingClientRect(), r = Ie(o);
-  let n = L(1);
-  e && (s ? A(s) && (n = G(s)) : n = G(o));
-  const a = Ht(r, t, s) ? Qe(r) : L(0);
-  let l = (i.left + a.x) / n.x, h = (i.top + a.y) / n.y, c = i.width / n.x, p = i.height / n.y;
+  const i = o.getBoundingClientRect(), r = Ve(o);
+  let a = F(1);
+  e && (s ? B(s) && (a = Q(s)) : a = Q(o));
+  const n = Kt(r, t, s) ? at(r) : F(0);
+  let l = (i.left + n.x) / a.x, c = (i.top + n.y) / a.y, d = i.width / a.x, p = i.height / a.y;
   if (r) {
-    const u = T(r), m = s && A(s) ? T(s) : s;
-    let b = u, f = ve(b);
-    for (; f && s && m !== b; ) {
-      const g = G(f), v = f.getBoundingClientRect(), _ = M(f), w = v.left + (f.clientLeft + parseFloat(_.paddingLeft)) * g.x, C = v.top + (f.clientTop + parseFloat(_.paddingTop)) * g.y;
-      l *= g.x, h *= g.y, c *= g.x, p *= g.y, l += w, h += C, b = T(f), f = ve(b);
+    const u = V(r), m = s && B(s) ? V(s) : s;
+    let b = u, v = Ce(b);
+    for (; v && s && m !== b; ) {
+      const f = Q(v), g = v.getBoundingClientRect(), _ = $(v), y = g.left + (v.clientLeft + parseFloat(_.paddingLeft)) * f.x, w = g.top + (v.clientTop + parseFloat(_.paddingTop)) * f.y;
+      l *= f.x, c *= f.y, d *= f.x, p *= f.y, l += y, c += w, b = V(v), v = Ce(b);
     }
   }
-  return ae({
-    width: c,
+  return ue({
+    width: d,
     height: p,
     x: l,
-    y: h
+    y: c
   });
 }
-function pe(o, e) {
-  const t = me(o).scrollLeft;
-  return e ? e.left + t : W(D(o)).left + t;
+function ke(o, e) {
+  const t = _e(o).scrollLeft;
+  return e ? e.left + t : Z(N(o)).left + t;
 }
-function et(o, e) {
-  const t = o.getBoundingClientRect(), s = t.left + e.scrollLeft - pe(o, t), i = t.top + e.scrollTop;
+function nt(o, e) {
+  const t = o.getBoundingClientRect(), s = t.left + e.scrollLeft - ke(o, t), i = t.top + e.scrollTop;
   return {
     x: s,
     y: i
   };
 }
-function Ft(o) {
+function qt(o) {
   let {
     elements: e,
     rect: t,
     offsetParent: s,
     strategy: i
   } = o;
-  const r = i === "fixed", n = D(s), a = e ? he(e.floating) : !1;
-  if (s === n || a && r)
+  const r = i === "fixed", a = N(s), n = e ? ve(e.floating) : !1;
+  if (s === a || n && r)
     return t;
   let l = {
     scrollLeft: 0,
     scrollTop: 0
-  }, h = L(1);
-  const c = L(0), p = E(s);
-  if ((p || !p && !r) && ((q(s) !== "body" || ee(n)) && (l = me(s)), E(s))) {
-    const m = W(s);
-    h = G(s), c.x = m.x + s.clientLeft, c.y = m.y + s.clientTop;
+  }, c = F(1);
+  const d = F(0), p = H(s);
+  if ((p || !p && !r) && ((te(s) !== "body" || le(a)) && (l = _e(s)), H(s))) {
+    const m = Z(s);
+    c = Q(s), d.x = m.x + s.clientLeft, d.y = m.y + s.clientTop;
   }
-  const u = n && !p && !r ? et(n, l) : L(0);
+  const u = a && !p && !r ? nt(a, l) : F(0);
   return {
-    width: t.width * h.x,
-    height: t.height * h.y,
-    x: t.x * h.x - l.scrollLeft * h.x + c.x + u.x,
-    y: t.y * h.y - l.scrollTop * h.y + c.y + u.y
+    width: t.width * c.x,
+    height: t.height * c.y,
+    x: t.x * c.x - l.scrollLeft * c.x + d.x + u.x,
+    y: t.y * c.y - l.scrollTop * c.y + d.y + u.y
   };
 }
-function Nt(o) {
+function Yt(o) {
   return Array.from(o.getClientRects());
 }
-function Wt(o) {
-  const e = D(o), t = me(o), s = o.ownerDocument.body, i = F(e.scrollWidth, e.clientWidth, s.scrollWidth, s.clientWidth), r = F(e.scrollHeight, e.clientHeight, s.scrollHeight, s.clientHeight);
-  let n = -t.scrollLeft + pe(o);
-  const a = -t.scrollTop;
-  return M(s).direction === "rtl" && (n += F(e.clientWidth, s.clientWidth) - i), {
+function Xt(o) {
+  const e = N(o), t = _e(o), s = o.ownerDocument.body, i = X(e.scrollWidth, e.clientWidth, s.scrollWidth, s.clientWidth), r = X(e.scrollHeight, e.clientHeight, s.scrollHeight, s.clientHeight);
+  let a = -t.scrollLeft + ke(o);
+  const n = -t.scrollTop;
+  return $(s).direction === "rtl" && (a += X(e.clientWidth, s.clientWidth) - i), {
     width: i,
     height: r,
-    x: n,
-    y: a
+    x: a,
+    y: n
   };
 }
-const Re = 25;
-function jt(o, e) {
-  const t = T(o), s = D(o), i = t.visualViewport;
-  let r = s.clientWidth, n = s.clientHeight, a = 0, l = 0;
+const je = 25;
+function Jt(o, e) {
+  const t = V(o), s = N(o), i = t.visualViewport;
+  let r = s.clientWidth, a = s.clientHeight, n = 0, l = 0;
   if (i) {
-    r = i.width, n = i.height;
-    const c = Oe();
-    (!c || c && e === "fixed") && (a = i.offsetLeft, l = i.offsetTop);
+    r = i.width, a = i.height;
+    const d = Ee();
+    (!d || d && e === "fixed") && (n = i.offsetLeft, l = i.offsetTop);
   }
-  const h = pe(s);
-  if (h <= 0) {
-    const c = s.ownerDocument, p = c.body, u = getComputedStyle(p), m = c.compatMode === "CSS1Compat" && parseFloat(u.marginLeft) + parseFloat(u.marginRight) || 0, b = Math.abs(s.clientWidth - p.clientWidth - m);
-    b <= Re && (r -= b);
-  } else h <= Re && (r += h);
+  const c = ke(s);
+  if (c <= 0) {
+    const d = s.ownerDocument, p = d.body, u = getComputedStyle(p), m = d.compatMode === "CSS1Compat" && parseFloat(u.marginLeft) + parseFloat(u.marginRight) || 0, b = Math.abs(s.clientWidth - p.clientWidth - m);
+    b <= je && (r -= b);
+  } else c <= je && (r += c);
   return {
     width: r,
-    height: n,
-    x: a,
+    height: a,
+    x: n,
     y: l
   };
 }
-const Ut = /* @__PURE__ */ new Set(["absolute", "fixed"]);
-function Gt(o, e) {
-  const t = W(o, !0, e === "fixed"), s = t.top + o.clientTop, i = t.left + o.clientLeft, r = E(o) ? G(o) : L(1), n = o.clientWidth * r.x, a = o.clientHeight * r.y, l = i * r.x, h = s * r.y;
+const Zt = /* @__PURE__ */ new Set(["absolute", "fixed"]);
+function Qt(o, e) {
+  const t = Z(o, !0, e === "fixed"), s = t.top + o.clientTop, i = t.left + o.clientLeft, r = H(o) ? Q(o) : F(1), a = o.clientWidth * r.x, n = o.clientHeight * r.y, l = i * r.x, c = s * r.y;
   return {
-    width: n,
-    height: a,
+    width: a,
+    height: n,
     x: l,
-    y: h
+    y: c
   };
 }
-function He(o, e, t) {
+function We(o, e, t) {
   let s;
   if (e === "viewport")
-    s = jt(o, t);
+    s = Jt(o, t);
   else if (e === "document")
-    s = Wt(D(o));
-  else if (A(e))
-    s = Gt(e, t);
+    s = Xt(N(o));
+  else if (B(e))
+    s = Qt(e, t);
   else {
-    const i = Qe(o);
+    const i = at(o);
     s = {
       x: e.x - i.x,
       y: e.y - i.y,
@@ -724,36 +724,36 @@ function He(o, e, t) {
       height: e.height
     };
   }
-  return ae(s);
+  return ue(s);
 }
-function tt(o, e) {
-  const t = B(o);
-  return t === e || !A(t) || K(t) ? !1 : M(t).position === "fixed" || tt(t, e);
+function lt(o, e) {
+  const t = K(o);
+  return t === e || !B(t) || ee(t) ? !1 : $(t).position === "fixed" || lt(t, e);
 }
-function Kt(o, e) {
+function es(o, e) {
   const t = e.get(o);
   if (t)
     return t;
-  let s = Z(o, [], !1).filter((a) => A(a) && q(a) !== "body"), i = null;
-  const r = M(o).position === "fixed";
-  let n = r ? B(o) : o;
-  for (; A(n) && !K(n); ) {
-    const a = M(n), l = Te(n);
-    !l && a.position === "fixed" && (i = null), (r ? !l && !i : !l && a.position === "static" && !!i && Ut.has(i.position) || ee(n) && !l && tt(o, n)) ? s = s.filter((c) => c !== n) : i = a, n = B(n);
+  let s = ae(o, [], !1).filter((n) => B(n) && te(n) !== "body"), i = null;
+  const r = $(o).position === "fixed";
+  let a = r ? K(o) : o;
+  for (; B(a) && !ee(a); ) {
+    const n = $(a), l = Le(a);
+    !l && n.position === "fixed" && (i = null), (r ? !l && !i : !l && n.position === "static" && !!i && Zt.has(i.position) || le(a) && !l && lt(o, a)) ? s = s.filter((d) => d !== a) : i = n, a = K(a);
   }
   return e.set(o, s), s;
 }
-function qt(o) {
+function ts(o) {
   let {
     element: e,
     boundary: t,
     rootBoundary: s,
     strategy: i
   } = o;
-  const n = [...t === "clippingAncestors" ? he(e) ? [] : Kt(e, this._c) : [].concat(t), s], a = n[0], l = n.reduce((h, c) => {
-    const p = He(e, c, i);
-    return h.top = F(p.top, h.top), h.right = ie(p.right, h.right), h.bottom = ie(p.bottom, h.bottom), h.left = F(p.left, h.left), h;
-  }, He(e, a, i));
+  const a = [...t === "clippingAncestors" ? ve(e) ? [] : es(e, this._c) : [].concat(t), s], n = a[0], l = a.reduce((c, d) => {
+    const p = We(e, d, i);
+    return c.top = X(p.top, c.top), c.right = he(p.right, c.right), c.bottom = he(p.bottom, c.bottom), c.left = X(p.left, c.left), c;
+  }, We(e, n, i));
   return {
     width: l.right - l.left,
     height: l.bottom - l.top,
@@ -761,73 +761,73 @@ function qt(o) {
     y: l.top
   };
 }
-function Yt(o) {
+function ss(o) {
   const {
     width: e,
     height: t
-  } = Ze(o);
+  } = rt(o);
   return {
     width: e,
     height: t
   };
 }
-function Xt(o, e, t) {
-  const s = E(e), i = D(e), r = t === "fixed", n = W(o, !0, r, e);
-  let a = {
+function os(o, e, t) {
+  const s = H(e), i = N(e), r = t === "fixed", a = Z(o, !0, r, e);
+  let n = {
     scrollLeft: 0,
     scrollTop: 0
   };
-  const l = L(0);
-  function h() {
-    l.x = pe(i);
+  const l = F(0);
+  function c() {
+    l.x = ke(i);
   }
   if (s || !s && !r)
-    if ((q(e) !== "body" || ee(i)) && (a = me(e)), s) {
-      const m = W(e, !0, r, e);
+    if ((te(e) !== "body" || le(i)) && (n = _e(e)), s) {
+      const m = Z(e, !0, r, e);
       l.x = m.x + e.clientLeft, l.y = m.y + e.clientTop;
-    } else i && h();
-  r && !s && i && h();
-  const c = i && !s && !r ? et(i, a) : L(0), p = n.left + a.scrollLeft - l.x - c.x, u = n.top + a.scrollTop - l.y - c.y;
+    } else i && c();
+  r && !s && i && c();
+  const d = i && !s && !r ? nt(i, n) : F(0), p = a.left + n.scrollLeft - l.x - d.x, u = a.top + n.scrollTop - l.y - d.y;
   return {
     x: p,
     y: u,
-    width: n.width,
-    height: n.height
+    width: a.width,
+    height: a.height
   };
 }
-function ge(o) {
-  return M(o).position === "static";
+function ye(o) {
+  return $(o).position === "static";
 }
-function Fe(o, e) {
-  if (!E(o) || M(o).position === "fixed")
+function Ue(o, e) {
+  if (!H(o) || $(o).position === "fixed")
     return null;
   if (e)
     return e(o);
   let t = o.offsetParent;
-  return D(o) === t && (t = t.ownerDocument.body), t;
+  return N(o) === t && (t = t.ownerDocument.body), t;
 }
-function st(o, e) {
-  const t = T(o);
-  if (he(o))
+function ct(o, e) {
+  const t = V(o);
+  if (ve(o))
     return t;
-  if (!E(o)) {
-    let i = B(o);
-    for (; i && !K(i); ) {
-      if (A(i) && !ge(i))
+  if (!H(o)) {
+    let i = K(o);
+    for (; i && !ee(i); ) {
+      if (B(i) && !ye(i))
         return i;
-      i = B(i);
+      i = K(i);
     }
     return t;
   }
-  let s = Fe(o, e);
-  for (; s && Lt(s) && ge(s); )
-    s = Fe(s, e);
-  return s && K(s) && ge(s) && !Te(s) ? t : s || Bt(o) || t;
+  let s = Ue(o, e);
+  for (; s && Rt(s) && ye(s); )
+    s = Ue(s, e);
+  return s && ee(s) && ye(s) && !Le(s) ? t : s || Wt(o) || t;
 }
-const Jt = async function(o) {
-  const e = this.getOffsetParent || st, t = this.getDimensions, s = await t(o.floating);
+const is = async function(o) {
+  const e = this.getOffsetParent || ct, t = this.getDimensions, s = await t(o.floating);
   return {
-    reference: Xt(o.reference, await e(o.floating), o.strategy),
+    reference: os(o.reference, await e(o.floating), o.strategy),
     floating: {
       x: 0,
       y: 0,
@@ -836,128 +836,128 @@ const Jt = async function(o) {
     }
   };
 };
-function Zt(o) {
-  return M(o).direction === "rtl";
+function rs(o) {
+  return $(o).direction === "rtl";
 }
-const ot = {
-  convertOffsetParentRelativeRectToViewportRelativeRect: Ft,
-  getDocumentElement: D,
-  getClippingRect: qt,
-  getOffsetParent: st,
-  getElementRects: Jt,
-  getClientRects: Nt,
-  getDimensions: Yt,
-  getScale: G,
-  isElement: A,
-  isRTL: Zt
+const dt = {
+  convertOffsetParentRelativeRectToViewportRelativeRect: qt,
+  getDocumentElement: N,
+  getClippingRect: ts,
+  getOffsetParent: ct,
+  getElementRects: is,
+  getClientRects: Yt,
+  getDimensions: ss,
+  getScale: Q,
+  isElement: B,
+  isRTL: rs
 };
-function it(o, e) {
+function ht(o, e) {
   return o.x === e.x && o.y === e.y && o.width === e.width && o.height === e.height;
 }
-function Qt(o, e) {
+function as(o, e) {
   let t = null, s;
-  const i = D(o);
+  const i = N(o);
   function r() {
-    var a;
-    clearTimeout(s), (a = t) == null || a.disconnect(), t = null;
+    var n;
+    clearTimeout(s), (n = t) == null || n.disconnect(), t = null;
   }
-  function n(a, l) {
-    a === void 0 && (a = !1), l === void 0 && (l = 1), r();
-    const h = o.getBoundingClientRect(), {
-      left: c,
+  function a(n, l) {
+    n === void 0 && (n = !1), l === void 0 && (l = 1), r();
+    const c = o.getBoundingClientRect(), {
+      left: d,
       top: p,
       width: u,
       height: m
-    } = h;
-    if (a || e(), !u || !m)
+    } = c;
+    if (n || e(), !u || !m)
       return;
-    const b = se(p), f = se(i.clientWidth - (c + u)), g = se(i.clientHeight - (p + m)), v = se(c), w = {
-      rootMargin: -b + "px " + -f + "px " + -g + "px " + -v + "px",
-      threshold: F(0, ie(1, l)) || 1
+    const b = ce(p), v = ce(i.clientWidth - (d + u)), f = ce(i.clientHeight - (p + m)), g = ce(d), y = {
+      rootMargin: -b + "px " + -v + "px " + -f + "px " + -g + "px",
+      threshold: X(0, he(1, l)) || 1
     };
-    let C = !0;
-    function k(Y) {
-      const j = Y[0].intersectionRatio;
+    let w = !0;
+    function M(E) {
+      const j = E[0].intersectionRatio;
       if (j !== l) {
-        if (!C)
-          return n();
-        j ? n(!1, j) : s = setTimeout(() => {
-          n(!1, 1e-7);
+        if (!w)
+          return a();
+        j ? a(!1, j) : s = setTimeout(() => {
+          a(!1, 1e-7);
         }, 1e3);
       }
-      j === 1 && !it(h, o.getBoundingClientRect()) && n(), C = !1;
+      j === 1 && !ht(c, o.getBoundingClientRect()) && a(), w = !1;
     }
     try {
-      t = new IntersectionObserver(k, {
-        ...w,
+      t = new IntersectionObserver(M, {
+        ...y,
         // Handle <iframe>s
         root: i.ownerDocument
       });
     } catch {
-      t = new IntersectionObserver(k, w);
+      t = new IntersectionObserver(M, y);
     }
     t.observe(o);
   }
-  return n(!0), r;
+  return a(!0), r;
 }
-function _e(o, e, t, s) {
+function Se(o, e, t, s) {
   s === void 0 && (s = {});
   const {
     ancestorScroll: i = !0,
     ancestorResize: r = !0,
-    elementResize: n = typeof ResizeObserver == "function",
-    layoutShift: a = typeof IntersectionObserver == "function",
+    elementResize: a = typeof ResizeObserver == "function",
+    layoutShift: n = typeof IntersectionObserver == "function",
     animationFrame: l = !1
-  } = s, h = Ie(o), c = i || r ? [...h ? Z(h) : [], ...Z(e)] : [];
-  c.forEach((v) => {
-    i && v.addEventListener("scroll", t, {
+  } = s, c = Ve(o), d = i || r ? [...c ? ae(c) : [], ...ae(e)] : [];
+  d.forEach((g) => {
+    i && g.addEventListener("scroll", t, {
       passive: !0
-    }), r && v.addEventListener("resize", t);
+    }), r && g.addEventListener("resize", t);
   });
-  const p = h && a ? Qt(h, t) : null;
+  const p = c && n ? as(c, t) : null;
   let u = -1, m = null;
-  n && (m = new ResizeObserver((v) => {
-    let [_] = v;
-    _ && _.target === h && m && (m.unobserve(e), cancelAnimationFrame(u), u = requestAnimationFrame(() => {
-      var w;
-      (w = m) == null || w.observe(e);
+  a && (m = new ResizeObserver((g) => {
+    let [_] = g;
+    _ && _.target === c && m && (m.unobserve(e), cancelAnimationFrame(u), u = requestAnimationFrame(() => {
+      var y;
+      (y = m) == null || y.observe(e);
     })), t();
-  }), h && !l && m.observe(h), m.observe(e));
-  let b, f = l ? W(o) : null;
-  l && g();
-  function g() {
-    const v = W(o);
-    f && !it(f, v) && t(), f = v, b = requestAnimationFrame(g);
+  }), c && !l && m.observe(c), m.observe(e));
+  let b, v = l ? Z(o) : null;
+  l && f();
+  function f() {
+    const g = Z(o);
+    v && !ht(v, g) && t(), v = g, b = requestAnimationFrame(f);
   }
   return t(), () => {
-    var v;
-    c.forEach((_) => {
+    var g;
+    d.forEach((_) => {
       i && _.removeEventListener("scroll", t), r && _.removeEventListener("resize", t);
-    }), p == null || p(), (v = m) == null || v.disconnect(), m = null, l && cancelAnimationFrame(b);
+    }), p == null || p(), (g = m) == null || g.disconnect(), m = null, l && cancelAnimationFrame(b);
   };
 }
-const ye = It, we = At, rt = St, ke = (o, e, t) => {
+const Te = Dt, Ie = zt, mt = Lt, Me = (o, e, t) => {
   const s = /* @__PURE__ */ new Map(), i = {
-    platform: ot,
+    platform: dt,
     ...t
   }, r = {
     ...i.platform,
     _c: s
   };
-  return Ct(o, e, {
+  return Pt(o, e, {
     ...i,
     platform: r
   });
 };
-var nt = function() {
-}, I = "undefined", es = typeof window !== I && typeof window.navigator !== I && /Trident\/|MSIE /.test(window.navigator.userAgent), xe = [
+var pt = function() {
+}, z = "undefined", ns = typeof window !== z && typeof window.navigator !== z && /Trident\/|MSIE /.test(window.navigator.userAgent), Oe = [
   "trace",
   "debug",
   "info",
   "warn",
   "error"
-], Q = {}, y = null;
-function Ne(o, e) {
+], ne = {}, T = null;
+function Ge(o, e) {
   var t = o[e];
   if (typeof t.bind == "function")
     return t.bind(o);
@@ -969,76 +969,76 @@ function Ne(o, e) {
     };
   }
 }
-function ts() {
+function ls() {
   console.log && (console.log.apply ? console.log.apply(console, arguments) : Function.prototype.apply.apply(console.log, [console, arguments])), console.trace && console.trace();
 }
-function ss(o) {
-  return o === "debug" && (o = "log"), typeof console === I ? !1 : o === "trace" && es ? ts : console[o] !== void 0 ? Ne(console, o) : console.log !== void 0 ? Ne(console, "log") : nt;
+function cs(o) {
+  return o === "debug" && (o = "log"), typeof console === z ? !1 : o === "trace" && ns ? ls : console[o] !== void 0 ? Ge(console, o) : console.log !== void 0 ? Ge(console, "log") : pt;
 }
-function J() {
-  for (var o = this.getLevel(), e = 0; e < xe.length; e++) {
-    var t = xe[e];
-    this[t] = e < o ? nt : this.methodFactory(t, o, this.name);
+function ie() {
+  for (var o = this.getLevel(), e = 0; e < Oe.length; e++) {
+    var t = Oe[e];
+    this[t] = e < o ? pt : this.methodFactory(t, o, this.name);
   }
-  if (this.log = this.debug, typeof console === I && o < this.levels.SILENT)
+  if (this.log = this.debug, typeof console === z && o < this.levels.SILENT)
     return "No console available for logging";
 }
-function os(o) {
+function ds(o) {
   return function() {
-    typeof console !== I && (J.call(this), this[o].apply(this, arguments));
+    typeof console !== z && (ie.call(this), this[o].apply(this, arguments));
   };
 }
-function is(o, e, t) {
-  return ss(o) || os.apply(this, arguments);
+function hs(o, e, t) {
+  return cs(o) || ds.apply(this, arguments);
 }
-function at(o, e) {
-  var t = this, s, i, r, n = "loglevel";
-  typeof o == "string" ? n += ":" + o : typeof o == "symbol" && (n = void 0);
-  function a(u) {
-    var m = (xe[u] || "silent").toUpperCase();
-    if (!(typeof window === I || !n)) {
+function ut(o, e) {
+  var t = this, s, i, r, a = "loglevel";
+  typeof o == "string" ? a += ":" + o : typeof o == "symbol" && (a = void 0);
+  function n(u) {
+    var m = (Oe[u] || "silent").toUpperCase();
+    if (!(typeof window === z || !a)) {
       try {
-        window.localStorage[n] = m;
+        window.localStorage[a] = m;
         return;
       } catch {
       }
       try {
-        window.document.cookie = encodeURIComponent(n) + "=" + m + ";";
+        window.document.cookie = encodeURIComponent(a) + "=" + m + ";";
       } catch {
       }
     }
   }
   function l() {
     var u;
-    if (!(typeof window === I || !n)) {
+    if (!(typeof window === z || !a)) {
       try {
-        u = window.localStorage[n];
+        u = window.localStorage[a];
       } catch {
       }
-      if (typeof u === I)
+      if (typeof u === z)
         try {
-          var m = window.document.cookie, b = encodeURIComponent(n), f = m.indexOf(b + "=");
-          f !== -1 && (u = /^([^;]+)/.exec(
-            m.slice(f + b.length + 1)
+          var m = window.document.cookie, b = encodeURIComponent(a), v = m.indexOf(b + "=");
+          v !== -1 && (u = /^([^;]+)/.exec(
+            m.slice(v + b.length + 1)
           )[1]);
         } catch {
         }
       return t.levels[u] === void 0 && (u = void 0), u;
     }
   }
-  function h() {
-    if (!(typeof window === I || !n)) {
+  function c() {
+    if (!(typeof window === z || !a)) {
       try {
-        window.localStorage.removeItem(n);
+        window.localStorage.removeItem(a);
       } catch {
       }
       try {
-        window.document.cookie = encodeURIComponent(n) + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        window.document.cookie = encodeURIComponent(a) + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
       } catch {
       }
     }
   }
-  function c(u) {
+  function d(u) {
     var m = u;
     if (typeof m == "string" && t.levels[m.toUpperCase()] !== void 0 && (m = t.levels[m.toUpperCase()]), typeof m == "number" && m >= 0 && m <= t.levels.SILENT)
       return m;
@@ -1051,52 +1051,52 @@ function at(o, e) {
     WARN: 3,
     ERROR: 4,
     SILENT: 5
-  }, t.methodFactory = e || is, t.getLevel = function() {
+  }, t.methodFactory = e || hs, t.getLevel = function() {
     return r ?? i ?? s;
   }, t.setLevel = function(u, m) {
-    return r = c(u), m !== !1 && a(r), J.call(t);
+    return r = d(u), m !== !1 && n(r), ie.call(t);
   }, t.setDefaultLevel = function(u) {
-    i = c(u), l() || t.setLevel(u, !1);
+    i = d(u), l() || t.setLevel(u, !1);
   }, t.resetLevel = function() {
-    r = null, h(), J.call(t);
+    r = null, c(), ie.call(t);
   }, t.enableAll = function(u) {
     t.setLevel(t.levels.TRACE, u);
   }, t.disableAll = function(u) {
     t.setLevel(t.levels.SILENT, u);
   }, t.rebuild = function() {
-    if (y !== t && (s = c(y.getLevel())), J.call(t), y === t)
-      for (var u in Q)
-        Q[u].rebuild();
-  }, s = c(
-    y ? y.getLevel() : "WARN"
+    if (T !== t && (s = d(T.getLevel())), ie.call(t), T === t)
+      for (var u in ne)
+        ne[u].rebuild();
+  }, s = d(
+    T ? T.getLevel() : "WARN"
   );
   var p = l();
-  p != null && (r = c(p)), J.call(t);
+  p != null && (r = d(p)), ie.call(t);
 }
-y = new at();
-y.getLogger = function(e) {
+T = new ut();
+T.getLogger = function(e) {
   if (typeof e != "symbol" && typeof e != "string" || e === "")
     throw new TypeError("You must supply a name when creating a logger.");
-  var t = Q[e];
-  return t || (t = Q[e] = new at(
+  var t = ne[e];
+  return t || (t = ne[e] = new ut(
     e,
-    y.methodFactory
+    T.methodFactory
   )), t;
 };
-var rs = typeof window !== I ? window.log : void 0;
-y.noConflict = function() {
-  return typeof window !== I && window.log === y && (window.log = rs), y;
+var ms = typeof window !== z ? window.log : void 0;
+T.noConflict = function() {
+  return typeof window !== z && window.log === T && (window.log = ms), T;
 };
-y.getLoggers = function() {
-  return Q;
+T.getLoggers = function() {
+  return ne;
 };
-y.default = y;
-var ns = function(o) {
+T.default = T;
+var ps = function(o) {
   for (var e = 1, t = arguments.length, s; e < t; e++)
     for (s in arguments[e])
       Object.prototype.hasOwnProperty.call(arguments[e], s) && (o[s] = arguments[e][s]);
   return o;
-}, as = {
+}, us = {
   template: "[%t] %l:",
   levelFormatter: function(o) {
     return o.toUpperCase();
@@ -1108,34 +1108,34 @@ var ns = function(o) {
     return o.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
   },
   format: void 0
-}, lt, H = {}, ls = function(o) {
+}, bt, Y = {}, bs = function(o) {
   if (!o || !o.getLogger)
     throw new TypeError("Argument is not a root logger");
-  lt = o;
-}, cs = function(o, e) {
+  bt = o;
+}, gs = function(o, e) {
   if (!o || !o.setLevel)
     throw new TypeError("Argument is not a logger");
-  var t = o.methodFactory, s = o.name || "", i = H[s] || H[""] || as;
-  function r(n, a, l) {
-    var h = t(n, a, l), c = H[l] || H[""], p = c.template.indexOf("%t") !== -1, u = c.template.indexOf("%l") !== -1, m = c.template.indexOf("%n") !== -1;
+  var t = o.methodFactory, s = o.name || "", i = Y[s] || Y[""] || us;
+  function r(a, n, l) {
+    var c = t(a, n, l), d = Y[l] || Y[""], p = d.template.indexOf("%t") !== -1, u = d.template.indexOf("%l") !== -1, m = d.template.indexOf("%n") !== -1;
     return function() {
-      for (var b = "", f = arguments.length, g = Array(f), v = 0; v < f; v++)
-        g[v] = arguments[v];
-      if (s || !H[l]) {
-        var _ = c.timestampFormatter(/* @__PURE__ */ new Date()), w = c.levelFormatter(n), C = c.nameFormatter(l);
-        c.format ? b += c.format(w, C, _) : (b += c.template, p && (b = b.replace(/%t/, _)), u && (b = b.replace(/%l/, w)), m && (b = b.replace(/%n/, C))), g.length && typeof g[0] == "string" ? g[0] = b + " " + g[0] : g.unshift(b);
+      for (var b = "", v = arguments.length, f = Array(v), g = 0; g < v; g++)
+        f[g] = arguments[g];
+      if (s || !Y[l]) {
+        var _ = d.timestampFormatter(/* @__PURE__ */ new Date()), y = d.levelFormatter(a), w = d.nameFormatter(l);
+        d.format ? b += d.format(y, w, _) : (b += d.template, p && (b = b.replace(/%t/, _)), u && (b = b.replace(/%l/, y)), m && (b = b.replace(/%n/, w))), f.length && typeof f[0] == "string" ? f[0] = b + " " + f[0] : f.unshift(b);
       }
-      h.apply(void 0, g);
+      c.apply(void 0, f);
     };
   }
-  return H[s] || (o.methodFactory = r), e = e || {}, e.template && (e.format = void 0), H[s] = ns({}, i, e), o.setLevel(o.getLevel()), lt || o.warn(
+  return Y[s] || (o.methodFactory = r), e = e || {}, e.template && (e.format = void 0), Y[s] = ps({}, i, e), o.setLevel(o.getLevel()), bt || o.warn(
     "It is necessary to call the function reg() of loglevel-plugin-prefix before calling apply. From the next release, it will throw an error. See more: https://github.com/kutuluk/loglevel-plugin-prefix/blob/master/README.md"
   ), o;
-}, ds = {
-  reg: ls,
-  apply: cs
+}, fs = {
+  reg: bs,
+  apply: gs
 };
-const hs = {
+const vs = {
   debug: "#0ea5e9",
   // Blue
   info: "#10b981",
@@ -1145,55 +1145,55 @@ const hs = {
   error: "#ef4444"
   // Red
 };
-ds.reg(y);
-const ms = (o) => o.toTimeString().split(" ")[0] + "." + o.getMilliseconds().toString().padStart(3, "0"), ps = y.methodFactory;
-y.methodFactory = function(o, e, t) {
-  const s = ps(o, e, t), r = `color: ${hs[o] || "#666"}; font-weight: bold;`, n = "color: inherit;";
-  return function(...a) {
-    const l = ms(/* @__PURE__ */ new Date()), h = o.toUpperCase(), c = t ? `%c[${l}]%c %c[${h}]%c %c[${t}]%c` : `%c[${l}]%c %c[${h}]%c`;
-    s(c, ...t ? [r, n, r, n, r, n] : [r, n, r, n], ...a);
+fs.reg(T);
+const _s = (o) => o.toTimeString().split(" ")[0] + "." + o.getMilliseconds().toString().padStart(3, "0"), ks = T.methodFactory;
+T.methodFactory = function(o, e, t) {
+  const s = ks(o, e, t), r = `color: ${vs[o] || "#666"}; font-weight: bold;`, a = "color: inherit;";
+  return function(...n) {
+    const l = _s(/* @__PURE__ */ new Date()), c = o.toUpperCase(), d = t ? `%c[${l}]%c %c[${c}]%c %c[${t}]%c` : `%c[${l}]%c %c[${c}]%c`;
+    s(d, ...t ? [r, a, r, a, r, a] : [r, a, r, a], ...n);
   };
 };
-typeof y.setDefaultLevel == "function" ? y.setDefaultLevel("silent") : y.setLevel("silent", !1);
-const oe = y.getLogger("MULTISELECT:INIT"), x = y.getLogger("MULTISELECT:DATA"), P = y.getLogger("MULTISELECT:UI"), S = y.getLogger("MULTISELECT:INTERACTION"), us = [
+typeof T.setDefaultLevel == "function" ? T.setDefaultLevel("silent") : T.setLevel("silent", !1);
+const de = T.getLogger("MULTISELECT:INIT"), O = T.getLogger("MULTISELECT:DATA"), R = T.getLogger("MULTISELECT:UI"), L = T.getLogger("MULTISELECT:INTERACTION"), ys = [
   "MULTISELECT:INIT",
   "MULTISELECT:DATA",
   "MULTISELECT:UI",
   "MULTISELECT:INTERACTION"
 ];
-function Ae() {
-  typeof y.rebuild == "function" && y.rebuild();
+function De() {
+  typeof T.rebuild == "function" && T.rebuild();
 }
-function bs() {
-  y.setLevel("debug"), Ae();
+function ws() {
+  T.setLevel("debug"), De();
 }
-function gs() {
-  y.setLevel("silent"), Ae();
+function xs() {
+  T.setLevel("silent"), De();
 }
-function fs(o) {
-  y.setLevel(o), Ae();
+function Cs(o) {
+  T.setLevel(o), De();
 }
-function vs(o, e) {
+function Ss(o, e) {
   const t = o.includes(":") ? o : `MULTISELECT:${o}`;
-  y.getLogger(t).setLevel(e);
+  T.getLogger(t).setLevel(e);
 }
-class We {
+class Ke {
   constructor(e) {
-    d(this, "container");
-    d(this, "wrapper");
-    d(this, "viewport");
-    d(this, "itemHeight");
-    d(this, "items");
-    d(this, "renderItem");
-    d(this, "bufferSize");
-    d(this, "onVisibleRangeChange");
-    d(this, "onScroll");
-    d(this, "scrollTop", 0);
-    d(this, "viewportHeight", 0);
-    d(this, "visibleStart", 0);
-    d(this, "visibleEnd", 0);
-    d(this, "scrollHandler");
-    d(this, "resizeObserver");
+    h(this, "container");
+    h(this, "wrapper");
+    h(this, "viewport");
+    h(this, "itemHeight");
+    h(this, "items");
+    h(this, "renderItem");
+    h(this, "bufferSize");
+    h(this, "onVisibleRangeChange");
+    h(this, "onScroll");
+    h(this, "scrollTop", 0);
+    h(this, "viewportHeight", 0);
+    h(this, "visibleStart", 0);
+    h(this, "visibleEnd", 0);
+    h(this, "scrollHandler");
+    h(this, "resizeObserver");
     this.container = e.container, this.itemHeight = e.itemHeight, this.items = e.items, this.renderItem = e.renderItem, this.bufferSize = e.bufferSize ?? 10, this.onVisibleRangeChange = e.onVisibleRangeChange, this.onScroll = e.onScroll, this.scrollHandler = this.handleScroll.bind(this), this.init();
   }
   /**
@@ -1240,8 +1240,8 @@ class We {
     this.visibleStart = e, this.visibleEnd = t, this.onVisibleRangeChange && this.onVisibleRangeChange(e, t);
     let s = "";
     for (let i = e; i < t; i++) {
-      const r = this.items[i], n = this.renderItem(r, i), a = i * this.itemHeight;
-      s += `<div class="ms__virtual-item" style="position: absolute; top: ${a}px; left: 0; right: 0; height: ${this.itemHeight}px;" data-index="${i}">`, s += n, s += "</div>";
+      const r = this.items[i], a = this.renderItem(r, i), n = i * this.itemHeight;
+      s += `<div class="ms__virtual-item" style="position: absolute; top: ${n}px; left: 0; right: 0; height: ${this.itemHeight}px;" data-index="${i}">`, s += a, s += "</div>";
     }
     this.viewport.innerHTML = s;
   }
@@ -1299,27 +1299,27 @@ class We {
     this.container.removeEventListener("scroll", this.scrollHandler), this.resizeObserver && this.resizeObserver.disconnect(), this.container.innerHTML = "";
   }
 }
-class _s {
+class Ts {
   constructor(e) {
-    d(this, "element");
-    d(this, "trigger");
-    d(this, "container");
-    d(this, "placement");
-    d(this, "offsetDistance");
-    d(this, "showDelay");
-    d(this, "hideDelay");
-    d(this, "visibleClass");
-    d(this, "followCursor");
-    d(this, "onBeforeShow");
-    d(this, "showTimer", null);
-    d(this, "hideTimer", null);
-    d(this, "positionCleanup", null);
-    d(this, "visible", !1);
-    d(this, "cursorX", 0);
-    d(this, "cursorY", 0);
-    d(this, "handleMouseEnter");
-    d(this, "handleMouseLeave");
-    d(this, "handleMouseMove");
+    h(this, "element");
+    h(this, "trigger");
+    h(this, "container");
+    h(this, "placement");
+    h(this, "offsetDistance");
+    h(this, "showDelay");
+    h(this, "hideDelay");
+    h(this, "visibleClass");
+    h(this, "followCursor");
+    h(this, "onBeforeShow");
+    h(this, "showTimer", null);
+    h(this, "hideTimer", null);
+    h(this, "positionCleanup", null);
+    h(this, "visible", !1);
+    h(this, "cursorX", 0);
+    h(this, "cursorY", 0);
+    h(this, "handleMouseEnter");
+    h(this, "handleMouseLeave");
+    h(this, "handleMouseMove");
     this.trigger = e.trigger, this.container = e.container, this.placement = e.placement ?? "top", this.offsetDistance = e.offsetDistance ?? 8, this.showDelay = e.showDelay ?? 100, this.hideDelay = e.hideDelay ?? 100, this.visibleClass = e.visibleClass ?? "ms__badge-tooltip--visible", this.followCursor = e.followCursor ?? !1, this.onBeforeShow = e.onBeforeShow, this.element = document.createElement("div"), this.element.className = e.cssClass ?? "ms__badge-tooltip", typeof e.content == "string" ? this.element.textContent = e.content : this.element.appendChild(e.content), this.container.appendChild(this.element), this.handleMouseEnter = (t) => {
       this.followCursor && (this.cursorX = t.clientX, this.cursorY = t.clientY), this.scheduleShow();
     }, this.handleMouseLeave = () => this.scheduleHide(), this.trigger.addEventListener("mouseenter", this.handleMouseEnter), this.trigger.addEventListener("mouseleave", this.handleMouseLeave), this.followCursor && (this.handleMouseMove = (t) => {
@@ -1338,17 +1338,17 @@ class _s {
   }
   show() {
     var e;
-    (e = this.onBeforeShow) == null || e.call(this), this.visible = !0, this.element.classList.add(this.visibleClass), this.positionCleanup && (this.positionCleanup(), this.positionCleanup = null), this.followCursor ? this.positionAtCursor() : this.positionCleanup = _e(this.trigger, this.element, () => this.computeAt(this.trigger));
+    (e = this.onBeforeShow) == null || e.call(this), this.visible = !0, this.element.classList.add(this.visibleClass), this.positionCleanup && (this.positionCleanup(), this.positionCleanup = null), this.followCursor ? this.positionAtCursor() : this.positionCleanup = Se(this.trigger, this.element, () => this.computeAt(this.trigger));
   }
   /** Position the tooltip relative to a reference (the trigger element or a pointer virtual element). */
   computeAt(e) {
-    ke(e, this.element, {
+    Me(e, this.element, {
       placement: this.placement,
       strategy: "fixed",
       middleware: [
-        ye(this.offsetDistance),
-        rt(),
-        we({ padding: 8 })
+        Te(this.offsetDistance),
+        mt(),
+        Ie({ padding: 8 })
       ]
     }).then(({ x: t, y: s }) => {
       Object.assign(this.element.style, {
@@ -1384,7 +1384,190 @@ class _s {
     this.showTimer !== null && clearTimeout(this.showTimer), this.hideTimer !== null && clearTimeout(this.hideTimer), this.showTimer = null, this.hideTimer = null, this.positionCleanup && (this.positionCleanup(), this.positionCleanup = null), this.trigger.removeEventListener("mouseenter", this.handleMouseEnter), this.trigger.removeEventListener("mouseleave", this.handleMouseLeave), this.handleMouseMove && this.trigger.removeEventListener("mousemove", this.handleMouseMove), this.element.remove();
   }
 }
-function ys(o) {
+function qe(o) {
+  return {
+    treeId: "",
+    id: -1,
+    path: "",
+    pathSegment: "",
+    parentPath: void 0,
+    level: void 0,
+    children: {},
+    hasChildren: !1,
+    isSelectable: !0,
+    data: void 0,
+    ...o
+  };
+}
+const re = (o) => !o || typeof o == "string" && o.trim() === "";
+function Is(o, e = ".") {
+  if (!o || typeof o != "string") return null;
+  const t = o.lastIndexOf(e);
+  return t === -1 ? "" : o.substring(0, t);
+}
+function Ye(o, e, t = ".") {
+  return re(e) ? o : o.startsWith(e + t) ? o.substring(e.length + t.length) : o;
+}
+function Xe(o, e = 0, t = 1, s = ".") {
+  return o.split(s).slice(e, e + t).join(s);
+}
+function Ms(o, e) {
+  return o.split(e).length;
+}
+function U(o, e) {
+  return o[e];
+}
+function Os(o = {}) {
+  const e = o.idMember, t = o.pathMember, s = o.getPathCallback, i = o.parentPathMember, r = o.levelMember, a = o.hasChildrenMember, n = o.isSelectableMember, l = o.getIsSelectableCallback, c = o.treeId || "multiselect-tree", d = o.orderMember, p = o.getDisplayValueCallback, u = re(i), m = re(r), b = re(a), v = re(n), f = "x", g = o.treePathSeparator || ".", _ = qe();
+  let y = 0, w = null;
+  const M = (I) => s ? s(I) : t ? U(I, t) : void 0, E = {
+    treePathSeparator: g,
+    root: _,
+    get tree() {
+      return Object.values(_.children);
+    },
+    /**
+     * Every node in depth-first render order (a parent immediately precedes
+     * its subtree). Computed once per `insertArray` and cached.
+     */
+    get flatNodes() {
+      if (w) return w;
+      const I = [], C = o.isSorted ?? !1, x = o.sortCallback;
+      function S(A) {
+        let k = Object.values(A.children);
+        C && x && k.length > 0 && (k = x(k));
+        for (const P of k)
+          I.push(P), P.hasChildren && S(P);
+      }
+      return S(_), w = I, I;
+    },
+    insertArray(I) {
+      I = I || [], _.children = {}, y = 0, w = null;
+      const C = [];
+      let x = I.map((S, A) => {
+        const k = qe();
+        k.treeId = c, k.id = e ? U(S, e) : void 0;
+        const P = M(S);
+        return P == null || P === "" || typeof P != "string" ? (C.push(`index ${A}`), null) : (k.path = P, (k.id === void 0 || k.id === -1) && (k.id = P), u ? k.parentPath = Is(k.path, g) : k.parentPath = U(S, i), k.pathSegment = Xe(
+          Ye(k.path, k.parentPath ?? "", g),
+          0,
+          1,
+          g
+        ), m ? k.level = Ms(k.path, g) : k.level = U(S, r), b || (k.hasChildren = U(S, a)), k.data = S, k);
+      }).filter((S) => S !== null);
+      o.isSorted || (o.sortCallback ? x = o.sortCallback(x) : x = se(x));
+      for (const S of x)
+        j(S.parentPath ?? "", S);
+      if (l || !v)
+        for (const S of x)
+          if (l)
+            S.isSelectable = l(S) !== !1;
+          else {
+            const A = U(S.data, n);
+            S.isSelectable = A == null ? !0 : !!A;
+          }
+      C.length > 0 && console.warn(
+        `[ltree ${c}] ${C.length} option(s) had an invalid path and were skipped (pathMember="${t}"). Offending: ${C.slice(0, 5).join(", ")}` + (C.length > 5 ? ", …" : "")
+      );
+    },
+    getNodeByPath(I, C) {
+      let x = C || _;
+      if (I) {
+        const S = I.split(g);
+        for (let A = 0; A < S.length; A++) {
+          const k = f + S[A];
+          if (!x.children.hasOwnProperty(k))
+            return null;
+          x = x.children[k];
+        }
+      }
+      return x;
+    }
+  };
+  function j(I, C) {
+    const x = E.getNodeByPath(I);
+    if (!x)
+      return `Node: ${C.path} - Could not find parent node: ${I}`;
+    m && (C.level = (x.level || 0) + 1);
+    const S = f + Xe(Ye(C.path, I, g), 0, 1, g);
+    return x.children.hasOwnProperty(S) || (x.children[S] = C, b && !x.hasChildren && (x.hasChildren = !0), y = Math.max(y, C.level || 0)), null;
+  }
+  function se(I) {
+    return I.sort((C, x) => {
+      const S = C.level || 0, A = x.level || 0;
+      if (S !== A) return S - A;
+      if (C.parentPath !== x.parentPath)
+        return C.parentPath ? x.parentPath ? C.parentPath.localeCompare(x.parentPath) : 1 : -1;
+      if (d && C.data && x.data) {
+        const k = U(C.data, d) ?? 0, P = U(x.data, d) ?? 0;
+        if (k !== P) return k - P;
+      }
+      return p ? p(C).localeCompare(p(x)) : C.path.localeCompare(x.path);
+    });
+  }
+  return E;
+}
+function As(o, e) {
+  const t = /* @__PURE__ */ new Map(), s = /* @__PURE__ */ new Map(), i = /* @__PURE__ */ new Set(), r = (l) => String(e(l.data)), a = (l) => {
+    t.set(r(l), l);
+    const c = [];
+    for (const p of Object.values(l.children))
+      c.push(...a(p));
+    let d;
+    return c.length > 0 ? d = c : l.isSelectable !== !1 ? (d = [r(l)], i.add(l.path)) : d = [], s.set(l.path, d), d;
+  }, n = o.tree;
+  for (const l of n) a(l);
+  return { nodeByValue: t, atomsUnder: s, atomPaths: i, roots: n };
+}
+function ze(o, e, t) {
+  const s = o.atomsUnder.get(e.path);
+  if (!s || s.length === 0) return "unchecked";
+  let i = 0;
+  for (const r of s) t.has(r) && i++;
+  return i === 0 ? "unchecked" : i === s.length ? "checked" : "indeterminate";
+}
+function we(o, e) {
+  const t = /* @__PURE__ */ new Set();
+  for (const s of e) {
+    const i = o.nodeByValue.get(String(s));
+    if (i)
+      for (const r of o.atomsUnder.get(i.path) ?? []) t.add(r);
+  }
+  return t;
+}
+function Ps(o, e, t) {
+  const s = o.atomsUnder.get(e.path) ?? [], i = new Set(t), r = ze(o, e, t), a = [], n = [];
+  if (r === "checked")
+    for (const l of s) i.delete(l) && n.push(l);
+  else
+    for (const l of s) i.has(l) || (i.add(l), a.push(l));
+  return { checkedAtoms: i, addedAtoms: a, removedAtoms: n };
+}
+function Ls(o, e, t, s) {
+  const i = (n) => String(s(n.data)), r = [], a = (n) => {
+    const l = ze(o, n, e);
+    if (l === "unchecked") return;
+    const c = n.isSelectable !== !1, d = Object.values(n.children);
+    if (t === "leaves") {
+      o.atomPaths.has(n.path) && l === "checked" && r.push(i(n));
+      for (const p of d) a(p);
+      return;
+    }
+    if (t === "all") {
+      l === "checked" && c && r.push(i(n));
+      for (const p of d) a(p);
+      return;
+    }
+    if (l === "checked" && c) {
+      r.push(i(n));
+      return;
+    }
+    for (const p of d) a(p);
+  };
+  for (const n of o.roots) a(n);
+  return r;
+}
+function Es(o) {
   let e = o;
   for (; e && !(e === document.body || e === document.documentElement); ) {
     if (e instanceof Element) {
@@ -1398,7 +1581,7 @@ function ys(o) {
   }
   return window;
 }
-function ws(o, e, t) {
+function Vs(o, e, t) {
   let s = o;
   for (; s && !(s === document.body || s === document.documentElement); ) {
     if (s instanceof Element) {
@@ -1410,58 +1593,68 @@ function ws(o, e, t) {
   }
   return null;
 }
-function ks(o) {
+function Ds(o) {
   const e = getComputedStyle(o), t = [];
   e.transform !== "none" && t.push(`transform: ${e.transform}`), e.perspective !== "none" && t.push(`perspective: ${e.perspective}`), e.filter !== "none" && t.push(`filter: ${e.filter}`);
   const s = e.backdropFilter;
   return s && s !== "none" && t.push(`backdrop-filter: ${s}`), e.willChange && /\b(transform|filter|perspective)\b/.test(e.willChange) && t.push(`will-change: ${e.willChange}`), e.contain && /\b(paint|layout|strict|content)\b/.test(e.contain) && t.push(`contain: ${e.contain}`), e.containerType && e.containerType !== "normal" && t.push(`container-type: ${e.containerType}`), t.join("; ");
 }
-class xs {
+class zs {
   constructor(e, t = {}) {
-    d(this, "element");
-    d(this, "instanceId");
-    d(this, "options");
-    d(this, "isOpen", !1);
-    d(this, "selectedValues", /* @__PURE__ */ new Set());
-    d(this, "selectedOptions", /* @__PURE__ */ new Map());
-    d(this, "allOptions", []);
-    d(this, "filteredOptions", []);
-    d(this, "hiddenInputs", []);
-    d(this, "focusedIndex", -1);
-    d(this, "matchingIndices", /* @__PURE__ */ new Set());
-    d(this, "searchTerm", "");
-    d(this, "isLoading", !1);
-    d(this, "searchDebounceTimer");
-    d(this, "searchAbortController");
-    d(this, "showSelectedPopover", !1);
-    d(this, "selectedPopoverPlacement", null);
-    d(this, "dropdownPlacement", null);
-    d(this, "isRTL", !1);
-    d(this, "effectiveBadgesPosition", "bottom");
-    d(this, "justClosedViaClick", !1);
-    d(this, "positioningDriftWarned", !1);
+    h(this, "element");
+    h(this, "instanceId");
+    h(this, "options");
+    h(this, "isOpen", !1);
+    h(this, "selectedValues", /* @__PURE__ */ new Set());
+    h(this, "selectedOptions", /* @__PURE__ */ new Map());
+    h(this, "allOptions", []);
+    h(this, "filteredOptions", []);
+    // Tree mode: the hierarchy built from option paths, and the flat list of
+    // nodes currently shown. `treeNodes` stays index-aligned with
+    // `filteredOptions` so focus/keyboard/virtual-scroll keep working unchanged.
+    h(this, "tree", null);
+    h(this, "treeNodes", []);
+    // Cascade checkbox mode (tree + multiple + checkbox-mode="cascade"): the index
+    // is rebuilt with the tree; `cascadeCheckedAtoms` is the derived set of checked
+    // leaf-level atoms, refreshed from `selectedValues` before each render.
+    h(this, "cascadeIndex", null);
+    h(this, "cascadeCheckedAtoms", /* @__PURE__ */ new Set());
+    h(this, "hiddenInputs", []);
+    h(this, "focusedIndex", -1);
+    h(this, "matchingIndices", /* @__PURE__ */ new Set());
+    h(this, "searchTerm", "");
+    h(this, "isLoading", !1);
+    h(this, "searchDebounceTimer");
+    h(this, "searchAbortController");
+    h(this, "showSelectedPopover", !1);
+    h(this, "selectedPopoverPlacement", null);
+    h(this, "dropdownPlacement", null);
+    h(this, "isRTL", !1);
+    h(this, "effectiveBadgesPosition", "bottom");
+    h(this, "justClosedViaClick", !1);
+    h(this, "positioningDriftWarned", !1);
     // Floating UI cleanup functions
-    d(this, "dropdownCleanup", null);
-    d(this, "hintCleanup", null);
-    d(this, "selectedPopoverCleanup", null);
+    h(this, "dropdownCleanup", null);
+    h(this, "hintCleanup", null);
+    h(this, "selectedPopoverCleanup", null);
     // All hover tooltips (badge text, badge-remove buttons, action buttons), keyed by id.
-    d(this, "tooltips", /* @__PURE__ */ new Map());
+    h(this, "tooltips", /* @__PURE__ */ new Map());
     // Virtual scroll instance
-    d(this, "virtualScroll", null);
-    d(this, "optionsContainer", null);
-    d(this, "selectedPopoverVirtualScroll", null);
-    d(this, "selectedPopoverContainer", null);
+    h(this, "virtualScroll", null);
+    h(this, "optionsContainer", null);
+    h(this, "selectedPopoverVirtualScroll", null);
+    h(this, "selectedPopoverContainer", null);
     // DOM elements
-    d(this, "input");
-    d(this, "dropdown");
-    d(this, "dropdownInner");
-    d(this, "badgesContainer");
-    d(this, "counter");
-    d(this, "hint");
-    d(this, "selectedPopover");
+    h(this, "input");
+    h(this, "dropdown");
+    h(this, "dropdownInner");
+    h(this, "badgesContainer");
+    h(this, "counter");
+    h(this, "hint");
+    h(this, "selectedPopover");
     // Document-level event handlers (stored for cleanup)
-    d(this, "documentKeydownHandler", null);
-    d(this, "documentClickHandler", null);
+    h(this, "documentKeydownHandler", null);
+    h(this, "documentClickHandler", null);
     this.element = e, this.instanceId = `MS-${Math.random().toString(36).slice(2, 11)}`, this.options = {
       // String options
       searchHint: e.dataset.searchHint || "",
@@ -1555,7 +1748,25 @@ class xs {
    * text independently. Doesn't fit the extractField shape (no tuple/member layer of its own).
    */
   getItemBadgeDisplayValue(e) {
-    return this.options.getBadgeDisplayCallback ? this.options.getBadgeDisplayCallback(e) : this.getItemDisplayValue(e);
+    if (this.options.getBadgeDisplayCallback) return this.options.getBadgeDisplayCallback(e);
+    if (this.options.isBadgeFullTitleShown) {
+      const t = this.getItemFullTitle(e);
+      if (t) return t;
+    }
+    return this.getItemDisplayValue(e);
+  }
+  /**
+   * Full title — a fully-qualified label supplied with the data (never computed here). Used by
+   * badges when `isBadgeFullTitleShown` is on. Returns undefined when the option has none.
+   */
+  getItemFullTitle(e) {
+    return this.extractField(e, {
+      tupleSkip: !0,
+      member: this.options.fullTitleMember,
+      callback: this.options.getFullTitleCallback,
+      transform: String,
+      fallback: void 0
+    });
   }
   getItemSearchValue(e) {
     return this.extractField(e, {
@@ -1601,8 +1812,27 @@ class xs {
       fallback: !1
     });
   }
+  /**
+   * Tree mode: whether the visible node at `index` may be selected. Non-selectable
+   * nodes (see `isSelectableMember`/`getIsSelectableCallback`) still render — just
+   * without a checkbox — but are skipped by focus and cannot be toggled. Always
+   * true outside tree mode. `treeNodes` is index-aligned with `filteredOptions`.
+   */
+  isIndexSelectable(e) {
+    if (!this.isTreeMode()) return !0;
+    const t = this.treeNodes[e];
+    return t ? t.isSelectable !== !1 : !0;
+  }
+  /** Whether an option may be selected. Always true outside tree mode. */
+  isOptionSelectable(e) {
+    if (!this.isTreeMode()) return !0;
+    const t = this.filteredOptions.indexOf(e);
+    if (t >= 0) return this.isIndexSelectable(t);
+    const s = String(this.getItemValue(e)), i = this.treeNodes.find((r) => String(this.getItemValue(r.data)) === s);
+    return i ? i.isSelectable !== !1 : !0;
+  }
   init() {
-    this.parseOptions(), this.buildHTML(), this.attachEvents(), this.parseInitialSelection(), oe.debug(`Initialized [${this.instanceId}] with options:`, {
+    this.parseOptions(), this.buildHTML(), this.attachEvents(), this.parseInitialSelection(), de.debug(`Initialized [${this.instanceId}] with options:`, {
       placeholder: this.options.searchPlaceholder,
       totalOptions: this.allOptions.length,
       isCloseOnSelect: this.options.isCloseOnSelect,
@@ -1615,27 +1845,158 @@ class xs {
       try {
         this.allOptions = JSON.parse(e);
       } catch (t) {
-        x.error(`[${this.instanceId}] Failed to parse data-options:`, t), this.allOptions = [];
+        O.error(`[${this.instanceId}] Failed to parse data-options:`, t), this.allOptions = [];
       }
     else this.options.options && (this.allOptions = this.options.options);
-    this.filteredOptions = [...this.allOptions];
+    this.filteredOptions = [...this.allOptions], this.isTreeMode() && this.buildTree();
+  }
+  // ========================================================================
+  // TREE MODE
+  // ========================================================================
+  /** Whether options should be rendered as an (always-expanded) tree. */
+  isTreeMode() {
+    return this.options.isTreeEnabled === !1 ? !1 : !!(this.options.isTreeEnabled || this.options.pathMember || this.options.getPathCallback);
+  }
+  /** (Re)build the ltree from `allOptions` and derive the visible flat list. */
+  buildTree() {
+    this.tree = Os({
+      idMember: this.options.valueMember,
+      pathMember: this.options.pathMember,
+      getPathCallback: this.options.getPathCallback,
+      parentPathMember: this.options.parentPathMember,
+      levelMember: this.options.levelMember,
+      hasChildrenMember: this.options.hasChildrenMember,
+      isSelectableMember: this.options.isSelectableMember,
+      getIsSelectableCallback: this.options.getIsSelectableCallback,
+      treePathSeparator: this.options.treePathSeparator,
+      treeId: this.instanceId,
+      getDisplayValueCallback: (e) => this.getItemDisplayValue(e.data)
+    }), this.tree.insertArray(this.allOptions), this.cascadeIndex = this.isCascadeMode() ? As(this.tree, (e) => String(this.getItemValue(e))) : null, this.rebuildTreeVisible();
+  }
+  /**
+   * Whether cascade checkbox mode is active: a multi-select tree with
+   * `checkbox-mode="cascade"`. Checking a node then toggles its whole subtree
+   * and branches show a tristate box.
+   */
+  isCascadeMode() {
+    return this.isTreeMode() && this.options.isMultipleEnabled !== !1 && this.options.checkboxMode === "cascade";
+  }
+  cascadePolicy() {
+    return this.options.cascadeSelectPolicy ?? "rolled-up";
+  }
+  /** Refresh the derived checked-atom set from the emitted `selectedValues`. */
+  refreshCascadeAtoms() {
+    this.isCascadeMode() && this.cascadeIndex && (this.cascadeCheckedAtoms = we(this.cascadeIndex, this.selectedValues));
+  }
+  /**
+   * Toggle a tree node in cascade mode: flip its whole subtree, re-project the
+   * checked atoms to emitted values under the active policy, and commit the diff
+   * so badges / form / change events reflect the policy (rolled-up branches, etc.).
+   */
+  toggleTreeCascade(e) {
+    const t = this.cascadeIndex, s = we(t, this.selectedValues), { checkedAtoms: i } = Ps(t, e, s);
+    this.commitCascadeAtoms(i);
+  }
+  /**
+   * Given a checked-atom set, project it to emitted values under the active
+   * policy, diff it against the current selection, and commit. Shared by every
+   * cascade entry point (node toggle, Select All) so they all emit the same
+   * policy-projected shape (e.g. a full subtree rolls up to one value).
+   */
+  commitCascadeAtoms(e) {
+    var l;
+    const t = this.cascadeIndex, s = Ls(
+      t,
+      e,
+      this.cascadePolicy(),
+      (c) => String(this.getItemValue(c))
+    ), i = new Set(s), r = [], a = [];
+    for (const [c, d] of this.selectedOptions)
+      i.has(c) || a.push(d);
+    const n = /* @__PURE__ */ new Map();
+    for (const c of s) {
+      const p = ((l = t.nodeByValue.get(c)) == null ? void 0 : l.data) ?? this.selectedOptions.get(c);
+      p !== void 0 && (n.set(c, p), this.selectedValues.has(c) || r.push(p));
+    }
+    this.selectedValues = i, this.selectedOptions = n, this.cascadeCheckedAtoms = e, this.commit({ added: r, removed: a });
+  }
+  /**
+   * Derive `treeNodes` + `filteredOptions` from the full tree, applying the
+   * current search term. Matching nodes keep all their ancestors visible so
+   * indentation stays coherent (the tree is always fully expanded).
+   */
+  rebuildTreeVisible() {
+    if (!this.tree) {
+      this.treeNodes = [];
+      return;
+    }
+    const e = this.tree.flatNodes, t = this.options.isSearchEnabled ? (this.searchTerm || "").trim().toLowerCase() : "";
+    let s;
+    if (!t)
+      s = e;
+    else {
+      const i = this.tree.treePathSeparator, r = /* @__PURE__ */ new Set();
+      for (const a of e)
+        if (this.getItemSearchValue(a.data).toLowerCase().includes(t)) {
+          const l = a.path.split(i);
+          for (let c = 1; c <= l.length; c++)
+            r.add(l.slice(0, c).join(i));
+        }
+      s = e.filter((a) => r.has(a.path));
+    }
+    this.treeNodes = s, this.filteredOptions = s.map((i) => i.data);
+  }
+  /**
+   * Reset the visible list to "everything". **Tree-aware**: in tree mode it
+   * rebuilds `treeNodes` (kept index-aligned with `filteredOptions`) from the
+   * full tree, so the two never drift. A raw `filteredOptions = [...allOptions]`
+   * would leave `treeNodes` stale after clearing a search — the virtual list
+   * then reserves height for every option but renders blank rows because
+   * `treeNodes[index]` is undefined. Always use this to clear the visible list.
+   */
+  resetVisibleToAll() {
+    this.isTreeMode() ? this.rebuildTreeVisible() : this.filteredOptions = [...this.allOptions];
+  }
+  /**
+   * Tree mode: derive the visible list from an **external** set of matched
+   * options — e.g. the results returned by `searchCallback` — keeping each
+   * match's ancestors so indentation stays coherent. This is the async-search
+   * analogue of `rebuildTreeVisible`: the matching is done by the caller (their
+   * own index/engine) instead of a local substring test, but ancestor
+   * preservation and `treeNodes`/`filteredOptions` index-alignment still happen
+   * here. Pass all options to show the whole tree.
+   */
+  rebuildTreeVisibleFromMatches(e) {
+    if (!this.tree) {
+      this.treeNodes = [], this.filteredOptions = [];
+      return;
+    }
+    const t = this.tree.flatNodes, s = this.tree.treePathSeparator, i = new Set((e || []).map((n) => String(this.getItemValue(n)))), r = /* @__PURE__ */ new Set();
+    for (const n of t)
+      if (i.has(String(this.getItemValue(n.data)))) {
+        const l = n.path.split(s);
+        for (let c = 1; c <= l.length; c++)
+          r.add(l.slice(0, c).join(s));
+      }
+    const a = t.filter((n) => r.has(n.path));
+    this.treeNodes = a, this.filteredOptions = a.map((n) => n.data);
   }
   buildHTML() {
     const e = this.options.container || document.body, t = this.element.getRootNode(), s = t instanceof ShadowRoot ? t.host : this.element, i = s.getAttribute("dir") === "rtl", r = s.closest('[dir="rtl"]') !== null;
-    this.isRTL = i || r, oe.debug(`[${this.instanceId}] RTL Debug:`, {
+    this.isRTL = i || r, de.debug(`[${this.instanceId}] RTL Debug:`, {
       isShadowRoot: t instanceof ShadowRoot,
       hostElement: s,
       elementDir: s.getAttribute("dir"),
       hasElementDir: i,
       hasAncestorDir: r,
       isRTL: this.isRTL
-    }), this.effectiveBadgesPosition = this.options.badgesPosition || "bottom", this.isRTL && (this.effectiveBadgesPosition === "left" ? this.effectiveBadgesPosition = "right" : this.effectiveBadgesPosition === "right" && (this.effectiveBadgesPosition = "left")), this.element.classList.add("ms"), this.isRTL && (this.element.classList.add("ms--rtl"), oe.debug(`[${this.instanceId}] Added ms--rtl class to element`)), (!this.options.isCheckboxesShown || !this.options.isMultipleEnabled) && this.element.classList.add("ms--no-checkboxes");
-    const n = document.createElement("div");
-    n.className = "ms__input-wrapper", this.input = document.createElement("input"), this.input.type = "text", this.input.className = "ms__input", this.input.placeholder = this.getPlaceholderText(), this.input.autocomplete = "off", this.options.searchInputMode === "readonly" ? this.input.readOnly = !0 : this.options.searchInputMode === "hidden" && (this.input.style.display = "none");
-    const a = document.createElement("span");
-    a.className = "ms__toggle", a.innerHTML = "▼", this.counter = document.createElement("span"), this.counter.className = "ms__counter", this.counter.style.display = "none", n.appendChild(this.input), n.appendChild(this.counter), n.appendChild(a), this.badgesContainer = document.createElement("div"), this.badgesContainer.className = "ms__badges";
+    }), this.effectiveBadgesPosition = this.options.badgesPosition || "bottom", this.isRTL && (this.effectiveBadgesPosition === "left" ? this.effectiveBadgesPosition = "right" : this.effectiveBadgesPosition === "right" && (this.effectiveBadgesPosition = "left")), this.element.classList.add("ms"), this.isRTL && (this.element.classList.add("ms--rtl"), de.debug(`[${this.instanceId}] Added ms--rtl class to element`)), (!this.options.isCheckboxesShown || !this.options.isMultipleEnabled) && this.element.classList.add("ms--no-checkboxes");
+    const a = document.createElement("div");
+    a.className = "ms__input-wrapper", this.input = document.createElement("input"), this.input.type = "text", this.input.className = "ms__input", this.input.placeholder = this.getPlaceholderText(), this.input.autocomplete = "off", this.options.searchInputMode === "readonly" ? this.input.readOnly = !0 : this.options.searchInputMode === "hidden" && (this.input.style.display = "none");
+    const n = document.createElement("span");
+    n.className = "ms__toggle", n.innerHTML = "▼", this.counter = document.createElement("span"), this.counter.className = "ms__counter", this.counter.style.display = "none", a.appendChild(this.input), a.appendChild(this.counter), a.appendChild(n), this.badgesContainer = document.createElement("div"), this.badgesContainer.className = "ms__badges";
     const l = document.createElement("div");
-    l.className = "ms__wrapper", (this.effectiveBadgesPosition === "left" || this.effectiveBadgesPosition === "right") && l.classList.add("ms__wrapper--inline"), l.appendChild(n), l.appendChild(this.badgesContainer), this.element.appendChild(l), this.dropdown = document.createElement("div"), this.dropdown.className = "ms__dropdown", this.dropdownInner = document.createElement("div"), this.dropdownInner.className = "ms__dropdown-inner", this.dropdown.appendChild(this.dropdownInner), e.appendChild(this.dropdown), this.options.searchHint && (this.hint = document.createElement("div"), this.hint.className = "ms__hint", this.hint.textContent = this.options.searchHint, e.appendChild(this.hint)), this.selectedPopover = document.createElement("div"), this.selectedPopover.className = "ms__selected-popover", e.appendChild(this.selectedPopover), this.renderDropdown();
+    l.className = "ms__wrapper", (this.effectiveBadgesPosition === "left" || this.effectiveBadgesPosition === "right") && l.classList.add("ms__wrapper--inline"), l.appendChild(a), l.appendChild(this.badgesContainer), this.element.appendChild(l), this.dropdown = document.createElement("div"), this.dropdown.className = "ms__dropdown", this.dropdownInner = document.createElement("div"), this.dropdownInner.className = "ms__dropdown-inner", this.dropdown.appendChild(this.dropdownInner), e.appendChild(this.dropdown), this.options.searchHint && (this.hint = document.createElement("div"), this.hint.className = "ms__hint", this.hint.textContent = this.options.searchHint, e.appendChild(this.hint)), this.selectedPopover = document.createElement("div"), this.selectedPopover.className = "ms__selected-popover", e.appendChild(this.selectedPopover), this.renderDropdown();
   }
   /**
    * Check if virtual scroll should be used
@@ -1655,7 +2016,7 @@ class xs {
     });
   }
   renderDropdown() {
-    if (this.destroyAllActionButtonTooltips(), this.shouldUseVirtualScroll()) {
+    if (this.destroyAllActionButtonTooltips(), this.refreshCascadeAtoms(), this.shouldUseVirtualScroll()) {
       this.dropdown.classList.add("ms__dropdown--virtual"), this.renderDropdownVirtual();
       return;
     }
@@ -1666,23 +2027,32 @@ class xs {
       return;
     }
     const t = this.renderActionsHTML(), s = this.options.actionsPosition === "bottom";
-    if (s || (e += t), e += '<div class="ms__options">', this.filteredOptions.length === 0)
+    if (s || (e += t), this.options.isVirtualScrollEnabled) {
+      const i = this.options.optionHeight ?? 50;
+      e += `<div class="ms__options ms__options--fixed-height" style="--ms-option-height: ${i}px;">`;
+    } else
+      e += '<div class="ms__options">';
+    if (this.filteredOptions.length === 0)
       e += `<div class="ms__empty">${this.options.emptyMessage}</div>`;
+    else if (this.isTreeMode())
+      this.treeNodes.forEach((i, r) => {
+        e += this.renderTreeNode(i, r);
+      });
     else if (this.options.isGroupsAllowed) {
       const i = this.groupOptions(this.filteredOptions), r = /* @__PURE__ */ new Map();
-      this.filteredOptions.forEach((n, a) => r.set(n, a)), Object.keys(i).forEach((n) => {
-        if (e += '<div class="ms__group">', n !== "__ungrouped__")
+      this.filteredOptions.forEach((a, n) => r.set(a, n)), Object.keys(i).forEach((a) => {
+        if (e += '<div class="ms__group">', a !== "__ungrouped__")
           if (this.options.renderGroupLabelContentCallback) {
-            const a = this.options.renderGroupLabelContentCallback(n);
-            if (a instanceof HTMLElement) {
+            const n = this.options.renderGroupLabelContentCallback(a);
+            if (n instanceof HTMLElement) {
               const l = document.createElement("div");
-              l.className = "ms__group-label", l.appendChild(a), e += l.outerHTML;
+              l.className = "ms__group-label", l.appendChild(n), e += l.outerHTML;
             } else
-              e += `<div class="ms__group-label">${a}</div>`;
+              e += `<div class="ms__group-label">${n}</div>`;
           } else
-            e += `<div class="ms__group-label">${n}</div>`;
-        i[n].forEach((a) => {
-          e += this.renderOption(a, r.get(a) ?? -1);
+            e += `<div class="ms__group-label">${a}</div>`;
+        i[a].forEach((n) => {
+          e += this.renderOption(n, r.get(n) ?? -1);
         }), e += "</div>";
       });
     } else
@@ -1699,8 +2069,8 @@ class xs {
       let s = "";
       const i = this.renderActionsHTML(), r = this.options.actionsPosition === "bottom";
       r || (s += i);
-      const n = this.options.maxHeight || "20rem", a = this.options.optionHeight ?? 50;
-      s += `<div class="ms__options ms__options--virtual" style="height: ${n}; max-height: ${n}; overflow-y: auto; position: relative; --ms-option-height: ${a}px;"></div>`, r && (s += i), this.dropdownInner.innerHTML = s, this.optionsContainer = this.dropdownInner.querySelector(".ms__options");
+      const a = this.options.maxHeight || "20rem", n = this.options.optionHeight ?? 50;
+      s += `<div class="ms__options ms__options--virtual" style="height: ${a}; max-height: ${a}; overflow-y: auto; position: relative; --ms-option-height: ${n}px;"></div>`, r && (s += i), this.dropdownInner.innerHTML = s, this.optionsContainer = this.dropdownInner.querySelector(".ms__options");
     }
     if (this.filteredOptions.length === 0) {
       this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.optionsContainer.innerHTML = `<div class="ms__empty">${this.options.emptyMessage}</div>`;
@@ -1708,11 +2078,11 @@ class xs {
     }
     const e = this.options.optionHeight ?? 50, t = this.options.virtualScrollBuffer ?? 10;
     requestAnimationFrame(() => {
-      this.optionsContainer && (this.virtualScroll ? this.virtualScroll.setItems(this.filteredOptions) : this.virtualScroll = new We({
+      this.optionsContainer && (this.virtualScroll ? this.virtualScroll.setItems(this.filteredOptions) : this.virtualScroll = new Ke({
         container: this.optionsContainer,
         itemHeight: e,
         items: this.filteredOptions,
-        renderItem: (s, i) => this.renderOption(s, i),
+        renderItem: (s, i) => this.isTreeMode() ? this.renderTreeNode(this.treeNodes[i], i) : this.renderOption(s, i),
         bufferSize: t,
         onVisibleRangeChange: () => {
           this.attachOptionTooltips();
@@ -1737,40 +2107,65 @@ class xs {
   renderActionsHTML() {
     const e = this.options.actionButtons;
     if (!this.options.isMultipleEnabled || !e || e.length === 0) return "";
-    const t = this.options.actionsPosition === "bottom" ? "bottom" : "top", s = this.options.actionsAlign ?? "stretch", i = ` ms__actions--${t}`, r = this.options.isActionsSticky ? " ms__actions--sticky" : "", n = this.options.actionsLayout === "wrap" ? " ms__actions--wrap" : "", a = ` ms__actions--align-${s}`, l = /* @__PURE__ */ new Map();
-    if (e.forEach((c, p) => {
-      if (!(c.getIsVisibleCallback ? c.getIsVisibleCallback(this) : c.isVisible ?? !0)) return;
+    const t = this.options.actionsPosition === "bottom" ? "bottom" : "top", s = this.options.actionsAlign ?? "stretch", i = ` ms__actions--${t}`, r = this.options.isActionsSticky ? " ms__actions--sticky" : "", a = this.options.actionsLayout === "wrap" ? " ms__actions--wrap" : "", n = ` ms__actions--align-${s}`, l = /* @__PURE__ */ new Map();
+    if (e.forEach((d, p) => {
+      if (!(d.getIsVisibleCallback ? d.getIsVisibleCallback(this) : d.isVisible ?? !0)) return;
       let m;
-      c.getIsDisabledCallback ? m = c.getIsDisabledCallback(this) : c.isDisabled !== void 0 ? m = c.isDisabled : m = this.getBuiltInActionDisabled(c.action);
-      const b = m ? " disabled" : "", f = c.getTextCallback ? c.getTextCallback(this) : c.text;
-      let g = "";
-      if (c.getClassCallback) {
-        const w = c.getClassCallback(this);
-        g = Array.isArray(w) ? ` ${w.join(" ")}` : w ? ` ${w}` : "";
-      } else c.cssClass && (g = ` ${c.cssClass}`);
-      const v = Math.max(1, Math.floor(c.row ?? 1)), _ = `<button type="button"${b} class="ms__action-btn${g}" data-action="${c.action}" data-button-index="${p}">${f}</button>`;
-      l.has(v) || l.set(v, []), l.get(v).push(_);
+      d.getIsDisabledCallback ? m = d.getIsDisabledCallback(this) : d.isDisabled !== void 0 ? m = d.isDisabled : m = this.getBuiltInActionDisabled(d.action);
+      const b = m ? " disabled" : "", v = d.getTextCallback ? d.getTextCallback(this) : d.text;
+      let f = "";
+      if (d.getClassCallback) {
+        const y = d.getClassCallback(this);
+        f = Array.isArray(y) ? ` ${y.join(" ")}` : y ? ` ${y}` : "";
+      } else d.cssClass && (f = ` ${d.cssClass}`);
+      const g = Math.max(1, Math.floor(d.row ?? 1)), _ = `<button type="button"${b} class="ms__action-btn${f}" data-action="${d.action}" data-button-index="${p}">${v}</button>`;
+      l.has(g) || l.set(g, []), l.get(g).push(_);
     }), l.size === 0) return "";
-    const h = Array.from(l.keys()).sort((c, p) => c - p).map((c) => `<div class="ms__actions-row" data-row="${c}">${l.get(c).join("")}</div>`).join("");
-    return `<div class="ms__actions${i}${r}${n}${a}">${h}</div>`;
+    const c = Array.from(l.keys()).sort((d, p) => d - p).map((d) => `<div class="ms__actions-row" data-row="${d}">${l.get(d).join("")}</div>`).join("");
+    return `<div class="ms__actions${i}${r}${a}${n}">${c}</div>`;
   }
   renderOption(e, t) {
-    const s = this.getItemValue(e), i = this.getItemDisplayValue(e), r = this.getItemIcon(e), n = this.getItemSubtitle(e), a = this.getItemDisabled(e), l = this.selectedValues.has(String(s)), h = t === this.focusedIndex, c = this.matchingIndices.has(t), p = ["ms__option"];
-    l && p.push("ms__option--selected"), h && p.push("ms__option--focused"), c && p.push("ms__option--matched"), a && p.push("ms__option--disabled");
+    const s = this.getItemValue(e), i = this.getItemDisplayValue(e), r = this.getItemIcon(e), a = this.getItemSubtitle(e), n = this.getItemDisabled(e), l = this.selectedValues.has(String(s)), c = t === this.focusedIndex, d = this.matchingIndices.has(t), p = ["ms__option"];
+    l && p.push("ms__option--selected"), c && p.push("ms__option--focused"), d && p.push("ms__option--matched"), n && p.push("ms__option--disabled");
     const u = this.options.checkboxAlign && this.options.checkboxAlign !== "center" ? ` data-checkbox-align="${this.options.checkboxAlign}"` : "";
     let m = `<div class="${p.join(" ")}" data-value="${s}" data-index="${t}"${u}>`;
-    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && (m += `<input type="checkbox" class="ms__checkbox" ${l ? "checked" : ""} ${a ? "disabled" : ""}>`), m += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
+    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && (m += `<input type="checkbox" class="ms__checkbox" ${l ? "checked" : ""} ${n ? "disabled" : ""}>`), m += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
       const b = {
         index: t,
         isSelected: l,
-        isFocused: h,
-        isMatched: c,
-        isDisabled: a
-      }, f = this.options.renderOptionContentCallback(e, b);
-      typeof f == "string" ? m += f : m += f.outerHTML;
+        isFocused: c,
+        isMatched: d,
+        isDisabled: n
+      }, v = this.options.renderOptionContentCallback(e, b);
+      typeof v == "string" ? m += v : m += v.outerHTML;
     } else
-      r && (m += `<span class="ms__option-icon">${r}</span>`), m += '<div class="ms__option-text">', m += `<div class="ms__option-title">${this.highlightMatch(i, this.searchTerm)}</div>`, n && (m += `<div class="ms__option-subtitle">${n}</div>`), m += "</div>";
+      r && (m += `<span class="ms__option-icon">${r}</span>`), m += '<div class="ms__option-text">', m += `<div class="ms__option-title">${this.highlightMatch(i, this.searchTerm)}</div>`, a && (m += `<div class="ms__option-subtitle">${a}</div>`), m += "</div>";
     return m += "</div>", m += "</div>", m;
+  }
+  /**
+   * Render a single tree-mode row. Separate from `renderOption`: a tree row is
+   * indented by its depth (via the `--ms-tree-depth` custom property) and
+   * tagged branch/leaf, but otherwise carries the same selection/checkbox/
+   * icon/subtitle content. The tree is always fully expanded, so there is no
+   * chevron/toggle — every node is just a normal, selectable option.
+   */
+  renderTreeNode(e, t) {
+    const s = e.data, i = this.getItemValue(s), r = this.getItemDisplayValue(s), a = this.getItemIcon(s), n = this.getItemSubtitle(s), l = this.getItemDisabled(s), c = this.isCascadeMode() && this.cascadeIndex, d = c ? ze(this.cascadeIndex, e, this.cascadeCheckedAtoms) : null, p = c ? d === "checked" : this.selectedValues.has(String(i)), u = d === "indeterminate", m = t === this.focusedIndex, b = e.isSelectable !== !1, v = e.level ?? 1, f = Math.max(0, v - 1), g = ["ms__option", "ms__option--tree"];
+    g.push(e.hasChildren ? "ms__option--tree-branch" : "ms__option--tree-leaf"), p && g.push("ms__option--selected"), u && g.push("ms__option--indeterminate"), m && g.push("ms__option--focused"), l && g.push("ms__option--disabled"), b || g.push("ms__option--tree-unselectable");
+    const _ = this.options.checkboxAlign && this.options.checkboxAlign !== "center" ? ` data-checkbox-align="${this.options.checkboxAlign}"` : "", y = b ? "" : ' data-selectable="false"';
+    let w = `<div class="${g.join(" ")}" data-value="${i}" data-index="${t}" data-path="${e.path}" data-level="${v}" style="--ms-tree-depth: ${f};"${_}${y}>`;
+    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && b && (w += `<input type="checkbox" class="${u ? "ms__checkbox ms__checkbox--indeterminate" : "ms__checkbox"}" ${p ? "checked" : ""}${u ? ' aria-checked="mixed"' : ""} ${l ? "disabled" : ""}>`), w += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
+      const M = {
+        index: t,
+        isSelected: p,
+        isFocused: m,
+        isMatched: !1,
+        isDisabled: l
+      }, E = this.options.renderOptionContentCallback(s, M);
+      w += typeof E == "string" ? E : E.outerHTML;
+    } else
+      a && (w += `<span class="ms__option-icon">${a}</span>`), w += '<div class="ms__option-text">', w += `<div class="ms__option-title">${this.highlightMatch(r, this.searchTerm)}</div>`, n && (w += `<div class="ms__option-subtitle">${n}</div>`), w += "</div>";
+    return w += "</div>", w += "</div>", w;
   }
   highlightMatch(e, t) {
     if (!t) return e;
@@ -1820,21 +2215,21 @@ class xs {
       this.badgesContainer.className = `ms__badges ms__badges--${this.effectiveBadgesPosition}`, this.badgesContainer.innerHTML = e.map((r) => this.renderBadgeHTML(r, { displayMode: "badges", isInPopover: !1 })).join("");
     else if (s === "partial") {
       this.badgesContainer.className = `ms__badges ms__badges--${this.effectiveBadgesPosition}`;
-      const r = this.options.badgesMaxVisible || 3, n = e.slice(0, r), a = t - r, l = n.map((c) => this.renderBadgeHTML(c, { displayMode: "partial", isInPopover: !1 })).join("");
-      let h = "";
-      a > 0 && (h = `
+      const r = this.options.badgesMaxVisible || 3, a = e.slice(0, r), n = t - r, l = a.map((d) => this.renderBadgeHTML(d, { displayMode: "partial", isInPopover: !1 })).join("");
+      let c = "";
+      n > 0 && (c = `
                     <div class="ms__badge ms__badge--counter ms__badge--more" data-action="show-selected">
-                        <span class="ms__badge-text">${this.options.getCounterCallback ? this.options.getCounterCallback(t, a) : `+${a} more`}</span>
-                        <button type="button" class="ms__badge-remove" data-action="remove-hidden" aria-label="Remove ${a} hidden items"></button>
+                        <span class="ms__badge-text">${this.options.getCounterCallback ? this.options.getCounterCallback(t, n) : `+${n} more`}</span>
+                        <button type="button" class="ms__badge-remove" data-action="remove-hidden" aria-label="Remove ${n} hidden items"></button>
                     </div>
-                `), this.badgesContainer.innerHTML = l + h;
+                `), this.badgesContainer.innerHTML = l + c;
     } else if (s === "compact")
       if (this.badgesContainer.className = `ms__badges ms__badges--${this.effectiveBadgesPosition}`, t > 0) {
-        const r = e[0], n = this.getItemBadgeDisplayValue(r), a = t - 1;
-        let l = n;
-        if (a > 0) {
-          const h = this.options.getCounterCallback ? this.options.getCounterCallback(t, a) : `+${a} more`;
-          l = `${n} (${h})`;
+        const r = e[0], a = this.getItemBadgeDisplayValue(r), n = t - 1;
+        let l = a;
+        if (n > 0) {
+          const c = this.options.getCounterCallback ? this.options.getCounterCallback(t, n) : `+${n} more`;
+          l = `${a} (${c})`;
         }
         this.badgesContainer.innerHTML = `
                     <div class="ms__badge" data-action="show-selected">
@@ -1890,14 +2285,14 @@ class xs {
     if (this.options.beforeSearchCallback) {
       const s = this.options.beforeSearchCallback(e);
       if (s === null) {
-        x.debug(`[${this.instanceId}] beforeSearchCallback blocked search for term:`, e), this.abortInFlightSearch(), this.filteredOptions = [...this.allOptions], this.matchingIndices.clear(), this.renderDropdown();
+        O.debug(`[${this.instanceId}] beforeSearchCallback blocked search for term:`, e), this.abortInFlightSearch(), this.matchingIndices.clear(), this.isTreeMode() ? (this.searchTerm = "", this.rebuildTreeVisible()) : this.filteredOptions = [...this.allOptions], this.renderDropdown();
         return;
       }
-      t = s, t !== e && x.debug(`[${this.instanceId}] beforeSearchCallback transformed: "${e}" -> "${t}"`);
+      t = s, t !== e && O.debug(`[${this.instanceId}] beforeSearchCallback transformed: "${e}" -> "${t}"`);
     }
     if (this.options.searchCallback) {
       if (t.length < this.options.minSearchLength) {
-        this.abortInFlightSearch(), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? (this.filteredOptions = [...this.allOptions], x.debug(`[${this.instanceId}] Search term below minimum, showing ${this.allOptions.length} initial options`)) : this.filteredOptions = [], this.matchingIndices.clear(), this.renderDropdown();
+        this.abortInFlightSearch(), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? (this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions], O.debug(`[${this.instanceId}] Search term below minimum, showing ${this.allOptions.length} initial options`)) : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown();
         return;
       }
       this.searchDebounceTimer && (clearTimeout(this.searchDebounceTimer), this.searchDebounceTimer = void 0);
@@ -1906,18 +2301,22 @@ class xs {
         this.searchDebounceTimer = void 0, this.searchTerm === e && this.performAsyncSearch(e, t);
       }, s) : await this.performAsyncSearch(e, t);
     } else {
+      if (this.isTreeMode()) {
+        this.rebuildTreeVisible(), this.matchingIndices.clear(), this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1, this.renderDropdown();
+        return;
+      }
       if (!t)
         this.filteredOptions = [...this.allOptions], this.matchingIndices.clear(), this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1;
       else {
         const s = this.options.searchMode || "filter", i = t.toLowerCase();
         if (s === "filter")
-          this.filteredOptions = this.allOptions.filter((r) => this.getItemSearchValue(r).toLowerCase().includes(i)), this.matchingIndices.clear(), this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1, x.debug(`[${this.instanceId}] Filter mode: ${this.filteredOptions.length} matches for "${t}"`);
+          this.filteredOptions = this.allOptions.filter((r) => this.getItemSearchValue(r).toLowerCase().includes(i)), this.matchingIndices.clear(), this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1, O.debug(`[${this.instanceId}] Filter mode: ${this.filteredOptions.length} matches for "${t}"`);
         else {
           this.filteredOptions = [...this.allOptions], this.matchingIndices.clear();
           let r = -1;
-          this.allOptions.forEach((n, a) => {
-            this.getItemSearchValue(n).toLowerCase().includes(i) && (this.matchingIndices.add(a), r === -1 && (r = a));
-          }), r >= 0 ? (this.focusedIndex = r, x.debug(`[${this.instanceId}] Navigate mode: ${this.matchingIndices.size} matches, jumped to index ${r}`)) : x.debug(`[${this.instanceId}] Navigate mode: No matches found, keeping previous focus`);
+          this.allOptions.forEach((a, n) => {
+            this.getItemSearchValue(a).toLowerCase().includes(i) && (this.matchingIndices.add(n), r === -1 && (r = n));
+          }), r >= 0 ? (this.focusedIndex = r, O.debug(`[${this.instanceId}] Navigate mode: ${this.matchingIndices.size} matches, jumped to index ${r}`)) : O.debug(`[${this.instanceId}] Navigate mode: No matches found, keeping previous focus`);
         }
       }
       this.renderDropdown(), this.options.searchMode === "navigate" && this.focusedIndex >= 0 && this.scrollToFocused();
@@ -1941,15 +2340,15 @@ class xs {
   async performAsyncSearch(e, t) {
     this.abortInFlightSearch();
     const s = new AbortController();
-    this.searchAbortController = s, this.isLoading = !0, this.renderDropdown(), x.debug(`[${this.instanceId}] Loading data for search term:`, t);
+    this.searchAbortController = s, this.isLoading = !0, this.renderDropdown(), O.debug(`[${this.instanceId}] Loading data for search term:`, t);
     try {
       const i = await this.options.searchCallback(t, s.signal);
       if (s.signal.aborted || this.searchTerm !== e) return;
       const r = i || [];
-      this.filteredOptions = [...r], this.isLoading = !1, this.matchingIndices.clear(), this.focusedIndex = this.options.isSearchEnabled && this.filteredOptions.length > 0 ? 0 : -1, this.renderDropdown(), x.debug(`[${this.instanceId}] Loaded ${r.length} results`);
+      this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(r) : this.filteredOptions = [...r], this.isLoading = !1, this.matchingIndices.clear(), this.focusedIndex = this.options.isSearchEnabled && this.filteredOptions.length > 0 ? 0 : -1, this.renderDropdown(), O.debug(`[${this.instanceId}] Loaded ${r.length} results`);
     } catch (i) {
       if (s.signal.aborted) return;
-      x.error(`[${this.instanceId}] Error loading data:`, i), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? this.filteredOptions = [...this.allOptions] : this.filteredOptions = [], this.matchingIndices.clear(), this.renderDropdown();
+      O.error(`[${this.instanceId}] Error loading data:`, i), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions] : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown();
     } finally {
       this.searchAbortController === s && (this.searchAbortController = void 0);
     }
@@ -1977,7 +2376,7 @@ class xs {
         e.preventDefault(), this.focusedIndex >= 0 ? this.toggleOption(this.filteredOptions[this.focusedIndex]) : this.options.isAddNewAllowed && this.options.addNewCallback && this.input.value.trim() && this.handleAddNew(this.input.value.trim());
         break;
       case "Escape":
-        e.preventDefault(), this.showSelectedPopover ? this.hideSelectedPopover() : this.input.value ? (this.input.value = "", this.searchTerm = "", this.filteredOptions = [...this.allOptions], this.focusedIndex = -1, this.renderDropdown()) : this.close();
+        e.preventDefault(), this.showSelectedPopover ? this.hideSelectedPopover() : this.input.value ? (this.input.value = "", this.searchTerm = "", this.resetVisibleToAll(), this.matchingIndices.clear(), this.focusedIndex = -1, this.renderDropdown()) : this.close();
         break;
       case "Tab":
         this.close();
@@ -1998,36 +2397,36 @@ class xs {
   }
   handleDropdownClick(e) {
     var i;
-    S.debug(`[${this.instanceId}] Dropdown clicked`, { target: e.target.className }), e.stopPropagation();
+    L.debug(`[${this.instanceId}] Dropdown clicked`, { target: e.target.className }), e.stopPropagation();
     const t = e.target.closest("[data-action]");
     if (t) {
       e.preventDefault();
       const r = t.dataset.action;
-      if (S.debug(`[${this.instanceId}] Action button clicked:`, r), r === "select-all")
+      if (L.debug(`[${this.instanceId}] Action button clicked:`, r), r === "select-all")
         this.selectAll();
       else if (r === "clear-all")
         this.clearAll();
       else if (r === "custom") {
-        const n = parseInt(t.dataset.buttonIndex || "-1"), a = (i = this.options.actionButtons) == null ? void 0 : i[n];
-        a != null && a.onClick && a.onClick(this);
+        const a = parseInt(t.dataset.buttonIndex || "-1"), n = (i = this.options.actionButtons) == null ? void 0 : i[a];
+        n != null && n.onClick && n.onClick(this);
       }
       return;
     }
     const s = e.target.closest(".ms__option");
     if (s && !s.classList.contains("ms__option--disabled")) {
       e.preventDefault();
-      const r = s.dataset.value, n = this.filteredOptions.findIndex((a) => String(this.getItemValue(a)) === r);
-      S.debug(`[${this.instanceId}] Option clicked:`, {
+      const r = s.dataset.value, a = this.filteredOptions.findIndex((n) => String(this.getItemValue(n)) === r);
+      L.debug(`[${this.instanceId}] Option clicked:`, {
         value: r,
-        optionIndex: n,
+        optionIndex: a,
         closeOnSelect: this.options.isCloseOnSelect,
         placeholder: this.options.searchPlaceholder
-      }), n >= 0 && (this.focusedIndex = n, this.toggleOption(this.filteredOptions[n]), this.isOpen && this.input.focus());
+      }), a >= 0 && (this.focusedIndex = a, this.toggleOption(this.filteredOptions[a]), this.isOpen && this.input.focus());
     }
   }
   handleBadgeClick(e) {
     if (e.target.closest('[data-action="clear-count"]')) {
-      e.preventDefault(), e.stopPropagation(), S.debug(`[${this.instanceId}] Clear count button clicked`), this.clearAll();
+      e.preventDefault(), e.stopPropagation(), L.debug(`[${this.instanceId}] Clear count button clicked`), this.clearAll();
       return;
     }
     if (e.target.closest('[data-action="show-selected"]')) {
@@ -2037,17 +2436,17 @@ class xs {
     const i = e.target.closest(".ms__badge-remove");
     if (i) {
       if (e.preventDefault(), e.stopPropagation(), i.dataset.action === "remove-hidden") {
-        S.debug(`[${this.instanceId}] Remove hidden items button clicked`);
+        L.debug(`[${this.instanceId}] Remove hidden items button clicked`);
         const l = this.options.badgesMaxVisible || 3;
         Array.from(this.selectedOptions.values()).slice(l).forEach((p) => this.interactiveDeselect(p));
         return;
       }
-      const n = i.dataset.value, a = this.selectedOptions.get(n);
-      a && this.interactiveDeselect(a);
+      const a = i.dataset.value, n = this.selectedOptions.get(a);
+      n && this.interactiveDeselect(n);
       return;
     }
     if (e.target.closest(".ms__badge--more") && !e.target.closest(".ms__badge-remove")) {
-      e.preventDefault(), e.stopPropagation(), S.debug(`[${this.instanceId}] '+X more' badge clicked, showing popover`), this.toggleSelectedPopover();
+      e.preventDefault(), e.stopPropagation(), L.debug(`[${this.instanceId}] '+X more' badge clicked, showing popover`), this.toggleSelectedPopover();
       return;
     }
   }
@@ -2055,16 +2454,16 @@ class xs {
     var i;
     const t = e.composedPath();
     if (this.showSelectedPopover && !t.some(
-      (n) => n instanceof Node && (this.selectedPopover.contains(n) || this.counter.contains(n) || n.closest && n.closest('[data-action="show-selected"]'))
+      (a) => a instanceof Node && (this.selectedPopover.contains(a) || this.counter.contains(a) || a.closest && a.closest('[data-action="show-selected"]'))
     )) {
-      P.debug(`[${this.instanceId}] Closing selected popover due to click outside`), this.hideSelectedPopover();
+      R.debug(`[${this.instanceId}] Closing selected popover due to click outside`), this.hideSelectedPopover();
       return;
     }
     if (!this.isOpen) return;
     const s = t.some(
       (r) => r instanceof Node && (this.element.contains(r) || this.dropdown.contains(r) || this.hint && this.hint.contains(r))
     );
-    S.debug(`[${this.instanceId}] handleClickOutside`, {
+    L.debug(`[${this.instanceId}] handleClickOutside`, {
       target: e.target.className,
       targetTag: e.target.tagName,
       clickedInside: s,
@@ -2073,45 +2472,61 @@ class xs {
       elementContains: t.some((r) => r instanceof Node && this.element.contains(r)),
       dropdownContains: t.some((r) => r instanceof Node && this.dropdown.contains(r)),
       isConnected: this.dropdown.isConnected
-    }), s || (S.warn(`[${this.instanceId}] Closing dropdown due to click outside`), this.close());
+    }), s || (L.warn(`[${this.instanceId}] Closing dropdown due to click outside`), this.close());
   }
   /**
    * Move focus by computing a new index from (current, total).
    * Returning -1 from `compute` is a no-op (used for empty list / no match).
    */
-  focusBy(e) {
-    const t = this.filteredOptions.length;
-    if (t === 0) return;
-    const s = e(this.focusedIndex, t);
-    s < 0 || (this.focusedIndex = s, this.renderDropdown(), this.scrollToFocused());
+  focusBy(e, t = 1) {
+    const s = this.filteredOptions.length;
+    if (s === 0) return;
+    const i = e(this.focusedIndex, s);
+    if (i < 0) return;
+    const r = this.resolveSelectableIndex(i, t, s);
+    r < 0 || (this.focusedIndex = r, this.renderDropdown(), this.scrollToFocused());
+  }
+  /**
+   * Given a target index and a preferred direction, return the nearest index
+   * whose node is selectable (skipping non-selectable tree nodes). Falls back to
+   * the opposite direction, then to -1 if nothing is selectable. No-op outside
+   * tree mode.
+   */
+  resolveSelectableIndex(e, t, s) {
+    if (!this.isTreeMode()) return e;
+    let i = e;
+    for (; i >= 0 && i < s && !this.isIndexSelectable(i); ) i += t;
+    if (i < 0 || i >= s)
+      for (i = e - t; i >= 0 && i < s && !this.isIndexSelectable(i); ) i -= t;
+    return i >= 0 && i < s ? i : -1;
   }
   focusNext() {
-    this.focusBy((e, t) => Math.min(t - 1, e + 1));
+    this.focusBy((e, t) => Math.min(t - 1, e + 1), 1);
   }
   focusPrevious() {
-    this.focusBy((e) => Math.max(0, e - 1));
+    this.focusBy((e) => Math.max(0, e - 1), -1);
   }
   focusFirst() {
-    this.focusBy(() => 0);
+    this.focusBy(() => 0, 1);
   }
   focusLast() {
-    this.focusBy((e, t) => t - 1);
+    this.focusBy((e, t) => t - 1, -1);
   }
   focusPageUp() {
-    this.focusBy((e) => Math.max(0, e - 10));
+    this.focusBy((e) => Math.max(0, e - 10), -1);
   }
   focusPageDown() {
-    this.focusBy((e, t) => Math.min(t - 1, e + 10));
+    this.focusBy((e, t) => Math.min(t - 1, e + 10), 1);
   }
   focusNextMatch() {
     if (this.matchingIndices.size === 0) return;
     const e = Array.from(this.matchingIndices).sort((i, r) => i - r), t = e.findIndex((i) => i === this.focusedIndex), s = (t + 1) % e.length;
-    this.focusBy(() => e[s]), S.debug(`[${this.instanceId}] Jumped to next match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
+    this.focusBy(() => e[s]), L.debug(`[${this.instanceId}] Jumped to next match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
   }
   focusPreviousMatch() {
     if (this.matchingIndices.size === 0) return;
     const e = Array.from(this.matchingIndices).sort((i, r) => i - r), t = e.findIndex((i) => i === this.focusedIndex), s = t <= 0 ? e.length - 1 : t - 1;
-    this.focusBy(() => e[s]), S.debug(`[${this.instanceId}] Jumped to previous match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
+    this.focusBy(() => e[s]), L.debug(`[${this.instanceId}] Jumped to previous match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
   }
   scrollToFocused() {
     if (this.virtualScroll && this.focusedIndex >= 0)
@@ -2123,11 +2538,22 @@ class xs {
   }
   toggleOption(e) {
     if (this.getItemDisabled(e)) {
-      S.debug(`[${this.instanceId}] toggleOption ignored — option is disabled`);
+      L.debug(`[${this.instanceId}] toggleOption ignored — option is disabled`);
+      return;
+    }
+    if (!this.isOptionSelectable(e)) {
+      L.debug(`[${this.instanceId}] toggleOption ignored — node is not selectable`);
       return;
     }
     const t = this.getItemValue(e), s = String(t);
-    S.debug(`[${this.instanceId}] toggleOption called`, { value: t, multiple: this.options.isMultipleEnabled }), (this.selectedValues.has(s) ? this.interactiveDeselect(e) : this.interactiveSelect(e)) && (this.options.isMultipleEnabled ? this.options.isCloseOnSelect && this.close() : this.close());
+    if (L.debug(`[${this.instanceId}] toggleOption called`, { value: t, multiple: this.options.isMultipleEnabled }), this.isCascadeMode() && this.cascadeIndex) {
+      const a = this.cascadeIndex.nodeByValue.get(s);
+      if (a) {
+        this.toggleTreeCascade(a), this.options.isCloseOnSelect && this.close();
+        return;
+      }
+    }
+    (this.selectedValues.has(s) ? this.interactiveDeselect(e) : this.interactiveSelect(e)) && (this.options.isMultipleEnabled ? this.options.isCloseOnSelect && this.close() : this.close());
   }
   /**
    * The single funnel for an interactive (user-initiated) selection. Consults
@@ -2137,7 +2563,7 @@ class xs {
    * Returns true if the option was selected, false if the veto blocked it.
    */
   interactiveSelect(e) {
-    return this.options.beforeSelectCallback && this.options.beforeSelectCallback(e, this.getSelected()) === !1 ? (S.debug(`[${this.instanceId}] Selection blocked by beforeSelectCallback`), !1) : (this.options.isMultipleEnabled || (this.selectedValues.clear(), this.selectedOptions.clear()), this.selectOption(e), !0);
+    return this.options.beforeSelectCallback && this.options.beforeSelectCallback(e, this.getSelected()) === !1 ? (L.debug(`[${this.instanceId}] Selection blocked by beforeSelectCallback`), !1) : (this.options.isMultipleEnabled || (this.selectedValues.clear(), this.selectedOptions.clear()), this.selectOption(e), !0);
   }
   /**
    * The single funnel for an interactive (user-initiated) deselection. Every
@@ -2148,16 +2574,16 @@ class xs {
    * Returns true if the option was deselected, false if the veto blocked it.
    */
   interactiveDeselect(e) {
-    return this.options.beforeDeselectCallback && this.options.beforeDeselectCallback(e, this.getSelected()) === !1 ? (S.debug(`[${this.instanceId}] Deselection blocked by beforeDeselectCallback`), !1) : (this.deselectOption(e), !0);
+    return this.options.beforeDeselectCallback && this.options.beforeDeselectCallback(e, this.getSelected()) === !1 ? (L.debug(`[${this.instanceId}] Deselection blocked by beforeDeselectCallback`), !1) : (this.deselectOption(e), !0);
   }
   async handleAddNew(e) {
     if (this.options.addNewCallback)
       try {
-        x.debug(`[${this.instanceId}] Adding new option:`, e);
+        O.debug(`[${this.instanceId}] Adding new option:`, e);
         const t = await this.options.addNewCallback(e);
         this.allOptions.push(t), this.filteredOptions.push(t), this.selectOption(t), this.input.value = "", this.renderDropdown(), this.renderBadges(), this.options.isCloseOnSelect && this.close();
       } catch (t) {
-        x.error(`[${this.instanceId}] Error adding new option:`, t);
+        O.error(`[${this.instanceId}] Error adding new option:`, t);
       }
   }
   selectOption(e) {
@@ -2169,11 +2595,18 @@ class xs {
     this.selectedValues.delete(s), this.selectedOptions.delete(s), this.commit({ removed: [e] });
   }
   selectAll() {
+    if (this.isCascadeMode() && this.cascadeIndex) {
+      const t = this.cascadeIndex, s = new Set(we(t, this.selectedValues));
+      for (const i of this.treeNodes)
+        t.atomPaths.has(i.path) && (this.getItemDisabled(i.data) || s.add(String(this.getItemValue(i.data))));
+      this.commitCascadeAtoms(s);
+      return;
+    }
     const e = [];
-    this.filteredOptions.forEach((t) => {
-      if (this.getItemDisabled(t)) return;
-      const s = String(this.getItemValue(t));
-      this.selectedValues.has(s) || (this.selectedValues.add(s), this.selectedOptions.set(s, t), e.push(t));
+    this.filteredOptions.forEach((t, s) => {
+      if (this.getItemDisabled(t) || !this.isIndexSelectable(s)) return;
+      const i = String(this.getItemValue(t));
+      this.selectedValues.has(i) || (this.selectedValues.add(i), this.selectedOptions.set(i, t), e.push(t));
     }), this.commit({ added: e });
   }
   clearAll() {
@@ -2191,10 +2624,10 @@ class xs {
     this.options.onSelect && t.forEach((i) => this.options.onSelect(i)), this.options.onDeselect && s.forEach((i) => this.options.onDeselect(i)), (t.length > 0 || s.length > 0) && this.options.onChange && this.options.onChange(this.getSelected());
   }
   open() {
-    P.debug(`[${this.instanceId}] open() called`, { isOpen: this.isOpen }), !this.isOpen && (this.isOpen = !0, this.element.classList.add("ms--open"), this.dropdown.classList.add("ms__dropdown--visible"), P.info(`[${this.instanceId}] Dropdown opened`), this.input.placeholder = this.getPlaceholderText(), !this.options.isMultipleEnabled && this.options.isSearchEnabled && (this.input.value = this.searchTerm), this.options.searchCallback && this.options.isKeepOptionsOnSearch && !this.searchTerm && (this.filteredOptions = [...this.allOptions], P.debug(`[${this.instanceId}] Showing ${this.allOptions.length} initial options on open`)), this.renderDropdown(), this.positionDropdown(), this.hint && (this.hint.classList.add("ms__hint--visible"), this.positionHint()));
+    R.debug(`[${this.instanceId}] open() called`, { isOpen: this.isOpen }), !this.isOpen && (this.isOpen = !0, this.element.classList.add("ms--open"), this.dropdown.classList.add("ms__dropdown--visible"), R.info(`[${this.instanceId}] Dropdown opened`), this.input.placeholder = this.getPlaceholderText(), !this.options.isMultipleEnabled && this.options.isSearchEnabled && (this.input.value = this.searchTerm), this.options.searchCallback && this.options.isKeepOptionsOnSearch && !this.searchTerm && (this.filteredOptions = [...this.allOptions], R.debug(`[${this.instanceId}] Showing ${this.allOptions.length} initial options on open`)), this.renderDropdown(), this.positionDropdown(), this.hint && (this.hint.classList.add("ms__hint--visible"), this.positionHint()));
   }
   close() {
-    P.debug(`[${this.instanceId}] close() called`, { isOpen: this.isOpen }), this.isOpen && (this.isOpen = !1, this.element.classList.remove("ms--open"), this.dropdown.classList.remove("ms__dropdown--visible"), this.hint && this.hint.classList.remove("ms__hint--visible"), this.options.shouldKeepSearchOnClose || (this.searchTerm = "", (this.options.isMultipleEnabled || this.options.isSearchEnabled) && (this.input.value = ""), this.filteredOptions = [...this.allOptions]), this.focusedIndex = -1, this.destroyAllOptionTooltips(), this.renderBadges(), this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.dropdownPlacement = null, P.debug(`[${this.instanceId}] Dropdown closed`));
+    R.debug(`[${this.instanceId}] close() called`, { isOpen: this.isOpen }), this.isOpen && (this.isOpen = !1, this.element.classList.remove("ms--open"), this.dropdown.classList.remove("ms__dropdown--visible"), this.hint && this.hint.classList.remove("ms__hint--visible"), this.options.shouldKeepSearchOnClose || (this.searchTerm = "", (this.options.isMultipleEnabled || this.options.isSearchEnabled) && (this.input.value = ""), this.resetVisibleToAll()), this.focusedIndex = -1, this.destroyAllOptionTooltips(), this.renderBadges(), this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.dropdownPlacement = null, R.debug(`[${this.instanceId}] Dropdown closed`));
   }
   /**
    * Anchor a floating panel (dropdown or selected-items popover) below/above the input with
@@ -2205,24 +2638,24 @@ class xs {
    */
   anchorFloatingPanel(e, t) {
     const s = {
-      ...ot,
-      getOffsetParent: () => ys(this.input)
+      ...dt,
+      getOffsetParent: () => Es(this.input)
     };
-    return _e(this.input, e, () => {
+    return Se(this.input, e, () => {
       var l;
       e.style.width = `${this.input.offsetWidth}px`, this.options.dropdownMinWidth && (e.style.minWidth = this.options.dropdownMinWidth), t.applyMaxWidth && this.options.dropdownMaxWidth && (e.style.maxWidth = this.options.dropdownMaxWidth);
-      const i = ((l = t.isLocked) == null ? void 0 : l.call(t)) ?? !0, r = t.getPlacement(), n = i && r ? r : "bottom-start", a = [
-        ye(4),
-        ...i && r ? [] : [rt()],
-        we({ padding: 8 })
+      const i = ((l = t.isLocked) == null ? void 0 : l.call(t)) ?? !0, r = t.getPlacement(), a = i && r ? r : "bottom-start", n = [
+        Te(4),
+        ...i && r ? [] : [mt()],
+        Ie({ padding: 8 })
       ];
-      ke(this.input, e, { placement: n, strategy: "fixed", middleware: a, platform: s }).then(({ x: h, y: c, placement: p }) => {
+      Me(this.input, e, { placement: a, strategy: "fixed", middleware: n, platform: s }).then(({ x: c, y: d, placement: p }) => {
         var u;
         r || t.setPlacement(p), Object.assign(e.style, {
           position: "fixed",
-          left: `${h}px`,
-          top: `${c}px`
-        }), this.verifyPanelLanded(e, h, c), (u = t.afterPosition) == null || u.call(t);
+          left: `${c}px`,
+          top: `${d}px`
+        }), this.verifyPanelLanded(e, c, d), (u = t.afterPosition) == null || u.call(t);
       });
     });
   }
@@ -2239,19 +2672,19 @@ class xs {
    */
   verifyPanelLanded(e, t, s) {
     if (this.positioningDriftWarned) return;
-    const i = e.getBoundingClientRect(), r = i.x - t, n = i.y - s;
-    if (Math.abs(r) < 1 && Math.abs(n) < 1) return;
+    const i = e.getBoundingClientRect(), r = i.x - t, a = i.y - s;
+    if (Math.abs(r) < 1 && Math.abs(a) < 1) return;
     this.positioningDriftWarned = !0;
-    const a = ws(this.input, r, n), l = a ? `<${a.tagName.toLowerCase()}${a.id ? "#" + a.id : ""}${typeof a.className == "string" && a.className ? "." + a.className.split(/\s+/).filter(Boolean).slice(0, 2).join(".") : ""}>` : "an ancestor element (could not auto-identify)", h = a ? ks(a) : "";
+    const n = Vs(this.input, r, a), l = n ? `<${n.tagName.toLowerCase()}${n.id ? "#" + n.id : ""}${typeof n.className == "string" && n.className ? "." + n.className.split(/\s+/).filter(Boolean).slice(0, 2).join(".") : ""}>` : "an ancestor element (could not auto-identify)", c = n ? Ds(n) : "";
     console.warn(
-      `[@keenmate/web-multiselect] Dropdown panel rendered ${r.toFixed(0)}px / ${n.toFixed(0)}px away from where the library positioned it. Most likely culprit: ${l}` + (h ? ` (has ${h})` : "") + ".\nAn ancestor of <web-multiselect> establishes a fixed-positioning containing block that the library's heuristic doesn't recognize. Fix on your side: replace the property with `transform: translateZ(0)` on that ancestor, OR move the trigger out of that ancestor's subtree. If neither is acceptable, please file an issue at https://github.com/keenmate/web-multiselect/issues with the ancestor's computed CSS."
+      `[@keenmate/web-multiselect] Dropdown panel rendered ${r.toFixed(0)}px / ${a.toFixed(0)}px away from where the library positioned it. Most likely culprit: ${l}` + (c ? ` (has ${c})` : "") + ".\nAn ancestor of <web-multiselect> establishes a fixed-positioning containing block that the library's heuristic doesn't recognize. Fix on your side: replace the property with `transform: translateZ(0)` on that ancestor, OR move the trigger out of that ancestor's subtree. If neither is acceptable, please file an issue at https://github.com/keenmate/web-multiselect/issues with the ancestor's computed CSS."
     );
   }
   positionDropdown() {
     this.dropdownCleanup = this.anchorFloatingPanel(this.dropdown, {
       getPlacement: () => this.dropdownPlacement,
       setPlacement: (e) => {
-        this.dropdownPlacement = e, P.debug(`[${this.instanceId}] Locked dropdown placement:`, e);
+        this.dropdownPlacement = e, R.debug(`[${this.instanceId}] Locked dropdown placement:`, e);
       },
       isLocked: () => !!this.options.isPlacementLocked,
       applyMaxWidth: !0,
@@ -2261,18 +2694,18 @@ class xs {
     });
   }
   positionHint() {
-    this.hint && (this.hintCleanup && this.hintCleanup(), this.hintCleanup = _e(
+    this.hint && (this.hintCleanup && this.hintCleanup(), this.hintCleanup = Se(
       this.input,
       this.hint,
       () => {
         let e = "top-start";
-        this.dropdownPlacement && (this.dropdownPlacement.startsWith("bottom") ? e = this.dropdownPlacement.replace("bottom", "top") : this.dropdownPlacement.startsWith("top") && (e = this.dropdownPlacement.replace("top", "bottom"))), ke(this.input, this.hint, {
+        this.dropdownPlacement && (this.dropdownPlacement.startsWith("bottom") ? e = this.dropdownPlacement.replace("bottom", "top") : this.dropdownPlacement.startsWith("top") && (e = this.dropdownPlacement.replace("top", "bottom"))), Me(this.input, this.hint, {
           placement: e,
           strategy: "fixed",
           middleware: [
-            ye(4),
+            Te(4),
             // Don't use flip() - we want hint to stay opposite of dropdown
-            we({ padding: 8 })
+            Ie({ padding: 8 })
           ]
         }).then(({ x: t, y: s }) => {
           Object.assign(this.hint.style, {
@@ -2292,7 +2725,7 @@ class xs {
           this.selectedValues.add(String(s));
         }), this.reconcileSelectedOptions(), this.renderBadges();
       } catch (t) {
-        x.error(`[${this.instanceId}] Failed to parse initial values:`, t);
+        O.error(`[${this.instanceId}] Failed to parse initial values:`, t);
       }
   }
   /**
@@ -2314,13 +2747,13 @@ class xs {
     this.showSelectedPopover ? this.hideSelectedPopover() : this.showPopover();
   }
   showPopover() {
-    P.debug(`[${this.instanceId}] showPopover() called`), this.isOpen && this.close(), this.showSelectedPopover = !0, this.renderSelectedPopover(), this.selectedPopover.classList.add("ms__selected-popover--visible");
+    R.debug(`[${this.instanceId}] showPopover() called`), this.isOpen && this.close(), this.showSelectedPopover = !0, this.renderSelectedPopover(), this.selectedPopover.classList.add("ms__selected-popover--visible");
     const e = this.options.virtualScrollThreshold ?? 100;
     this.selectedValues.size >= e && this.selectedPopover.classList.add("ms__selected-popover--virtual"), this.positionSelectedPopover();
   }
   hideSelectedPopover() {
     var e;
-    P.debug(`[${this.instanceId}] hideSelectedPopover() called`), this.showSelectedPopover = !1, this.selectedPopover.classList.remove("ms__selected-popover--visible"), this.selectedPopover.classList.remove("ms__selected-popover--virtual"), this.selectedPopoverPlacement = null, this.selectedPopoverVirtualScroll && (this.selectedPopoverVirtualScroll.destroy(), this.selectedPopoverVirtualScroll = null, this.selectedPopoverContainer = null), this.selectedPopoverCleanup && (this.selectedPopoverCleanup(), this.selectedPopoverCleanup = null);
+    R.debug(`[${this.instanceId}] hideSelectedPopover() called`), this.showSelectedPopover = !1, this.selectedPopover.classList.remove("ms__selected-popover--visible"), this.selectedPopover.classList.remove("ms__selected-popover--virtual"), this.selectedPopoverPlacement = null, this.selectedPopoverVirtualScroll && (this.selectedPopoverVirtualScroll.destroy(), this.selectedPopoverVirtualScroll = null, this.selectedPopoverContainer = null), this.selectedPopoverCleanup && (this.selectedPopoverCleanup(), this.selectedPopoverCleanup = null);
     for (const t of Array.from(this.tooltips.keys()))
       t.startsWith("popover-") && ((e = this.tooltips.get(t)) == null || e.destroy(), this.tooltips.delete(t));
   }
@@ -2342,27 +2775,27 @@ class xs {
   }
   renderSelectedPopoverVirtual(e, t) {
     if (this.selectedPopoverVirtualScroll) {
-      const a = this.selectedPopover.querySelector(".ms__selected-popover-header span");
-      a && (a.textContent = `Selected Items (${t})`);
+      const n = this.selectedPopover.querySelector(".ms__selected-popover-header span");
+      n && (n.textContent = `Selected Items (${t})`);
     } else {
-      const a = this.options.badgeHeight ?? 36, l = `
+      const n = this.options.badgeHeight ?? 36, l = `
                 <div class="ms__selected-popover-header">
                     <span>Selected Items (${t})</span>
                     <button type="button" class="ms__selected-popover-close" aria-label="Close"></button>
                 </div>
-                <div class="ms__selected-popover-body ms__selected-popover-body--virtual" style="height: 18rem; overflow-y: auto; position: relative; --ms-badge-height-virtual: ${a}px;"></div>
+                <div class="ms__selected-popover-body ms__selected-popover-body--virtual" style="height: 18rem; overflow-y: auto; position: relative; --ms-badge-height-virtual: ${n}px;"></div>
             `;
       this.selectedPopover.innerHTML = l, this.selectedPopoverContainer = this.selectedPopover.querySelector(".ms__selected-popover-body");
     }
     if (!this.selectedPopoverContainer) return;
-    const r = (this.options.badgeHeight ?? 36) + 4, n = this.options.virtualScrollBuffer ?? 10;
+    const r = (this.options.badgeHeight ?? 36) + 4, a = this.options.virtualScrollBuffer ?? 10;
     requestAnimationFrame(() => {
-      this.selectedPopoverContainer && (this.selectedPopoverVirtualScroll ? this.selectedPopoverVirtualScroll.setItems(e) : this.selectedPopoverVirtualScroll = new We({
+      this.selectedPopoverContainer && (this.selectedPopoverVirtualScroll ? this.selectedPopoverVirtualScroll.setItems(e) : this.selectedPopoverVirtualScroll = new Ke({
         container: this.selectedPopoverContainer,
         itemHeight: r,
         items: e,
-        renderItem: (a) => this.renderBadgeHTML(a, { displayMode: this.options.badgesDisplayMode || "badges", isInPopover: !0 }),
-        bufferSize: n,
+        renderItem: (n) => this.renderBadgeHTML(n, { displayMode: this.options.badgesDisplayMode || "badges", isInPopover: !0 }),
+        bufferSize: a,
         onVisibleRangeChange: () => {
           this.attachBadgeTooltips(this.selectedPopoverContainer);
         }
@@ -2383,22 +2816,22 @@ class xs {
     let i;
     const r = t.isInPopover ? this.options.renderSelectedItemContentCallback : void 0;
     if (r) {
-      const h = r(e);
-      i = typeof h == "string" ? h : h.outerHTML;
+      const c = r(e);
+      i = typeof c == "string" ? c : c.outerHTML;
     } else if (this.options.renderBadgeContentCallback) {
-      const h = this.options.renderBadgeContentCallback(e, t);
-      i = typeof h == "string" ? h : h.outerHTML;
+      const c = this.options.renderBadgeContentCallback(e, t);
+      i = typeof c == "string" ? c : c.outerHTML;
     } else
       i = this.getItemBadgeDisplayValue(e);
-    const n = t.isInPopover ? this.options.getSelectedItemClassCallback || this.options.getBadgeClassCallback : this.options.getBadgeClassCallback;
-    let a = "ms__badge";
-    if (n) {
-      const h = n(e), c = Array.isArray(h) ? h : [h];
-      a += " " + c.filter((p) => p).join(" ");
+    const a = t.isInPopover ? this.options.getSelectedItemClassCallback || this.options.getBadgeClassCallback : this.options.getBadgeClassCallback;
+    let n = "ms__badge";
+    if (a) {
+      const c = a(e), d = Array.isArray(c) ? c : [c];
+      n += " " + d.filter((p) => p).join(" ");
     }
     const l = this.getItemBadgeDisplayValue(e);
     return `
-            <div class="${a}">
+            <div class="${n}">
                 <span class="ms__badge-text">${i}</span>
                 <button type="button" class="ms__badge-remove" data-value="${s}" aria-label="Remove ${l}"></button>
             </div>
@@ -2420,7 +2853,7 @@ class xs {
     this.selectedPopoverCleanup = this.anchorFloatingPanel(this.selectedPopover, {
       getPlacement: () => this.selectedPopoverPlacement,
       setPlacement: (e) => {
-        this.selectedPopoverPlacement = e, P.debug(`[${this.instanceId}] Locked popover placement:`, e);
+        this.selectedPopoverPlacement = e, R.debug(`[${this.instanceId}] Locked popover placement:`, e);
       }
     });
   }
@@ -2451,11 +2884,20 @@ class xs {
   getSelected() {
     return Array.from(this.selectedOptions.values());
   }
-  setSelected(e) {
-    this.selectedValues = new Set(e.map((t) => String(t))), this.selectedOptions.clear(), e.forEach((t) => {
-      const s = String(t), i = this.allOptions.find((r) => String(this.getItemValue(r)) === s);
-      i && this.selectedOptions.set(s, i);
-    }), this.renderDropdown(), this.renderBadges(), this.updateHiddenInput();
+  /**
+   * Set the selection programmatically. **Silent by default** — it does not fire
+   * `select`/`deselect`/`change` (so restoring saved state, cascade resets, or a
+   * server-authoritative correction can't loop back or trip "user changed it"
+   * handlers). Pass `{ notify: true }` to announce the result as a **single
+   * aggregate `change`** — for a deliberate user gesture (e.g. an action button)
+   * that should reach the same listeners a manual pick does, without the per-item
+   * `select`/`deselect` flood a bulk change would otherwise cause.
+   */
+  setSelected(e, t = {}) {
+    this.selectedValues = new Set(e.map((s) => String(s))), this.selectedOptions.clear(), e.forEach((s) => {
+      const i = String(s), r = this.allOptions.find((a) => String(this.getItemValue(a)) === i);
+      r && this.selectedOptions.set(i, r);
+    }), this.renderDropdown(), this.renderBadges(), this.updateHiddenInput(), t.notify && this.options.onChange && this.options.onChange(this.getSelected());
   }
   /**
    * Merge a partial config update into the live picker without tearing down the DOM.
@@ -2471,13 +2913,15 @@ class xs {
   updateOptions(e) {
     const t = !!this.hint, s = "searchHint" in e ? !!e.searchHint : t;
     if (t !== s) return !1;
-    if (Object.assign(this.options, e), "options" in e && e.options !== void 0 && (this.allOptions = e.options, this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions], this.reconcileSelectedOptions()), this.element.classList.toggle(
+    Object.assign(this.options, e);
+    const i = "pathMember" in e || "getPathCallback" in e || "parentPathMember" in e || "levelMember" in e || "hasChildrenMember" in e || "treePathSeparator" in e || "isTreeEnabled" in e || "isSelectableMember" in e || "getIsSelectableCallback" in e;
+    if ("options" in e && e.options !== void 0 ? (this.allOptions = e.options, this.reconcileSelectedOptions(), this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]) : i && (this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]), this.element.classList.toggle(
       "ms--no-checkboxes",
       !this.options.isCheckboxesShown || !this.options.isMultipleEnabled
     ), "badgesPosition" in e) {
       this.effectiveBadgesPosition = this.options.badgesPosition || "bottom", this.isRTL && (this.effectiveBadgesPosition === "left" ? this.effectiveBadgesPosition = "right" : this.effectiveBadgesPosition === "right" && (this.effectiveBadgesPosition = "left"));
-      const i = this.element.querySelector(".ms__wrapper");
-      i == null || i.classList.toggle(
+      const r = this.element.querySelector(".ms__wrapper");
+      r == null || r.classList.toggle(
         "ms__wrapper--inline",
         this.effectiveBadgesPosition === "left" || this.effectiveBadgesPosition === "right"
       );
@@ -2511,7 +2955,7 @@ class xs {
   spawnTooltip(e) {
     var r;
     (r = this.tooltips.get(e.id)) == null || r.destroy();
-    const t = this.element.getRootNode(), s = t instanceof ShadowRoot ? t : null, i = new _s({
+    const t = this.element.getRootNode(), s = t instanceof ShadowRoot ? t : null, i = new Ts({
       trigger: e.trigger,
       container: this.options.container ?? s ?? document.body,
       content: e.content,
@@ -2542,36 +2986,36 @@ ${s}` : t;
   attachBadgeTooltips(e) {
     if (!this.options.isBadgeTooltipsEnabled) return;
     const t = !!e, s = e || this.badgesContainer, i = t ? "popover-" : "";
-    if (s.querySelectorAll(".ms__badge:not(.ms__badge--more)").forEach((n) => {
-      const a = n.querySelector(".ms__badge-remove");
-      if (!a) return;
-      const l = a.dataset.value, h = this.selectedOptions.get(l);
-      if (!h) return;
-      const c = `${i}${l}`, p = `${i}${l}-remove`, u = n.querySelector(".ms__badge-text");
+    if (s.querySelectorAll(".ms__badge:not(.ms__badge--more)").forEach((a) => {
+      const n = a.querySelector(".ms__badge-remove");
+      if (!n) return;
+      const l = n.dataset.value, c = this.selectedOptions.get(l);
+      if (!c) return;
+      const d = `${i}${l}`, p = `${i}${l}-remove`, u = a.querySelector(".ms__badge-text");
       u && this.spawnTooltip({
-        id: c,
+        id: d,
         trigger: u,
-        content: this.buildBadgeTooltipContent(h)
+        content: this.buildBadgeTooltipContent(c)
       });
-      const m = this.getItemBadgeDisplayValue(h);
+      const m = this.getItemBadgeDisplayValue(c);
       this.spawnTooltip({
         id: p,
-        trigger: a,
-        content: this.buildRemoveButtonTooltipText(m, h),
+        trigger: n,
+        content: this.buildRemoveButtonTooltipText(m, c),
         // Keep parent badge tooltip from overlapping the remove-button tooltip.
         onBeforeShow: () => {
           var b;
-          return (b = this.tooltips.get(c)) == null ? void 0 : b.hideImmediate();
+          return (b = this.tooltips.get(d)) == null ? void 0 : b.hideImmediate();
         }
       });
     }), !t) {
-      const n = this.badgesContainer.querySelector(".ms__badge--more"), a = n == null ? void 0 : n.querySelector(".ms__badge-remove");
-      if (a && a.dataset.action === "remove-hidden") {
-        const l = this.options.badgesMaxVisible || 3, h = this.selectedOptions.size - l;
+      const a = this.badgesContainer.querySelector(".ms__badge--more"), n = a == null ? void 0 : a.querySelector(".ms__badge-remove");
+      if (n && n.dataset.action === "remove-hidden") {
+        const l = this.options.badgesMaxVisible || 3, c = this.selectedOptions.size - l;
         this.spawnTooltip({
           id: "more-badge-remove",
-          trigger: a,
-          content: this.buildRemoveButtonTooltipText(`${h} hidden items`)
+          trigger: n,
+          content: this.buildRemoveButtonTooltipText(`${c} hidden items`)
         });
       }
     }
@@ -2596,11 +3040,11 @@ ${s}` : t;
       if (i < 0) return;
       const r = this.filteredOptions[i];
       if (!r) return;
-      const n = this.buildOptionTooltipContent(r);
-      n && this.spawnTooltip({
+      const a = this.buildOptionTooltipContent(r);
+      a && this.spawnTooltip({
         id: `option-${i}`,
         trigger: s,
-        content: n,
+        content: a,
         // Default to `top-start` (anchored to the row's start edge) so the tooltip doesn't
         // center on a full-width row. Falls through to the badge settings for delay/offset.
         placement: this.options.optionTooltipPlacement ?? "top-start",
@@ -2623,15 +3067,15 @@ ${s}` : t;
   }
   attachActionButtonTooltips() {
     this.dropdown.querySelectorAll(".ms__action-btn").forEach((t) => {
-      var h, c;
+      var c, d;
       const s = t, i = s.dataset.action;
       if (!i) return;
-      const r = parseInt(s.dataset.buttonIndex || "-1"), n = r >= 0 ? (h = this.options.actionButtons) == null ? void 0 : h[r] : (c = this.options.actionButtons) == null ? void 0 : c.find((p) => p.action === i);
-      if (!n) return;
-      const a = n.getTooltipCallback ? n.getTooltipCallback(this) : n.tooltip;
+      const r = parseInt(s.dataset.buttonIndex || "-1"), a = r >= 0 ? (c = this.options.actionButtons) == null ? void 0 : c[r] : (d = this.options.actionButtons) == null ? void 0 : d.find((p) => p.action === i);
       if (!a) return;
+      const n = a.getTooltipCallback ? a.getTooltipCallback(this) : a.tooltip;
+      if (!n) return;
       const l = `action-${r >= 0 ? r : i}`;
-      this.spawnTooltip({ id: l, trigger: s, content: a });
+      this.spawnTooltip({ id: l, trigger: s, content: n });
     });
   }
   /**
@@ -2657,11 +3101,11 @@ ${s}` : t;
   // PUBLIC API
   // ========================================================================
   destroy() {
-    this.destroyAllTooltips(), this.searchDebounceTimer && (clearTimeout(this.searchDebounceTimer), this.searchDebounceTimer = void 0), this.abortInFlightSearch(), this.dropdownCleanup && this.dropdownCleanup(), this.hintCleanup && this.hintCleanup(), this.selectedPopoverCleanup && this.selectedPopoverCleanup(), this.documentClickHandler && (document.removeEventListener("click", this.documentClickHandler), this.documentClickHandler = null), this.documentKeydownHandler && (document.removeEventListener("keydown", this.documentKeydownHandler), this.documentKeydownHandler = null), this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.dropdown && this.dropdown.remove(), this.hint && this.hint.remove(), this.selectedPopover && this.selectedPopover.remove(), this.element.innerHTML = "", this.element.classList.remove("ms", "ms--open", "ms--no-checkboxes"), oe.info(`[${this.instanceId}] Component destroyed`);
+    this.destroyAllTooltips(), this.searchDebounceTimer && (clearTimeout(this.searchDebounceTimer), this.searchDebounceTimer = void 0), this.abortInFlightSearch(), this.dropdownCleanup && this.dropdownCleanup(), this.hintCleanup && this.hintCleanup(), this.selectedPopoverCleanup && this.selectedPopoverCleanup(), this.documentClickHandler && (document.removeEventListener("click", this.documentClickHandler), this.documentClickHandler = null), this.documentKeydownHandler && (document.removeEventListener("keydown", this.documentKeydownHandler), this.documentKeydownHandler = null), this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.dropdown && this.dropdown.remove(), this.hint && this.hint.remove(), this.selectedPopover && this.selectedPopover.remove(), this.element.innerHTML = "", this.element.classList.remove("ms", "ms--open", "ms--no-checkboxes"), de.info(`[${this.instanceId}] Component destroyed`);
   }
 }
-const Cs = `@layer variables,component,overrides;@layer variables{:host{display:block;--ms-rem: 10px;font-family:var(--ms-font-family, var(--base-font-family, inherit));--ms-accent-color: var(--base-accent-color, #3b82f6);--ms-accent-color-hover: var(--base-accent-color-hover, #2563eb);--ms-accent-color-active: var(--base-accent-color-active, #1d4ed8);--ms-accent-color-light: var(--base-accent-color-light, light-dark(#eff6ff, #1e3a5f));--ms-accent-color-light-hover: var(--base-accent-color-light-hover, light-dark(#e0f2fe, #264a73));--ms-text-color-1: var(--base-text-color-1, light-dark(#111827, #f5f5f5));--ms-text-color-2: var(--base-text-color-2, light-dark(#353b47, #d4d4d4));--ms-text-color-3: var(--base-text-color-3, light-dark(#6b7280, #a3a3a3));--ms-text-color-4: var(--base-text-color-4, light-dark(#a0a3a9, #737373));--ms-text-color-on-accent: var(--base-text-color-on-accent, #ffffff);--ms-text-primary: var(--ms-text-color-1);--ms-text-secondary: var(--ms-text-color-3);--ms-primary-bg: var(--base-hover-bg, color-mix(in srgb, var(--ms-text-color-1) 8%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-primary-bg-hover: var(--base-active-bg, color-mix(in srgb, var(--ms-text-color-1) 14%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-border-color: var(--base-border-color, light-dark(#e5e7eb, #3a3a3a));--ms-border: var(--base-border, 1px solid var(--ms-border-color));--ms-input-bg: var(--base-input-bg, light-dark(#ffffff, #1a1a1a));--ms-input-color: var(--base-input-color, var(--ms-text-color-1));--ms-input-border: var(--base-input-border, 1px solid var(--ms-border-color));--ms-input-border-hover: var(--base-input-border-hover, 1px solid var(--ms-accent-color));--ms-input-border-focus: var(--base-input-border-focus, 1px solid var(--ms-accent-color));--ms-input-placeholder-color: var(--base-input-placeholder-color, var(--ms-text-color-4));--ms-input-bg-disabled: var(--base-input-bg-disabled, rgba(107, 114, 128, .05));--ms-toggle-icon-color: var(--ms-text-color-3);--ms-toggle-icon-color-open: var(--ms-text-color-3);--ms-counter-badge-bg: var(--ms-accent-color);--ms-counter-badge-bg-hover: var(--ms-accent-color-hover);--ms-counter-badge-color: var(--ms-text-color-on-accent);--ms-hint-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-hint-color: var(--ms-text-color-4);--ms-hint-border-color: var(--ms-border-color);--ms-dropdown-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-dropdown-text-color: var(--ms-text-color-1);--ms-dropdown-border-color: var(--ms-border-color);--ms-dropdown-box-shadow-semantic: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-actions-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-actions-border-color: var(--ms-border-color);--ms-action-button-bg: transparent;--ms-action-button-bg-hover: var(--ms-primary-bg);--ms-action-button-border-color: var(--ms-border-color);--ms-action-button-border-color-hover: var(--ms-accent-color);--ms-action-button-color: var(--ms-text-color-1);--ms-group-border-color: var(--ms-border-color);--ms-option-text-color: var(--ms-text-color-1);--ms-option-bg: transparent;--ms-option-bg-hover: var(--ms-primary-bg);--ms-option-color-hover: inherit;--ms-option-bg-focused: var(--ms-primary-bg);--ms-option-color-focused: inherit;--ms-option-outline-color-focused: var(--ms-accent-color);--ms-option-bg-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-option-bg-matched: color-mix(in srgb, var(--ms-accent-color) 8%, transparent);--ms-option-color-matched: inherit;--ms-option-border-matched-color: color-mix(in srgb, var(--ms-accent-color) 40%, transparent);--ms-option-title-color: var(--ms-text-color-1);--ms-option-subtitle-color: var(--ms-text-color-3);--ms-option-mark-bg: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-option-mark-color: inherit;--ms-loading-color: var(--ms-text-color-3);--ms-badge-bg: var(--ms-accent-color-light);--ms-badge-bg-hover: var(--base-hover-bg, var(--ms-input-bg));--ms-badge-bg-active: var(--ms-accent-color-light-hover);--ms-badge-text-bg-hover: var(--base-hover-bg, var(--ms-input-bg));--ms-badge-text-color-hover: var(--ms-badge-text-color);--ms-badge-counter-border-color: var(--ms-border-color);--ms-badge-counter-text-bg: var(--ms-primary-bg-hover);--ms-badge-counter-text-color: var(--ms-text-color-1);--ms-badge-counter-remove-bg: var(--ms-text-color-3);--ms-badge-counter-remove-bg-hover: var(--ms-text-color-1);--ms-badge-counter-remove-color: var(--ms-text-color-on-accent);--ms-counter-wrapper-border-color: var(--ms-border-color);--ms-count-clear-bg-hover: var(--ms-accent-color);--ms-tooltip-bg: var(--base-tooltip-bg, var(--base-inverse-bg, light-dark(#333333, #f5f5f5)));--ms-tooltip-text-color: var(--base-tooltip-text-color, light-dark(#ffffff, #1a1a1a));--ms-selected-popover-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-selected-popover-border-color: var(--ms-border-color);--ms-selected-popover-header-border-color: var(--ms-border-color);--ms-selected-popover-close-bg-hover: var(--ms-accent-color);--ms-input-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-input-padding-right: calc(4 * var(--ms-rem));--ms-input-padding-h: calc(1.2 * var(--ms-rem));--ms-input-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-border-width: 1px;--ms-input-border-radius: var(--ms-border-radius-md);--ms-input-text: var(--ms-text-color-1);--ms-input-bg-disabled: rgba(107, 114, 128, .05);--ms-input-size-xs-font: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-input-size-xs-padding-v: calc(.4 * var(--ms-rem));--ms-input-size-xs-padding-h: calc(.8 * var(--ms-rem));--ms-input-size-xs-height: calc(var(--base-input-size-xs-height, 3.1) * var(--ms-rem));--ms-input-size-sm-font: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-size-sm-padding-v: calc(.5 * var(--ms-rem));--ms-input-size-sm-padding-h: calc(1 * var(--ms-rem));--ms-input-size-sm-height: calc(var(--base-input-size-sm-height, 3.3) * var(--ms-rem));--ms-input-size-md-font: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-size-md-padding-v: calc(.8 * var(--ms-rem));--ms-input-size-md-padding-h: calc(1.2 * var(--ms-rem));--ms-input-size-md-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-size-lg-font: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-input-size-lg-padding-v: calc(1 * var(--ms-rem));--ms-input-size-lg-padding-h: calc(1.4 * var(--ms-rem));--ms-input-size-lg-height: calc(var(--base-input-size-lg-height, 3.8) * var(--ms-rem));--ms-input-size-xl-font: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-input-size-xl-padding-v: calc(1.2 * var(--ms-rem));--ms-input-size-xl-padding-h: calc(1.6 * var(--ms-rem));--ms-input-size-xl-height: calc(var(--base-input-size-xl-height, 4.1) * var(--ms-rem));--ms-toggle-right: calc(1.2 * var(--ms-rem));--ms-toggle-color: var(--ms-text-color-3);--ms-transform-center-y: translateY(-50%);--ms-transform-rotate-180: 180deg;--ms-counter-offset: calc(3.2 * var(--ms-rem));--ms-counter-padding: calc(.2 * var(--ms-rem)) calc(.4 * var(--ms-rem));--ms-counter-bg: var(--ms-accent-color);--ms-counter-color: var(--ms-text-color-on-accent);--ms-counter-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-counter-font-weight: var(--base-font-weight-semibold, 600);--ms-counter-border-radius: var(--ms-border-radius-sm);--ms-counter-bg-hover: var(--ms-accent-color-hover);--ms-transform-scale-hover: 1.1;--ms-hint-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-hint-border: 1px solid var(--ms-hint-border-color);--ms-hint-border-radius: var(--ms-border-radius-lg);--ms-hint-box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--ms-hint-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-dropdown-border: var(--base-dropdown-border, 1px solid var(--ms-dropdown-border-color));--ms-dropdown-border-radius: var(--ms-border-radius-lg);--ms-dropdown-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-options-max-height: calc(32 * var(--ms-rem));--ms-option-color: var(--ms-text-color-1);--ms-z-index-dropdown: 9999;--ms-z-index-sticky: 1;--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem));--ms-actions-border-bottom: 1px solid var(--ms-actions-border-color);--ms-action-btn-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-action-btn-border: var(--ms-border);--ms-action-btn-border-radius: var(--ms-border-radius-sm);--ms-action-btn-bg: transparent;--ms-action-btn-color: inherit;--ms-action-btn-bg-hover: var(--ms-primary-bg);--ms-action-btn-border-color-hover: var(--ms-accent-color);--ms-transform-scale-active: .98;--ms-options-padding: 0;--ms-group-border-top: 1px solid var(--ms-group-border-color);--ms-group-margin-top: calc(.4 * var(--ms-rem));--ms-group-padding-top: calc(.4 * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-font-weight: var(--base-font-weight-semibold, 600);--ms-group-label-color: var(--ms-text-color-3);--ms-group-label-transform: uppercase;--ms-group-label-letter-spacing: .05em;--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-padding-h: calc(1.2 * var(--ms-rem));--ms-option-outline-focused: 2px solid var(--ms-option-outline-color-focused);--ms-option-focus-outline-offset: -2px;--ms-option-border-matched: 3px solid var(--ms-option-border-matched-color);--ms-option-bg-focused-hover: var(--ms-primary-bg);--ms-option-bg-matched-hover: color-mix(in srgb, var(--ms-accent-color) 12%, transparent);--ms-option-bg-selected-focused: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-bg-selected-matched: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-disabled-bg: var(--base-disabled-bg, transparent);--ms-option-bg-disabled-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-disabled-opacity: .5;--ms-option-content-gap: calc(.8 * var(--ms-rem));--ms-option-icon-size: calc(2 * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-mark-font-weight: var(--base-font-weight-semibold, 600);--ms-option-subtitle-margin-top: calc(.4 * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-subtitle-line-height: var(--base-line-height-tight, 1.25);--ms-checkbox-margin-top: calc(.2 * var(--ms-rem));--ms-checkbox-margin-right: 0;--ms-checkbox-margin-bottom: 0;--ms-checkbox-margin-left: 0;--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-checkbox-scale: 1;--ms-checkbox-align: center;--ms-checkbox-bg: var(--ms-input-bg);--ms-checkbox-border: var(--ms-border);--ms-checkbox-border-radius: calc(.3 * var(--ms-rem));--ms-checkbox-checked-bg: var(--ms-accent-color);--ms-checkbox-checked-border: 1px solid var(--ms-accent-color);--ms-checkbox-checkmark-color: var(--ms-text-color-on-accent);--ms-checkbox-hover-border-color: var(--ms-accent-color);--ms-checkbox-disabled-bg: var(--ms-primary-bg);--ms-checkbox-disabled-border: var(--ms-border);--ms-checkbox-checked-bg-hover: var(--ms-accent-color-hover);--ms-checkbox-checked-border-color-hover: var(--ms-accent-color-hover);--ms-state-min-height: calc(8 * var(--ms-rem));--ms-empty-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-empty-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-empty-color: var(--ms-text-color-3);--ms-loader-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-loader-gap: calc(.8 * var(--ms-rem));--ms-loading-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-loading-text-color: var(--ms-text-color-3);--ms-badges-gap: calc(.8 * var(--ms-rem));--ms-badges-margin-bottom: calc(.8 * var(--ms-rem));--ms-badges-margin-top: calc(.8 * var(--ms-rem));--ms-badges-margin-left: calc(.4 * var(--ms-rem));--ms-badges-margin-right: calc(.4 * var(--ms-rem));--ms-inline-align: center;--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(2.7 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-font-weight: var(--base-font-weight-semibold, 600);--ms-badge-border-radius: var(--ms-border-radius-sm);--ms-order-first: -1;--ms-badge-text-padding: 0 calc(.8 * var(--ms-rem));--ms-badge-text-bg: var(--ms-accent-color-light);--ms-badge-text-color: var(--ms-accent-color);--ms-badge-text-border: none;--ms-badge-remove-width: calc(2.7 * var(--ms-rem));--ms-badge-remove-bg: var(--ms-accent-color);--ms-badge-remove-color: var(--ms-text-color-on-accent);--ms-badge-remove-border: none;--ms-badge-remove-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-remove-bg-hover: var(--ms-accent-color-hover);--ms-badge-remove-box-shadow-focus: 0 0 0 2px color-mix(in srgb, var(--ms-accent-color) 50%, transparent);--ms-badge-remove-icon-size: calc(1 * var(--ms-rem));--ms-icon-remove: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 6L18 18M18 6L6 18' stroke='black' stroke-width='2.5' stroke-linecap='round' fill='none'/></svg>");--ms-badge-counter-bg: transparent;--ms-badge-counter-border: 1px solid var(--ms-badge-counter-border-color);--ms-badge-counter-border-radius: var(--ms-border-radius-sm);--ms-more-badge-bg: var(--ms-accent-color-light);--ms-more-badge-hover-bg: var(--ms-badge-bg-hover);--ms-more-badge-active-bg: var(--ms-accent-color-light-hover);--ms-count-display-margin-bottom: calc(.8 * var(--ms-rem));--ms-count-display-margin-top: calc(.8 * var(--ms-rem));--ms-count-display-margin-left: calc(.8 * var(--ms-rem));--ms-count-display-margin-right: calc(.8 * var(--ms-rem));--ms-counter-wrapper-bg: transparent;--ms-counter-wrapper-border: var(--ms-border);--ms-counter-wrapper-border-radius: var(--ms-border-radius-sm);--ms-counter-wrapper-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-counter-wrapper-gap: calc(.4 * var(--ms-rem));--ms-counter-wrapper-bg-hover: var(--ms-primary-bg);--ms-counter-wrapper-border-color-hover: var(--ms-accent-color);--ms-count-text-bg: transparent;--ms-count-text-border: none;--ms-count-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-count-text-color: var(--ms-text-color-1);--ms-count-clear-size: calc(1.6 * var(--ms-rem));--ms-count-clear-bg: transparent;--ms-count-clear-color: var(--ms-text-color-3);--ms-count-clear-font-size: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-count-clear-border-radius: var(--ms-border-radius-sm);--ms-count-clear-bg-hover: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-count-clear-color-hover: var(--ms-accent-color);--ms-count-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-clear: var(--ms-icon-remove);--ms-tooltip-color: var(--ms-tooltip-text-color);--ms-tooltip-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tooltip-border-radius: var(--ms-border-radius-lg);--ms-tooltip-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-tooltip-max-width: calc(32 * var(--ms-rem));--ms-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, .15);--ms-tooltip-z-index: 10000;--ms-option-tooltip-bg: var(--ms-tooltip-bg);--ms-option-tooltip-text-color: var(--ms-tooltip-text-color);--ms-option-tooltip-padding: var(--ms-tooltip-padding);--ms-option-tooltip-border-radius: var(--ms-tooltip-border-radius);--ms-option-tooltip-font-size: var(--ms-tooltip-font-size);--ms-option-tooltip-max-width: var(--ms-tooltip-max-width);--ms-option-tooltip-shadow: var(--ms-tooltip-shadow);--ms-option-tooltip-z-index: var(--ms-tooltip-z-index);--ms-z-index-popover: 10000;--ms-selected-popover-width: calc(32 * var(--ms-rem));--ms-selected-popover-max-height: calc(32 * var(--ms-rem));--ms-selected-popover-border: 1px solid var(--ms-selected-popover-border-color);--ms-selected-popover-border-radius: var(--ms-border-radius-lg);--ms-selected-popover-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-selected-popover-header-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-selected-popover-header-bg: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-selected-popover-header-border-bottom: 1px solid var(--ms-selected-popover-header-border-color);--ms-selected-popover-header-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-selected-popover-header-font-weight: var(--base-font-weight-semibold, 600);--ms-selected-popover-header-color: var(--ms-text-color-1);--ms-popover-close-size: calc(2.4 * var(--ms-rem));--ms-selected-popover-close-bg: transparent;--ms-selected-popover-close-color: var(--ms-text-color-3);--ms-selected-popover-close-font-size: calc(var(--base-font-size-xl, 2) * var(--ms-rem));--ms-selected-popover-close-border-radius: var(--ms-border-radius-sm);--ms-selected-popover-close-bg-hover: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-selected-popover-close-color-hover: var(--ms-accent-color);--ms-selected-popover-close-icon-size: calc(1.4 * var(--ms-rem));--ms-selected-popover-body-gap: calc(.4 * var(--ms-rem));--ms-selected-popover-body-padding: calc(.8 * var(--ms-rem));--ms-selected-popover-body-max-height: calc(28.8 * var(--ms-rem));--ms-font-size-2xs: calc(var(--base-font-size-2xs, 1) * var(--ms-rem));--ms-font-size-xs: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-font-size-sm: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-font-size-base: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-font-size-lg: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-font-weight-normal: var(--base-font-weight-normal, 400);--ms-font-weight-medium: var(--base-font-weight-medium, 500);--ms-font-weight-semibold: var(--base-font-weight-semibold, 600);--ms-line-height-none: 1;--ms-line-height-tight: var(--base-line-height-tight, 1.25);--ms-line-height-normal: var(--base-line-height-normal, 1.5);--ms-line-height-relaxed: var(--base-line-height-relaxed, 1.75);--ms-border-radius-sm: calc(var(--base-border-radius-sm, .4) * var(--ms-rem));--ms-border-radius-md: calc(var(--base-border-radius-md, .6) * var(--ms-rem));--ms-border-radius-lg: calc(var(--base-border-radius-lg, .8) * var(--ms-rem));--ms-border-radius: var(--ms-border-radius-md);--ms-spacing-xs: calc(.4 * var(--ms-rem));--ms-spacing-sm: calc(.8 * var(--ms-rem));--ms-spacing-md: calc(1.2 * var(--ms-rem));--ms-spacing-lg: calc(1.6 * var(--ms-rem));--ms-transition-fast: .15s;--ms-transition-normal: .2s;--ms-easing-snappy: cubic-bezier(.4, 0, .2, 1);--ms-placeholder-opacity: .6;--ms-disabled-input-opacity: .6;--ms-scrollbar-width: 8px;--ms-scrollbar-track-bg: transparent;--ms-scrollbar-thumb-bg: var(--ms-border-color);--ms-scrollbar-thumb-bg-hover: var(--ms-text-color-3);--ms-scrollbar-thumb-border-radius: 4px;--ms-debug-bg: var(--base-elevated-bg, light-dark(#f9fafb, #2b2b2b));--ms-debug-border-color: var(--ms-border-color);--ms-debug-text-color: var(--ms-text-color-1);--ms-debug-border-radius: var(--ms-border-radius-md);--ms-debug-summary-color: var(--ms-accent-color);--ms-debug-summary-bg-hover: var(--ms-primary-bg);--ms-debug-summary-outline-color: var(--ms-accent-color);--ms-debug-summary-border-radius: var(--ms-border-radius-sm);--ms-debug-stats-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-debug-stats-border-radius: var(--ms-border-radius-sm);--ms-debug-bullet-color: var(--ms-accent-color)}}@layer component{web-multiselect:not(:defined){display:block;min-height:calc(3.5 * var(--ms-rem));color:transparent!important;background:transparent}.ms__wrapper{display:flex;flex-direction:column;align-items:stretch}.ms__wrapper--inline{flex-direction:row;align-items:var(--ms-inline-align, center)}.ms{position:relative;width:100%}}@layer component{.ms__input-wrapper{position:relative;display:flex;align-items:center}.ms__input{box-sizing:border-box;width:100%;font-family:inherit;height:var(--ms-input-height);padding:var(--ms-input-padding);padding-right:var(--ms-input-padding-right);font-size:var(--ms-input-font-size);border:var(--ms-input-border);border-radius:var(--ms-input-border-radius);background:var(--ms-input-bg);color:var(--ms-input-color);cursor:pointer;transition:border var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input:hover:not(:focus):not(:disabled){border:var(--ms-input-border-hover)}.ms__input:focus{outline:none;border:var(--ms-input-border-focus)}.ms__input::placeholder{color:var(--ms-input-placeholder-color);opacity:0;transition:opacity var(--ms-transition-fast) var(--ms-easing-snappy)}:host([data-ready]) .ms__input::placeholder{opacity:var(--ms-placeholder-opacity)}.ms__input.ms__input--xs{font-size:var(--ms-input-size-xs-font);padding:var(--ms-input-size-xs-padding-v) var(--ms-input-size-xs-padding-h);padding-right:calc(var(--ms-input-size-xs-padding-h) * 2.5);height:var(--ms-input-size-xs-height)}.ms__input.ms__input--sm{font-size:var(--ms-input-size-sm-font);padding:var(--ms-input-size-sm-padding-v) var(--ms-input-size-sm-padding-h);padding-right:calc(var(--ms-input-size-sm-padding-h) * 2.5);height:var(--ms-input-size-sm-height)}.ms__input.ms__input--lg{font-size:var(--ms-input-size-lg-font);padding:var(--ms-input-size-lg-padding-v) var(--ms-input-size-lg-padding-h);padding-right:calc(var(--ms-input-size-lg-padding-h) * 2.5);height:var(--ms-input-size-lg-height)}.ms__input.ms__input--xl{font-size:var(--ms-input-size-xl-font);padding:var(--ms-input-size-xl-padding-v) var(--ms-input-size-xl-padding-h);padding-right:calc(var(--ms-input-size-xl-padding-h) * 2.5);height:var(--ms-input-size-xl-height)}.ms__toggle{position:absolute;right:var(--ms-toggle-right);top:50%;transform:var(--ms-transform-center-y);pointer-events:none;color:var(--ms-toggle-icon-color);transition:transform var(--ms-transition-fast) var(--ms-easing-snappy)}.ms--open .ms__toggle{transform:var(--ms-transform-center-y) rotate(var(--ms-transform-rotate-180));color:var(--ms-toggle-icon-color-open)}.ms__counter{position:absolute;right:var(--ms-counter-offset);top:50%;transform:var(--ms-transform-center-y);padding:var(--ms-counter-padding);background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-size:var(--ms-counter-font-size);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter:hover{background:var(--ms-counter-badge-bg-hover);transform:var(--ms-transform-center-y) scale(var(--ms-transform-scale-hover))}.ms__actions{display:flex;flex-direction:column;gap:var(--ms-actions-gap);padding:var(--ms-actions-padding)}.ms__actions--top{border-bottom:var(--ms-actions-border-bottom)}.ms__actions--bottom{flex-direction:column-reverse;border-top:var(--ms-actions-border-bottom)}.ms__actions-row{display:flex;flex-wrap:nowrap;gap:var(--ms-actions-gap)}.ms__actions--wrap .ms__actions-row{flex-wrap:wrap}.ms__actions--sticky{position:sticky;z-index:var(--ms-z-index-sticky);background:var(--ms-actions-bg)}.ms__actions--sticky.ms__actions--top{top:0}.ms__actions--sticky.ms__actions--bottom{bottom:0}.ms__actions--align-stretch .ms__action-btn{flex:1}.ms__actions--align-left .ms__actions-row{justify-content:flex-start}.ms__actions--align-right .ms__actions-row{justify-content:flex-end}.ms__actions--align-center .ms__actions-row{justify-content:center}.ms__actions--align-space-between .ms__actions-row{justify-content:space-between}.ms__action-btn{font-family:inherit;padding:var(--ms-action-btn-padding);font-size:var(--ms-action-btn-font-size);border:var(--ms-action-btn-border);border-radius:var(--ms-action-btn-border-radius);background:var(--ms-action-button-bg);color:var(--ms-action-button-color);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__action-btn:hover{background:var(--ms-action-button-bg-hover);border-color:var(--ms-action-button-border-color-hover)}.ms__action-btn:active{transform:scale(var(--ms-transform-scale-active))}.ms__action-btn:disabled,.ms__action-btn[disabled]{opacity:var(--ms-disabled-opacity);cursor:not-allowed;pointer-events:none}}@layer component{.ms__hint{display:none;position:fixed;z-index:var(--ms-z-index-popover);padding:var(--ms-hint-padding);background:var(--ms-hint-bg);border:var(--ms-hint-border);border-radius:var(--ms-hint-border-radius);box-shadow:var(--ms-hint-box-shadow);font-size:var(--ms-hint-font-size);color:var(--ms-hint-color);line-height:var(--ms-line-height-relaxed);max-width:100%}.ms__hint--visible{display:block}.ms__dropdown{display:none;position:fixed;font-family:inherit;z-index:var(--ms-z-index-dropdown);background:var(--ms-dropdown-bg);border:var(--ms-dropdown-border);border-radius:var(--ms-dropdown-border-radius);box-shadow:var(--ms-dropdown-box-shadow);max-height:var(--ms-options-max-height);overflow:hidden;color:var(--ms-dropdown-text-color)}.ms__dropdown--visible{display:flex;flex-direction:column}.ms__dropdown-inner{flex:1;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__dropdown-inner::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__dropdown-inner::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__dropdown--virtual{max-height:none}.ms__dropdown--virtual .ms__dropdown-inner{overflow-y:visible}.ms__badge-tooltip{position:fixed;z-index:var(--ms-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-tooltip-bg);color:var(--ms-tooltip-text-color);padding:var(--ms-tooltip-padding);border-radius:var(--ms-tooltip-border-radius);font-size:var(--ms-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-tooltip-shadow);pointer-events:none}.ms__badge-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip{position:fixed;z-index:var(--ms-option-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-option-tooltip-bg);color:var(--ms-option-tooltip-text-color);padding:var(--ms-option-tooltip-padding);border-radius:var(--ms-option-tooltip-border-radius);font-size:var(--ms-option-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-option-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-option-tooltip-shadow);pointer-events:none}.ms__option-tooltip--visible{opacity:1;visibility:visible}.ms__selected-popover{display:none;position:fixed;z-index:var(--ms-z-index-popover);background:var(--ms-selected-popover-bg);border:var(--ms-selected-popover-border);border-radius:var(--ms-selected-popover-border-radius);box-shadow:var(--ms-selected-popover-box-shadow);width:var(--ms-selected-popover-width);max-height:var(--ms-selected-popover-max-height);overflow:hidden}.ms__selected-popover--visible{display:flex;flex-direction:column}.ms__selected-popover--virtual{display:block;overflow:visible;max-height:none}.ms__selected-popover-header{display:flex;align-items:center;justify-content:space-between;padding:var(--ms-selected-popover-header-padding);background:var(--ms-selected-popover-header-bg);border-bottom:var(--ms-selected-popover-header-border-bottom);font-size:var(--ms-selected-popover-header-font-size);font-weight:var(--ms-selected-popover-header-font-weight);color:var(--ms-selected-popover-header-color)}.ms__selected-popover-close{display:flex;align-items:center;justify-content:center;width:var(--ms-popover-close-size);height:var(--ms-popover-close-size);padding:0;border:none;background:var(--ms-selected-popover-close-bg);color:var(--ms-selected-popover-close-color);font-size:var(--ms-selected-popover-close-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-selected-popover-close-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__selected-popover-close:hover{background:var(--ms-selected-popover-close-bg-hover);color:var(--ms-selected-popover-close-color-hover)}.ms__selected-popover-close:before{content:"";display:block;width:var(--ms-selected-popover-close-icon-size);height:var(--ms-selected-popover-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__selected-popover-body{display:flex;flex-direction:column;gap:var(--ms-selected-popover-body-gap);padding:var(--ms-selected-popover-body-padding);overflow-y:auto;max-height:var(--ms-selected-popover-body-max-height);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__selected-popover-body::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__selected-popover-body::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__selected-popover-body .ms__badge{width:100%;min-height:fit-content;line-height:var(--ms-line-height-relaxed)}.ms__selected-popover-body .ms__badge-text{flex:1;min-width:0;white-space:normal;word-wrap:break-word}.ms__selected-popover-body--virtual{display:block;max-height:none;padding:0}.ms__selected-popover-body--virtual .ms__badge{height:var(--ms-badge-height-virtual, 36px);min-height:var(--ms-badge-height-virtual, 36px);max-height:var(--ms-badge-height-virtual, 36px);margin-bottom:var(--ms-selected-popover-body-gap);overflow:hidden;box-sizing:border-box}.ms__selected-popover-body--virtual .ms__badge-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}@layer component{.ms--disabled .ms__input{opacity:var(--ms-disabled-input-opacity);cursor:not-allowed;background:var(--ms-input-bg-disabled)}.ms--disabled .ms__toggle{opacity:var(--ms-disabled-input-opacity)}.ms--no-checkboxes .ms__option{gap:0;padding-left:var(--ms-option-padding-h)}.ms--no-checkboxes .ms__option-content{padding-left:0}}@layer component;@layer component{.ms__badges{display:flex;flex-wrap:wrap;gap:var(--ms-badges-gap);padding:0}.ms__badges:empty{display:none}.ms__badges--bottom{margin-top:var(--ms-badges-margin-bottom)}.ms__badges--top{margin-bottom:var(--ms-badges-margin-top);order:var(--ms-order-first)}.ms__badges--left{order:var(--ms-order-first);margin-right:var(--ms-badges-margin-left);justify-content:flex-end}.ms__badges--right{margin-left:var(--ms-badges-margin-right);justify-content:flex-start}.ms__badge{display:inline-flex;align-items:center;height:var(--ms-badge-height);font-size:var(--ms-badge-font-size);font-weight:var(--ms-badge-font-weight);line-height:var(--ms-line-height-none);border-radius:var(--ms-badge-border-radius);overflow:hidden;max-width:100%}.ms__badge-text{display:flex;align-items:center;box-sizing:border-box;height:100%;padding:var(--ms-badge-text-padding);background:var(--ms-badge-text-bg);color:var(--ms-badge-text-color);border:var(--ms-badge-text-border);border-right:none;border-radius:var(--ms-badge-border-radius) 0 0 var(--ms-badge-border-radius);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background-color var(--ms-transition-normal) ease,color var(--ms-transition-normal) ease}.ms__badge:hover .ms__badge-text{background:var(--ms-badge-text-bg-hover, var(--ms-badge-text-bg));color:var(--ms-badge-text-color-hover, var(--ms-badge-text-color))}.ms__badge-remove{display:flex;align-items:center;justify-content:center;box-sizing:border-box;font-family:inherit;width:var(--ms-badge-remove-width);height:100%;flex-shrink:0;background:var(--ms-badge-remove-bg);color:var(--ms-badge-remove-color);border:var(--ms-badge-remove-border);border-left:none;border-radius:0 var(--ms-badge-border-radius) var(--ms-badge-border-radius) 0;cursor:pointer;transition:background-color var(--ms-transition-normal) ease;font-size:var(--ms-badge-remove-font-size)}.ms__badge-remove:hover{background:var(--ms-badge-remove-bg-hover)}.ms__badge-remove:focus{outline:none}.ms__badge-remove:focus-visible{outline:none;box-shadow:var(--ms-badge-remove-box-shadow-focus)}.ms__badge-remove:before{content:"";display:block;width:var(--ms-badge-remove-icon-size);height:var(--ms-badge-remove-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__badge--counter{cursor:pointer}.ms__badge--counter .ms__badge-text{background:var(--ms-badge-counter-text-bg);color:var(--ms-badge-counter-text-color);border:var(--ms-badge-counter-border);border-right:none}.ms__badge--counter .ms__badge-remove{background:var(--ms-badge-counter-remove-bg);color:var(--ms-badge-counter-remove-color);border:var(--ms-badge-counter-border);border-left:none}.ms__badge--counter .ms__badge-remove:hover{background:var(--ms-badge-counter-remove-bg-hover)}.ms__badge--more,.ms__badge[data-action=show-selected]{cursor:pointer}}@layer component{.ms__count-display{display:flex;align-items:center}.ms__count-display:empty{display:none}.ms__count-display--bottom{margin-top:var(--ms-count-display-margin-bottom)}.ms__count-display--top{margin-bottom:var(--ms-count-display-margin-top);order:var(--ms-order-first)}.ms__count-display--left{order:var(--ms-order-first);margin-right:var(--ms-count-display-margin-left);justify-content:flex-start}.ms__count-display--right{margin-left:var(--ms-count-display-margin-right);justify-content:flex-end}.ms__counter-wrapper{display:inline-flex;align-items:center;gap:var(--ms-counter-wrapper-gap);background:var(--ms-counter-wrapper-bg);border:var(--ms-counter-wrapper-border);border-radius:var(--ms-counter-wrapper-border-radius);padding:var(--ms-counter-wrapper-padding);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter-wrapper:hover{background:var(--ms-counter-wrapper-bg-hover);border-color:var(--ms-counter-wrapper-border-color-hover)}.ms__count-text{display:inline-flex;align-items:center;background:var(--ms-count-text-bg);border:var(--ms-count-text-border);padding:0;font-size:var(--ms-count-text-font-size);color:var(--ms-count-text-color);cursor:pointer;transition:color var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:var(--ms-count-clear-size);height:var(--ms-count-clear-size);padding:0;border:none;background:var(--ms-count-clear-bg);color:var(--ms-count-clear-color);font-size:var(--ms-count-clear-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-count-clear-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear:hover{background:var(--ms-count-clear-bg-hover);color:var(--ms-count-clear-color-hover)}.ms__count-clear:before{content:"";display:block;width:var(--ms-count-clear-icon-size);height:var(--ms-count-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}}@layer component{.ms__debug-info{margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-bg);border:1px solid var(--ms-debug-border-color);border-radius:var(--ms-debug-border-radius);font-size:calc(1.2 * var(--ms-rem));color:var(--ms-debug-text-color)}.ms__debug-info details summary{cursor:pointer;font-weight:600;color:var(--ms-debug-summary-color);-webkit-user-select:none;user-select:none;padding:calc(.4 * var(--ms-rem));border-radius:var(--ms-debug-summary-border-radius)}.ms__debug-info details summary:hover{background-color:var(--ms-debug-summary-bg-hover)}.ms__debug-info details summary:focus{outline:2px solid var(--ms-debug-summary-outline-color);outline-offset:2px}.ms__debug-info .ms__debug-stats{display:flex;flex-direction:column;gap:calc(.4 * var(--ms-rem));margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-stats-bg);border-radius:var(--ms-debug-stats-border-radius)}.ms__debug-info .ms__debug-stats span{display:flex;justify-content:space-between;padding:2px 4px;font-family:monospace;font-size:calc(1 * var(--ms-rem))}.ms__debug-info .ms__debug-stats span:before{content:"•";margin-right:calc(.4 * var(--ms-rem));color:var(--ms-debug-bullet-color)}}@layer component{.ms__options{padding:var(--ms-options-padding);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__options::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__options::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__options--virtual .ms__option{height:var(--ms-option-height, 50px);min-height:var(--ms-option-height, 50px);max-height:var(--ms-option-height, 50px);overflow:hidden;box-sizing:border-box}.ms__group+.ms__group{border-top:var(--ms-group-border-top);margin-top:var(--ms-group-margin-top);padding-top:var(--ms-group-padding-top)}.ms__group-label{padding:var(--ms-group-label-padding);font-size:var(--ms-group-label-font-size);font-weight:var(--ms-group-label-font-weight);color:var(--ms-group-label-color);text-transform:var(--ms-group-label-transform);letter-spacing:var(--ms-group-label-letter-spacing)}.ms__option{display:flex;align-items:var(--ms-checkbox-align, center);gap:var(--ms-option-gap);padding:var(--ms-option-padding);color:var(--ms-option-text-color);background:var(--ms-option-bg);cursor:pointer}.ms__option:hover{background:var(--ms-option-bg-hover);color:var(--ms-option-color-hover, inherit)}.ms__option--focused{background:var(--ms-option-bg-focused);color:var(--ms-option-color-focused, inherit);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--matched{background:var(--ms-option-bg-matched);color:var(--ms-option-color-matched, inherit);border-left:var(--ms-option-border-matched)}.ms__option--selected{background:var(--ms-option-bg-selected)}.ms__option--selected:hover{background:var(--ms-option-bg-selected-hover, var(--ms-option-bg-selected))}.ms__option--disabled{opacity:var(--ms-disabled-opacity);cursor:not-allowed;background:var(--ms-option-disabled-bg)}.ms__option--disabled:hover{background:var(--ms-option-disabled-bg)}.ms__option--focused:hover{background:var(--ms-option-bg-focused-hover);color:var(--ms-option-color-focused-hover, var(--ms-option-color-focused, var(--ms-option-text-color)))}.ms__option--matched:hover{background:var(--ms-option-bg-matched-hover);color:var(--ms-option-color-matched-hover, var(--ms-option-color-matched, var(--ms-option-text-color)))}.ms__option--selected.ms__option--focused{background:var(--ms-option-bg-selected-focused);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--selected.ms__option--matched{background:var(--ms-option-bg-selected-matched);border-left:var(--ms-option-border-matched)}.ms__option--disabled.ms__option--selected{background:var(--ms-option-bg-disabled-selected)}.ms__option--disabled.ms__option--focused{outline:none}.ms__option[data-checkbox-align=top]{--ms-checkbox-align: flex-start}.ms__option[data-checkbox-align=bottom]{--ms-checkbox-align: flex-end}.ms__checkbox{appearance:none;-webkit-appearance:none;-moz-appearance:none;flex-shrink:0;position:relative;margin-top:var(--ms-checkbox-margin-top);margin-right:var(--ms-checkbox-margin-right);margin-bottom:var(--ms-checkbox-margin-bottom);margin-left:var(--ms-checkbox-margin-left);width:var(--ms-checkbox-size);height:var(--ms-checkbox-size);transform:scale(var(--ms-checkbox-scale));transform-origin:top left;cursor:pointer;background:var(--ms-checkbox-bg);border:var(--ms-checkbox-border);border-radius:var(--ms-checkbox-border-radius);transition:background-color .15s ease,border-color .15s ease}.ms__checkbox:after{content:"";position:absolute;display:none;left:50%;top:40%;width:30%;height:55%;transform:translate(-50%,-50%) rotate(45deg);border:solid var(--ms-checkbox-checkmark-color);border-width:0 2px 2px 0}.ms__checkbox:hover:not(:disabled){border-color:var(--ms-checkbox-hover-border-color)}.ms__checkbox:checked{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox:checked:after{display:block}.ms__checkbox:checked:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:focus-visible{outline:2px solid var(--ms-checkbox-checked-bg);outline-offset:2px}.ms__checkbox:disabled{cursor:not-allowed;background:var(--ms-checkbox-disabled-bg);border:var(--ms-checkbox-disabled-border);opacity:.6}.ms__checkbox:disabled:checked{background:var(--ms-checkbox-disabled-bg)}.ms__option--disabled .ms__checkbox{cursor:not-allowed}.ms__option-content{flex:1;display:flex;align-items:center;gap:var(--ms-option-content-gap);min-width:0}.ms__option-icon{flex-shrink:0;width:var(--ms-option-icon-size);height:var(--ms-option-icon-size);display:flex;align-items:center;justify-content:center;font-size:var(--ms-option-icon-font-size)}.ms__option-icon svg{width:100%;height:100%;fill:currentColor}.ms__option-text{flex:1;min-width:0}.ms__option-title{font-size:var(--ms-option-title-font-size);color:var(--ms-option-title-color);line-height:var(--ms-line-height-relaxed)}.ms__option:hover .ms__option-title{color:var(--ms-option-title-color-hover, var(--ms-option-title-color))}.ms__option--selected .ms__option-title{color:var(--ms-option-title-color-selected, var(--ms-option-title-color))}.ms__option--selected:hover .ms__option-title{color:var(--ms-option-title-color-selected-hover, var(--ms-option-title-color-selected, var(--ms-option-title-color)))}.ms__option-title mark{background:var(--ms-option-mark-bg);color:var(--ms-option-mark-color);font-weight:var(--ms-option-mark-font-weight)}.ms__option-subtitle{margin-top:var(--ms-option-subtitle-margin-top);font-size:var(--ms-option-subtitle-font-size);color:var(--ms-option-subtitle-color);line-height:var(--ms-option-subtitle-line-height)}.ms__option:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-hover, var(--ms-option-subtitle-color))}.ms__option--selected .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color))}.ms__option--selected:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected-hover, var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color)))}.ms__empty{display:flex;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-empty-padding);text-align:center;font-size:var(--ms-empty-font-size);color:var(--ms-empty-color)}.ms__loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-loader-padding);gap:var(--ms-loader-gap)}.ms__loading-text{font-size:var(--ms-loading-text-font-size);color:var(--ms-loading-color)}}@layer component{.ms--rtl .ms__input-wrapper{direction:rtl}.ms--rtl .ms__input{text-align:right;padding-left:var(--ms-input-padding-right);padding-right:var(--ms-input-padding-h)}.ms--rtl .ms__toggle{left:var(--ms-toggle-right)!important;right:auto!important}.ms--rtl .ms__counter{left:var(--ms-counter-offset)!important;right:auto!important}.ms--rtl .ms__dropdown{direction:rtl;text-align:right}.ms--rtl .ms__option{flex-direction:row-reverse}.ms--rtl .ms__checkbox{margin-left:var(--ms-spacing-sm);margin-right:0}.ms--rtl .ms__option-content{text-align:right}.ms--rtl .ms__option-icon{margin-left:var(--ms-spacing-xs);margin-right:0}.ms--rtl .ms__badges{direction:rtl}.ms--rtl .ms__badges--right{margin-left:0;margin-right:var(--ms-badges-margin-right)}.ms--rtl .ms__badges--left{margin-right:0;margin-left:var(--ms-badges-margin-left)}.ms--rtl .ms__badge{flex-direction:row-reverse}.ms--rtl .ms__badge-remove{border-radius:var(--ms-badge-border-radius) 0 0 var(--ms-badge-border-radius);border-left:var(--ms-badge-remove-border);border-right:none}.ms--rtl .ms__badge-text{border-radius:0 var(--ms-badge-border-radius) var(--ms-badge-border-radius) 0;border-right:var(--ms-badge-text-border);border-left:none}.ms--rtl .ms__count-display{direction:rtl}.ms--rtl .ms__count-display--right{margin-left:0;margin-right:var(--ms-count-display-margin-right)}.ms--rtl .ms__count-display--left{margin-right:0;margin-left:var(--ms-count-display-margin-left)}.ms--rtl .ms__counter-wrapper{flex-direction:row-reverse}.ms--rtl .ms__selected-popover{direction:rtl;text-align:right}.ms--rtl .ms__actions{direction:rtl}.ms--rtl .ms__group-label,.ms--rtl .ms__empty{text-align:right}.ms--rtl .ms__hint{direction:rtl;text-align:right}}@layer overrides{:host-context([data-theme="dark"]),:host-context([data-bs-theme="dark"]),:host-context(.dark){color-scheme:dark}:host-context([data-theme="light"]),:host-context([data-bs-theme="light"]),:host-context(.light){color-scheme:light}:host([data-theme="dark"]){color-scheme:dark}:host([data-theme="light"]){color-scheme:light}}`, Ss = typeof HTMLElement < "u" ? HTMLElement : class {
-}, Ce = [
+const Bs = `@layer variables,component,overrides;@layer variables{:host{display:block;--ms-rem: 10px;font-family:var(--ms-font-family, var(--base-font-family, inherit));--ms-accent-color: var(--base-accent-color, #3b82f6);--ms-accent-color-hover: var(--base-accent-color-hover, #2563eb);--ms-accent-color-active: var(--base-accent-color-active, #1d4ed8);--ms-accent-color-light: var(--base-accent-color-light, light-dark(#eff6ff, #1e3a5f));--ms-accent-color-light-hover: var(--base-accent-color-light-hover, light-dark(#e0f2fe, #264a73));--ms-text-color-1: var(--base-text-color-1, light-dark(#111827, #f5f5f5));--ms-text-color-2: var(--base-text-color-2, light-dark(#353b47, #d4d4d4));--ms-text-color-3: var(--base-text-color-3, light-dark(#6b7280, #a3a3a3));--ms-text-color-4: var(--base-text-color-4, light-dark(#a0a3a9, #737373));--ms-text-color-on-accent: var(--base-text-color-on-accent, #ffffff);--ms-text-primary: var(--ms-text-color-1);--ms-text-secondary: var(--ms-text-color-3);--ms-primary-bg: var(--base-hover-bg, color-mix(in srgb, var(--ms-text-color-1) 8%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-primary-bg-hover: var(--base-active-bg, color-mix(in srgb, var(--ms-text-color-1) 14%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-border-color: var(--base-border-color, light-dark(#e5e7eb, #3a3a3a));--ms-border: var(--base-border, 1px solid var(--ms-border-color));--ms-input-bg: var(--base-input-bg, light-dark(#ffffff, #1a1a1a));--ms-input-color: var(--base-input-color, var(--ms-text-color-1));--ms-input-border: var(--base-input-border, 1px solid var(--ms-border-color));--ms-input-border-hover: var(--base-input-border-hover, 1px solid var(--ms-accent-color));--ms-input-border-focus: var(--base-input-border-focus, 1px solid var(--ms-accent-color));--ms-input-placeholder-color: var(--base-input-placeholder-color, var(--ms-text-color-4));--ms-input-bg-disabled: var(--base-input-bg-disabled, rgba(107, 114, 128, .05));--ms-toggle-icon-color: var(--ms-text-color-3);--ms-toggle-icon-color-open: var(--ms-text-color-3);--ms-counter-badge-bg: var(--ms-accent-color);--ms-counter-badge-bg-hover: var(--ms-accent-color-hover);--ms-counter-badge-color: var(--ms-text-color-on-accent);--ms-hint-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-hint-color: var(--ms-text-color-4);--ms-hint-border-color: var(--ms-border-color);--ms-dropdown-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-dropdown-text-color: var(--ms-text-color-1);--ms-dropdown-border-color: var(--ms-border-color);--ms-dropdown-box-shadow-semantic: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-actions-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-actions-border-color: var(--ms-border-color);--ms-action-button-bg: transparent;--ms-action-button-bg-hover: var(--ms-primary-bg);--ms-action-button-border-color: var(--ms-border-color);--ms-action-button-border-color-hover: var(--ms-accent-color);--ms-action-button-color: var(--ms-text-color-1);--ms-group-border-color: var(--ms-border-color);--ms-option-text-color: var(--ms-text-color-1);--ms-option-bg: transparent;--ms-option-bg-hover: var(--ms-primary-bg);--ms-option-color-hover: inherit;--ms-option-bg-focused: var(--ms-primary-bg);--ms-option-color-focused: inherit;--ms-option-outline-color-focused: var(--ms-accent-color);--ms-option-bg-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-option-bg-matched: color-mix(in srgb, var(--ms-accent-color) 8%, transparent);--ms-option-color-matched: inherit;--ms-option-border-matched-color: color-mix(in srgb, var(--ms-accent-color) 40%, transparent);--ms-option-title-color: var(--ms-text-color-1);--ms-option-subtitle-color: var(--ms-text-color-3);--ms-option-mark-bg: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-option-mark-color: inherit;--ms-loading-color: var(--ms-text-color-3);--ms-badge-bg: var(--ms-accent-color-light);--ms-badge-bg-hover: var(--base-hover-bg, var(--ms-input-bg));--ms-badge-bg-active: var(--ms-accent-color-light-hover);--ms-badge-text-bg-hover: var(--base-hover-bg, var(--ms-input-bg));--ms-badge-text-color-hover: var(--ms-badge-text-color);--ms-badge-counter-border-color: var(--ms-border-color);--ms-badge-counter-text-bg: var(--ms-primary-bg-hover);--ms-badge-counter-text-color: var(--ms-text-color-1);--ms-badge-counter-remove-bg: var(--ms-text-color-3);--ms-badge-counter-remove-bg-hover: var(--ms-text-color-1);--ms-badge-counter-remove-color: var(--ms-text-color-on-accent);--ms-counter-wrapper-border-color: var(--ms-border-color);--ms-count-clear-bg-hover: var(--ms-accent-color);--ms-tooltip-bg: var(--base-tooltip-bg, var(--base-inverse-bg, light-dark(#333333, #f5f5f5)));--ms-tooltip-text-color: var(--base-tooltip-text-color, light-dark(#ffffff, #1a1a1a));--ms-selected-popover-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-selected-popover-border-color: var(--ms-border-color);--ms-selected-popover-header-border-color: var(--ms-border-color);--ms-selected-popover-close-bg-hover: var(--ms-accent-color);--ms-input-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-input-padding-right: calc(4 * var(--ms-rem));--ms-input-padding-h: calc(1.2 * var(--ms-rem));--ms-input-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-border-width: 1px;--ms-input-border-radius: var(--ms-border-radius-md);--ms-input-text: var(--ms-text-color-1);--ms-input-bg-disabled: rgba(107, 114, 128, .05);--ms-input-size-xs-font: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-input-size-xs-padding-v: calc(.4 * var(--ms-rem));--ms-input-size-xs-padding-h: calc(.8 * var(--ms-rem));--ms-input-size-xs-height: calc(var(--base-input-size-xs-height, 3.1) * var(--ms-rem));--ms-input-size-sm-font: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-size-sm-padding-v: calc(.5 * var(--ms-rem));--ms-input-size-sm-padding-h: calc(1 * var(--ms-rem));--ms-input-size-sm-height: calc(var(--base-input-size-sm-height, 3.3) * var(--ms-rem));--ms-input-size-md-font: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-size-md-padding-v: calc(.8 * var(--ms-rem));--ms-input-size-md-padding-h: calc(1.2 * var(--ms-rem));--ms-input-size-md-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-size-lg-font: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-input-size-lg-padding-v: calc(1 * var(--ms-rem));--ms-input-size-lg-padding-h: calc(1.4 * var(--ms-rem));--ms-input-size-lg-height: calc(var(--base-input-size-lg-height, 3.8) * var(--ms-rem));--ms-input-size-xl-font: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-input-size-xl-padding-v: calc(1.2 * var(--ms-rem));--ms-input-size-xl-padding-h: calc(1.6 * var(--ms-rem));--ms-input-size-xl-height: calc(var(--base-input-size-xl-height, 4.1) * var(--ms-rem));--ms-toggle-right: calc(1.2 * var(--ms-rem));--ms-toggle-color: var(--ms-text-color-3);--ms-transform-center-y: translateY(-50%);--ms-transform-rotate-180: 180deg;--ms-counter-offset: calc(3.2 * var(--ms-rem));--ms-counter-padding: calc(.2 * var(--ms-rem)) calc(.4 * var(--ms-rem));--ms-counter-bg: var(--ms-accent-color);--ms-counter-color: var(--ms-text-color-on-accent);--ms-counter-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-counter-font-weight: var(--base-font-weight-semibold, 600);--ms-counter-border-radius: var(--ms-border-radius-sm);--ms-counter-bg-hover: var(--ms-accent-color-hover);--ms-transform-scale-hover: 1.1;--ms-hint-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-hint-border: 1px solid var(--ms-hint-border-color);--ms-hint-border-radius: var(--ms-border-radius-lg);--ms-hint-box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--ms-hint-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-dropdown-border: var(--base-dropdown-border, 1px solid var(--ms-dropdown-border-color));--ms-dropdown-border-radius: var(--ms-border-radius-lg);--ms-dropdown-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-options-max-height: calc(32 * var(--ms-rem));--ms-option-color: var(--ms-text-color-1);--ms-z-index-dropdown: 9999;--ms-z-index-sticky: 1;--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem));--ms-actions-border-bottom: 1px solid var(--ms-actions-border-color);--ms-action-btn-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-action-btn-border: var(--ms-border);--ms-action-btn-border-radius: var(--ms-border-radius-sm);--ms-action-btn-bg: transparent;--ms-action-btn-color: inherit;--ms-action-btn-bg-hover: var(--ms-primary-bg);--ms-action-btn-border-color-hover: var(--ms-accent-color);--ms-transform-scale-active: .98;--ms-options-padding: 0;--ms-group-border-top: 1px solid var(--ms-group-border-color);--ms-group-margin-top: calc(.4 * var(--ms-rem));--ms-group-padding-top: calc(.4 * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-font-weight: var(--base-font-weight-semibold, 600);--ms-group-label-color: var(--ms-text-color-3);--ms-group-label-transform: uppercase;--ms-group-label-letter-spacing: .05em;--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-padding-h: calc(1.2 * var(--ms-rem));--ms-option-min-height: auto;--ms-option-outline-focused: 2px solid var(--ms-option-outline-color-focused);--ms-option-focus-outline-offset: -2px;--ms-option-border-matched: 3px solid var(--ms-option-border-matched-color);--ms-option-bg-focused-hover: var(--ms-primary-bg);--ms-option-bg-matched-hover: color-mix(in srgb, var(--ms-accent-color) 12%, transparent);--ms-option-bg-selected-focused: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-bg-selected-matched: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-disabled-bg: var(--base-disabled-bg, transparent);--ms-option-bg-disabled-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-disabled-opacity: .5;--ms-option-content-gap: calc(.8 * var(--ms-rem));--ms-option-icon-size: calc(2 * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-mark-font-weight: var(--base-font-weight-semibold, 600);--ms-option-title-white-space: normal;--ms-option-title-overflow: visible;--ms-option-title-text-overflow: clip;--ms-option-subtitle-margin-top: calc(.4 * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-subtitle-line-height: var(--base-line-height-tight, 1.25);--ms-checkbox-margin-top: calc(.2 * var(--ms-rem));--ms-checkbox-margin-right: 0;--ms-checkbox-margin-bottom: 0;--ms-checkbox-margin-left: 0;--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-checkbox-scale: 1;--ms-checkbox-align: center;--ms-checkbox-bg: var(--ms-input-bg);--ms-checkbox-border-width: 1px;--ms-checkbox-border-color: var(--base-checkbox-border-color, #8f8f8f);--ms-checkbox-border: var(--ms-checkbox-border-width) solid var(--ms-checkbox-border-color);--ms-checkbox-border-radius: calc(.3 * var(--ms-rem));--ms-checkbox-checkmark-thickness: 2.5px;--ms-checkbox-checked-bg: var(--ms-accent-color);--ms-checkbox-checked-border: var(--ms-checkbox-border-width) solid var(--ms-accent-color);--ms-checkbox-checkmark-color: var(--ms-text-color-on-accent);--ms-checkbox-hover-border-color: var(--ms-accent-color);--ms-checkbox-disabled-bg: var(--ms-primary-bg);--ms-checkbox-disabled-border: var(--ms-checkbox-border-width) solid var(--ms-border-color);--ms-checkbox-checked-bg-hover: var(--ms-accent-color-hover);--ms-checkbox-checked-border-color-hover: var(--ms-accent-color-hover);--ms-state-min-height: calc(8 * var(--ms-rem));--ms-empty-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-empty-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-empty-color: var(--ms-text-color-3);--ms-loader-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-loader-gap: calc(.8 * var(--ms-rem));--ms-loading-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-loading-text-color: var(--ms-text-color-3);--ms-badges-gap: calc(.8 * var(--ms-rem));--ms-badges-margin-bottom: calc(.8 * var(--ms-rem));--ms-badges-margin-top: calc(.8 * var(--ms-rem));--ms-badges-margin-left: calc(.4 * var(--ms-rem));--ms-badges-margin-right: calc(.4 * var(--ms-rem));--ms-inline-align: center;--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(2.7 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-font-weight: var(--base-font-weight-semibold, 600);--ms-badge-border-radius: var(--ms-border-radius-sm);--ms-order-first: -1;--ms-badge-text-padding: 0 calc(.8 * var(--ms-rem));--ms-badge-text-bg: var(--ms-accent-color-light);--ms-badge-text-color: var(--ms-accent-color);--ms-badge-text-border: none;--ms-badge-remove-width: calc(2.7 * var(--ms-rem));--ms-badge-remove-bg: var(--ms-accent-color);--ms-badge-remove-color: var(--ms-text-color-on-accent);--ms-badge-remove-border: none;--ms-badge-remove-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-remove-bg-hover: var(--ms-accent-color-hover);--ms-badge-remove-box-shadow-focus: 0 0 0 2px color-mix(in srgb, var(--ms-accent-color) 50%, transparent);--ms-badge-remove-icon-size: calc(1 * var(--ms-rem));--ms-icon-remove: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 6L18 18M18 6L6 18' stroke='black' stroke-width='2.5' stroke-linecap='round' fill='none'/></svg>");--ms-badge-counter-bg: transparent;--ms-badge-counter-border: 1px solid var(--ms-badge-counter-border-color);--ms-badge-counter-border-radius: var(--ms-border-radius-sm);--ms-more-badge-bg: var(--ms-accent-color-light);--ms-more-badge-hover-bg: var(--ms-badge-bg-hover);--ms-more-badge-active-bg: var(--ms-accent-color-light-hover);--ms-count-display-margin-bottom: calc(.8 * var(--ms-rem));--ms-count-display-margin-top: calc(.8 * var(--ms-rem));--ms-count-display-margin-left: calc(.8 * var(--ms-rem));--ms-count-display-margin-right: calc(.8 * var(--ms-rem));--ms-counter-wrapper-bg: transparent;--ms-counter-wrapper-border: var(--ms-border);--ms-counter-wrapper-border-radius: var(--ms-border-radius-sm);--ms-counter-wrapper-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-counter-wrapper-gap: calc(.4 * var(--ms-rem));--ms-counter-wrapper-bg-hover: var(--ms-primary-bg);--ms-counter-wrapper-border-color-hover: var(--ms-accent-color);--ms-count-text-bg: transparent;--ms-count-text-border: none;--ms-count-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-count-text-color: var(--ms-text-color-1);--ms-count-clear-size: calc(1.6 * var(--ms-rem));--ms-count-clear-bg: transparent;--ms-count-clear-color: var(--ms-text-color-3);--ms-count-clear-font-size: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-count-clear-border-radius: var(--ms-border-radius-sm);--ms-count-clear-bg-hover: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-count-clear-color-hover: var(--ms-accent-color);--ms-count-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-clear: var(--ms-icon-remove);--ms-tooltip-color: var(--ms-tooltip-text-color);--ms-tooltip-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tooltip-border-radius: var(--ms-border-radius-lg);--ms-tooltip-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-tooltip-max-width: calc(32 * var(--ms-rem));--ms-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, .15);--ms-tooltip-z-index: 10000;--ms-option-tooltip-bg: var(--ms-tooltip-bg);--ms-option-tooltip-text-color: var(--ms-tooltip-text-color);--ms-option-tooltip-padding: var(--ms-tooltip-padding);--ms-option-tooltip-border-radius: var(--ms-tooltip-border-radius);--ms-option-tooltip-font-size: var(--ms-tooltip-font-size);--ms-option-tooltip-max-width: var(--ms-tooltip-max-width);--ms-option-tooltip-shadow: var(--ms-tooltip-shadow);--ms-option-tooltip-z-index: var(--ms-tooltip-z-index);--ms-z-index-popover: 10000;--ms-selected-popover-width: calc(32 * var(--ms-rem));--ms-selected-popover-max-height: calc(32 * var(--ms-rem));--ms-selected-popover-border: 1px solid var(--ms-selected-popover-border-color);--ms-selected-popover-border-radius: var(--ms-border-radius-lg);--ms-selected-popover-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-selected-popover-header-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-selected-popover-header-bg: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-selected-popover-header-border-bottom: 1px solid var(--ms-selected-popover-header-border-color);--ms-selected-popover-header-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-selected-popover-header-font-weight: var(--base-font-weight-semibold, 600);--ms-selected-popover-header-color: var(--ms-text-color-1);--ms-popover-close-size: calc(2.4 * var(--ms-rem));--ms-selected-popover-close-bg: transparent;--ms-selected-popover-close-color: var(--ms-text-color-3);--ms-selected-popover-close-font-size: calc(var(--base-font-size-xl, 2) * var(--ms-rem));--ms-selected-popover-close-border-radius: var(--ms-border-radius-sm);--ms-selected-popover-close-bg-hover: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-selected-popover-close-color-hover: var(--ms-accent-color);--ms-selected-popover-close-icon-size: calc(1.4 * var(--ms-rem));--ms-selected-popover-body-gap: calc(.4 * var(--ms-rem));--ms-selected-popover-body-padding: calc(.8 * var(--ms-rem));--ms-selected-popover-body-max-height: calc(28.8 * var(--ms-rem));--ms-font-size-2xs: calc(var(--base-font-size-2xs, 1) * var(--ms-rem));--ms-font-size-xs: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-font-size-sm: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-font-size-base: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-font-size-lg: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-font-weight-normal: var(--base-font-weight-normal, 400);--ms-font-weight-medium: var(--base-font-weight-medium, 500);--ms-font-weight-semibold: var(--base-font-weight-semibold, 600);--ms-line-height-none: 1;--ms-line-height-tight: var(--base-line-height-tight, 1.25);--ms-line-height-normal: var(--base-line-height-normal, 1.5);--ms-line-height-relaxed: var(--base-line-height-relaxed, 1.75);--ms-border-radius-sm: calc(var(--base-border-radius-sm, .4) * var(--ms-rem));--ms-border-radius-md: calc(var(--base-border-radius-md, .6) * var(--ms-rem));--ms-border-radius-lg: calc(var(--base-border-radius-lg, .8) * var(--ms-rem));--ms-border-radius: var(--ms-border-radius-md);--ms-spacing-xs: calc(.4 * var(--ms-rem));--ms-spacing-sm: calc(.8 * var(--ms-rem));--ms-spacing-md: calc(1.2 * var(--ms-rem));--ms-spacing-lg: calc(1.6 * var(--ms-rem));--ms-transition-fast: .15s;--ms-transition-normal: .2s;--ms-easing-snappy: cubic-bezier(.4, 0, .2, 1);--ms-placeholder-opacity: .6;--ms-disabled-input-opacity: .6;--ms-scrollbar-width: 8px;--ms-scrollbar-track-bg: transparent;--ms-scrollbar-thumb-bg: var(--ms-border-color);--ms-scrollbar-thumb-bg-hover: var(--ms-text-color-3);--ms-scrollbar-thumb-border-radius: 4px;--ms-debug-bg: var(--base-elevated-bg, light-dark(#f9fafb, #2b2b2b));--ms-debug-border-color: var(--ms-border-color);--ms-debug-text-color: var(--ms-text-color-1);--ms-debug-border-radius: var(--ms-border-radius-md);--ms-debug-summary-color: var(--ms-accent-color);--ms-debug-summary-bg-hover: var(--ms-primary-bg);--ms-debug-summary-outline-color: var(--ms-accent-color);--ms-debug-summary-border-radius: var(--ms-border-radius-sm);--ms-debug-stats-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-debug-stats-border-radius: var(--ms-border-radius-sm);--ms-debug-bullet-color: var(--ms-accent-color)}}@layer component{web-multiselect:not(:defined){display:block;min-height:calc(3.5 * var(--ms-rem));color:transparent!important;background:transparent}.ms__wrapper{display:flex;flex-direction:column;align-items:stretch}.ms__wrapper--inline{flex-direction:row;align-items:var(--ms-inline-align, center)}.ms{position:relative;width:100%}}@layer component{.ms__input-wrapper{position:relative;display:flex;align-items:center}.ms__input{box-sizing:border-box;width:100%;font-family:inherit;height:var(--ms-input-height);padding:var(--ms-input-padding);padding-right:var(--ms-input-padding-right);font-size:var(--ms-input-font-size);border:var(--ms-input-border);border-radius:var(--ms-input-border-radius);background:var(--ms-input-bg);color:var(--ms-input-color);cursor:pointer;transition:border var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input:hover:not(:focus):not(:disabled){border:var(--ms-input-border-hover)}.ms__input:focus{outline:none;border:var(--ms-input-border-focus)}.ms__input::placeholder{color:var(--ms-input-placeholder-color);opacity:0;transition:opacity var(--ms-transition-fast) var(--ms-easing-snappy)}:host([data-ready]) .ms__input::placeholder{opacity:var(--ms-placeholder-opacity)}.ms__input.ms__input--xs{font-size:var(--ms-input-size-xs-font);padding:var(--ms-input-size-xs-padding-v) var(--ms-input-size-xs-padding-h);padding-right:calc(var(--ms-input-size-xs-padding-h) * 2.5);height:var(--ms-input-size-xs-height)}.ms__input.ms__input--sm{font-size:var(--ms-input-size-sm-font);padding:var(--ms-input-size-sm-padding-v) var(--ms-input-size-sm-padding-h);padding-right:calc(var(--ms-input-size-sm-padding-h) * 2.5);height:var(--ms-input-size-sm-height)}.ms__input.ms__input--lg{font-size:var(--ms-input-size-lg-font);padding:var(--ms-input-size-lg-padding-v) var(--ms-input-size-lg-padding-h);padding-right:calc(var(--ms-input-size-lg-padding-h) * 2.5);height:var(--ms-input-size-lg-height)}.ms__input.ms__input--xl{font-size:var(--ms-input-size-xl-font);padding:var(--ms-input-size-xl-padding-v) var(--ms-input-size-xl-padding-h);padding-right:calc(var(--ms-input-size-xl-padding-h) * 2.5);height:var(--ms-input-size-xl-height)}.ms__toggle{position:absolute;right:var(--ms-toggle-right);top:50%;transform:var(--ms-transform-center-y);pointer-events:none;color:var(--ms-toggle-icon-color);transition:transform var(--ms-transition-fast) var(--ms-easing-snappy)}.ms--open .ms__toggle{transform:var(--ms-transform-center-y) rotate(var(--ms-transform-rotate-180));color:var(--ms-toggle-icon-color-open)}.ms__counter{position:absolute;right:var(--ms-counter-offset);top:50%;transform:var(--ms-transform-center-y);padding:var(--ms-counter-padding);background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-size:var(--ms-counter-font-size);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter:hover{background:var(--ms-counter-badge-bg-hover);transform:var(--ms-transform-center-y) scale(var(--ms-transform-scale-hover))}.ms__actions{display:flex;flex-direction:column;gap:var(--ms-actions-gap);padding:var(--ms-actions-padding)}.ms__actions--top{border-bottom:var(--ms-actions-border-bottom)}.ms__actions--bottom{flex-direction:column-reverse;border-top:var(--ms-actions-border-bottom)}.ms__actions-row{display:flex;flex-wrap:nowrap;gap:var(--ms-actions-gap)}.ms__actions--wrap .ms__actions-row{flex-wrap:wrap}.ms__actions--sticky{position:sticky;z-index:var(--ms-z-index-sticky);background:var(--ms-actions-bg)}.ms__actions--sticky.ms__actions--top{top:0}.ms__actions--sticky.ms__actions--bottom{bottom:0}.ms__actions--align-stretch .ms__action-btn{flex:1}.ms__actions--align-left .ms__actions-row{justify-content:flex-start}.ms__actions--align-right .ms__actions-row{justify-content:flex-end}.ms__actions--align-center .ms__actions-row{justify-content:center}.ms__actions--align-space-between .ms__actions-row{justify-content:space-between}.ms__action-btn{font-family:inherit;padding:var(--ms-action-btn-padding);font-size:var(--ms-action-btn-font-size);border:var(--ms-action-btn-border);border-radius:var(--ms-action-btn-border-radius);background:var(--ms-action-button-bg);color:var(--ms-action-button-color);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__action-btn:hover{background:var(--ms-action-button-bg-hover);border-color:var(--ms-action-button-border-color-hover)}.ms__action-btn:active{transform:scale(var(--ms-transform-scale-active))}.ms__action-btn:disabled,.ms__action-btn[disabled]{opacity:var(--ms-disabled-opacity);cursor:not-allowed;pointer-events:none}}@layer component{.ms__hint{display:none;position:fixed;z-index:var(--ms-z-index-popover);padding:var(--ms-hint-padding);background:var(--ms-hint-bg);border:var(--ms-hint-border);border-radius:var(--ms-hint-border-radius);box-shadow:var(--ms-hint-box-shadow);font-size:var(--ms-hint-font-size);color:var(--ms-hint-color);line-height:var(--ms-line-height-relaxed);max-width:100%}.ms__hint--visible{display:block}.ms__dropdown{display:none;position:fixed;font-family:inherit;z-index:var(--ms-z-index-dropdown);background:var(--ms-dropdown-bg);border:var(--ms-dropdown-border);border-radius:var(--ms-dropdown-border-radius);box-shadow:var(--ms-dropdown-box-shadow);max-height:var(--ms-options-max-height);overflow:hidden;color:var(--ms-dropdown-text-color)}.ms__dropdown--visible{display:flex;flex-direction:column}.ms__dropdown-inner{flex:1;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__dropdown-inner::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__dropdown-inner::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__dropdown--virtual{max-height:none}.ms__dropdown--virtual .ms__dropdown-inner{overflow-y:visible}.ms__badge-tooltip{position:fixed;z-index:var(--ms-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-tooltip-bg);color:var(--ms-tooltip-text-color);padding:var(--ms-tooltip-padding);border-radius:var(--ms-tooltip-border-radius);font-size:var(--ms-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-tooltip-shadow);pointer-events:none}.ms__badge-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip{position:fixed;z-index:var(--ms-option-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-option-tooltip-bg);color:var(--ms-option-tooltip-text-color);padding:var(--ms-option-tooltip-padding);border-radius:var(--ms-option-tooltip-border-radius);font-size:var(--ms-option-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-option-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-option-tooltip-shadow);pointer-events:none}.ms__option-tooltip--visible{opacity:1;visibility:visible}.ms__selected-popover{display:none;position:fixed;z-index:var(--ms-z-index-popover);background:var(--ms-selected-popover-bg);border:var(--ms-selected-popover-border);border-radius:var(--ms-selected-popover-border-radius);box-shadow:var(--ms-selected-popover-box-shadow);width:var(--ms-selected-popover-width);max-height:var(--ms-selected-popover-max-height);overflow:hidden}.ms__selected-popover--visible{display:flex;flex-direction:column}.ms__selected-popover--virtual{display:block;overflow:visible;max-height:none}.ms__selected-popover-header{display:flex;align-items:center;justify-content:space-between;padding:var(--ms-selected-popover-header-padding);background:var(--ms-selected-popover-header-bg);border-bottom:var(--ms-selected-popover-header-border-bottom);font-size:var(--ms-selected-popover-header-font-size);font-weight:var(--ms-selected-popover-header-font-weight);color:var(--ms-selected-popover-header-color)}.ms__selected-popover-close{display:flex;align-items:center;justify-content:center;width:var(--ms-popover-close-size);height:var(--ms-popover-close-size);padding:0;border:none;background:var(--ms-selected-popover-close-bg);color:var(--ms-selected-popover-close-color);font-size:var(--ms-selected-popover-close-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-selected-popover-close-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__selected-popover-close:hover{background:var(--ms-selected-popover-close-bg-hover);color:var(--ms-selected-popover-close-color-hover)}.ms__selected-popover-close:before{content:"";display:block;width:var(--ms-selected-popover-close-icon-size);height:var(--ms-selected-popover-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__selected-popover-body{display:flex;flex-direction:column;gap:var(--ms-selected-popover-body-gap);padding:var(--ms-selected-popover-body-padding);overflow-y:auto;max-height:var(--ms-selected-popover-body-max-height);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__selected-popover-body::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__selected-popover-body::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__selected-popover-body .ms__badge{width:100%;min-height:fit-content;line-height:var(--ms-line-height-relaxed)}.ms__selected-popover-body .ms__badge-text{flex:1;min-width:0;white-space:normal;word-wrap:break-word}.ms__selected-popover-body--virtual{display:block;max-height:none;padding:0}.ms__selected-popover-body--virtual .ms__badge{height:var(--ms-badge-height-virtual, 36px);min-height:var(--ms-badge-height-virtual, 36px);max-height:var(--ms-badge-height-virtual, 36px);margin-bottom:var(--ms-selected-popover-body-gap);overflow:hidden;box-sizing:border-box}.ms__selected-popover-body--virtual .ms__badge-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}@layer component{.ms--disabled .ms__input{opacity:var(--ms-disabled-input-opacity);cursor:not-allowed;background:var(--ms-input-bg-disabled)}.ms--disabled .ms__toggle{opacity:var(--ms-disabled-input-opacity)}.ms--no-checkboxes .ms__option{gap:0;padding-left:var(--ms-option-padding-h)}.ms--no-checkboxes .ms__option-content{padding-left:0}}@layer component;@layer component{.ms__badges{display:flex;flex-wrap:wrap;gap:var(--ms-badges-gap);padding:0}.ms__badges:empty{display:none}.ms__badges--bottom{margin-top:var(--ms-badges-margin-bottom)}.ms__badges--top{margin-bottom:var(--ms-badges-margin-top);order:var(--ms-order-first)}.ms__badges--left{order:var(--ms-order-first);margin-right:var(--ms-badges-margin-left);justify-content:flex-end}.ms__badges--right{margin-left:var(--ms-badges-margin-right);justify-content:flex-start}.ms__badge{display:inline-flex;align-items:center;height:var(--ms-badge-height);font-size:var(--ms-badge-font-size);font-weight:var(--ms-badge-font-weight);line-height:var(--ms-line-height-none);border-radius:var(--ms-badge-border-radius);overflow:hidden;max-width:100%}.ms__badge-text{display:flex;align-items:center;box-sizing:border-box;height:100%;padding:var(--ms-badge-text-padding);background:var(--ms-badge-text-bg);color:var(--ms-badge-text-color);border:var(--ms-badge-text-border);border-right:none;border-radius:var(--ms-badge-border-radius) 0 0 var(--ms-badge-border-radius);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background-color var(--ms-transition-normal) ease,color var(--ms-transition-normal) ease}.ms__badge:hover .ms__badge-text{background:var(--ms-badge-text-bg-hover, var(--ms-badge-text-bg));color:var(--ms-badge-text-color-hover, var(--ms-badge-text-color))}.ms__badge-remove{display:flex;align-items:center;justify-content:center;box-sizing:border-box;font-family:inherit;width:var(--ms-badge-remove-width);height:100%;flex-shrink:0;background:var(--ms-badge-remove-bg);color:var(--ms-badge-remove-color);border:var(--ms-badge-remove-border);border-left:none;border-radius:0 var(--ms-badge-border-radius) var(--ms-badge-border-radius) 0;cursor:pointer;transition:background-color var(--ms-transition-normal) ease;font-size:var(--ms-badge-remove-font-size)}.ms__badge-remove:hover{background:var(--ms-badge-remove-bg-hover)}.ms__badge-remove:focus{outline:none}.ms__badge-remove:focus-visible{outline:none;box-shadow:var(--ms-badge-remove-box-shadow-focus)}.ms__badge-remove:before{content:"";display:block;width:var(--ms-badge-remove-icon-size);height:var(--ms-badge-remove-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__badge--counter{cursor:pointer}.ms__badge--counter .ms__badge-text{background:var(--ms-badge-counter-text-bg);color:var(--ms-badge-counter-text-color);border:var(--ms-badge-counter-border);border-right:none}.ms__badge--counter .ms__badge-remove{background:var(--ms-badge-counter-remove-bg);color:var(--ms-badge-counter-remove-color);border:var(--ms-badge-counter-border);border-left:none}.ms__badge--counter .ms__badge-remove:hover{background:var(--ms-badge-counter-remove-bg-hover)}.ms__badge--more,.ms__badge[data-action=show-selected]{cursor:pointer}}@layer component{.ms__count-display{display:flex;align-items:center}.ms__count-display:empty{display:none}.ms__count-display--bottom{margin-top:var(--ms-count-display-margin-bottom)}.ms__count-display--top{margin-bottom:var(--ms-count-display-margin-top);order:var(--ms-order-first)}.ms__count-display--left{order:var(--ms-order-first);margin-right:var(--ms-count-display-margin-left);justify-content:flex-start}.ms__count-display--right{margin-left:var(--ms-count-display-margin-right);justify-content:flex-end}.ms__counter-wrapper{display:inline-flex;align-items:center;gap:var(--ms-counter-wrapper-gap);background:var(--ms-counter-wrapper-bg);border:var(--ms-counter-wrapper-border);border-radius:var(--ms-counter-wrapper-border-radius);padding:var(--ms-counter-wrapper-padding);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter-wrapper:hover{background:var(--ms-counter-wrapper-bg-hover);border-color:var(--ms-counter-wrapper-border-color-hover)}.ms__count-text{display:inline-flex;align-items:center;background:var(--ms-count-text-bg);border:var(--ms-count-text-border);padding:0;font-size:var(--ms-count-text-font-size);color:var(--ms-count-text-color);cursor:pointer;transition:color var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:var(--ms-count-clear-size);height:var(--ms-count-clear-size);padding:0;border:none;background:var(--ms-count-clear-bg);color:var(--ms-count-clear-color);font-size:var(--ms-count-clear-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-count-clear-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear:hover{background:var(--ms-count-clear-bg-hover);color:var(--ms-count-clear-color-hover)}.ms__count-clear:before{content:"";display:block;width:var(--ms-count-clear-icon-size);height:var(--ms-count-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}}@layer component{.ms__debug-info{margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-bg);border:1px solid var(--ms-debug-border-color);border-radius:var(--ms-debug-border-radius);font-size:calc(1.2 * var(--ms-rem));color:var(--ms-debug-text-color)}.ms__debug-info details summary{cursor:pointer;font-weight:600;color:var(--ms-debug-summary-color);-webkit-user-select:none;user-select:none;padding:calc(.4 * var(--ms-rem));border-radius:var(--ms-debug-summary-border-radius)}.ms__debug-info details summary:hover{background-color:var(--ms-debug-summary-bg-hover)}.ms__debug-info details summary:focus{outline:2px solid var(--ms-debug-summary-outline-color);outline-offset:2px}.ms__debug-info .ms__debug-stats{display:flex;flex-direction:column;gap:calc(.4 * var(--ms-rem));margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-stats-bg);border-radius:var(--ms-debug-stats-border-radius)}.ms__debug-info .ms__debug-stats span{display:flex;justify-content:space-between;padding:2px 4px;font-family:monospace;font-size:calc(1 * var(--ms-rem))}.ms__debug-info .ms__debug-stats span:before{content:"•";margin-right:calc(.4 * var(--ms-rem));color:var(--ms-debug-bullet-color)}}@layer component{.ms__options{padding:var(--ms-options-padding);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__options::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__options::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__options--virtual .ms__option,.ms__options--fixed-height .ms__option{height:var(--ms-option-height, 50px);min-height:var(--ms-option-height, 50px);max-height:var(--ms-option-height, 50px);overflow:hidden;box-sizing:border-box}.ms__group+.ms__group{border-top:var(--ms-group-border-top);margin-top:var(--ms-group-margin-top);padding-top:var(--ms-group-padding-top)}.ms__group-label{padding:var(--ms-group-label-padding);font-size:var(--ms-group-label-font-size);font-weight:var(--ms-group-label-font-weight);color:var(--ms-group-label-color);text-transform:var(--ms-group-label-transform);letter-spacing:var(--ms-group-label-letter-spacing)}.ms__option{display:flex;align-items:var(--ms-checkbox-align, center);gap:var(--ms-option-gap);padding:var(--ms-option-padding);min-height:var(--ms-option-min-height, auto);color:var(--ms-option-text-color);background:var(--ms-option-bg);cursor:pointer;user-select:none;-webkit-user-select:none}.ms__option:hover{background:var(--ms-option-bg-hover);color:var(--ms-option-color-hover, inherit)}.ms__option--focused{background:var(--ms-option-bg-focused);color:var(--ms-option-color-focused, inherit);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--matched{background:var(--ms-option-bg-matched);color:var(--ms-option-color-matched, inherit);border-left:var(--ms-option-border-matched)}.ms__option--selected{background:var(--ms-option-bg-selected)}.ms__option--selected:hover{background:var(--ms-option-bg-selected-hover, var(--ms-option-bg-selected))}.ms__option--disabled{opacity:var(--ms-disabled-opacity);cursor:not-allowed;background:var(--ms-option-disabled-bg)}.ms__option--disabled:hover{background:var(--ms-option-disabled-bg)}.ms__option--focused:hover{background:var(--ms-option-bg-focused-hover);color:var(--ms-option-color-focused-hover, var(--ms-option-color-focused, var(--ms-option-text-color)))}.ms__option--matched:hover{background:var(--ms-option-bg-matched-hover);color:var(--ms-option-color-matched-hover, var(--ms-option-color-matched, var(--ms-option-text-color)))}.ms__option--selected.ms__option--focused{background:var(--ms-option-bg-selected-focused);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--selected.ms__option--matched{background:var(--ms-option-bg-selected-matched);border-left:var(--ms-option-border-matched)}.ms__option--disabled.ms__option--selected{background:var(--ms-option-bg-disabled-selected)}.ms__option--disabled.ms__option--focused{outline:none}.ms__option[data-checkbox-align=top]{--ms-checkbox-align: flex-start}.ms__option[data-checkbox-align=bottom]{--ms-checkbox-align: flex-end}.ms__checkbox{appearance:none;-webkit-appearance:none;-moz-appearance:none;flex-shrink:0;position:relative;margin-top:var(--ms-checkbox-margin-top);margin-right:var(--ms-checkbox-margin-right);margin-bottom:var(--ms-checkbox-margin-bottom);margin-left:var(--ms-checkbox-margin-left);width:var(--ms-checkbox-size);height:var(--ms-checkbox-size);transform:scale(var(--ms-checkbox-scale));transform-origin:top left;cursor:pointer;background:var(--ms-checkbox-bg);border:var(--ms-checkbox-border);border-radius:var(--ms-checkbox-border-radius);transition:background-color .15s ease,border-color .15s ease}.ms__checkbox:after{content:"";position:absolute;display:none;left:50%;top:40%;width:30%;height:55%;transform:translate(-50%,-50%) rotate(45deg);border:solid var(--ms-checkbox-checkmark-color);border-width:0 var(--ms-checkbox-checkmark-thickness, 2px) var(--ms-checkbox-checkmark-thickness, 2px) 0}.ms__checkbox:hover:not(:disabled){border-color:var(--ms-checkbox-hover-border-color)}.ms__checkbox:checked{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox:checked:after{display:block}.ms__checkbox--indeterminate{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox--indeterminate:after{display:block;top:50%;left:50%;width:55%;height:0;transform:translate(-50%,-50%);border:none;border-bottom:var(--ms-checkbox-checkmark-thickness, 2px) solid var(--ms-checkbox-checkmark-color)}.ms__checkbox--indeterminate:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:checked:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:focus-visible{outline:2px solid var(--ms-checkbox-checked-bg);outline-offset:2px}.ms__checkbox:disabled{cursor:not-allowed;background:var(--ms-checkbox-disabled-bg);border:var(--ms-checkbox-disabled-border);opacity:.6}.ms__checkbox:disabled:checked{background:var(--ms-checkbox-disabled-bg)}.ms__option--disabled .ms__checkbox{cursor:not-allowed}.ms__option-content{flex:1;display:flex;align-items:center;gap:var(--ms-option-content-gap);min-width:0}.ms__option-icon{flex-shrink:0;width:var(--ms-option-icon-size);height:var(--ms-option-icon-size);display:flex;align-items:center;justify-content:center;font-size:var(--ms-option-icon-font-size)}.ms__option-icon svg{width:100%;height:100%;fill:currentColor}.ms__option-text{flex:1;min-width:0}.ms__option-title{font-size:var(--ms-option-title-font-size);color:var(--ms-option-title-color);line-height:var(--ms-line-height-relaxed);white-space:var(--ms-option-title-white-space, normal);overflow:var(--ms-option-title-overflow, visible);text-overflow:var(--ms-option-title-text-overflow, clip)}.ms__option:hover .ms__option-title{color:var(--ms-option-title-color-hover, var(--ms-option-title-color))}.ms__option--selected .ms__option-title{color:var(--ms-option-title-color-selected, var(--ms-option-title-color))}.ms__option--selected:hover .ms__option-title{color:var(--ms-option-title-color-selected-hover, var(--ms-option-title-color-selected, var(--ms-option-title-color)))}.ms__option-title mark{background:var(--ms-option-mark-bg);color:var(--ms-option-mark-color);font-weight:var(--ms-option-mark-font-weight)}.ms__option-subtitle{margin-top:var(--ms-option-subtitle-margin-top);font-size:var(--ms-option-subtitle-font-size);color:var(--ms-option-subtitle-color);line-height:var(--ms-option-subtitle-line-height)}.ms__option:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-hover, var(--ms-option-subtitle-color))}.ms__option--selected .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color))}.ms__option--selected:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected-hover, var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color)))}.ms__empty{display:flex;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-empty-padding);text-align:center;font-size:var(--ms-empty-font-size);color:var(--ms-empty-color)}.ms__loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-loader-padding);gap:var(--ms-loader-gap)}.ms__loading-text{font-size:var(--ms-loading-text-font-size);color:var(--ms-loading-color)}}@layer component{.ms--rtl .ms__input-wrapper{direction:rtl}.ms--rtl .ms__input{text-align:right;padding-left:var(--ms-input-padding-right);padding-right:var(--ms-input-padding-h)}.ms--rtl .ms__toggle{left:var(--ms-toggle-right)!important;right:auto!important}.ms--rtl .ms__counter{left:var(--ms-counter-offset)!important;right:auto!important}.ms--rtl .ms__dropdown{direction:rtl;text-align:right}.ms--rtl .ms__option{flex-direction:row-reverse}.ms--rtl .ms__checkbox{margin-left:var(--ms-spacing-sm);margin-right:0}.ms--rtl .ms__option-content{text-align:right}.ms--rtl .ms__option-icon{margin-left:var(--ms-spacing-xs);margin-right:0}.ms--rtl .ms__badges{direction:rtl}.ms--rtl .ms__badges--right{margin-left:0;margin-right:var(--ms-badges-margin-right)}.ms--rtl .ms__badges--left{margin-right:0;margin-left:var(--ms-badges-margin-left)}.ms--rtl .ms__badge{flex-direction:row-reverse}.ms--rtl .ms__badge-remove{border-radius:var(--ms-badge-border-radius) 0 0 var(--ms-badge-border-radius);border-left:var(--ms-badge-remove-border);border-right:none}.ms--rtl .ms__badge-text{border-radius:0 var(--ms-badge-border-radius) var(--ms-badge-border-radius) 0;border-right:var(--ms-badge-text-border);border-left:none}.ms--rtl .ms__count-display{direction:rtl}.ms--rtl .ms__count-display--right{margin-left:0;margin-right:var(--ms-count-display-margin-right)}.ms--rtl .ms__count-display--left{margin-right:0;margin-left:var(--ms-count-display-margin-left)}.ms--rtl .ms__counter-wrapper{flex-direction:row-reverse}.ms--rtl .ms__selected-popover{direction:rtl;text-align:right}.ms--rtl .ms__actions{direction:rtl}.ms--rtl .ms__group-label,.ms--rtl .ms__empty{text-align:right}.ms--rtl .ms__hint{direction:rtl;text-align:right}}@layer component{.ms__option--tree{padding-inline-start:calc(var(--ms-tree-base-indent, .75rem) + var(--ms-tree-depth, 0) * var(--ms-tree-indent, 1.25rem))}.ms__option--tree-unselectable{cursor:default}.ms__option--tree-unselectable:hover{background:transparent}}@layer overrides{:host-context([data-theme="dark"]),:host-context([data-bs-theme="dark"]),:host-context(.dark){color-scheme:dark}:host-context([data-theme="light"]),:host-context([data-bs-theme="light"]),:host-context(.light){color-scheme:light}:host([data-theme="dark"]){color-scheme:dark}:host([data-theme="light"]){color-scheme:light}}`, $s = typeof HTMLElement < "u" ? HTMLElement : class {
+}, Ae = [
   // Strings
   { attr: "search-hint", key: "searchHint", parser: "string-or-undefined" },
   { attr: "search-placeholder", key: "searchPlaceholder", parser: "string", default: "Search..." },
@@ -2680,8 +3124,30 @@ const Cs = `@layer variables,component,overrides;@layer variables{:host{display:
   { attr: "search-value-member", key: "searchValueMember", parser: "string-or-undefined" },
   { attr: "icon-member", key: "iconMember", parser: "string-or-undefined" },
   { attr: "subtitle-member", key: "subtitleMember", parser: "string-or-undefined" },
+  { attr: "full-title-member", key: "fullTitleMember", parser: "string-or-undefined" },
   { attr: "group-member", key: "groupMember", parser: "string-or-undefined" },
   { attr: "disabled-member", key: "disabledMember", parser: "string-or-undefined" },
+  // Tree of options (presence of path-member / getPathCallback auto-enables tree mode)
+  { attr: "path-member", key: "pathMember", parser: "string-or-undefined" },
+  { attr: "parent-path-member", key: "parentPathMember", parser: "string-or-undefined" },
+  { attr: "level-member", key: "levelMember", parser: "string-or-undefined" },
+  { attr: "has-children-member", key: "hasChildrenMember", parser: "string-or-undefined" },
+  { attr: "is-selectable-member", key: "isSelectableMember", parser: "string-or-undefined" },
+  { attr: "tree-path-separator", key: "treePathSeparator", parser: "string", default: "." },
+  {
+    attr: "checkbox-mode",
+    key: "checkboxMode",
+    parser: "enum",
+    enumValues: ["independent", "cascade"],
+    default: "independent"
+  },
+  {
+    attr: "cascade-select-policy",
+    key: "cascadeSelectPolicy",
+    parser: "enum",
+    enumValues: ["rolled-up", "leaves", "all"],
+    default: "rolled-up"
+  },
   // Enums
   {
     attr: "badges-display-mode",
@@ -2793,11 +3259,12 @@ const Cs = `@layer variables,component,overrides;@layer variables{:host{display:
   { attr: "close-on-select", key: "isCloseOnSelect", parser: "bool-default-false" },
   { attr: "allow-add-new", key: "isAddNewAllowed", parser: "bool-default-false" },
   { attr: "show-counter", key: "isCounterShown", parser: "bool-default-false" },
+  { attr: "show-badge-full-title", key: "isBadgeFullTitleShown", parser: "bool-default-false" },
   { attr: "enable-virtual-scroll", key: "isVirtualScrollEnabled", parser: "bool-default-false" },
   { attr: "enable-badge-tooltips", key: "isBadgeTooltipsEnabled", parser: "bool-default-false" },
   { attr: "enable-option-tooltips", key: "isOptionTooltipsEnabled", parser: "bool-default-false" },
   { attr: "option-tooltip-follow-cursor", key: "isOptionTooltipFollowCursor", parser: "bool-default-false" }
-], Ts = new Map(Ce.map((o) => [o.attr, o])), je = [
+], Rs = new Map(Ae.map((o) => [o.attr, o])), Je = [
   { key: "valueMember", field: "_valueMember" },
   { key: "displayValueMember", field: "_displayValueMember" },
   { key: "searchValueMember", field: "_searchValueMember" },
@@ -2805,7 +3272,7 @@ const Cs = `@layer variables,component,overrides;@layer variables{:host{display:
   { key: "subtitleMember", field: "_subtitleMember" },
   { key: "groupMember", field: "_groupMember" },
   { key: "disabledMember", field: "_disabledMember" }
-], Os = [
+], Fs = [
   { key: "valueMember", member: "value" },
   { key: "displayValueMember", member: "label" },
   { key: "groupMember", member: "group" },
@@ -2813,7 +3280,7 @@ const Cs = `@layer variables,component,overrides;@layer variables{:host{display:
   { key: "subtitleMember", member: "subtitle" },
   { key: "disabledMember", member: "disabled" }
 ];
-function Ue(o, e) {
+function Ze(o, e) {
   if (e === null || e === "")
     switch (o.parser) {
       case "bool-default-true":
@@ -2839,83 +3306,88 @@ function Ue(o, e) {
       return e === "true";
   }
 }
-const Se = /* @__PURE__ */ new Set();
-function ct() {
-  return Array.from(Se);
+const Pe = /* @__PURE__ */ new Set();
+function gt() {
+  return Array.from(Pe);
 }
-class Me extends Ss {
+class Be extends $s {
   constructor() {
     super();
-    d(this, "picker");
-    d(this, "containerElement");
-    d(this, "shadow");
-    d(this, "internals");
+    h(this, "picker");
+    h(this, "containerElement");
+    h(this, "shadow");
+    h(this, "internals");
     // Properties for complex data (not attributes)
-    d(this, "_options");
-    d(this, "_hasDeclarativeOptions", !1);
+    h(this, "_options");
+    h(this, "_hasDeclarativeOptions", !1);
     // Member/Callback properties
-    d(this, "_valueMember");
-    d(this, "_getValueCallback");
-    d(this, "_displayValueMember");
-    d(this, "_getDisplayValueCallback");
-    d(this, "_getBadgeDisplayCallback");
-    d(this, "_getBadgeClassCallback");
-    d(this, "_customStylesCallback");
-    d(this, "_searchValueMember");
-    d(this, "_getSearchValueCallback");
-    d(this, "_iconMember");
-    d(this, "_getIconCallback");
-    d(this, "_subtitleMember");
-    d(this, "_getSubtitleCallback");
-    d(this, "_groupMember");
-    d(this, "_getGroupCallback");
-    d(this, "_renderGroupLabelContentCallback");
-    d(this, "_disabledMember");
-    d(this, "_getDisabledCallback");
+    h(this, "_valueMember");
+    h(this, "_getValueCallback");
+    h(this, "_displayValueMember");
+    h(this, "_getDisplayValueCallback");
+    h(this, "_getBadgeDisplayCallback");
+    h(this, "_getBadgeClassCallback");
+    h(this, "_customStylesCallback");
+    h(this, "_searchValueMember");
+    h(this, "_getSearchValueCallback");
+    h(this, "_iconMember");
+    h(this, "_getIconCallback");
+    h(this, "_subtitleMember");
+    h(this, "_getSubtitleCallback");
+    h(this, "_getFullTitleCallback");
+    h(this, "_groupMember");
+    h(this, "_getGroupCallback");
+    h(this, "_renderGroupLabelContentCallback");
+    h(this, "_disabledMember");
+    h(this, "_getDisabledCallback");
+    // Tree of options
+    h(this, "_getPathCallback");
+    h(this, "_isTreeEnabled");
+    h(this, "_getIsSelectableCallback");
     // Value formatting callbacks
-    d(this, "_getValueFormatCallback");
+    h(this, "_getValueFormatCallback");
     // Tooltip callbacks
-    d(this, "_getBadgeTooltipCallback");
-    d(this, "_getOptionTooltipCallback");
-    d(this, "_getRemoveButtonTooltipCallback");
+    h(this, "_getBadgeTooltipCallback");
+    h(this, "_getOptionTooltipCallback");
+    h(this, "_getRemoveButtonTooltipCallback");
     // Custom rendering callbacks
-    d(this, "_renderOptionContentCallback");
-    d(this, "_renderBadgeContentCallback");
-    d(this, "_renderSelectedItemContentCallback");
-    d(this, "_getSelectedItemClassCallback");
-    d(this, "_renderSelectedContentCallback");
+    h(this, "_renderOptionContentCallback");
+    h(this, "_renderBadgeContentCallback");
+    h(this, "_renderSelectedItemContentCallback");
+    h(this, "_getSelectedItemClassCallback");
+    h(this, "_renderSelectedContentCallback");
     // Count badge callback
-    d(this, "_getCounterCallback");
+    h(this, "_getCounterCallback");
     // Action buttons
-    d(this, "_actionButtons");
+    h(this, "_actionButtons");
     // Batch-update state (setAttributes): collects per-attribute changes so a group of
     // attribute writes applies as a single in-place update instead of one re-render each.
-    d(this, "_batchDepth", 0);
-    d(this, "_batchPartial", {});
-    d(this, "_batchNeedsReinit", !1);
+    h(this, "_batchDepth", 0);
+    h(this, "_batchPartial", {});
+    h(this, "_batchNeedsReinit", !1);
     // Event callbacks
-    d(this, "_beforeSearchCallback");
-    d(this, "_beforeSelectCallback");
-    d(this, "_beforeDeselectCallback");
-    d(this, "_searchCallback");
-    d(this, "_addNewCallback");
-    d(this, "_onSelect");
-    d(this, "_onDeselect");
-    d(this, "_onChange");
-    d(this, "_declarativeSelectedValues");
+    h(this, "_beforeSearchCallback");
+    h(this, "_beforeSelectCallback");
+    h(this, "_beforeDeselectCallback");
+    h(this, "_searchCallback");
+    h(this, "_addNewCallback");
+    h(this, "_onSelect");
+    h(this, "_onDeselect");
+    h(this, "_onChange");
+    h(this, "_declarativeSelectedValues");
     if (this.shadow = this.attachShadow({ mode: "open" }), typeof this.attachInternals == "function")
       try {
         this.internals = this.attachInternals();
       } catch {
       }
     const t = document.createElement("style");
-    t.textContent = Cs, this.shadow.appendChild(t), requestAnimationFrame(() => {
+    t.textContent = Bs, this.shadow.appendChild(t), requestAnimationFrame(() => {
       this.setAttribute("data-ready", "");
     });
   }
   static get observedAttributes() {
     return [
-      ...Ce.map((t) => t.attr),
+      ...Ae.map((t) => t.attr),
       // Out-of-table attributes (handled by special-case logic in attributeChangedCallback)
       "initial-values",
       "show-debug-info"
@@ -2933,30 +3405,30 @@ class Me extends Ss {
     (t = this.picker) == null || t.clearAll();
   }
   connectedCallback() {
-    Se.add(this), this.render();
+    Pe.add(this), this.render();
     const t = this.parseDeclarativeOptions();
-    t && (this._options && this._options.length > 0 && x.warn("[MultiSelectElement] Both declarative <option> elements and programmatic .options detected. Using declarative options."), this._options = t, this._hasDeclarativeOptions = !0), this.initializePicker();
+    t && (this._options && this._options.length > 0 && O.warn("[MultiSelectElement] Both declarative <option> elements and programmatic .options detected. Using declarative options."), this._options = t, this._hasDeclarativeOptions = !0), this.initializePicker();
   }
   disconnectedCallback() {
-    Se.delete(this), this.picker && this.picker.destroy();
+    Pe.delete(this), this.picker && this.picker.destroy();
   }
   attributeChangedCallback(t, s, i) {
-    var n;
+    var a;
     if (s === i || !this.picker || t === "initial-values") return;
     if (t === "show-debug-info") {
-      const a = this.shadow.querySelector(".ms__debug-info");
-      a && a.remove(), i === "true" && this.renderDebugInfo();
+      const n = this.shadow.querySelector(".ms__debug-info");
+      n && n.remove(), i === "true" && this.renderDebugInfo();
       return;
     }
-    const r = Ts.get(t);
+    const r = Rs.get(t);
     if (r) {
-      const a = Ue(r, i), l = (n = je.find((u) => u.key === r.key)) == null ? void 0 : n.field, h = a === void 0 && l ? this[l] : a;
+      const n = Ze(r, i), l = (a = Je.find((u) => u.key === r.key)) == null ? void 0 : a.field, c = n === void 0 && l ? this[l] : n;
       if (this._batchDepth > 0) {
-        this._batchPartial[r.key] = h;
+        this._batchPartial[r.key] = c;
         return;
       }
-      const c = { [r.key]: h };
-      if (this.picker.updateOptions(c)) return;
+      const d = { [r.key]: c };
+      if (this.picker.updateOptions(d)) return;
     }
     if (this._batchDepth > 0) {
       this._batchNeedsReinit = !0;
@@ -2980,8 +3452,8 @@ class Me extends Ss {
   setAttributes(t) {
     this._batchDepth++;
     try {
-      for (const [r, n] of Object.entries(t))
-        n == null || n === !1 ? this.removeAttribute(r) : this.setAttribute(r, n === !0 ? "" : String(n));
+      for (const [r, a] of Object.entries(t))
+        a == null || a === !1 ? this.removeAttribute(r) : this.setAttribute(r, a === !0 ? "" : String(a));
     } finally {
       this._batchDepth--;
     }
@@ -3005,22 +3477,22 @@ class Me extends Ss {
     s.className = "ms__debug-info";
     const i = document.createElement("details"), r = document.createElement("summary");
     r.textContent = "Debug Info";
-    const n = document.createElement("div");
-    n.className = "ms__debug-stats", i.appendChild(r), i.appendChild(n), s.appendChild(i), this.shadow.appendChild(s), this.updateDebugInfo();
+    const a = document.createElement("div");
+    a.className = "ms__debug-stats", i.appendChild(r), i.appendChild(a), s.appendChild(i), this.shadow.appendChild(s), this.updateDebugInfo();
   }
   updateDebugInfo() {
     var m, b;
     const t = this.shadow.querySelector(".ms__debug-stats");
     if (!t || !this.picker) return;
-    const s = "1.12.0-rc05", i = ct().length, n = this.picker.getSelected().length, a = ((m = this._options) == null ? void 0 : m.length) || 0, l = this.picker, h = l.isOpen || !1, c = l.searchTerm || "", p = l.isLoading || !1, u = ((b = l.filteredOptions) == null ? void 0 : b.length) || 0;
+    const s = "1.12.0-rc07", i = gt().length, a = this.picker.getSelected().length, n = ((m = this._options) == null ? void 0 : m.length) || 0, l = this.picker, c = l.isOpen || !1, d = l.searchTerm || "", p = l.isLoading || !1, u = ((b = l.filteredOptions) == null ? void 0 : b.length) || 0;
     t.innerHTML = `
             <span>Version: ${s}</span>
             <span>Total Instances: ${i}</span>
-            <span>Options: ${a}</span>
+            <span>Options: ${n}</span>
             <span>Filtered: ${u}</span>
-            <span>Selected: ${n}</span>
-            <span>Dropdown: ${h ? "Open" : "Closed"}</span>
-            <span>Search: ${c || "none"}</span>
+            <span>Selected: ${a}</span>
+            <span>Dropdown: ${c ? "Open" : "Closed"}</span>
+            <span>Search: ${d || "none"}</span>
             <span>Loading: ${p ? "Yes" : "No"}</span>
         `, setTimeout(() => {
       this.getAttribute("show-debug-info") === "true" && this.updateDebugInfo();
@@ -3031,38 +3503,38 @@ class Me extends Ss {
    * Returns array of options in the format expected by the picker
    */
   parseDeclarativeOptions() {
-    var r, n, a, l;
+    var r, a, n, l;
     const t = [], s = Array.from(this.children);
     if (s.length === 0)
       return null;
     let i = !1;
-    for (const h of s)
-      if (h.tagName === "OPTION") {
-        const c = h, p = {
-          value: c.value || ((r = c.textContent) == null ? void 0 : r.trim()) || "",
-          label: ((n = c.textContent) == null ? void 0 : n.trim()) || c.value || ""
+    for (const c of s)
+      if (c.tagName === "OPTION") {
+        const d = c, p = {
+          value: d.value || ((r = d.textContent) == null ? void 0 : r.trim()) || "",
+          label: ((a = d.textContent) == null ? void 0 : a.trim()) || d.value || ""
         };
-        c.hasAttribute("selected") && (this._declarativeSelectedValues || (this._declarativeSelectedValues = []), this._declarativeSelectedValues.push(p.value)), c.hasAttribute("disabled") && (p.disabled = !0), c.hasAttribute("data-icon") && (p.icon = c.getAttribute("data-icon")), c.hasAttribute("data-subtitle") && (p.subtitle = c.getAttribute("data-subtitle")), t.push(p), i = !0;
-      } else if (h.tagName === "OPTGROUP") {
-        const c = h, p = c.label || c.getAttribute("label") || "Group", u = Array.from(c.querySelectorAll("option"));
+        d.hasAttribute("selected") && (this._declarativeSelectedValues || (this._declarativeSelectedValues = []), this._declarativeSelectedValues.push(p.value)), d.hasAttribute("disabled") && (p.disabled = !0), d.hasAttribute("data-icon") && (p.icon = d.getAttribute("data-icon")), d.hasAttribute("data-subtitle") && (p.subtitle = d.getAttribute("data-subtitle")), t.push(p), i = !0;
+      } else if (c.tagName === "OPTGROUP") {
+        const d = c, p = d.label || d.getAttribute("label") || "Group", u = Array.from(d.querySelectorAll("option"));
         for (const m of u) {
           const b = {
-            value: m.value || ((a = m.textContent) == null ? void 0 : a.trim()) || "",
+            value: m.value || ((n = m.textContent) == null ? void 0 : n.trim()) || "",
             label: ((l = m.textContent) == null ? void 0 : l.trim()) || m.value || "",
             group: p
           };
           m.hasAttribute("selected") && (this._declarativeSelectedValues || (this._declarativeSelectedValues = []), this._declarativeSelectedValues.push(b.value)), m.hasAttribute("disabled") && (b.disabled = !0), m.hasAttribute("data-icon") && (b.icon = m.getAttribute("data-icon")), m.hasAttribute("data-subtitle") && (b.subtitle = m.getAttribute("data-subtitle")), t.push(b), i = !0;
         }
       }
-    return i ? (x.debug(`[MultiSelectElement] Parsed ${t.length} declarative options from Light DOM`), s.forEach((h) => {
-      (h.tagName === "OPTION" || h.tagName === "OPTGROUP") && h.remove();
+    return i ? (O.debug(`[MultiSelectElement] Parsed ${t.length} declarative options from Light DOM`), s.forEach((c) => {
+      (c.tagName === "OPTION" || c.tagName === "OPTGROUP") && c.remove();
     }), t) : null;
   }
   /** Parse all observed attributes via ATTRIBUTE_TABLE into a partial config object. */
   parseAttributesFromTable() {
     const t = {};
-    for (const s of Ce) {
-      const i = Ue(s, this.getAttribute(s.attr));
+    for (const s of Ae) {
+      const i = Ze(s, this.getAttribute(s.attr));
       i !== void 0 && (t[s.key] = i);
     }
     return t;
@@ -3074,26 +3546,26 @@ class Me extends Ss {
     if (s && this._options === void 0)
       try {
         t = JSON.parse(s);
-      } catch (n) {
-        x.error("[MultiSelectElement] Failed to parse data-options:", n);
+      } catch (a) {
+        O.error("[MultiSelectElement] Failed to parse data-options:", a);
       }
     let i;
     if (this._declarativeSelectedValues && this._declarativeSelectedValues.length > 0)
-      i = this._declarativeSelectedValues, x.debug(`[MultiSelectElement] Using ${i.length} declaratively selected values`);
+      i = this._declarativeSelectedValues, O.debug(`[MultiSelectElement] Using ${i.length} declaratively selected values`);
     else {
-      const n = this.getAttribute("initial-values");
-      if (n)
+      const a = this.getAttribute("initial-values");
+      if (a)
         try {
-          i = JSON.parse(n);
-        } catch (a) {
-          x.error("[MultiSelectElement] Failed to parse initial-values:", a);
+          i = JSON.parse(a);
+        } catch (n) {
+          O.error("[MultiSelectElement] Failed to parse initial-values:", n);
         }
     }
     const r = this.parseAttributesFromTable();
-    for (const { key: n, field: a } of je)
-      r[n] === void 0 && (r[n] = this[a]);
+    for (const { key: a, field: n } of Je)
+      r[a] === void 0 && (r[a] = this[n]);
     if (this._hasDeclarativeOptions) {
-      const n = {
+      const a = {
         valueMember: this._getValueCallback,
         displayValueMember: this._getDisplayValueCallback,
         groupMember: this._getGroupCallback,
@@ -3101,8 +3573,8 @@ class Me extends Ss {
         subtitleMember: this._getSubtitleCallback,
         disabledMember: this._getDisabledCallback
       };
-      for (const { key: a, member: l } of Os)
-        r[a] === void 0 && !n[a] && (r[a] = l);
+      for (const { key: n, member: l } of Fs)
+        r[n] === void 0 && !a[n] && (r[n] = l);
     }
     if (Object.assign(r, {
       actionButtons: this._actionButtons,
@@ -3114,7 +3586,11 @@ class Me extends Ss {
       getSearchValueCallback: this._getSearchValueCallback,
       getIconCallback: this._getIconCallback,
       getSubtitleCallback: this._getSubtitleCallback,
+      getFullTitleCallback: this._getFullTitleCallback,
       getGroupCallback: this._getGroupCallback,
+      getPathCallback: this._getPathCallback,
+      isTreeEnabled: this._isTreeEnabled,
+      getIsSelectableCallback: this._getIsSelectableCallback,
       renderGroupLabelContentCallback: this._renderGroupLabelContentCallback,
       getDisabledCallback: this._getDisabledCallback,
       renderOptionContentCallback: this._renderOptionContentCallback,
@@ -3126,43 +3602,43 @@ class Me extends Ss {
       getBadgeTooltipCallback: this._getBadgeTooltipCallback,
       getOptionTooltipCallback: this._getOptionTooltipCallback,
       getRemoveButtonTooltipCallback: this._getRemoveButtonTooltipCallback,
-      getCounterCallback: this._getCounterCallback || ((n, a) => a !== void 0 ? `+${a} more` : `${n} selected`),
+      getCounterCallback: this._getCounterCallback || ((a, n) => n !== void 0 ? `+${n} more` : `${a} selected`),
       options: this._options ?? t,
       beforeSearchCallback: this._beforeSearchCallback,
       beforeSelectCallback: this._beforeSelectCallback,
       beforeDeselectCallback: this._beforeDeselectCallback,
       searchCallback: this._searchCallback,
       addNewCallback: this._addNewCallback,
-      onSelect: (n) => {
-        var a;
-        this._onSelect && this._onSelect(n), this.dispatchEvent(new CustomEvent("select", {
+      onSelect: (a) => {
+        var n;
+        this._onSelect && this._onSelect(a), this.dispatchEvent(new CustomEvent("select", {
           bubbles: !0,
           composed: !0,
           detail: {
-            option: n,
-            selectedOptions: (a = this.picker) == null ? void 0 : a.getSelected(),
+            option: a,
+            selectedOptions: (n = this.picker) == null ? void 0 : n.getSelected(),
             selectedValues: this.collectSelectedValues()
           }
         }));
       },
-      onDeselect: (n) => {
-        var a;
-        this._onDeselect && this._onDeselect(n), this.dispatchEvent(new CustomEvent("deselect", {
+      onDeselect: (a) => {
+        var n;
+        this._onDeselect && this._onDeselect(a), this.dispatchEvent(new CustomEvent("deselect", {
           bubbles: !0,
           composed: !0,
           detail: {
-            option: n,
-            selectedOptions: (a = this.picker) == null ? void 0 : a.getSelected(),
+            option: a,
+            selectedOptions: (n = this.picker) == null ? void 0 : n.getSelected(),
             selectedValues: this.collectSelectedValues()
           }
         }));
       },
-      onChange: (n) => {
-        this._onChange && this._onChange(n), this.dispatchEvent(new CustomEvent("change", {
+      onChange: (a) => {
+        this._onChange && this._onChange(a), this.dispatchEvent(new CustomEvent("change", {
           bubbles: !0,
           composed: !0,
           detail: {
-            selectedOptions: n,
+            selectedOptions: a,
             selectedValues: this.collectSelectedValues()
           }
         }));
@@ -3171,11 +3647,11 @@ class Me extends Ss {
       container: this.shadow,
       // Pass host element (this) for hidden inputs in light DOM
       hostElement: this
-    }), i && (this.containerElement.dataset.initialValues = JSON.stringify(i)), this.picker = new xs(this.containerElement, r), this._customStylesCallback) {
-      const n = this._customStylesCallback();
-      if (n) {
-        const a = document.createElement("style");
-        a.className = "ms-custom-styles", a.textContent = n, this.shadow.insertBefore(a, this.shadow.firstChild);
+    }), i && (this.containerElement.dataset.initialValues = JSON.stringify(i)), this.picker = new zs(this.containerElement, r), this._customStylesCallback) {
+      const a = this._customStylesCallback();
+      if (a) {
+        const n = document.createElement("style");
+        n.className = "ms-custom-styles", n.textContent = a, this.shadow.insertBefore(n, this.shadow.firstChild);
       }
     }
   }
@@ -3238,6 +3714,12 @@ class Me extends Ss {
   get subtitleMember() {
     return this.getAttribute("subtitle-member");
   }
+  set fullTitleMember(t) {
+    t ? this.setAttribute("full-title-member", t) : this.removeAttribute("full-title-member");
+  }
+  get fullTitleMember() {
+    return this.getAttribute("full-title-member");
+  }
   set groupMember(t) {
     this._groupMember = t || void 0, t ? this.setAttribute("group-member", t) : this.removeAttribute("group-member");
   }
@@ -3249,6 +3731,57 @@ class Me extends Ss {
   }
   get disabledMember() {
     return this.getAttribute("disabled-member");
+  }
+  // Tree-of-options members. Setting `pathMember` (like the `path-member`
+  // attribute) turns on tree mode. Each reflects to its kebab attribute, which
+  // is observed and applied in place — no separate wiring needed.
+  set pathMember(t) {
+    t ? this.setAttribute("path-member", t) : this.removeAttribute("path-member");
+  }
+  get pathMember() {
+    return this.getAttribute("path-member");
+  }
+  set parentPathMember(t) {
+    t ? this.setAttribute("parent-path-member", t) : this.removeAttribute("parent-path-member");
+  }
+  get parentPathMember() {
+    return this.getAttribute("parent-path-member");
+  }
+  set levelMember(t) {
+    t ? this.setAttribute("level-member", t) : this.removeAttribute("level-member");
+  }
+  get levelMember() {
+    return this.getAttribute("level-member");
+  }
+  set hasChildrenMember(t) {
+    t ? this.setAttribute("has-children-member", t) : this.removeAttribute("has-children-member");
+  }
+  get hasChildrenMember() {
+    return this.getAttribute("has-children-member");
+  }
+  set isSelectableMember(t) {
+    t ? this.setAttribute("is-selectable-member", t) : this.removeAttribute("is-selectable-member");
+  }
+  get isSelectableMember() {
+    return this.getAttribute("is-selectable-member");
+  }
+  set treePathSeparator(t) {
+    t ? this.setAttribute("tree-path-separator", t) : this.removeAttribute("tree-path-separator");
+  }
+  get treePathSeparator() {
+    return this.getAttribute("tree-path-separator");
+  }
+  set checkboxMode(t) {
+    t ? this.setAttribute("checkbox-mode", t) : this.removeAttribute("checkbox-mode");
+  }
+  get checkboxMode() {
+    return this.getAttribute("checkbox-mode");
+  }
+  set cascadeSelectPolicy(t) {
+    t ? this.setAttribute("cascade-select-policy", t) : this.removeAttribute("cascade-select-policy");
+  }
+  get cascadeSelectPolicy() {
+    return this.getAttribute("cascade-select-policy");
   }
   // Callback properties (JavaScript only - no attributes)
   set getValueCallback(t) {
@@ -3307,11 +3840,43 @@ class Me extends Ss {
   get getSubtitleCallback() {
     return this._getSubtitleCallback;
   }
+  /** Callback returning an option's full title (used by badges when show-badge-full-title is on). */
+  set getFullTitleCallback(t) {
+    this._getFullTitleCallback = t, this.updatePicker({ getFullTitleCallback: t });
+  }
+  get getFullTitleCallback() {
+    return this._getFullTitleCallback;
+  }
   set getGroupCallback(t) {
     this._getGroupCallback = t, this.updatePicker({ getGroupCallback: t });
   }
   get getGroupCallback() {
     return this._getGroupCallback;
+  }
+  /** Callback returning an option's materialized dot-path (enables tree mode). */
+  set getPathCallback(t) {
+    this._getPathCallback = t, this.updatePicker({ getPathCallback: t });
+  }
+  get getPathCallback() {
+    return this._getPathCallback;
+  }
+  /** Force tree mode on/off. When unset, tree mode auto-enables if a path source is present. */
+  set isTreeEnabled(t) {
+    this._isTreeEnabled = t, this.updatePicker({ isTreeEnabled: t });
+  }
+  get isTreeEnabled() {
+    return this._isTreeEnabled;
+  }
+  /**
+   * Callback deciding whether a tree node is selectable (takes precedence over
+   * `is-selectable-member`). Receives the built node — e.g.
+   * `el.getIsSelectableCallback = (node) => !node.hasChildren` for leaves only.
+   */
+  set getIsSelectableCallback(t) {
+    this._getIsSelectableCallback = t, this.updatePicker({ getIsSelectableCallback: t });
+  }
+  get getIsSelectableCallback() {
+    return this._getIsSelectableCallback;
   }
   set renderGroupLabelContentCallback(t) {
     this._renderGroupLabelContentCallback = t, this.updatePicker({ renderGroupLabelContentCallback: t });
@@ -3540,8 +4105,8 @@ class Me extends Ss {
   getSelected() {
     return this.picker ? this.picker.getSelected() : [];
   }
-  setSelected(t) {
-    this.picker && this.picker.setSelected(t);
+  setSelected(t, s = {}) {
+    this.picker && this.picker.setSelected(t, s);
   }
   getValue() {
     return this.picker ? this.picker.getValue() : null;
@@ -3554,40 +4119,40 @@ class Me extends Ss {
 // makes `form.reset()`, `form.elements`, and (in the future) constraint
 // validation actually do something. Without this flag the element is
 // invisible to the form lifecycle even when it has a `name`.
-d(Me, "formAssociated", !0);
-typeof window < "u" && typeof customElements < "u" && (customElements.get("web-multiselect") || customElements.define("web-multiselect", Me));
+h(Be, "formAssociated", !0);
+typeof window < "u" && typeof customElements < "u" && (customElements.get("web-multiselect") || customElements.define("web-multiselect", Be));
 typeof window < "u" && (window.components = window.components || {}, window.components["web-multiselect"] = {
-  version: () => "1.12.0-rc05",
+  version: () => "1.12.0-rc07",
   config: {
     name: "@keenmate/web-multiselect",
-    version: "1.12.0-rc05",
+    version: "1.12.0-rc07",
     author: "Keenmate",
     license: "MIT",
     repository: "git+https://github.com/keenmate/web-multiselect.git",
     homepage: "https://web-multiselect.keenmate.dev"
   },
   logging: {
-    enableLogging: bs,
-    disableLogging: gs,
-    setLogLevel: fs,
-    setCategoryLevel: vs,
-    getCategories: () => [...us]
+    enableLogging: ws,
+    disableLogging: xs,
+    setLogLevel: Cs,
+    setCategoryLevel: Ss,
+    getCategories: () => [...ys]
   },
   register: () => {
-    typeof customElements < "u" && !customElements.get("web-multiselect") && customElements.define("web-multiselect", Me);
+    typeof customElements < "u" && !customElements.get("web-multiselect") && customElements.define("web-multiselect", Be);
   },
-  getInstances: () => ct()
+  getInstances: () => gt()
 });
 export {
-  us as LOGGING_CATEGORIES,
-  Me as MultiSelectElement,
-  xs as WebMultiSelect,
-  x as dataLogger,
-  gs as disableLogging,
-  bs as enableLogging,
-  oe as initLogger,
-  S as interactionLogger,
-  vs as setCategoryLevel,
-  fs as setLogLevel,
-  P as uiLogger
+  ys as LOGGING_CATEGORIES,
+  Be as MultiSelectElement,
+  zs as WebMultiSelect,
+  O as dataLogger,
+  xs as disableLogging,
+  ws as enableLogging,
+  de as initLogger,
+  L as interactionLogger,
+  Ss as setCategoryLevel,
+  Cs as setLogLevel,
+  R as uiLogger
 };

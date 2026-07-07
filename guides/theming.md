@@ -194,6 +194,34 @@ the base layer keeps input heights consistent across all KeenMate components:
 :root { --base-input-size-md-height: 4.0; }   /* 40px at --ms-rem: 10px */
 ```
 
+### Option rows — height and long labels
+
+Dropdown option rows (including tree nodes) are content-driven by default: a long
+title **wraps** and the row grows. Two option-level variables change that:
+
+| Variable | Default | Effect |
+|---|---|---|
+| `--ms-option-min-height` | `auto` | A consistent minimum row height. Rows still grow if content is taller. (Virtual-scroll rows use the fixed `--ms-option-height` instead.) |
+| `--ms-option-title-white-space` | `normal` | Set `nowrap` to keep the title on one line. |
+| `--ms-option-title-overflow` | `visible` | Set `hidden` to clip the overflow. |
+| `--ms-option-title-text-overflow` | `clip` | Set `ellipsis` for a trailing `…`. |
+
+```css
+web-multiselect {
+  --ms-option-min-height: 3.5rem;
+
+  /* truncate long titles to one line + ellipsis */
+  --ms-option-title-white-space: nowrap;
+  --ms-option-title-overflow: hidden;
+  --ms-option-title-text-overflow: ellipsis;
+}
+```
+
+`.ms__option-title` is the label hook (the analog of web-treeview's
+`.wtv__node-label`). When truncating, turn on `enable_option_tooltips={true}` so
+the full label appears on hover. See the *Tree of options* guide for the tree
+angle.
+
 ## Dark mode
 
 Since upstream v1.12.0 the component honors **five** dark-mode signals — pick

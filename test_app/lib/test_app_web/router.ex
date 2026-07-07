@@ -26,6 +26,8 @@ defmodule TestAppWeb.Router do
 
     live "/examples/classic", Examples.ClassicLive
     live "/examples/new-api", Examples.NewApiLive
+    live "/examples/tree", Examples.TreeLive
+    live "/examples/search-index", Examples.SearchIndexLive
     live "/examples/performance", Examples.PerformanceLive
     live "/examples/templating", Examples.TemplatingLive
     live "/examples/action-buttons", Examples.ActionButtonsLive

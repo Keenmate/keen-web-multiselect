@@ -240,7 +240,7 @@ See the **[Theming guide](guides/theming.md)** for the three integration paths:
 
 ```elixir
 Keenmate.WebMultiselect.upstream_version()
-#=> "1.12.0-rc05"
+#=> "1.12.0-rc07"
 ```
 
 ## For LLMs and coding agents

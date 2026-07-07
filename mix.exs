@@ -57,13 +57,14 @@ defmodule Keenmate.WebMultiselect.MixProject do
       main: "readme",
       extras: [
         "README.md",
+        "guides/tree_of_options.md",
         "guides/theming.md",
         {"AGENTS.md", [title: "Using with AI agents"]},
         "CHANGELOG.md"
       ],
       source_ref: "v#{@version}",
       groups_for_extras: [
-        Guides: ["guides/theming.md", "AGENTS.md"]
+        Guides: ["guides/tree_of_options.md", "guides/theming.md", "AGENTS.md"]
       ],
       groups_for_modules: [
         Components: [Keenmate.WebMultiselect.Components],

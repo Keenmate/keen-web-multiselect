@@ -120,6 +120,31 @@ export declare const interactionLogger: any;
  */
 export declare const LOGGING_CATEGORIES: string[];
 
+declare interface LTreeNode<T> {
+    treeId: string;
+    id: NodeId;
+    /** Materialized dot-path, e.g. "1.2.3". */
+    path: string;
+    /** This node's own segment relative to its parent. */
+    pathSegment: string;
+    parentPath: string | null | undefined;
+    /** Depth in the tree (1-based; root children are level 1). */
+    level: number | null | undefined;
+    /** Children keyed by prefixed segment (see `segmentPrefix` in ltree.ts). */
+    children: Record<string, LTreeNode<T>>;
+    hasChildren: boolean;
+    /**
+     * Whether this node may be selected. Defaults to `true`; set `false` (via
+     * `isSelectableMember`/`getIsSelectableCallback`) to make a node non-interactive
+     * — it renders normally (no grey/disabled styling) but has no checkbox, is
+     * skipped by keyboard focus, and cannot be toggled or selected by Select-All.
+     * This is distinct from `disabled` (which greys the row out).
+     */
+    isSelectable: boolean;
+    /** The original option object this node was built from. */
+    data: T | null | undefined;
+}
+
 /**
  * Generic configuration options for the MultiSelect component
  * @template T The type of data items
@@ -137,6 +162,15 @@ declare interface MultiSelectConfig<T = any> {
     getDisplayValueCallback?: (item: T) => string;
     /** Callback to customize badge display text (defaults to display value if not provided) */
     getBadgeDisplayCallback?: (item: T) => string;
+    /**
+     * Member property name for a "full title" — a fully-qualified label that ships with the
+     * data (e.g. a breadcrumb like "Fruit / Pome fruit / Apple"). It is never computed by the
+     * component. When `isBadgeFullTitleShown` is on, badges display this instead of the display
+     * value (falling back to the display value when an option has none).
+     */
+    fullTitleMember?: string;
+    /** Callback to extract the full title from an item (takes precedence over `fullTitleMember`). */
+    getFullTitleCallback?: (item: T) => string;
     /** Callback to add custom CSS classes to badges - return string or array of class names */
     getBadgeClassCallback?: (item: T) => string | string[];
     /** Callback to inject custom CSS into Shadow DOM - return CSS string for styling custom classes */
@@ -153,6 +187,55 @@ declare interface MultiSelectConfig<T = any> {
     subtitleMember?: string;
     /** Callback to extract subtitle from item */
     getSubtitleCallback?: (item: T) => string;
+    /**
+     * Enable tree mode: options are rendered as a hierarchy, indented by depth.
+     * Auto-enabled when a path source (`pathMember`/`getPathCallback`) is set;
+     * pass `false` to force it off. The tree is always fully expanded — there is
+     * no collapse (use @keenmate/web-treeview if you need expand/collapse).
+     */
+    isTreeEnabled?: boolean;
+    /** Member property name holding each option's materialized dot-path (e.g. "1.2.3"). */
+    pathMember?: string;
+    /** Callback returning an option's materialized dot-path (takes precedence over pathMember). */
+    getPathCallback?: (item: T) => string;
+    /** Member holding an option's parent path (otherwise derived from its path). */
+    parentPathMember?: string;
+    /** Member holding an option's depth/level (otherwise derived from its path). */
+    levelMember?: string;
+    /** Member holding a precomputed hasChildren flag (otherwise derived from the tree). */
+    hasChildrenMember?: string;
+    /** Path separator for tree paths. Default: "." */
+    treePathSeparator?: string;
+    /**
+     * Member holding a per-option `isSelectable` flag for tree mode. A node with a
+     * falsy value renders normally (NOT greyed like `disabled`) but has no checkbox,
+     * is skipped by keyboard focus, and cannot be toggled or picked by Select-All.
+     * Options default to selectable. Tree mode only.
+     */
+    isSelectableMember?: string;
+    /**
+     * Callback deciding whether a tree node is selectable (takes precedence over
+     * `isSelectableMember`). Receives the built tree node, so `node.hasChildren` /
+     * `node.level` are available — e.g. `(node) => !node.hasChildren` for a
+     * leaves-only tree. Tree mode only.
+     */
+    getIsSelectableCallback?: (node: LTreeNode<T>) => boolean;
+    /**
+     * Tree checkbox interaction. `independent` (default) toggles only the clicked
+     * node. `cascade` checks a node's whole subtree and shows a tristate
+     * (checked / indeterminate / unchecked) box on branches. Tree + multiple only.
+     */
+    checkboxMode?: 'independent' | 'cascade';
+    /**
+     * In `cascade` mode, which values a selection emits (badges / form / change):
+     *   - `rolled-up` (default) — minimal cover: a fully-selected subtree collapses
+     *     to its root ("complete node"); partially-selected branches emit their
+     *     individually-checked descendants. Rolls to the nearest selectable
+     *     descendant when the complete node itself is non-selectable.
+     *   - `leaves` — only the checked leaf-level nodes.
+     *   - `all` — every fully-checked node (branches and leaves), like web-treeview.
+     */
+    cascadeSelectPolicy?: 'rolled-up' | 'leaves' | 'all';
     /** Member property name for group extraction */
     groupMember?: string;
     /** Callback to extract group from item */
@@ -199,6 +282,12 @@ declare interface MultiSelectConfig<T = any> {
     isAddNewAllowed?: boolean;
     /** Show count badge next to toggle icon (internal: isCounterShown) */
     isCounterShown?: boolean;
+    /**
+     * Make badges display each option's `fullTitleMember` / `getFullTitleCallback` value
+     * instead of its display value. Falls back to the display value for options without a
+     * full title. An explicit `getBadgeDisplayCallback` still takes precedence. Off by default.
+     */
+    isBadgeFullTitleShown?: boolean;
     /** Keep initial options visible when searchCallback is active and search term is empty/short (internal: isKeepOptionsOnSearch) */
     isKeepOptionsOnSearch?: boolean;
     /** Keep search text and filtered results when dropdown closes (default: true) */
@@ -359,11 +448,15 @@ export declare class MultiSelectElement<T = any> extends BaseElement {
     private _getIconCallback?;
     private _subtitleMember?;
     private _getSubtitleCallback?;
+    private _getFullTitleCallback?;
     private _groupMember?;
     private _getGroupCallback?;
     private _renderGroupLabelContentCallback?;
     private _disabledMember?;
     private _getDisabledCallback?;
+    private _getPathCallback?;
+    private _isTreeEnabled?;
+    private _getIsSelectableCallback?;
     private _getValueFormatCallback?;
     private _getBadgeTooltipCallback?;
     private _getOptionTooltipCallback?;
@@ -447,10 +540,28 @@ export declare class MultiSelectElement<T = any> extends BaseElement {
     get iconMember(): string | null;
     set subtitleMember(value: string | null);
     get subtitleMember(): string | null;
+    set fullTitleMember(value: string | null);
+    get fullTitleMember(): string | null;
     set groupMember(value: string | null);
     get groupMember(): string | null;
     set disabledMember(value: string | null);
     get disabledMember(): string | null;
+    set pathMember(value: string | null);
+    get pathMember(): string | null;
+    set parentPathMember(value: string | null);
+    get parentPathMember(): string | null;
+    set levelMember(value: string | null);
+    get levelMember(): string | null;
+    set hasChildrenMember(value: string | null);
+    get hasChildrenMember(): string | null;
+    set isSelectableMember(value: string | null);
+    get isSelectableMember(): string | null;
+    set treePathSeparator(value: string | null);
+    get treePathSeparator(): string | null;
+    set checkboxMode(value: 'independent' | 'cascade' | null);
+    get checkboxMode(): 'independent' | 'cascade' | null;
+    set cascadeSelectPolicy(value: 'rolled-up' | 'leaves' | 'all' | null);
+    get cascadeSelectPolicy(): 'rolled-up' | 'leaves' | 'all' | null;
     set getValueCallback(callback: ((item: T) => string | number) | undefined);
     get getValueCallback(): ((item: T) => string | number) | undefined;
     set getDisplayValueCallback(callback: ((item: T) => string) | undefined);
@@ -467,8 +578,24 @@ export declare class MultiSelectElement<T = any> extends BaseElement {
     get getIconCallback(): ((item: T) => string) | undefined;
     set getSubtitleCallback(callback: ((item: T) => string) | undefined);
     get getSubtitleCallback(): ((item: T) => string) | undefined;
+    /** Callback returning an option's full title (used by badges when show-badge-full-title is on). */
+    set getFullTitleCallback(callback: ((item: T) => string) | undefined);
+    get getFullTitleCallback(): ((item: T) => string) | undefined;
     set getGroupCallback(callback: ((item: T) => string) | undefined);
     get getGroupCallback(): ((item: T) => string) | undefined;
+    /** Callback returning an option's materialized dot-path (enables tree mode). */
+    set getPathCallback(callback: ((item: T) => string) | undefined);
+    get getPathCallback(): ((item: T) => string) | undefined;
+    /** Force tree mode on/off. When unset, tree mode auto-enables if a path source is present. */
+    set isTreeEnabled(value: boolean | undefined);
+    get isTreeEnabled(): boolean | undefined;
+    /**
+     * Callback deciding whether a tree node is selectable (takes precedence over
+     * `is-selectable-member`). Receives the built node — e.g.
+     * `el.getIsSelectableCallback = (node) => !node.hasChildren` for leaves only.
+     */
+    set getIsSelectableCallback(callback: ((node: LTreeNode<T>) => boolean) | undefined);
+    get getIsSelectableCallback(): ((node: LTreeNode<T>) => boolean) | undefined;
     set renderGroupLabelContentCallback(callback: ((groupName: string) => string | HTMLElement) | undefined);
     get renderGroupLabelContentCallback(): ((groupName: string) => string | HTMLElement) | undefined;
     set getDisabledCallback(callback: ((item: T) => boolean) | undefined);
@@ -540,7 +667,9 @@ export declare class MultiSelectElement<T = any> extends BaseElement {
     get selectedValue(): string | number | (string | number)[] | null;
     get selectedItem(): T | null;
     getSelected(): T[];
-    setSelected(values: (string | number)[]): void;
+    setSelected(values: (string | number)[], opts?: {
+        notify?: boolean;
+    }): void;
     getValue(): string | number | (string | number)[] | null;
     destroy(): void;
 }
@@ -590,6 +719,17 @@ export declare interface MultiSelectOptions extends MultiSelectConfig<MultiSelec
     onDeselect?: ((option: MultiSelectOption) => void) | null;
     onChange?: ((selectedOptions: MultiSelectOption[]) => void) | null;
 }
+
+/**
+ * LTreeNode — a single node in the option tree.
+ *
+ * Trimmed lift of web-treeview's `ltree/ltree-node.ts`. The multiselect renders
+ * every node expanded (no collapse), so this keeps only the structural fields
+ * needed to order nodes and indent them: path/parent/level/children/hasChildren
+ * plus the original option `data`. Expand state, drag-drop, checkbox, selection
+ * and drop-position fields are all thrown out.
+ */
+declare type NodeId = string | number;
 
 /**
  * Context provided to renderOptionContentCallback
@@ -649,6 +789,10 @@ export declare class WebMultiSelect<T = any> {
     private selectedOptions;
     private allOptions;
     private filteredOptions;
+    private tree;
+    private treeNodes;
+    private cascadeIndex;
+    private cascadeCheckedAtoms;
     private hiddenInputs;
     private focusedIndex;
     private matchingIndices;
@@ -702,14 +846,79 @@ export declare class WebMultiSelect<T = any> {
      * text independently. Doesn't fit the extractField shape (no tuple/member layer of its own).
      */
     private getItemBadgeDisplayValue;
+    /**
+     * Full title — a fully-qualified label supplied with the data (never computed here). Used by
+     * badges when `isBadgeFullTitleShown` is on. Returns undefined when the option has none.
+     */
+    private getItemFullTitle;
     private getItemSearchValue;
     private getItemIcon;
     private getItemSubtitle;
     private getItemGroup;
     private getItemDisabled;
+    /**
+     * Tree mode: whether the visible node at `index` may be selected. Non-selectable
+     * nodes (see `isSelectableMember`/`getIsSelectableCallback`) still render — just
+     * without a checkbox — but are skipped by focus and cannot be toggled. Always
+     * true outside tree mode. `treeNodes` is index-aligned with `filteredOptions`.
+     */
+    private isIndexSelectable;
+    /** Whether an option may be selected. Always true outside tree mode. */
+    private isOptionSelectable;
     constructor(element: HTMLElement, options?: Partial<MultiSelectConfig<T>>);
     private init;
     private parseOptions;
+    /** Whether options should be rendered as an (always-expanded) tree. */
+    private isTreeMode;
+    /** (Re)build the ltree from `allOptions` and derive the visible flat list. */
+    private buildTree;
+    /**
+     * Whether cascade checkbox mode is active: a multi-select tree with
+     * `checkbox-mode="cascade"`. Checking a node then toggles its whole subtree
+     * and branches show a tristate box.
+     */
+    private isCascadeMode;
+    private cascadePolicy;
+    /** Refresh the derived checked-atom set from the emitted `selectedValues`. */
+    private refreshCascadeAtoms;
+    /**
+     * Toggle a tree node in cascade mode: flip its whole subtree, re-project the
+     * checked atoms to emitted values under the active policy, and commit the diff
+     * so badges / form / change events reflect the policy (rolled-up branches, etc.).
+     */
+    private toggleTreeCascade;
+    /**
+     * Given a checked-atom set, project it to emitted values under the active
+     * policy, diff it against the current selection, and commit. Shared by every
+     * cascade entry point (node toggle, Select All) so they all emit the same
+     * policy-projected shape (e.g. a full subtree rolls up to one value).
+     */
+    private commitCascadeAtoms;
+    /**
+     * Derive `treeNodes` + `filteredOptions` from the full tree, applying the
+     * current search term. Matching nodes keep all their ancestors visible so
+     * indentation stays coherent (the tree is always fully expanded).
+     */
+    private rebuildTreeVisible;
+    /**
+     * Reset the visible list to "everything". **Tree-aware**: in tree mode it
+     * rebuilds `treeNodes` (kept index-aligned with `filteredOptions`) from the
+     * full tree, so the two never drift. A raw `filteredOptions = [...allOptions]`
+     * would leave `treeNodes` stale after clearing a search — the virtual list
+     * then reserves height for every option but renders blank rows because
+     * `treeNodes[index]` is undefined. Always use this to clear the visible list.
+     */
+    private resetVisibleToAll;
+    /**
+     * Tree mode: derive the visible list from an **external** set of matched
+     * options — e.g. the results returned by `searchCallback` — keeping each
+     * match's ancestors so indentation stays coherent. This is the async-search
+     * analogue of `rebuildTreeVisible`: the matching is done by the caller (their
+     * own index/engine) instead of a local substring test, but ancestor
+     * preservation and `treeNodes`/`filteredOptions` index-alignment still happen
+     * here. Pass all options to show the whole tree.
+     */
+    private rebuildTreeVisibleFromMatches;
     private buildHTML;
     /**
      * Check if virtual scroll should be used
@@ -738,6 +947,14 @@ export declare class WebMultiSelect<T = any> {
     private getBuiltInActionDisabled;
     private renderActionsHTML;
     private renderOption;
+    /**
+     * Render a single tree-mode row. Separate from `renderOption`: a tree row is
+     * indented by its depth (via the `--ms-tree-depth` custom property) and
+     * tagged branch/leaf, but otherwise carries the same selection/checkbox/
+     * icon/subtitle content. The tree is always fully expanded, so there is no
+     * chevron/toggle — every node is just a normal, selectable option.
+     */
+    private renderTreeNode;
     private highlightMatch;
     private groupOptions;
     /** Whether the input currently functions as a usable search field (drives placeholder wording). */
@@ -774,6 +991,13 @@ export declare class WebMultiSelect<T = any> {
      * Returning -1 from `compute` is a no-op (used for empty list / no match).
      */
     private focusBy;
+    /**
+     * Given a target index and a preferred direction, return the nearest index
+     * whose node is selectable (skipping non-selectable tree nodes). Falls back to
+     * the opposite direction, then to -1 if nothing is selectable. No-op outside
+     * tree mode.
+     */
+    private resolveSelectableIndex;
     private focusNext;
     private focusPrevious;
     private focusFirst;
@@ -866,7 +1090,18 @@ export declare class WebMultiSelect<T = any> {
     private updateHiddenInput;
     private getFormValue;
     getSelected(): T[];
-    setSelected(values: (string | number)[]): void;
+    /**
+     * Set the selection programmatically. **Silent by default** — it does not fire
+     * `select`/`deselect`/`change` (so restoring saved state, cascade resets, or a
+     * server-authoritative correction can't loop back or trip "user changed it"
+     * handlers). Pass `{ notify: true }` to announce the result as a **single
+     * aggregate `change`** — for a deliberate user gesture (e.g. an action button)
+     * that should reach the same listeners a manual pick does, without the per-item
+     * `select`/`deselect` flood a bulk change would otherwise cause.
+     */
+    setSelected(values: (string | number)[], opts?: {
+        notify?: boolean;
+    }): void;
     /**
      * Merge a partial config update into the live picker without tearing down the DOM.
      *

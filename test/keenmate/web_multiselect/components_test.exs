@@ -68,4 +68,63 @@ defmodule Keenmate.WebMultiselect.ComponentsTest do
     assert html =~ ~s(initial-values="[&quot;a&quot;,&quot;b&quot;]")
     refute html =~ "FormField"
   end
+
+  test "emits tree attributes as kebab-case (tree mode)" do
+    html =
+      render_multiselect(
+        id: "cats",
+        path_member: "path",
+        parent_path_member: "parent",
+        level_member: "lvl",
+        has_children_member: "kids",
+        tree_path_separator: "/"
+      )
+
+    assert html =~ ~s(path-member="path")
+    assert html =~ ~s(parent-path-member="parent")
+    assert html =~ ~s(level-member="lvl")
+    assert html =~ ~s(has-children-member="kids")
+    assert html =~ ~s(tree-path-separator="/")
+  end
+
+  test "emits is-selectable-member (tree per-node selectability)" do
+    html = render_multiselect(id: "cats", path_member: "path", is_selectable_member: "selectable")
+
+    assert html =~ ~s(path-member="path")
+    assert html =~ ~s(is-selectable-member="selectable")
+  end
+
+  test "emits checkbox-mode and cascade-select-policy (cascade checkboxes)" do
+    html =
+      render_multiselect(
+        id: "cats",
+        path_member: "path",
+        checkbox_mode: "cascade",
+        cascade_select_policy: "rolled-up"
+      )
+
+    assert html =~ ~s(checkbox-mode="cascade")
+    assert html =~ ~s(cascade-select-policy="rolled-up")
+  end
+
+  test "omits tree attributes when not set (stays a flat list)" do
+    html = render_multiselect(id: "flat", options: [%{value: "a", label: "A"}])
+    refute html =~ "path-member"
+    refute html =~ "tree-path-separator"
+    refute html =~ "is-selectable-member"
+    refute html =~ "checkbox-mode"
+    refute html =~ "cascade-select-policy"
+  end
+
+  test "emits full-title-member and show-badge-full-title" do
+    html =
+      render_multiselect(
+        id: "ft",
+        full_title_member: "fullTitle",
+        show_badge_full_title: true
+      )
+
+    assert html =~ ~s(full-title-member="fullTitle")
+    assert html =~ ~s(show-badge-full-title="true")
+  end
 end

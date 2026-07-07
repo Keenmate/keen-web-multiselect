@@ -183,6 +183,13 @@ defmodule Keenmate.WebMultiselect.Components do
     default: nil,
     doc: "Show a count of the selected items."
 
+  attr :show_badge_full_title, :boolean,
+    default: nil,
+    doc: """
+    Make badges display each option's `full_title_member` value instead of its display value
+    (falling back to the display value for options without one). Off by default.
+    """
+
   attr :enable_badge_tooltips, :boolean,
     default: nil,
     doc: "Show a tooltip with the full label when hovering a badge. Off by default."
@@ -354,6 +361,14 @@ defmodule Keenmate.WebMultiselect.Components do
     default: nil,
     doc: ~s(Object key for an option's secondary line. The wrapper defaults this to `"subtitle"`.)
 
+  attr :full_title_member, :string,
+    default: nil,
+    doc: """
+    Object key for an option's **full title** — a fully-qualified label that ships with the
+    data (e.g. a breadcrumb like `"Fruit / Pome fruit / Apple"`); never computed by the
+    component. Pair with `show_badge_full_title` to render it on badges. Not defaulted.
+    """
+
   attr :group_member, :string,
     default: nil,
     doc:
@@ -362,6 +377,66 @@ defmodule Keenmate.WebMultiselect.Components do
   attr :disabled_member, :string,
     default: nil,
     doc: ~s(Object key marking an option disabled. The wrapper defaults this to `"disabled"`.)
+
+  # -- Tree of options ------------------------------------------------------
+
+  attr :path_member, :string,
+    default: nil,
+    doc: """
+    Object key holding each option's **materialized dot-path** (e.g. `"1"`, `"1.1"`,
+    `"1.1.1"`). Setting this turns on **tree mode**: options render as an always-expanded
+    hierarchy, indented by depth. Parent and level are derived from the path. There is no
+    collapse — reach for `@keenmate/web-treeview` when you need expand/collapse.
+    """
+
+  attr :parent_path_member, :string,
+    default: nil,
+    doc: "Object key holding an option's parent path. Optional — derived from `path_member` when unset."
+
+  attr :level_member, :string,
+    default: nil,
+    doc: "Object key holding an option's depth/level. Optional — derived from `path_member` when unset."
+
+  attr :has_children_member, :string,
+    default: nil,
+    doc: "Object key holding a precomputed `hasChildren` flag. Optional — derived from the tree when unset."
+
+  attr :is_selectable_member, :string,
+    default: nil,
+    doc: """
+    Object key holding a per-option **selectability** flag for tree mode. A node with a falsy
+    value renders *normally* — **not** greyed out like `disabled` — but has no checkbox, is
+    skipped by keyboard focus, and cannot be toggled or picked by Select&nbsp;All. Options
+    default to selectable. Use it for structural branch rows (e.g. a leaves-only tree); use
+    `disabled_member` for genuinely unavailable options. The JS-only `getIsSelectableCallback`
+    (predicate over the built node, so it can read `hasChildren`) has no HEEx attribute.
+    """
+
+  attr :tree_path_separator, :string,
+    default: nil,
+    doc: ~s(Separator used in tree paths. Defaults to `"."` upstream.)
+
+  attr :checkbox_mode, :string,
+    default: nil,
+    values: [nil, "independent", "cascade"],
+    doc: """
+    Tree checkbox interaction. `"independent"` (default) toggles only the clicked node.
+    `"cascade"` checks a node's whole subtree and shows a **tristate** (checked /
+    indeterminate / unchecked) box on partially-selected branches. Tree + multiple only.
+    Pair with `cascade_select_policy` to control which values a cascade selection emits.
+    """
+
+  attr :cascade_select_policy, :string,
+    default: nil,
+    values: [nil, "rolled-up", "leaves", "all"],
+    doc: """
+    In `checkbox_mode="cascade"`, which values a selection emits (badges / form / change):
+    `"rolled-up"` (default) — the **minimal cover**: a fully-selected subtree collapses to
+    its root ("complete node"); a partially-selected branch emits its individually-checked
+    descendants, rolling to the nearest selectable descendant when the complete node itself
+    is non-selectable. `"leaves"` — only the checked leaf nodes. `"all"` — every fully-checked
+    node (branches and leaves), like `@keenmate/web-treeview`.
+    """
 
   # -- Form value serialization ---------------------------------------------
 

@@ -32,6 +32,7 @@ defmodule TestAppWeb.Examples.PerformanceLive do
                     rating = Float.round(3.0 + rem(i, 20) / 10, 1)
 
                     %{
+                      id: i,
                       value: i,
                       name: "Product #{i} - #{category}",
                       category: category,

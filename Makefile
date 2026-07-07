@@ -80,6 +80,8 @@ dev: ## Start the test_app demo site on http://localhost:4060 (demo gallery at /
 	@echo "  Theming         http://localhost:4060/examples/theming"
 	@echo "  Logging         http://localhost:4060/examples/logging"
 	@echo "  Positioning     http://localhost:4060/examples/positioning"
+	@echo "  Tree            http://localhost:4060/examples/tree"
+	@echo "  Search index    http://localhost:4060/examples/search-index"
 	@echo ""
 	@echo "E2E fixtures:"
 	@echo "  Selection       http://localhost:4060/test/selection"

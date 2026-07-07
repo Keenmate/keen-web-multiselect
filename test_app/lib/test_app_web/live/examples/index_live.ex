@@ -17,6 +17,20 @@ defmodule TestAppWeb.Examples.IndexLive do
         "Custom objects, tuple arrays, member callbacks, async search, form integration (json/csv/array), and cascading selects."
     },
     %{
+      href: "/examples/tree",
+      icon: "🌳",
+      title: "Tree of Options",
+      description:
+        "Hierarchical options via a materialized `path_member` — always-expanded, indented by depth, branch/leaf theming hooks, ancestor-preserving search, custom separators."
+    },
+    %{
+      href: "/examples/search-index",
+      icon: "🔎",
+      title: "External Search (FlexSearch)",
+      description:
+        "Externalize the whole search via `searchCallback` — fuzzy, partial, accent-insensitive, ranked matching from a FlexSearch index. Works on flat lists and trees; FlexSearch never enters the wrapper bundle."
+    },
+    %{
       href: "/examples/performance",
       icon: "⚡",
       title: "Virtual Scrolling",
