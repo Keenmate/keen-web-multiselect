@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0-rc.4] - 2026-07-06
+## [1.0.0-rc.4] - 2026-07-07 [PUBLISHED]
 
 _First unreleased RC after the published `rc.3`; bundles tree mode and everything built on top of it, plus the earlier demo-site polish._
 
