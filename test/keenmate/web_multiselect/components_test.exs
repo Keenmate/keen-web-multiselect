@@ -94,6 +94,13 @@ defmodule Keenmate.WebMultiselect.ComponentsTest do
     assert html =~ ~s(is-selectable-member="selectable")
   end
 
+  test "emits dropdown-width and selected-popover-width (independent panel sizing)" do
+    html = render_multiselect(id: "sz", dropdown_width: "60rem", selected_popover_width: "30rem")
+
+    assert html =~ ~s(dropdown-width="60rem")
+    assert html =~ ~s(selected-popover-width="30rem")
+  end
+
   test "emits checkbox-mode and cascade-select-policy (cascade checkboxes)" do
     html =
       render_multiselect(

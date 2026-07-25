@@ -30,10 +30,10 @@ a page has several multiselects.
       payload: %{"id" => id, "values" => [ ...all selected values... ]}
 
   "web_multiselect:select"   - fired when one option is added
-      payload: %{"id" => id, "value" => added_value}
+      payload: %{"id" => id, "value" => added_value, "values" => [ ...full selection after the add... ]}
 
   "web_multiselect:deselect" - fired when one option is removed
-      payload: %{"id" => id, "value" => removed_value}
+      payload: %{"id" => id, "value" => removed_value, "values" => [ ...full selection after the remove... ]}
 
 USE "change" for authoritative state (it carries the full list). Use
 "select"/"deselect" when you care about the individual delta.

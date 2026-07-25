@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.0.0-rc.5] - 2026-07-25 [PUBLISHED]
+
+_Aligns the wrapper with upstream `@keenmate/web-multiselect` `1.12.0-rc08`._
+
+### Added
+
+- **Independently sizable panels — `dropdown_width` / `selected_popover_width`.** Two new typed attributes set the width of the options dropdown and the selected-items popover, decoupled from the input (and from each other). They're sugar over the CSS variables `--ms-dropdown-width` (defaults to tracking the input width) and `--ms-selected-popover-width` (intrinsic `32rem`) — set the variables at app/theme level to size every picker at once, or use the attributes to override a single instance. Documented in `guides/theming.md`; demoed as section 14 ("Independent Panel Widths") on `/examples/tree`.
+- **Tree metadata in `renderOptionContentCallback`.** Via the bundled upstream, the JS-side `renderOptionContentCallback(item, ctx)` now carries tree context on tree rows — `isTreeNode`, `isBranch`, `isLeaf`, `childCount`, `level`, `depth`, `path`, `isSelectable`, and `isIndeterminate` (cascade tristate) — so a custom node renderer can branch on the hierarchy (e.g. a child-count badge on branches) without re-deriving it. Demoed as section 12 ("Custom Node Rendering").
+
+### Changed
+
+- **Bundled `@keenmate/web-multiselect` upgraded to `1.12.0-rc08`** (from `1.12.0-rc07`). `priv/static/multiselect.{js,css,d.ts}` re-bundled; `Keenmate.WebMultiselect.upstream_version/0` now reports `"1.12.0-rc08"`. rc08 brings: independently sizable panels, tree metadata in the render callback, a counter-chip tooltip, the cascade counter now counting the rolled-up cover (not the emit policy), and fixes — a live `checkbox_mode` / `cascade_select_policy` switch re-projects the current selection, and badge hover no longer washes to white.
+
+### Internal — demo site
+
+- **`/examples/tree` re-mirrored against upstream `1.12.0-rc08` (§1–14).** Section 10 became a **single live picker with a control panel** (radios flip `checkbox_mode` / `cascade_select_policy`, emitted `getValue()` shown live) demonstrating that both switch live. Three new sections mirror the new upstream demos: §12 **Custom Node Rendering** (`renderOptionContentCallback` + `ctx` tree metadata + branch/leaf `customStylesCallback`), §13 **No Badges — Selections in a Popover** (`badges_display_mode="count"` + `show_counter` + a breadcrumb popover), §14 **Independent Panel Widths** (`dropdown_width` / `selected_popover_width`). The demo tree data grew to a richer 4-root, up-to-4-level catalogue (~51 nodes) so cascade rollup and deep nesting are exercisable. (`test_app/` is excluded from the Hex package.)
+
 ## [1.0.0-rc.4] - 2026-07-07 [PUBLISHED]
 
 _First unreleased RC after the published `rc.3`; bundles tree mode and everything built on top of it, plus the earlier demo-site polish._

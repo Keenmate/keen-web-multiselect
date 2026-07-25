@@ -745,6 +745,24 @@ declare interface OptionContentRenderContext {
     isMatched: boolean;
     /** Whether the option is disabled */
     isDisabled: boolean;
+    /** True when this row is a tree node (path-member / tree mode). Absent/false for flat options. */
+    isTreeNode?: boolean;
+    /** Tree only: the node has children (a branch). */
+    isBranch?: boolean;
+    /** Tree only: the node has no children (a leaf). */
+    isLeaf?: boolean;
+    /** Tree only: number of direct children (0 for a leaf). */
+    childCount?: number;
+    /** Tree only: 1-based depth level as derived from the path (top level = 1). */
+    level?: number;
+    /** Tree only: 0-based indentation depth (`level - 1`), matching `--ms-tree-depth`. */
+    depth?: number;
+    /** Tree only: the node's materialized path (e.g. "1.1.2"). */
+    path?: string;
+    /** Tree only: the node is selectable (branches marked non-selectable are `false`). */
+    isSelectable?: boolean;
+    /** Tree only: cascade tristate — a partially-checked branch (some but not all descendants). */
+    isIndeterminate?: boolean;
 }
 
 /**
@@ -894,6 +912,17 @@ export declare class WebMultiSelect<T = any> {
      * policy-projected shape (e.g. a full subtree rolls up to one value).
      */
     private commitCascadeAtoms;
+    /**
+     * The "meaningful selection" list used by the counter chip — the rolled-up
+     * minimal cover, regardless of the active emit policy. In cascade mode
+     * `leaves`/`all` emit many values for a single branch pick, which made the
+     * counter read e.g. `[5]` for what a person experiences as two selections.
+     * The counter should count the branches actually chosen, and stay stable when
+     * the policy knob flips. Outside cascade this is just the selected options.
+     */
+    private counterSelection;
+    /** Native `title` for the counter chip: the picked items, capped so it can't grow unbounded. */
+    private buildCounterTooltip;
     /**
      * Derive `treeNodes` + `filteredOptions` from the full tree, applying the
      * current search term. Matching nodes keep all their ancestors visible so

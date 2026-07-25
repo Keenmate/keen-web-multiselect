@@ -159,6 +159,21 @@ partially-selected branch surfaces exactly the descendants you checked. The
 emitted values are a pure projection of the selection, so the form value and
 `change` payload always reflect the policy.
 
+Both `checkbox_mode` and `cascade_select_policy` are **live**: flip either after
+mount (e.g. `el.checkboxMode = "cascade"` from JS) and the current selection
+re-projects immediately, so badges, form value, and checkboxes reflect the new
+mode/policy without a rebuild.
+
+### Custom node rendering
+
+`renderOptionContentCallback(item, ctx)` (JS-only) replaces a node's inner content
+while the component keeps drawing the tree chrome (checkbox, indentation, state
+classes). On tree rows `ctx` carries tree metadata so you can branch without
+re-deriving it: `isTreeNode`, `isBranch`, `isLeaf`, `childCount`, `level`, `depth`,
+`path`, `isSelectable`, and `isIndeterminate` (cascade tristate). Style full rows
+by node type with the `.ms__option--tree-branch` / `.ms__option--tree-leaf` hooks
+(via `customStylesCallback`) — the render callback only fills the content area.
+
 ## Search
 
 With `enable_search` on (the default), typing filters the hierarchy to the

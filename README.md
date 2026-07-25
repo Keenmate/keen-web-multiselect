@@ -4,6 +4,14 @@ Phoenix LiveView wrapper for [`@keenmate/web-multiselect`](https://github.com/ke
 
 One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundled, so no `npm install` is required.
 
+## What's New in v1.0.0-rc.5
+
+_Aligned with upstream `@keenmate/web-multiselect` `1.12.0-rc08`._
+
+- **Independently sizable panels — `dropdown_width` / `selected_popover_width`** — the control input, the options dropdown, and the "N selected" popover are three separate panels, and you can now size the latter two independently of the input and of each other. Both are typed-attribute sugar over CSS variables: `dropdown_width` writes `--ms-dropdown-width` (which otherwise tracks the input width) and `selected_popover_width` writes `--ms-selected-popover-width` (intrinsic `32rem`). Set the variables at app/theme level to size every picker at once, or use the attributes to override a single instance. Documented in `guides/theming.md` ("Independent panel widths") and demoed as section 14 on `/examples/tree`.
+- **Tree metadata in the custom node renderer — `renderOptionContentCallback(item, ctx)`** — on tree rows the JS-side render callback's context now carries the hierarchy: `isTreeNode`, `isBranch`, `isLeaf`, `childCount`, `level`, `depth`, `path`, `isSelectable`, and `isIndeterminate` (the cascade tristate). A custom renderer can branch on node type without re-deriving it — e.g. draw a child-count badge on branches and a plain label on leaves — while the component still draws the tree chrome (checkbox, indentation, state classes) around your content. Demoed as the new section 12 ("Custom Node Rendering").
+- **Bundled `@keenmate/web-multiselect` upgraded to `1.12.0-rc08`** — beyond the two features above, rc08 adds a counter-chip tooltip, makes the cascade counter count the rolled-up cover (rather than the emit policy), and fixes two rough edges: a live `checkbox_mode` / `cascade_select_policy` switch now re-projects the current selection instead of needing a rebuild, and badge hover no longer washes out to white. `priv/static/multiselect.{js,css,d.ts}` were re-bundled and `Keenmate.WebMultiselect.upstream_version/0` now reports `"1.12.0-rc08"`.
+
 ## What's New in v1.0.0-rc.4
 
 - **Tree of options — render options as an always-expanded hierarchy** — give each option a materialized dot-path (`"1"`, `"1.1"`, `"1.1.1"`, …) and set `path_member`; tree mode auto-enables and the wrapper derives parent/level from the path, rendering depth-first and indented. New typed attributes `path_member`, `parent_path_member`, `level_member`, `has_children_member`, and `tree_path_separator` cover the surface. There's no collapse — reach for `@keenmate/web-treeview` when you need expand/collapse. Documented in the new `guides/tree_of_options.md` (on hexdocs and in the package) and demoed on `/examples/tree`.
@@ -14,12 +22,6 @@ One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundl
 - **External search now composes with tree mode** — a JS-side `searchCallback` that returns matching options rebuilds the hierarchy from those matches, keeping their ancestors, so you can externalize the whole search over a tree. Demoed on the new `/examples/search-index` page (a client-side FlexSearch index over the full ISCO-08 occupation classification) which stays entirely in the demo app — never in the wrapper bundle.
 - **Programmatic selection can announce itself — `el.setSelected(values, {notify: true})`** — `setSelected` stays silent by default (so restoring saved state or a server-authoritative correction doesn't fire `change` or bounce in a loop), but the new opt-in fires a single aggregate `change` for a deliberate gesture like a custom action button that should reach the same `handle_event` a manual pick does.
 - **Bundled `@keenmate/web-multiselect` upgraded to `1.12.0-rc07`** — carries all of the above at the component level plus more pronounced option checkboxes (a dedicated mid-grey `#8f8f8f` border via `--ms-checkbox-border-color`), and fixes: row height no longer jumps as filtering crosses the virtual-scroll threshold, a tree no longer blanks out after clearing a search, and option rows no longer text-select on click-drag. `KeenWebMultiselect.upstream_version/0` now reports `"1.12.0-rc07"`.
-
-## What's New in v1.0.0-rc.3
-
-- **Docs — a dedicated Theming guide** — The component is styled entirely through CSS custom properties, so how those variables work is core knowledge — and the wrapper shipped none of it. The new [Theming guide](guides/theming.md) (in the Hex package and on hexdocs) explains the two-tier cascade where each component token `--ms-*` falls back to a shared design token `--base-*`, then walks the three integration paths: inheriting **pure-admin**'s tokens for free, defining your **own `--base-*` layer** shared across KeenMate components, or running **standalone** with the built-in `light-dark()` fallbacks and per-instance `--ms-*` overrides from HEEx `class`/`style`. Dark-mode signals, `--ms-rem` sizing, and the unlayered-reset footgun are covered too.
-- **Package — the live examples site is now linked from Hex** — `mix.exs` gained a `homepage_url` and an "Examples site" link pointing at [keen-web-multiselect.keenmate.dev](https://keen-web-multiselect.keenmate.dev), so the running demo gallery is one click from the package page and hexdocs sidebar.
-- **LLM / coding-agent docs — an `ai/` folder ships in the package** — A flat-text knowledge base (`ai/INDEX.txt` + topic files + a 12-recipe `ai/cookbook.txt`) written for the wrapper, so a coding agent can learn `<.web_multiselect>`, the LiveView hook, `push_update/3`, `search_event`, forms, and theming from `deps/keen_web_multiselect/ai/`. On hexdocs it's fronted by a **Using with AI agents** guide, plus ex_doc's generated `llms.txt` index.
 
 ## Install
 
@@ -247,7 +249,7 @@ See the **[Theming guide](guides/theming.md)** for the three integration paths:
 
 ```elixir
 Keenmate.WebMultiselect.upstream_version()
-#=> "1.12.0-rc07"
+#=> "1.12.0-rc08"
 ```
 
 ## For LLMs and coding agents

@@ -48,7 +48,8 @@ defmodule Keenmate.WebMultiselect.Components do
 
   attr :value, :any,
     default: nil,
-    doc: "Initial selected value(s). Strings, numbers, list, or nil."
+    doc:
+      "Initial selected value(s). Strings, numbers, list, or nil. Seeds the underlying `initial-values` attribute unless `:initial_values` is given explicitly (which takes precedence)."
 
   attr :options, :any,
     default: nil,
@@ -123,6 +124,22 @@ defmodule Keenmate.WebMultiselect.Components do
   attr :dropdown_max_width, :string,
     default: nil,
     doc: "Maximum width of the dropdown panel, as a CSS length."
+
+  attr :dropdown_width, :string,
+    default: nil,
+    doc: """
+    Width of the **options dropdown** panel, as a CSS length (e.g. `"60rem"`). Sugar that
+    sets `--ms-dropdown-width` on the element; defaults to tracking the input width. Set the
+    variable at app/theme level to size every picker at once.
+    """
+
+  attr :selected_popover_width, :string,
+    default: nil,
+    doc: """
+    Width of the **selected-items popover** (the panel opened from the "N selected" chip / `[N]`
+    counter), as a CSS length. Sugar that sets `--ms-selected-popover-width`; defaults to an
+    intrinsic `32rem`. Independent of the input and dropdown widths.
+    """
 
   attr :max_height, :string,
     default: nil,

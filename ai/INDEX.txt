@@ -22,7 +22,8 @@ CRITICAL FACTS
 FILE OVERVIEW
 -------------
 getting-started.txt       - Install (Hex), wire assets, import, first render
-component-reference.txt   - The <.web_multiselect> attribute surface (snake->kebab)
+component-reference.txt   - The <.web_multiselect> attribute surface (snake->kebab),
+                            incl. tree-of-options + cascade-checkbox attrs
 liveview-events.txt       - hook={true}; select/deselect/change -> handle_event/3
 server-updates.txt        - push_update/3: change options/selection from the server
 server-search.txt         - search_event: async server-side search over the LV channel
@@ -65,7 +66,10 @@ booleans (true/false rendering) -> component-reference.txt
 
 C
 -
-cascade (dependent selects) -> server-updates.txt, cookbook.txt
+cascade, dependent selects (server-driven) -> server-updates.txt, cookbook.txt
+cascade checkboxes (checkbox_mode="cascade") -> component-reference.txt, guides/tree_of_options.md
+cascade_select_policy (rolled-up|leaves|all) -> component-reference.txt, guides/tree_of_options.md
+checkbox_mode (independent|cascade) -> component-reference.txt, guides/tree_of_options.md
 class / style -> component-reference.txt, theming.txt
 change event -> liveview-events.txt
 
@@ -74,6 +78,7 @@ D
 dead view / SSR -> dead-views-and-ssr.txt
 data-theme (dark mode) -> theming.txt
 disabled_member -> data-and-options.txt
+dropdown_width / selected_popover_width -> component-reference.txt, theming.txt
 
 E
 -
@@ -84,6 +89,7 @@ F
 field={@form[:tags]} -> forms.txt
 FormField -> forms.txt
 FormHelpers.assign_from_field/1 -> forms.txt
+full_title_member / show_badge_full_title -> component-reference.txt, guides/tree_of_options.md
 
 G
 -
@@ -101,6 +107,7 @@ initial_values -> forms.txt, data-and-options.txt
 install (Hex) -> getting-started.txt
 installer (mix task) -> installer.txt
 import Keenmate.WebMultiselect.Components -> getting-started.txt
+is_selectable_member (non-selectable nodes) -> component-reference.txt, guides/tree_of_options.md
 
 M
 -
@@ -114,6 +121,7 @@ OptionHelpers -> data-and-options.txt
 
 P
 -
+path_member (enables tree mode) -> component-reference.txt, guides/tree_of_options.md
 phx-update="ignore" -> dead-views-and-ssr.txt, server-updates.txt
 Plug.Static (serve assets) -> getting-started.txt
 push_update/3 -> server-updates.txt, cookbook.txt
@@ -128,6 +136,8 @@ SSR / dead view -> dead-views-and-ssr.txt
 T
 -
 theming -> theming.txt, guides/theming.md
+tree of options (path_member, hierarchy) -> component-reference.txt, guides/tree_of_options.md
+tree_path_separator -> component-reference.txt, guides/tree_of_options.md
 tuples ({value, label}) -> data-and-options.txt
 
 U
@@ -163,6 +173,9 @@ A: -> forms.txt  (field={@form[:tags]})
 Q: What shape should my options be? How do I use my own keys?
 A: -> data-and-options.txt
 
+Q: How do I render options as a tree / hierarchy (and cascade checkboxes)?
+A: -> component-reference.txt (path_member, checkbox_mode) + guides/tree_of_options.md
+
 Q: How do I change colors / dark mode / sizing?
 A: -> theming.txt  (and guides/theming.md)
 
@@ -186,6 +199,13 @@ RENDERING
 - Component attributes -> component-reference.txt
 - Option data shapes -> data-and-options.txt
 - Dead view / SSR -> dead-views-and-ssr.txt
+
+TREE / HIERARCHY
+- Tree of options (materialized paths) -> component-reference.txt, guides/tree_of_options.md
+- Cascade checkboxes + value policy -> component-reference.txt, guides/tree_of_options.md
+- Per-node selectability (is_selectable_member) -> component-reference.txt, guides/tree_of_options.md
+- Full-breadcrumb badges (full_title_member) -> component-reference.txt, guides/tree_of_options.md
+- Independent panel widths -> component-reference.txt, theming.txt
 
 LIVEVIEW INTEGRATION
 - Events -> liveview-events.txt

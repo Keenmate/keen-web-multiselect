@@ -76,11 +76,13 @@ BADGES / SELECTED DISPLAY
   badges_max_visible
   badges_position
   show_counter
+  show_badge_full_title       - render each badge's full_title_member breadcrumb
+                                instead of the display value (tree mode; see below)
   remove_button_tooltip_text  (supports {0} interpolation)
   enable_badge_tooltips, badge_tooltip_placement, badge_tooltip_delay, badge_tooltip_offset
 
-OPTION TOOLTIPS (rc05)
-----------------------
+OPTION TOOLTIPS
+---------------
   enable_option_tooltips
   option_tooltip_placement    - Floating-UI placement, default top-start
   option_tooltip_follow_cursor
@@ -110,7 +112,33 @@ SIZING / LAYOUT
 ---------------
   max_height
   dropdown_min_width, dropdown_max_width
+  dropdown_width          - width of the options dropdown, decoupled from the input.
+                            String CSS length; sugar over --ms-dropdown-width
+                            (default: tracks the input width).
+  selected_popover_width  - width of the "N selected" popover. String CSS length;
+                            sugar over --ms-selected-popover-width (default 32rem).
 For proportional scaling use the CSS var --ms-rem (theming.txt), not an attr.
+See theming.txt / guides/theming.md "Independent panel widths".
+
+TREE OF OPTIONS / CASCADE CHECKBOXES
+------------------------------------
+Give options a materialized dot-path and the list renders as an always-expanded
+hierarchy. Setting path_member ENABLES tree mode. Full guide: guides/tree_of_options.md.
+  path_member           - key holding the dot-path ("1", "1.1", "1.1.1"). Setting it
+                          turns on tree mode; parent/level are derived from the path.
+  parent_path_member    - key holding the parent path (optional; derived when unset)
+  level_member          - key holding the depth/level (optional; derived when unset)
+  has_children_member   - key holding a precomputed hasChildren flag (optional)
+  is_selectable_member  - boolean key; a falsy value makes a node NON-selectable
+                          (renders normally, no checkbox, skipped by Select All /
+                          keyboard). NOT the same as disabled (which greys out).
+  tree_path_separator   - path separator (default ".")
+  checkbox_mode         - "independent" (default) | "cascade". Cascade checks a
+                          node's whole subtree; a partial branch shows a tristate box.
+  cascade_select_policy - which values a cascade selection emits (badges/form/change):
+                          "rolled-up" (default, minimal cover) | "leaves" | "all".
+  full_title_member     - key holding a fully-qualified breadcrumb label; pair with
+                          show_badge_full_title (see BADGES). Never computed.
 
 VIRTUAL SCROLLING (large lists)
 -------------------------------

@@ -131,9 +131,14 @@ The **Tier-1** names are aligned across components so the mapping is predictable
 | Purpose | Base token | multiselect | daterangepicker |
 |---------|-----------|-------------|-----------------|
 | Brand / accent | `--base-accent-color` | `--ms-accent-color` | `--drp-accent-color` |
-| Background | `--base-main-bg` | `--ms-primary-bg` | `--drp-primary-bg` |
+| Background | `--base-hover-bg` * | `--ms-primary-bg` | `--drp-primary-bg` |
 | Text | `--base-text-color-1` | `--ms-text-color-1` | `--drp-text-primary` |
 | Border | `--base-border-color` | `--ms-border-color` | `--drp-border-color` |
+
+\* Accent, text, and border map 1:1. Background is the one indirect case:
+`--ms-primary-bg` reads `--base-hover-bg` first, falling back to a `color-mix`
+over `--base-main-bg` when it's unset — so set **both** (as above) for a
+predictable surface color.
 
 This *is* the base-layer contract in its original form — a shared token set you
 own. pure-admin is simply one ready-made provider of it; Scenario B is "bring
@@ -154,7 +159,7 @@ element selector so it can't leak into other components:
 web-multiselect {
   --ms-accent-color:        #10b981;   /* emerald */
   --ms-input-border-radius: 0.5rem;
-  --ms-dropdown-max-height: 24rem;
+  --ms-options-max-height: 24rem;
 }
 ```
 
@@ -192,6 +197,27 @@ the base layer keeps input heights consistent across all KeenMate components:
 
 ```css
 :root { --base-input-size-md-height: 4.0; }   /* 40px at --ms-rem: 10px */
+```
+
+### Independent panel widths
+
+The control (input), the options **dropdown**, and the **selected-items popover**
+are three separate panels with independent widths:
+
+```css
+web-multiselect {
+  --ms-dropdown-width: 60rem;          /* options dropdown; default: tracks the input */
+  --ms-selected-popover-width: 30rem;  /* "N selected" popover; default: intrinsic 32rem */
+}
+```
+
+Set the variables at app/theme level to size every picker at once. The
+`dropdown_width` / `selected_popover_width` attributes are per-instance sugar that
+write those variables on a single element:
+
+```heex
+<.web_multiselect id="cats" style="width: 15rem;"
+  dropdown_width="60rem" selected_popover_width="30rem" options={@opts} />
 ```
 
 ### Option rows — height and long labels

@@ -6,7 +6,7 @@ custom element. One package covers plain HEEx AND LiveView. The upstream JS + CS
 are bundled in the Hex package — no `npm install`.
 
 Bundled upstream version at runtime:
-  Keenmate.WebMultiselect.upstream_version()  #=> "1.12.0-rc05"
+  Keenmate.WebMultiselect.upstream_version()  #=> "1.12.0-rc08"
 
 1. INSTALL (Hex)
 ----------------

@@ -34,7 +34,8 @@ or `ai/cookbook.txt`.
   `"true"`/`"false"`. A `nil` attr is omitted (upstream default applies).
 - LiveView events are **opt-in** via `hook={true}` (resolves to
   `"KeenWebMultiselectHook"`). Events: `"web_multiselect:change"`
-  (`%{"id","values"}`), `":select"` / `":deselect"` (`%{"id","value"}`).
+  (`%{"id","values"}`), `":select"` / `":deselect"` (`%{"id","value","values"}` —
+  `value` is the delta, `values` the full selection after it).
 - The element renders `phx-update="ignore"`, so re-rendering will **not** push new
   options/selection. Use `Keenmate.WebMultiselect.push_update(socket, id, options:/value:)`.
 - Server-side search replies with `{:reply, %{results: [...]}, socket}` — not
