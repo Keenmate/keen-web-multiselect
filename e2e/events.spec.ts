@@ -102,3 +102,20 @@ test('select fires before change for one click (newest-first log)', async ({ pag
     expect(order.change).toBeGreaterThanOrEqual(0);
     expect(order.select).toBeGreaterThan(order.change);
 });
+
+test('custom value_member forwards scalar value/values, not the option map', async ({ page }) => {
+    // Regression: custom-shaped options (keyed by userId, no value/id) must still
+    // forward the extracted scalar. A regression emits the whole option map, which
+    // crashes scalar-expecting server handlers (to_string/1 on a Map).
+    const p = picker(page, 'picker-custom');
+    await openDropdown(p);
+    await optionByValue(p, '2').click(); // Jane Smith → userId 2
+
+    const log = page.locator('[data-testid="custom-events"]');
+    await expect(log).toContainText('web_multiselect:select');
+    // Scalar, honouring value_member="userId".
+    await expect(log).toContainText('"value" => 2');
+    await expect(log).toContainText('"values" => [2]');
+    // The whole option map must NOT leak into the payload.
+    await expect(log).not.toContainText('fullName');
+});

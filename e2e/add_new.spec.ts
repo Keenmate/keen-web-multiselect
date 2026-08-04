@@ -64,6 +64,9 @@ test('the created option appears in allOptions for re-selection', async ({ page 
 
     await expect.poll(() => getValue(p)).toEqual(['kiwi']);
 
-    const values = await p.evaluate((el: any) => el.picker.allOptions.map((o: any) => o.value));
-    expect(values).toContain('kiwi');
+    // Re-selectability: the engine's option array is a private field (#picker)
+    // since upstream 2.0.0, so assert it via the DOM instead — clear the typed
+    // term and confirm the freshly-created option persists as a selectable row.
+    await input.fill('');
+    await expect(p.locator('.ms__option[data-value="kiwi"]')).toBeVisible();
 });

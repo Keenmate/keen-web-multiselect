@@ -15,10 +15,12 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
   # forwarding these same events to the server (see /test/events).
 
   @code_events ~S"""
-  // Property handlers (the on* form) — return value ignored
-  el.onSelect   = (option)          => log('prop', 'onSelect', option.label);
-  el.onDeselect = (option)          => log('prop', 'onDeselect', option.label);
-  el.onChange   = (selectedOptions) => log('prop', 'onChange', selectedOptions.map(o => o.value));
+  // Property handlers (the on* form) — since upstream 2.0.0 these install real
+  // event listeners, so each receives the CustomEvent (read e.detail.*), not a
+  // bare argument. Return value ignored.
+  el.onSelect   = (e) => log('prop', 'onSelect', e.detail.option.label);
+  el.onDeselect = (e) => log('prop', 'onDeselect', e.detail.option.label);
+  el.onChange   = (e) => log('prop', 'onChange', e.detail.selectedValues);
 
   // The very same notifications as bubbling DOM events
   el.addEventListener('change', (e) => {
@@ -371,10 +373,10 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
         wait('events-select').then((eventsSelect) => {
           const eventsLog = logger(document.getElementById('events-log'));
           eventsSelect.options = skills;
-          eventsSelect.onSelect   = (option) => eventsLog('tag-prop', '[prop] onSelect', option.label);
-          eventsSelect.onDeselect = (option) => eventsLog('tag-prop', '[prop] onDeselect', option.label);
-          eventsSelect.onChange   = (selectedOptions) =>
-            eventsLog('tag-prop', '[prop] onChange', JSON.stringify(selectedOptions.map(o => o.value)));
+          eventsSelect.onSelect   = (e) => eventsLog('tag-prop', '[prop] onSelect', e.detail.option.label);
+          eventsSelect.onDeselect = (e) => eventsLog('tag-prop', '[prop] onDeselect', e.detail.option.label);
+          eventsSelect.onChange   = (e) =>
+            eventsLog('tag-prop', '[prop] onChange', JSON.stringify(e.detail.selectedValues));
           eventsSelect.addEventListener('change', (e) =>
             eventsLog('tag-event', '[event] change', JSON.stringify(e.detail.selectedValues)));
         });
@@ -400,7 +402,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
             }
             // allow
           };
-          exclusiveSelect.onSelect = (option) => exclusiveLog('tag-ok', '[allowed] onSelect', option.label);
+          exclusiveSelect.onSelect = (e) => exclusiveLog('tag-ok', '[allowed] onSelect', e.detail.option.label);
         });
 
         // --- 3. beforeDeselectCallback (required item) ------------
@@ -419,7 +421,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
               return false;
             }
           };
-          requiredSelect.onDeselect = (option) => requiredLog('tag-ok', '[removed] onDeselect', option.label);
+          requiredSelect.onDeselect = (e) => requiredLog('tag-ok', '[removed] onDeselect', e.detail.option.label);
           requiredSelect.setSelected(['lead']); // pre-select; bypasses the veto
         });
       </script>

@@ -36,10 +36,12 @@ async function getValue(p: Locator): Promise<string | string[] | null> {
 }
 
 async function getOptionValues(p: Locator): Promise<string[]> {
-    // The option array lives on the internal picker, not the custom element
-    // (the element exposes `picker`, `getValue()`, `getSelected()`, etc.).
+    // Read the current option list from the public `el.options` getter. Since
+    // upstream 2.0.0 the engine (`#picker`) is a private field — its `allOptions`
+    // is no longer reachable; `el.options` returns the assigned option array
+    // (what the push_event set), which is exactly what this fixture asserts on.
     return p.evaluate((el: any) =>
-        (el.picker?.allOptions || []).map((o: any) => o.value)
+        (el.options || []).map((o: any) => o.value)
     );
 }
 

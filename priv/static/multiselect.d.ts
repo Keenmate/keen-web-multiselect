@@ -1,4 +1,8 @@
-import { Placement } from '@floating-ui/dom';
+import { BlissElement } from '@keenmate/web-components-core';
+import { InputDef } from '@keenmate/web-components-core';
+import { Logger } from '@keenmate/web-components-core';
+import { LogLevelDesc } from '@keenmate/web-components-core';
+import { Placement } from '@keenmate/web-components-core/positioning';
 
 /**
  * Action button configuration for dropdown actions (Select All, Clear All, custom actions)
@@ -76,47 +80,21 @@ export declare type BadgesPosition = 'top' | 'bottom' | 'left' | 'right';
  */
 export declare type BadgesThresholdMode = 'count' | 'partial';
 
-declare const BaseElement: typeof HTMLElement;
+export declare const dataLogger: Logger;
 
-export declare const dataLogger: any;
-
-/**
- * Disable all logging (set to silent level)
- */
+/** Disable all logging (silent). */
 export declare function disableLogging(): void;
 
-/**
- * Enable all logging (set to debug level)
- */
+/** Enable all logging (debug level). */
 export declare function enableLogging(): void;
 
-export declare interface GlobalMultiSelectAPI {
-    version: () => string;
-    config: {
-        name: string;
-        version: string;
-        author: string;
-        license: string;
-        repository: string;
-        homepage: string;
-    };
-    logging: {
-        enableLogging: () => void;
-        disableLogging: () => void;
-        setLogLevel: (level: string) => void;
-        setCategoryLevel: (category: string, level: string) => void;
-        getCategories: () => string[];
-    };
-    register: () => void;
-    getInstances: () => HTMLElement[];
-}
+export declare const initLogger: Logger;
 
-export declare const initLogger: any;
-
-export declare const interactionLogger: any;
+export declare const interactionLogger: Logger;
 
 /**
- * List of all logging categories for introspection
+ * Full (namespaced) category names, kept for the `getCategories()` global API
+ * and any consumer that introspected the list.
  */
 export declare const LOGGING_CATEGORIES: string[];
 
@@ -227,7 +205,8 @@ declare interface MultiSelectConfig<T = any> {
      */
     checkboxMode?: 'independent' | 'cascade';
     /**
-     * In `cascade` mode, which values a selection emits (badges / form / change):
+     * In `cascade` mode, which values a selection emits (badges / form / change).
+     *
      *   - `rolled-up` (default) — minimal cover: a fully-selected subtree collapses
      *     to its root ("complete node"); partially-selected branches emit their
      *     individually-checked descendants. Rolls to the nearest selectable
@@ -258,7 +237,13 @@ declare interface MultiSelectConfig<T = any> {
     renderSelectedContentCallback?: (item: T) => string;
     /** HTML form field ID/name for hidden input */
     formFieldId?: string;
-    /** Format for value serialization (forms and callbacks) */
+    /**
+     * Format for value serialization (hidden form inputs and callbacks). Default: `json`.
+     *
+     * - `json` — a JSON array string, e.g. `["a","b"]`
+     * - `csv` — comma-separated values, e.g. `a,b`
+     * - `array` — one hidden input per value (`name[]` entries)
+     */
     valueFormat?: ValueFormat;
     /** Custom callback to format value */
     getValueFormatCallback?: (selectedValues: (string | number)[]) => string;
@@ -294,7 +279,13 @@ declare interface MultiSelectConfig<T = any> {
     shouldKeepSearchOnClose?: boolean;
     /** Enable virtual scrolling for large datasets (internal: isVirtualScrollEnabled) */
     isVirtualScrollEnabled?: boolean;
-    /** Vertical alignment of checkboxes relative to option content */
+    /**
+     * Vertical alignment of checkboxes relative to option content. Default: `center`.
+     *
+     * - `top` — align to the top of the row
+     * - `center` — vertically centered
+     * - `bottom` — align to the bottom of the row
+     */
     checkboxAlign?: 'top' | 'center' | 'bottom';
     /** Hint text shown above the input while the dropdown is open. */
     searchHint?: string;
@@ -316,11 +307,31 @@ declare interface MultiSelectConfig<T = any> {
     dropdownMinWidth?: string | null;
     /** Maximum width for the dropdown (e.g., '40rem', '500px') */
     dropdownMaxWidth?: string | null;
-    /** Display mode for selected items in badges area */
+    /**
+     * Display mode for selected items in the badges area. Default: `badges`.
+     *
+     * - `badges` — one removable badge per selected option
+     * - `count` — a single "N selected" count badge
+     * - `compact` — condensed badges (first few, tighter spacing)
+     * - `partial` — a limited number of badges plus a "+X more" badge
+     * - `none` — hide the badges area entirely
+     */
     badgesDisplayMode?: BadgesDisplayMode;
-    /** Position of badges container */
+    /**
+     * Position of the badges container relative to the input. Default: `bottom`.
+     *
+     * - `top` — above the input
+     * - `bottom` — below the input
+     * - `left` — to the left of the input
+     * - `right` — to the right of the input
+     */
     badgesPosition?: BadgesPosition;
-    /** Threshold behavior mode: 'count' shows count badge, 'partial' shows limited badges + more badge */
+    /**
+     * How the display switches once `badgesThreshold` is exceeded. Default: `count`.
+     *
+     * - `count` — collapse all selections into a single count badge
+     * - `partial` — keep up to `badgesMaxVisible` badges and add a "+X more" badge
+     */
     badgesThresholdMode?: BadgesThresholdMode;
     /** Maximum height for dropdown */
     maxHeight?: string;
@@ -328,15 +339,44 @@ declare interface MultiSelectConfig<T = any> {
     emptyMessage?: string;
     /** Message shown while loading async data */
     loadingMessage?: string;
-    /** Search input display mode */
+    /**
+     * How the search input behaves. Default: `normal`.
+     *
+     * - `normal` — editable search box
+     * - `readonly` — visible but not editable (acts as a picker; uses `selectPlaceholder`)
+     * - `hidden` — no search box at all
+     */
     searchInputMode?: SearchInputMode;
-    /** Search behavior mode: 'filter' (hide non-matches) or 'navigate' (jump to matches, keep all visible) */
+    /**
+     * Search behavior mode. Default: `filter`.
+     *
+     * - `filter` — hide options that don't match
+     * - `navigate` — keep all options visible and jump focus to matches
+     */
     searchMode?: SearchMode;
-    /** Layout mode for action buttons: 'nowrap' (default) or 'wrap' for multi-row */
+    /**
+     * Layout mode for the action buttons. Default: `nowrap`.
+     *
+     * - `nowrap` — buttons stay on a single row
+     * - `wrap` — buttons wrap onto multiple rows
+     */
     actionsLayout?: ActionsLayout;
-    /** Where the action-buttons block sits in the dropdown: 'top' (default) or 'bottom' (sticky footer). */
+    /**
+     * Where the action-buttons block sits in the dropdown. Default: `top`.
+     *
+     * - `top` — above the options list
+     * - `bottom` — sticky footer below the options list
+     */
     actionsPosition?: ActionsPosition;
-    /** Horizontal arrangement of buttons within a row: 'stretch' (default, full-width), 'left', 'right', 'center', or 'space-between'. */
+    /**
+     * Horizontal arrangement of buttons within a row. Default: `stretch`.
+     *
+     * - `stretch` — full-width, evenly divided
+     * - `left` — packed to the start
+     * - `right` — packed to the end
+     * - `center` — centered
+     * - `space-between` — spread to the edges with gaps between
+     */
     actionsAlign?: ActionsAlign;
     /** Auto-switch from badges to count when threshold is exceeded */
     badgesThreshold?: number | null;
@@ -403,7 +443,12 @@ declare interface MultiSelectConfig<T = any> {
     getRemoveButtonTooltipCallback?: ((item: T) => string) | null;
     /** Format string for remove button tooltip text. Use {0} as placeholder for item name. Default: "Remove {0}" */
     removeButtonTooltipText?: string;
-    /** Tooltip placement relative to badge */
+    /**
+     * Tooltip placement relative to the badge (Floating UI `Placement`). Default: `top`.
+     *
+     * One of: `top`, `top-start`, `top-end`, `bottom`, `bottom-start`, `bottom-end`,
+     * `left`, `left-start`, `left-end`, `right`, `right-start`, `right-end`.
+     */
     badgeTooltipPlacement?: Placement;
     /** Delay before showing tooltip in milliseconds */
     badgeTooltipDelay?: number;
@@ -413,7 +458,14 @@ declare interface MultiSelectConfig<T = any> {
     isOptionTooltipsEnabled?: boolean;
     /** Callback to generate custom tooltip content for a dropdown option. Default: display value, plus subtitle on the next line when present. */
     getOptionTooltipCallback?: ((item: T) => string | HTMLElement) | null;
-    /** Option tooltip placement. Default `'top-start'` (anchored to the row's start edge, so it doesn't center on a full-width row). Use `'left'`/`'right'` (start/end side) for a narrow multiselect. */
+    /**
+     * Option tooltip placement (Floating UI `Placement`). Default `top-start`
+     * (anchored to the row's start edge, so it doesn't center on a full-width row).
+     * Use `left`/`right` (or their start/end variants) for a narrow multiselect.
+     *
+     * One of: `top`, `top-start`, `top-end`, `bottom`, `bottom-start`, `bottom-end`,
+     * `left`, `left-start`, `left-end`, `right`, `right-start`, `right-end`.
+     */
     optionTooltipPlacement?: Placement;
     /** Delay before showing an option tooltip (ms). Falls back to `badgeTooltipDelay`, then `100`. */
     optionTooltipDelay?: number;
@@ -427,243 +479,40 @@ declare interface MultiSelectConfig<T = any> {
     hostElement?: HTMLElement;
 }
 
-export declare class MultiSelectElement<T = any> extends BaseElement {
+export declare class MultiSelectElement<T = any> extends BlissElement<MultiSelectEvents> {
+    #private;
     static formAssociated: boolean;
-    private picker?;
-    private containerElement?;
-    private shadow;
-    private internals?;
-    private _options?;
-    private _hasDeclarativeOptions;
-    private _valueMember?;
-    private _getValueCallback?;
-    private _displayValueMember?;
-    private _getDisplayValueCallback?;
-    private _getBadgeDisplayCallback?;
-    private _getBadgeClassCallback?;
-    private _customStylesCallback?;
-    private _searchValueMember?;
-    private _getSearchValueCallback?;
-    private _iconMember?;
-    private _getIconCallback?;
-    private _subtitleMember?;
-    private _getSubtitleCallback?;
-    private _getFullTitleCallback?;
-    private _groupMember?;
-    private _getGroupCallback?;
-    private _renderGroupLabelContentCallback?;
-    private _disabledMember?;
-    private _getDisabledCallback?;
-    private _getPathCallback?;
-    private _isTreeEnabled?;
-    private _getIsSelectableCallback?;
-    private _getValueFormatCallback?;
-    private _getBadgeTooltipCallback?;
-    private _getOptionTooltipCallback?;
-    private _getRemoveButtonTooltipCallback?;
-    private _renderOptionContentCallback?;
-    private _renderBadgeContentCallback?;
-    private _renderSelectedItemContentCallback?;
-    private _getSelectedItemClassCallback?;
-    private _renderSelectedContentCallback?;
-    private _getCounterCallback?;
-    private _actionButtons?;
-    private _batchDepth;
-    private _batchPartial;
-    private _batchNeedsReinit;
-    private _beforeSearchCallback?;
-    private _beforeSelectCallback?;
-    private _beforeDeselectCallback?;
-    private _searchCallback?;
-    private _addNewCallback?;
-    private _onSelect?;
-    private _onDeselect?;
-    private _onChange?;
-    static get observedAttributes(): string[];
+    protected static inputs: readonly InputDef<unknown>[];
+    protected static events: readonly [{
+        readonly name: "select";
+        readonly description: "An option was selected. `detail.option` is the selected option; `detail.selectedOptions`/`detail.selectedValues` are the full selection.";
+    }, {
+        readonly name: "deselect";
+        readonly description: "An option was removed from the selection. `detail.option` is that option.";
+    }, {
+        readonly name: "change";
+        readonly description: "The selection changed. `detail.selectedOptions`/`detail.selectedValues` are the full selection.";
+    }];
+    onSelect: ((e: CustomEvent<MultiSelectEventDetail<T>>) => void) | null;
+    onDeselect: ((e: CustomEvent<MultiSelectEventDetail<T>>) => void) | null;
+    onChange: ((e: CustomEvent<MultiSelectEventDetail<T>>) => void) | null;
     constructor();
     /**
      * Called by the browser when the surrounding <form> is reset. Clears the
-     * picker's selection so the multiselect actually participates in the
-     * standard reset lifecycle. (Before form-association, reset was a no-op
-     * because the hidden inputs were re-stamped from internal state on every
-     * render.)
+     * picker's selection so the control participates in the standard reset.
      */
     formResetCallback(): void;
-    connectedCallback(): void;
-    disconnectedCallback(): void;
-    attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
-    /**
-     * Set several attributes in one in-place update — a single re-render instead of one per
-     * attribute (and a single reinit at most if any change is structural). Keys are attribute
-     * names in kebab-case, exactly as `setAttribute`. A value of `null`/`undefined`/`false`
-     * removes the attribute; `true` sets it to an empty string; anything else is stringified.
-     *
-     * @example
-     *   el.setAttributes({
-     *     'search-placeholder': t('search'),
-     *     'select-placeholder': t('pick'),
-     *     'no-data-placeholder': t('noData'),
-     *   });
-     */
-    setAttributes(attrs: Record<string, string | number | boolean | null | undefined>): void;
-    private render;
-    private renderDebugInfo;
-    private updateDebugInfo;
-    /**
-     * Parse declarative <option> and <optgroup> elements from Light DOM
-     * Returns array of options in the format expected by the picker
-     */
-    private parseDeclarativeOptions;
-    private _declarativeSelectedValues?;
-    /** Parse all observed attributes via ATTRIBUTE_TABLE into a partial config object. */
-    private parseAttributesFromTable;
-    private initializePicker;
-    private reinitialize;
-    /**
-     * Apply a partial config update to the live picker. Falls back to a full reinit if the
-     * picker can't apply the change in place (e.g. adding/removing the `searchHint` element).
-     * No-op if the picker hasn't been initialized yet — the next `initializePicker` will pick
-     * up the new programmatic state.
-     */
-    private updatePicker;
-    /** Normalize the picker's getValue() return into the array form expected by event detail. */
-    private collectSelectedValues;
-    get options(): T[] | undefined;
-    set options(value: T[] | undefined);
-    set valueMember(value: string | null);
-    get valueMember(): string | null;
-    set displayValueMember(value: string | null);
-    get displayValueMember(): string | null;
-    set searchValueMember(value: string | null);
-    get searchValueMember(): string | null;
-    set iconMember(value: string | null);
-    get iconMember(): string | null;
-    set subtitleMember(value: string | null);
-    get subtitleMember(): string | null;
-    set fullTitleMember(value: string | null);
-    get fullTitleMember(): string | null;
-    set groupMember(value: string | null);
-    get groupMember(): string | null;
-    set disabledMember(value: string | null);
-    get disabledMember(): string | null;
-    set pathMember(value: string | null);
-    get pathMember(): string | null;
-    set parentPathMember(value: string | null);
-    get parentPathMember(): string | null;
-    set levelMember(value: string | null);
-    get levelMember(): string | null;
-    set hasChildrenMember(value: string | null);
-    get hasChildrenMember(): string | null;
-    set isSelectableMember(value: string | null);
-    get isSelectableMember(): string | null;
-    set treePathSeparator(value: string | null);
-    get treePathSeparator(): string | null;
-    set checkboxMode(value: 'independent' | 'cascade' | null);
-    get checkboxMode(): 'independent' | 'cascade' | null;
-    set cascadeSelectPolicy(value: 'rolled-up' | 'leaves' | 'all' | null);
-    get cascadeSelectPolicy(): 'rolled-up' | 'leaves' | 'all' | null;
-    set getValueCallback(callback: ((item: T) => string | number) | undefined);
-    get getValueCallback(): ((item: T) => string | number) | undefined;
-    set getDisplayValueCallback(callback: ((item: T) => string) | undefined);
-    get getDisplayValueCallback(): ((item: T) => string) | undefined;
-    set getBadgeDisplayCallback(callback: ((item: T) => string) | undefined);
-    get getBadgeDisplayCallback(): ((item: T) => string) | undefined;
-    set getBadgeClassCallback(callback: ((item: T) => string | string[]) | undefined);
-    get getBadgeClassCallback(): ((item: T) => string | string[]) | undefined;
-    set customStylesCallback(value: (() => string) | undefined);
-    get customStylesCallback(): (() => string) | undefined;
-    set getSearchValueCallback(callback: ((item: T) => string) | undefined);
-    get getSearchValueCallback(): ((item: T) => string) | undefined;
-    set getIconCallback(callback: ((item: T) => string) | undefined);
-    get getIconCallback(): ((item: T) => string) | undefined;
-    set getSubtitleCallback(callback: ((item: T) => string) | undefined);
-    get getSubtitleCallback(): ((item: T) => string) | undefined;
-    /** Callback returning an option's full title (used by badges when show-badge-full-title is on). */
-    set getFullTitleCallback(callback: ((item: T) => string) | undefined);
-    get getFullTitleCallback(): ((item: T) => string) | undefined;
-    set getGroupCallback(callback: ((item: T) => string) | undefined);
-    get getGroupCallback(): ((item: T) => string) | undefined;
-    /** Callback returning an option's materialized dot-path (enables tree mode). */
-    set getPathCallback(callback: ((item: T) => string) | undefined);
-    get getPathCallback(): ((item: T) => string) | undefined;
-    /** Force tree mode on/off. When unset, tree mode auto-enables if a path source is present. */
-    set isTreeEnabled(value: boolean | undefined);
-    get isTreeEnabled(): boolean | undefined;
-    /**
-     * Callback deciding whether a tree node is selectable (takes precedence over
-     * `is-selectable-member`). Receives the built node — e.g.
-     * `el.getIsSelectableCallback = (node) => !node.hasChildren` for leaves only.
-     */
-    set getIsSelectableCallback(callback: ((node: LTreeNode<T>) => boolean) | undefined);
-    get getIsSelectableCallback(): ((node: LTreeNode<T>) => boolean) | undefined;
-    set renderGroupLabelContentCallback(callback: ((groupName: string) => string | HTMLElement) | undefined);
-    get renderGroupLabelContentCallback(): ((groupName: string) => string | HTMLElement) | undefined;
-    set getDisabledCallback(callback: ((item: T) => boolean) | undefined);
-    get getDisabledCallback(): ((item: T) => boolean) | undefined;
-    set renderOptionContentCallback(callback: ((item: T, context: OptionContentRenderContext) => string | HTMLElement) | undefined);
-    get renderOptionContentCallback(): ((item: T, context: OptionContentRenderContext) => string | HTMLElement) | undefined;
-    set renderBadgeContentCallback(callback: ((item: T, context: BadgeContentRenderContext) => string | HTMLElement) | undefined);
-    get renderBadgeContentCallback(): ((item: T, context: BadgeContentRenderContext) => string | HTMLElement) | undefined;
-    set renderSelectedItemContentCallback(callback: ((item: T) => string | HTMLElement) | undefined);
-    get renderSelectedItemContentCallback(): ((item: T) => string | HTMLElement) | undefined;
-    set getSelectedItemClassCallback(callback: ((item: T) => string | string[]) | undefined);
-    get getSelectedItemClassCallback(): ((item: T) => string | string[]) | undefined;
-    set renderSelectedContentCallback(callback: ((item: T) => string) | undefined);
-    get renderSelectedContentCallback(): ((item: T) => string) | undefined;
-    set name(value: string | null);
+    /** Structural change (or first connect): mirror CSS vars, then (re)build the picker. */
+    protected reinit(): void;
+    /** Cosmetic change: mirror CSS vars / custom styles / debug, patch the picker in place. */
+    protected update(partial: Record<string, unknown>): void;
+    /** Activate: ensure the picker exists (a DOM move destroyed it in disconnect()). */
+    protected connect(): void;
+    /** Deactivate: tear the picker down (rebuilt on the next connect). */
+    protected disconnect(): void;
+    /** Form field name (mirrors the `name` attribute → `formFieldId`). */
     get name(): string | null;
-    set valueFormat(value: 'json' | 'csv' | 'array' | null);
-    get valueFormat(): string | null;
-    set getValueFormatCallback(callback: ((values: (string | number)[]) => string) | undefined);
-    get getValueFormatCallback(): ((values: (string | number)[]) => string) | undefined;
-    set thresholdMode(value: 'count' | 'partial' | null);
-    get thresholdMode(): string | null;
-    set badgesMaxVisible(value: number | null);
-    get badgesMaxVisible(): number | null;
-    set checkboxAlign(value: 'top' | 'center' | 'bottom' | null);
-    get checkboxAlign(): string | null;
-    set enableBadgeTooltips(value: boolean);
-    get enableBadgeTooltips(): boolean;
-    set enableOptionTooltips(value: boolean);
-    get enableOptionTooltips(): boolean;
-    set getOptionTooltipCallback(callback: ((item: T) => string | HTMLElement) | undefined);
-    get getOptionTooltipCallback(): ((item: T) => string | HTMLElement) | undefined;
-    set optionTooltipPlacement(value: string | null);
-    get optionTooltipPlacement(): string | null;
-    set optionTooltipFollowCursor(value: boolean);
-    get optionTooltipFollowCursor(): boolean;
-    set actionsPosition(value: string | null);
-    get actionsPosition(): string | null;
-    set actionsAlign(value: string | null);
-    get actionsAlign(): string | null;
-    set badgeTooltipPlacement(value: string | null);
-    get badgeTooltipPlacement(): string | null;
-    set getBadgeTooltipCallback(callback: ((item: T) => string | HTMLElement) | undefined);
-    get getBadgeTooltipCallback(): ((item: T) => string | HTMLElement) | undefined;
-    set getRemoveButtonTooltipCallback(callback: ((item: T) => string) | undefined);
-    get getRemoveButtonTooltipCallback(): ((item: T) => string) | undefined;
-    set removeButtonTooltipText(value: string | null);
-    get removeButtonTooltipText(): string | null;
-    set getCounterCallback(callback: ((count: number, moreCount?: number) => string) | undefined);
-    get getCounterCallback(): ((count: number, moreCount?: number) => string) | undefined;
-    get beforeSearchCallback(): ((searchTerm: string) => string | null) | undefined;
-    set beforeSearchCallback(callback: ((searchTerm: string) => string | null) | undefined);
-    get beforeSelectCallback(): ((option: T, selectedOptions: T[]) => boolean | void) | undefined;
-    set beforeSelectCallback(callback: ((option: T, selectedOptions: T[]) => boolean | void) | undefined);
-    get beforeDeselectCallback(): ((option: T, selectedOptions: T[]) => boolean | void) | undefined;
-    set beforeDeselectCallback(callback: ((option: T, selectedOptions: T[]) => boolean | void) | undefined);
-    get searchCallback(): ((searchTerm: string, signal?: AbortSignal) => Promise<T[]>) | undefined;
-    set searchCallback(callback: ((searchTerm: string, signal?: AbortSignal) => Promise<T[]>) | undefined);
-    get addNewCallback(): ((value: string) => T | Promise<T>) | undefined;
-    set addNewCallback(callback: ((value: string) => T | Promise<T>) | undefined);
-    get onSelect(): ((option: T) => void) | undefined;
-    set onSelect(callback: ((option: T) => void) | undefined);
-    get onDeselect(): ((option: T) => void) | undefined;
-    set onDeselect(callback: ((option: T) => void) | undefined);
-    get onChange(): ((selectedOptions: T[]) => void) | undefined;
-    set onChange(callback: ((selectedOptions: T[]) => void) | undefined);
-    get actionButtons(): any[] | undefined;
-    set actionButtons(value: any[] | undefined);
+    set name(value: string | null);
     get selectedValue(): string | number | (string | number)[] | null;
     get selectedItem(): T | null;
     getSelected(): T[];
@@ -686,6 +535,12 @@ export declare interface MultiSelectEventDetail<T = any> {
     /** The option that triggered the event (for select/deselect) */
     option?: T;
 }
+
+declare type MultiSelectEvents = {
+    select: MultiSelectEventDetail;
+    deselect: MultiSelectEventDetail;
+    change: MultiSelectEventDetail;
+};
 
 /**
  * Legacy interface for backward reference
@@ -766,6 +621,43 @@ declare interface OptionContentRenderContext {
 }
 
 /**
+ * `data-options` payload parsers. The `data-options-format` attribute selects
+ * one; each turns the raw attribute string into an options array the picker
+ * understands. Pure + total (never throws) so they unit-test in isolation and a
+ * malformed payload degrades to `[]` with a describable error rather than
+ * breaking reinit.
+ */
+export declare const OPTIONS_FORMATS: readonly ["json", "csv", "plain"];
+
+export declare type OptionsFormat = (typeof OPTIONS_FORMATS)[number];
+
+export declare interface ParsedOptions {
+    /** Parsed options: objects for `json`/`csv`, `[value, label]` tuples for `plain`. */
+    options: unknown[];
+    /** A human-readable reason when the payload was malformed (`options` is then `[]`). */
+    error?: string;
+}
+
+/**
+ * Parse a `data-options` payload per `format`:
+ *  - `json`  — a JSON array of option objects or `[value, label]` tuples.
+ *              (`splitter`/`rowSplitter` do not apply.)
+ *  - `csv`   — rows split on `rowSplitter`, cells on `splitter`; the first row is a
+ *              header and each later row becomes an object keyed by the header cells
+ *              (map columns via `*-member`). RFC-4180-ish quoting on the cell splitter.
+ *  - `plain` — bare values split on `splitter` and `rowSplitter` -> `[value, label]`
+ *              tuples (value === label), so it renders with no member config.
+ */
+export declare function parseOptionsData(raw: string | null | undefined, format: OptionsFormat, opts?: ParseOptionsOptions): ParsedOptions;
+
+declare interface ParseOptionsOptions {
+    /** Field/cell delimiter for `csv` and `plain` (default `,`). Escapes `\t \n \r \\` are honoured. */
+    splitter?: string;
+    /** Row/record delimiter for `csv` and `plain` (default newline). Escapes honoured. */
+    rowSplitter?: string;
+}
+
+/**
  * Search input display mode
  */
 export declare type SearchInputMode = 'normal' | 'readonly' | 'hidden';
@@ -778,20 +670,16 @@ export declare type SearchInputMode = 'normal' | 'readonly' | 'hidden';
 export declare type SearchMode = 'filter' | 'navigate';
 
 /**
- * Set log level for a specific category. Accepts either the full prefixed name
- * (e.g. `MULTISELECT:UI`) or the bare suffix (`UI`) for convenience.
- * @param category Category logger name; bare names (UI/DATA/INIT/INTERACTION) are normalized to the prefixed form.
- * @param level Log level ('trace' | 'debug' | 'info' | 'warn' | 'error' | 'silent')
+ * Set the level of one category. Accepts the full prefixed name
+ * (`MULTISELECT:UI`) or the bare suffix (`UI`) — both normalize to the category
+ * key the core bundle expects.
  */
-export declare function setCategoryLevel(category: string, level: string): void;
+export declare function setCategoryLevel(category: string, level: LogLevelDesc): void;
 
-/**
- * Set log level for all loggers
- * @param level Log level to set ('trace' | 'debug' | 'info' | 'warn' | 'error' | 'silent')
- */
-export declare function setLogLevel(level: string): void;
+/** Set the same level on every category. */
+export declare function setLogLevel(level: LogLevelDesc): void;
 
-export declare const uiLogger: any;
+export declare const uiLogger: Logger;
 
 /**
  * Value format for serialization (forms and callbacks)
@@ -829,6 +717,7 @@ export declare class WebMultiSelect<T = any> {
     private hintCleanup;
     private selectedPopoverCleanup;
     private tooltips;
+    private readonly onDropdownScroll;
     private virtualScroll;
     private optionsContainer;
     private selectedPopoverVirtualScroll;
@@ -1076,17 +965,14 @@ export declare class WebMultiSelect<T = any> {
      */
     private anchorFloatingPanel;
     /**
-     * Sanity-check that the browser placed the panel where we told it to. With `position: fixed`
-     * and no transformed/perspective/filter ancestor, `left: ${x}px` must render at viewport-x = x.
-     * If the rendered position drifts, the consumer has an ancestor that establishes a fixed
-     * containing block but isn't on our reliable-anchors list (likely `contain: paint|layout|strict`
-     * or `container-type` — which the spec says creates a CB but the browser's actual behavior
-     * varies across shadow-DOM scenarios). We can't fix it from inside the library, but we can
-     * surface a clear warning so the developer knows where to look.
-     *
-     * Fires at most once per multiselect instance to avoid flooding the console during autoUpdate.
+     * Surface a multiselect-branded, once-per-instance warning when core's drift check
+     * (`anchor`'s `onDrift`) reports the panel didn't land where it was positioned. The
+     * consumer has an ancestor that establishes a fixed containing block but isn't on the
+     * reliable-anchors list (likely `contain: paint|layout|strict` or `container-type`).
+     * We can't fix it from inside the library, but we point at the likely culprit. Core
+     * owns the measurement + culprit-finding + CB-CSS diagnostic (`detectFixedDrift`).
      */
-    private verifyPanelLanded;
+    private warnDrift;
     private positionDropdown;
     private positionHint;
     private parseInitialSelection;
@@ -1166,6 +1052,13 @@ export declare class WebMultiSelect<T = any> {
      * `filteredOptions`, the same global index `renderOption` was given.
      */
     private attachOptionTooltips;
+    /**
+     * Hide (don't destroy) every currently-shown option tooltip immediately,
+     * ignoring the hide delay. Wired to dropdown scroll so a tooltip can't trail
+     * its recycling/scrolling anchor row. Handles stay in the map; a fresh hover
+     * re-shows them.
+     */
+    private hideOptionTooltips;
     /**
      * Destroy only the option tooltips (prefixed `option-`). Called before re-rendering or
      * recycling the options list so per-option tooltip state doesn't leak.

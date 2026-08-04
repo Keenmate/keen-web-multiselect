@@ -60,6 +60,31 @@ defmodule Keenmate.WebMultiselect.Components do
       * a list of arbitrary maps when paired with `*_member` or `get_*_callback` props (JS side)
     """
 
+  attr :data_options_format, :string,
+    default: nil,
+    doc: """
+    One of `"json"` / `"csv"` / `"plain"`. Format of a **raw `data-options` string** you supply
+    yourself (via `:rest`), added upstream
+    in 2.0.0: `json` (default — a JSON array), `csv` (first row is a header; map columns with
+    `*_member`), or `plain` (bare values → `value=label`). Not needed for the `:options` prop —
+    that path always emits JSON, so leave this at the `json` default unless you hand-write
+    `data-options` as CSV/plain text.
+    """
+
+  attr :data_options_splitter, :string,
+    default: nil,
+    doc: """
+    Field/cell delimiter for `csv`/`plain` `data-options` (default `,`). Honours `\\t` `\\n` `\\r`
+    escapes, so a tab (TSV) is expressible in the attribute. Ignored for `json`.
+    """
+
+  attr :data_options_row_splitter, :string,
+    default: nil,
+    doc: """
+    Row/record delimiter for `csv`/`plain` `data-options` (default newline). Honours `\\t` `\\n`
+    `\\r` escapes. Ignored for `json`.
+    """
+
   attr :hook, :any,
     default: nil,
     doc: """

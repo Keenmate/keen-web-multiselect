@@ -7,7 +7,7 @@ defmodule Keenmate.WebMultiselect do
   for how to wire up the bundled JS, CSS, and the optional LiveView hook.
   """
 
-  @upstream_version "1.12.0-rc08"
+  @upstream_version "2.0.0-rc02"
 
   @doc """
   The version of `@keenmate/web-multiselect` bundled with this release.

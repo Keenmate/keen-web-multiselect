@@ -40,13 +40,23 @@ defmodule TestAppWeb.Examples.SearchIndexLive do
 
   @wire_code ~S"""
   // FlexSearch lives entirely in your app — never in the multiselect bundle.
-  import FlexSearch, { Charset } from "https://esm.sh/flexsearch@0.8.212";
+  import FlexSearch from "https://esm.sh/flexsearch@0.8.212";
 
-  const index = new FlexSearch.Index({ tokenize: "full", encoder: Charset.Normalize });
-  el.options.forEach((o, i) => index.add(i, `${o.label} ${o.value} ${o.full_title}`));
+  // Fold diacritics so accented labels match plain ASCII (ü→u, é→e), applied to
+  // both the indexed text and the query so they meet on the same normalized form.
+  const fold = (s) => String(s || "").normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
+  // The wrapper feeds options via the `data-options` attribute, which upstream parses
+  // into `optionsSource` — read that when the JS `options` property is empty.
+  const opts = (Array.isArray(el.options) && el.options.length)
+    ? el.options
+    : JSON.parse(el.optionsSource || "[]");
+
+  const index = new FlexSearch.Index({ tokenize: "full" }); // "full" = substring matching
+  opts.forEach((o, i) => index.add(i, fold(`${o.label} ${o.value} ${o.full_title}`)));
 
   el.searchCallback = (term) =>
-    (index.search(term, { limit: 80 }) || []).map((i) => el.options[i]);
+    (index.search(fold(term), { limit: 80 }) || []).map((i) => opts[i]);
   """
 
   def mount(_params, _session, socket) do
@@ -120,12 +130,28 @@ defmodule TestAppWeb.Examples.SearchIndexLive do
     </.example_page>
 
     <script type="module">
-      import FlexSearch, { Charset } from "https://esm.sh/flexsearch@0.8.212";
+      import FlexSearch from "https://esm.sh/flexsearch@0.8.212";
+
+      // Fold diacritics to plain ASCII (ü→u, é→e, ł→l…) deterministically, rather
+      // than relying on a FlexSearch encoder preset — this is what makes "zur" find
+      // "Zürich" and "sao" find "São Paulo". Applied to BOTH the indexed text and the
+      // query so they meet on the same normalized form.
+      const fold = (s) =>
+        String(s || "").normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+
+      // Resolve the option list. The wrapper feeds options via the `data-options`
+      // attribute, which upstream 2.0.0 parses into `optionsSource` — NOT the JS
+      // `options` property (that only reflects a direct `el.options = …` assignment).
+      // So read `el.options` when it's populated, otherwise parse `optionsSource`.
+      const optionsOf = (el) => {
+        if (Array.isArray(el.options) && el.options.length) return el.options;
+        try { return JSON.parse(el.optionsSource || "[]"); } catch { return []; }
+      };
 
       const wait = (id) => new Promise((resolve) => {
         const check = () => {
           const el = document.getElementById(id);
-          if (el && el.tagName.toLowerCase() === 'web-multiselect' && Array.isArray(el.options)) resolve(el);
+          if (el && el.tagName.toLowerCase() === 'web-multiselect' && optionsOf(el).length) resolve(el);
           else requestAnimationFrame(check);
         };
         check();
@@ -135,14 +161,15 @@ defmodule TestAppWeb.Examples.SearchIndexLive do
       // plain-JS exact/prefix matcher for codes (ranked first — FlexSearch ranks
       // numeric codes poorly). `text(o)` is indexed; `code(o)` (optional) is matched exactly.
       const wireFlexSearch = (el, { text, code }, limit) => {
-        const index = new FlexSearch.Index({ tokenize: "full", encoder: Charset.Normalize });
-        const codes = code ? el.options.map((o) => String(code(o)).toLowerCase()) : null;
-        el.options.forEach((o, i) => index.add(i, text(o)));
+        const opts = optionsOf(el);
+        const index = new FlexSearch.Index({ tokenize: "full" }); // "full" = substring matching
+        const codes = code ? opts.map((o) => fold(code(o))) : null;
+        opts.forEach((o, i) => index.add(i, fold(text(o))));
         el.searchCallback = (term) => {
-          const t = String(term || "").trim().toLowerCase();
-          if (!t) return el.options;
+          const t = fold(term).trim();
+          if (!t) return opts;
           const seen = new Set(), out = [];
-          const push = (i) => { if (!seen.has(i)) { seen.add(i); out.push(el.options[i]); } };
+          const push = (i) => { if (!seen.has(i)) { seen.add(i); out.push(opts[i]); } };
           // Purely-numeric query = code lookup → exact/prefix only (no digit-substring
           // text noise, which in tree mode would drag in every stray match's ancestors).
           if (codes && /^\d+$/.test(t)) {

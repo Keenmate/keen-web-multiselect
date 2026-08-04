@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.0.0-rc.1] - 2026-08-04 [PUBLISHED]
+
+_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.0.0-rc02`._
+
+### Added
+
+- **`data_options_format` / `data_options_splitter` / `data_options_row_splitter`.** Upstream 2.0.0 lets the raw `data-options` HTML attribute carry JSON, CSV, or plain-text option data; these three new typed attributes expose that. `data_options_format` selects `json` (default) / `csv` / `plain`; the two splitters set the field/cell and row/record delimiters for `csv`/`plain` (honouring `\t` `\n` `\r` escapes). They only apply when you hand-write a raw `data-options` string (via `:rest`) — the `:options` prop always emits JSON, so the normal path is unaffected.
+
+### Changed
+
+- **Bundled `@keenmate/web-multiselect` upgraded to `2.0.0-rc02`** (from `1.12.0-rc08`) — the upstream "core adoption" major: the custom element is now built on `@keenmate/web-components-core` (`BlissElement`). The dropdown engine, CSS, tree, and virtual scroll are unchanged; the element plumbing (attribute parsing, reactivity, positioning, logging, registration) moved into the shared core. `priv/static/multiselect.{js,css,d.ts}` re-bundled (still a self-contained bundle — the core is inlined); `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.0.0-rc02"`.
+- **`.form` shim on the LV hook replaced with upstream's native getter.** The hook used to define a `.form` getter on `<web-multiselect>` reading its `ElementInternals.form`, so Phoenix LiveView's `phx-change` delegation could resolve the parent form. Upstream 2.0.0 made element internals a true private field (breaking the old shim) and, in `2.0.0-rc02`, added a real public `form` getter on the core element — so the shim is gone. The hook now keeps only a slim `closest("form")` fallback that installs solely on older bundles lacking the native getter (a no-op on `2.0.0-rc02`+). Form binding needs no hook; covered end-to-end by the `form` e2e suite.
+
+### Fixed
+
+- **The LV hook forwards a scalar `value`/`values` for custom `value_member` data.** `_forward` derived the payload value as `option.value ?? option.id ?? option`; for options keyed by a custom member (e.g. `value_member="userId"`, with no `value`/`id` field) it fell through to the whole option map — which then crashed scalar-expecting server handlers (`to_string/1` on a `Map`). It now reads the element's own extracted `selectedValues` for `values`, and derives the single `value` via the configured `value-member` with fallbacks, guaranteeing a scalar (an unresolvable option yields `null`, never a map). Guarded by a new custom-`value_member` case in the `events` e2e fixture.
+
+### Internal — docs & demo site
+
+- **README "Form integration" rewritten** — the example no longer passes `hook={true}` (form binding needs no hook), and the section now explains that `<.web_multiselect field={...}>` inside a `<.form phx-change ...>` works because the element is a real form-associated control with a native `.form`.
+- **Demo `on*` handlers updated for the upstream 2.0.0 event signature** — `onSelect` / `onDeselect` / `onChange` now install real listeners and receive the `CustomEvent`, so `/examples/events` reads `e.detail.option` / `e.detail.selectedValues` instead of a bare argument. The `before*Callback` interceptors keep their bare-arg signatures.
+- **FlexSearch demo (`/examples/search-index`) fixed for the v2 options model** — the demo built its index from `el.options`, which upstream 2.0.0 leaves empty when options arrive via the `data-options` attribute (they land in `optionsSource`), so the index was empty and nothing matched. It now resolves options from `el.options` or by parsing `optionsSource`, and folds diacritics deterministically (`NFD` + strip `\p{Diacritic}`) on both the indexed text and the query — so accent-insensitive matches like `zur` → *Zürich* work again.
+- **e2e helpers moved off the now-private engine** — upstream made the internal picker a private field, so specs that read `el.picker.allOptions` were rewritten onto the public surface (`el.options` / `el.optionsSource` / DOM assertions). (`test_app/` is excluded from the Hex package.)
+
 ## [1.0.0-rc.5] - 2026-07-25 [PUBLISHED]
 
 _Aligns the wrapper with upstream `@keenmate/web-multiselect` `1.12.0-rc08`._

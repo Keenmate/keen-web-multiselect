@@ -34,19 +34,26 @@
 //   - options (optional) new option list; assigned to el.options
 //   - value   (optional) new selection; passed to el.setSelected([...])
 
-// Polyfill .form on <web-multiselect> so Phoenix LV's phx-change delegation
-// can resolve the parent form. The upstream component calls attachInternals()
-// (which sets this.internals.form when associated with a <form>), but it never
-// exposes a public .form getter. Phoenix LV's form change handler does
+// Ensure <web-multiselect> exposes a .form getter so Phoenix LV's phx-change
+// delegation can resolve the parent form. LV's form change handler does
 // `if (e instanceof CustomEvent && e.target.form === void 0) return;` and
-// silently drops the change event without this shim.
+// silently drops the change event when the target has no .form.
+//
+// Since upstream 2.0.0 the element is built on @keenmate/web-components-core
+// (BlissElement), which defines a real, form-associated `get form()` on the
+// prototype (reads its ElementInternals.form) — so no shim is needed on current
+// bundles. This block only installs a fallback for OLDER bundles that predate
+// that getter; it resolves the form by DOM ancestry via closest("form"). It is
+// a no-op on 2.0.0+ because the native getter already occupies the prototype.
+// (The v1 shim read `this.internals?.form`; core made `internals` a true private
+// field, so that path is dead — closest("form") is the correct fallback now.)
 // Module-level — runs once per page load even if no element opts into the hook.
 if (typeof customElements !== "undefined") {
   customElements.whenDefined("web-multiselect").then((WebMultiselect) => {
     if (!("form" in WebMultiselect.prototype)) {
       Object.defineProperty(WebMultiselect.prototype, "form", {
         configurable: true,
-        get() { return this.internals?.form ?? null; }
+        get() { return this.closest("form"); }
       });
     }
   });
@@ -110,11 +117,33 @@ const KeenWebMultiselectHook = {
 
   _forward(name, event) {
     const detail = event.detail || {};
-    const values = (detail.selectedOptions || []).map((o) => o && (o.value ?? o.id ?? o));
-    const option = detail.option || null;
-    const value = option && (option.value ?? option.id ?? option);
 
-    this.pushEventTo(this.el, name, { id: this.el.id, value, values });
+    // `selectedValues` is the element's OWN extracted scalar values — it honours
+    // the configured value-member, a `getValueCallback`, and cascade policy. Always
+    // prefer it over re-deriving from the option objects: for custom-shaped data
+    // (keyed by e.g. `userId`, with no `.value`/`.id`), naive extraction would emit
+    // whole option maps, which then crash server handlers that expect a scalar
+    // (e.g. `to_string/1` on the payload).
+    const values = Array.isArray(detail.selectedValues)
+      ? detail.selectedValues
+      : (detail.selectedOptions || []).map((o) => this._optionValue(o));
+
+    this.pushEventTo(this.el, name, {
+      id: this.el.id,
+      value: this._optionValue(detail.option || null),
+      values
+    });
+  },
+
+  // Best-effort scalar value for a single option object. Uses the element's
+  // configured value-member (falling back to `value` / `id`), and never returns a
+  // non-scalar — an unresolvable object (e.g. a getValueCallback-only picker) yields
+  // null rather than a map, so the payload is always safe to serialize/print.
+  _optionValue(option) {
+    if (option == null || typeof option !== "object") return option;
+    const member = this.el.getAttribute("value-member") || "value";
+    const value = option[member] ?? option.value ?? option.id;
+    return value == null || typeof value === "object" ? null : value;
   },
 
   _forwardChange(event) {

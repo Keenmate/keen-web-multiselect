@@ -86,5 +86,9 @@ defmodule TestAppWeb.Examples.ServerEventsPanel do
   end
 
   defp format_last(shown) when is_list(shown), do: Enum.join(shown, ", ")
-  defp format_last(shown), do: to_string(shown)
+  defp format_last(shown) when is_binary(shown) or is_number(shown) or is_atom(shown),
+    do: to_string(shown)
+
+  # Any other shape (e.g. a map payload) — render inspectably instead of crashing.
+  defp format_last(shown), do: inspect(shown)
 end

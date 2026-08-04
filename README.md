@@ -4,6 +4,15 @@ Phoenix LiveView wrapper for [`@keenmate/web-multiselect`](https://github.com/ke
 
 One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundled, so no `npm install` is required.
 
+## What's New in v2.0.0-rc.1
+
+_Aligned with upstream `@keenmate/web-multiselect` `2.0.0-rc02`._
+
+- **Bundled upstream — the 2.0.0 "core adoption" major** — the bundled `@keenmate/web-multiselect` jumps from `1.12.0-rc08` to `2.0.0-rc02`, rebuilt on the shared `@keenmate/web-components-core` (`BlissElement`). The dropdown engine, CSS, tree mode, and virtual scroll are unchanged; what moved into the core is the element plumbing — attribute parsing, reactivity, positioning, logging, and registration. For you it's mostly invisible: `priv/static/multiselect.{js,css,d.ts}` were re-bundled (still one self-contained file — the core is inlined), and `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.0.0-rc02"`.
+- **Form integration is hook-free and rock-solid** — `<.web_multiselect field={@form[:tags]}>` inside a `<.form phx-change ... phx-submit ...>` just works with no hook: the element is a real form-associated control that writes `tags[]` hidden inputs and now exposes a native `.form`, so LiveView's `phx-change` live validation and `phx-submit` both see the selection like a native `<select multiple>`. The core rework briefly hid the form association behind a private field; upstream `2.0.0-rc02` restored a public `form` getter, so the wrapper dropped its old internals-reading shim and keeps only a defensive `closest("form")` fallback for pre-2.0 bundles. The README "Form integration" section was rewritten to show the hook-free pattern, and it's covered end-to-end by the form e2e suite.
+- **Custom `value_member` events forward clean scalars** — if you key options by your own field (e.g. `value_member="userId"`) and forward events through the LV hook, `select`/`deselect` now push the extracted scalar value — not the whole option map. Previously the hook fell back to the raw option object when it couldn't find a `value`/`id`, which crashed scalar-expecting server handlers (`to_string/1` on a `Map`). It now uses the element's own extracted `selectedValues` plus the configured value-member, guaranteeing a scalar payload; a custom-`value_member` case in the e2e suite guards it.
+- **New `data_options_*` attributes for HTML-authored option data** — upstream 2.0.0 lets the raw `data-options` attribute carry JSON, CSV, or plain-text; the wrapper exposes it via `data_options_format` (`json` default / `csv` / `plain`) plus `data_options_splitter` and `data_options_row_splitter` for custom field/row delimiters. These only matter if you hand-write a raw `data-options` string — the normal `options={...}` prop always emits JSON, so the default path is untouched.
+
 ## What's New in v1.0.0-rc.5
 
 _Aligned with upstream `@keenmate/web-multiselect` `1.12.0-rc08`._
@@ -11,17 +20,6 @@ _Aligned with upstream `@keenmate/web-multiselect` `1.12.0-rc08`._
 - **Independently sizable panels — `dropdown_width` / `selected_popover_width`** — the control input, the options dropdown, and the "N selected" popover are three separate panels, and you can now size the latter two independently of the input and of each other. Both are typed-attribute sugar over CSS variables: `dropdown_width` writes `--ms-dropdown-width` (which otherwise tracks the input width) and `selected_popover_width` writes `--ms-selected-popover-width` (intrinsic `32rem`). Set the variables at app/theme level to size every picker at once, or use the attributes to override a single instance. Documented in `guides/theming.md` ("Independent panel widths") and demoed as section 14 on `/examples/tree`.
 - **Tree metadata in the custom node renderer — `renderOptionContentCallback(item, ctx)`** — on tree rows the JS-side render callback's context now carries the hierarchy: `isTreeNode`, `isBranch`, `isLeaf`, `childCount`, `level`, `depth`, `path`, `isSelectable`, and `isIndeterminate` (the cascade tristate). A custom renderer can branch on node type without re-deriving it — e.g. draw a child-count badge on branches and a plain label on leaves — while the component still draws the tree chrome (checkbox, indentation, state classes) around your content. Demoed as the new section 12 ("Custom Node Rendering").
 - **Bundled `@keenmate/web-multiselect` upgraded to `1.12.0-rc08`** — beyond the two features above, rc08 adds a counter-chip tooltip, makes the cascade counter count the rolled-up cover (rather than the emit policy), and fixes two rough edges: a live `checkbox_mode` / `cascade_select_policy` switch now re-projects the current selection instead of needing a rebuild, and badge hover no longer washes out to white. `priv/static/multiselect.{js,css,d.ts}` were re-bundled and `Keenmate.WebMultiselect.upstream_version/0` now reports `"1.12.0-rc08"`.
-
-## What's New in v1.0.0-rc.4
-
-- **Tree of options — render options as an always-expanded hierarchy** — give each option a materialized dot-path (`"1"`, `"1.1"`, `"1.1.1"`, …) and set `path_member`; tree mode auto-enables and the wrapper derives parent/level from the path, rendering depth-first and indented. New typed attributes `path_member`, `parent_path_member`, `level_member`, `has_children_member`, and `tree_path_separator` cover the surface. There's no collapse — reach for `@keenmate/web-treeview` when you need expand/collapse. Documented in the new `guides/tree_of_options.md` (on hexdocs and in the package) and demoed on `/examples/tree`.
-- **Cascade checkboxes and a value policy — `checkbox_mode` + `cascade_select_policy`** — set `checkbox_mode="cascade"` and checking a node toggles its whole subtree, while a partially-selected branch shows a tristate box. Orthogonally, `cascade_select_policy` chooses which values a cascade selection emits: `rolled-up` (default) collapses a fully-selected subtree to one "complete node" value and surfaces individual descendants under partial branches, `leaves` emits only checked leaves, `all` emits every checked node. Those emitted values drive the badges, form value, and LiveView `change` event — so a whole selected branch can reach your server as a single value.
-- **Per-node selectability — `is_selectable_member`** — point it at a boolean key and a falsy value makes that node non-selectable: it renders normally (not greyed out like `disabled`) but has no checkbox, is skipped by keyboard focus, and can't be picked by Select All. Ideal for a leaves-only tree where branches are pure structure; a `only_leaves_selectable/1` helper in the guide precomputes the flag from whether an option has children.
-- **Badge full title — show the fully-qualified breadcrumb on badges** — new `full_title_member` reads a breadcrumb that ships with your data (e.g. `"Fruit / Pome fruit / Apple"`, never computed); turn on `show_badge_full_title={true}` and badges render it instead of the display value, falling back to the display value for options without one. Pairs naturally with tree mode to disambiguate leaves that share a name across branches.
-- **Adjustable row height and long-title handling — CSS variables, no new attributes** — deep tree indentation makes long labels likely, so you can set a consistent row height with `--ms-option-min-height` and/or truncate titles to one line with `--ms-option-title-white-space: nowrap` + `-overflow: hidden` + `-text-overflow: ellipsis` (pair with `enable_option_tooltips={true}` to reveal the full text on hover). These are option-level, so they work on flat lists too, and are scoped per-instance via the forwarded `class`/`style`.
-- **External search now composes with tree mode** — a JS-side `searchCallback` that returns matching options rebuilds the hierarchy from those matches, keeping their ancestors, so you can externalize the whole search over a tree. Demoed on the new `/examples/search-index` page (a client-side FlexSearch index over the full ISCO-08 occupation classification) which stays entirely in the demo app — never in the wrapper bundle.
-- **Programmatic selection can announce itself — `el.setSelected(values, {notify: true})`** — `setSelected` stays silent by default (so restoring saved state or a server-authoritative correction doesn't fire `change` or bounce in a loop), but the new opt-in fires a single aggregate `change` for a deliberate gesture like a custom action button that should reach the same `handle_event` a manual pick does.
-- **Bundled `@keenmate/web-multiselect` upgraded to `1.12.0-rc07`** — carries all of the above at the component level plus more pronounced option checkboxes (a dedicated mid-grey `#8f8f8f` border via `--ms-checkbox-border-color`), and fixes: row height no longer jumps as filtering crosses the virtual-scroll threshold, a tree no longer blanks out after clearing a search, and option rows no longer text-select on click-drag. `KeenWebMultiselect.upstream_version/0` now reports `"1.12.0-rc07"`.
 
 ## Install
 
@@ -207,19 +205,19 @@ keystroke bursts into a single round-trip.
 
 ### Form integration
 
-Pass a `Phoenix.HTML.FormField` and the component fills in `id`, `name`, and the initial value:
+Pass a `Phoenix.HTML.FormField` and the component fills in `id`, `name`, and the initial value — no other wiring, and **no hook required**:
 
 ```heex
-<.simple_form for={@form} phx-change="validate">
-  <.web_multiselect
-    field={@form[:tags]}
-    options={@tag_options}
-    hook={true}
-  />
-</.simple_form>
+<.form for={@form} phx-change="validate" phx-submit="save">
+  <.web_multiselect field={@form[:tags]} options={@tag_options} />
+
+  <.button>Save</.button>
+</.form>
 ```
 
-The underlying `<web-multiselect>` writes a hidden input named after `@form[:tags]`, so `phx-change` and `phx-submit` see the selected values in `params[form_name]["tags"]` just like a native `<select>`.
+That's the whole setup. It works because `<web-multiselect>` is a real form-associated custom element: it writes hidden inputs named after `@form[:tags]` (`tags[]`, one per value) into the form, and — since it exposes a native `.form` — LiveView's `phx-change` delegation picks up every selection change. So `phx-change` (live validation) and `phx-submit` both see the selected values in `params[form_name]["tags"]`, exactly like a native `<select multiple>`. Pre-selected values from the `FormField` render as badges on mount.
+
+The optional `hook={true}` is **orthogonal** to this — add it only when you also want the raw `select`/`deselect`/`change` events pushed to the server as `web_multiselect:*` messages, or to drive the element from the server via `push_update` (see [Driving the component from the server](#driving-the-component-from-the-server)). Plain `<.form>` binding needs none of that.
 
 ## Attributes
 

@@ -36,8 +36,15 @@ test('virtual picker windows the DOM but keeps all options in data', async ({ pa
     // Upstream flags the container as virtual.
     await expect(p.locator('.ms__options--virtual')).toBeAttached();
 
-    // The data side is complete...
-    const total = await p.evaluate((el: any) => el.picker.allOptions.length);
+    // The data side is complete. Since upstream 2.0.0 the engine (`#picker`) is
+    // private, so `allOptions` is gone; read the public inputs instead. The
+    // wrapper feeds options via the `data-options` attribute (→ `optionsSource`);
+    // a JS `el.options =` assignment would populate `options`. Count whichever
+    // source is set.
+    const total = await p.evaluate((el: any) => {
+        if (Array.isArray(el.options) && el.options.length) return el.options.length;
+        try { return JSON.parse(el.optionsSource || '[]').length; } catch { return 0; }
+    });
     expect(total).toBe(500);
 
     // ...but only a window of rows is materialized. A 20rem viewport over

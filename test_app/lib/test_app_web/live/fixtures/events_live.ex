@@ -9,9 +9,18 @@ defmodule TestAppWeb.Fixtures.EventsLive do
     %{value: "cherry", label: "Cherry"}
   ]
 
+  # Custom-shaped data keyed by `userId` (no `value`/`id` field) — exercises the
+  # hook's value extraction under a custom `value_member`. A regression here would
+  # push whole option maps as `value`/`values`.
+  @users [
+    %{userId: 1, fullName: "John Doe"},
+    %{userId: 2, fullName: "Jane Smith"},
+    %{userId: 3, fullName: "Alice Johnson"}
+  ]
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, fruits: @fruits, events: [])}
+    {:ok, assign(socket, fruits: @fruits, users: @users, events: [])}
   end
 
   @impl true
@@ -32,6 +41,22 @@ defmodule TestAppWeb.Fixtures.EventsLive do
     <div class="fixture">
       <div class="fixture-label">captured events (newest first)</div>
       <div data-testid="captured-events">{format(@events)}</div>
+    </div>
+
+    <div class="fixture">
+      <div class="fixture-label">custom value_member="userId" — value/values must be scalars</div>
+      <.web_multiselect
+        id="picker-custom"
+        hook="KeenWebMultiselectHook"
+        options={@users}
+        value_member="userId"
+        display_value_member="fullName"
+      />
+    </div>
+
+    <div class="fixture">
+      <div class="fixture-label">custom picker captured events (newest first)</div>
+      <div data-testid="custom-events">{format(for {_n, p} = e <- @events, p["id"] == "picker-custom", do: e)}</div>
     </div>
     """
   end
