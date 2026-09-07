@@ -205,6 +205,38 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
         </details>
       </.card>
 
+      <.card title="4 · keydownCallback — a keyboard hook">
+        <.tip>Client-only: set <code>el.keydownCallback = (ctx) => …</code>; return <code>true</code> to mark the key fully handled — no wrapper attribute.</.tip>
+        <p>
+          Runs on <strong>every</strong> keydown before all built-in handling, with a context
+          (<code>event</code>, <code>key</code>, <code>isOpen</code>, <code>focusedOption</code>,
+          <code>selectedValues</code>, …) and an imperative <code>controller</code>. Here
+          <kbd>Ctrl</kbd>+<kbd>A</kbd> selects every option while the dropdown is open.
+        </p>
+        <.form_group>
+          <label>Letters (Ctrl+A selects all)</label>
+          <.web_multiselect id="keydown-select" show_select_all={true} />
+          <small class="form-text">Open the dropdown, then press Ctrl+A.</small>
+        </.form_group>
+      </.card>
+
+      <.card title="5 · showMessage() — a component-anchored toast">
+        <.tip>Client-only: <code>el.showMessage(text, {"{ variant }"})</code> / <code>el.hideMessage()</code>. A <code>beforeSelect</code> callback returning a <em>string</em> vetoes and shows it as a warning toast.</.tip>
+        <p>
+          <code>showMessage</code> surfaces a transient toast anchored to the control (pinned over the
+          sheet while a fullscreen overlay is open). This picker caps the selection at 3 — the
+          <code>beforeSelectCallback</code> returns a string past the cap, which both vetoes the pick and
+          shows the reason.
+        </p>
+        <.form_group>
+          <label>Toppings (max 3)</label>
+          <.web_multiselect id="message-select" />
+          <button type="button" id="message-btn" class="btn" style="margin-top:0.5rem;">
+            Show a success toast
+          </button>
+        </.form_group>
+      </.card>
+
       <.card title="Callback vs event — the one rule">
         <p>The line is drawn by <strong>whether the component uses the return value</strong>:</p>
         <ul>
@@ -423,6 +455,31 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
           };
           requiredSelect.onDeselect = (e) => requiredLog('tag-ok', '[removed] onDeselect', e.detail.option.label);
           requiredSelect.setSelected(['lead']); // pre-select; bypasses the veto
+        });
+
+        // --- 4. keydownCallback (Ctrl+A → select all) -------------
+        wait('keydown-select').then((keydownSelect) => {
+          keydownSelect.options = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot']
+            .map((label, i) => ({ value: 'l-' + i, label }));
+          keydownSelect.keydownCallback = (ctx) => {
+            if (ctx.isOpen && (ctx.event.ctrlKey || ctx.event.metaKey) && ctx.key.toLowerCase() === 'a') {
+              ctx.event.preventDefault();
+              ctx.filteredOptions.forEach((o) => ctx.controller.selectValue(o.value));
+              return true; // fully handled — the component runs none of its own logic for this key
+            }
+          };
+        });
+
+        // --- 5. showMessage() + string-returning beforeSelect -----
+        wait('message-select').then((messageSelect) => {
+          messageSelect.options = ['Pepperoni', 'Mushrooms', 'Onions', 'Olives', 'Peppers', 'Bacon']
+            .map((label, i) => ({ value: 't-' + i, label }));
+          messageSelect.beforeSelectCallback = (option, selected) => {
+            if (selected.length >= 3) return 'You can pick at most 3 toppings.'; // vetoes + warning toast
+          };
+          document.getElementById('message-btn').addEventListener('click', () => {
+            messageSelect.showMessage('Saved your toppings!', { variant: 'success', duration: 2500 });
+          });
         });
       </script>
     </.example_page>

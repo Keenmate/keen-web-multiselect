@@ -1,4 +1,4 @@
-defmodule TestAppWeb.Examples.NewApiLive do
+defmodule TestAppWeb.Examples.DataApiLive do
   use TestAppWeb, :live_view
 
   import Keenmate.WebMultiselect.Components
@@ -125,7 +125,7 @@ defmodule TestAppWeb.Examples.NewApiLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "New Flexible API — keen_web_multiselect")
+     |> assign(:page_title, "Data & API — keen_web_multiselect")
      |> assign(:users, @users)
      |> assign(:languages, @languages)
      |> assign(:skills, @skills)
@@ -227,8 +227,8 @@ defmodule TestAppWeb.Examples.NewApiLive do
     ~H"""
     <.example_page
       icon="🚀"
-      title="New Flexible API"
-      subtitle="Flexible data handling, form integration, and powerful new features"
+      title="Data & API"
+      subtitle="Custom objects, tuple arrays, member/getter callbacks, async search, form integration (json/csv/array), public API methods, and cascading selects."
     >
       <.card title="1. Custom Object Structure">
         <.tip><code>value_member="userId"</code> · <code>display_value_member="fullName"</code> · <code>subtitle_member="email"</code></.tip>

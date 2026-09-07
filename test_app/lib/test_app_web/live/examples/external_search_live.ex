@@ -1,4 +1,4 @@
-defmodule TestAppWeb.Examples.SearchIndexLive do
+defmodule TestAppWeb.Examples.ExternalSearchLive do
   use TestAppWeb, :live_view
 
   import Keenmate.WebMultiselect.Components

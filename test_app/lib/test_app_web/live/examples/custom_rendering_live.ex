@@ -1,4 +1,4 @@
-defmodule TestAppWeb.Examples.TemplatingLive do
+defmodule TestAppWeb.Examples.CustomRenderingLive do
   use TestAppWeb, :live_view
 
   import Keenmate.WebMultiselect.Components
@@ -246,6 +246,40 @@ defmodule TestAppWeb.Examples.TemplatingLive do
         /* Custom checkbox sizing for example #15 */
         #large-checkbox { --ml-checkbox-scale: 1.5; --ml-checkbox-margin-top: 0; }
       </style>
+
+      <.card title="renderBadgeCallback — own the whole badge">
+        <.tip>JS callback: <code>el.renderBadgeCallback = (item) => …</code> · returns the entire badge markup, not just its content</.tip>
+        <p>
+          <code>renderBadgeCallback</code> returns the <em>whole</em> badge, so a selection can be a
+          full card rather than a pill. The component wraps your markup in
+          <code>.ms__badge.ms__badge--custom</code> and delegates removal to any element inside with
+          <code>data-action="remove"</code>.
+        </p>
+        <.form_group>
+          <label for="badge-cards">Team members</label>
+          <.web_multiselect id="badge-cards" />
+        </.form_group>
+      </.card>
+
+      <.card title="enable_selected_popover={false} — own the selection UI">
+        <.tip><code>{"enable_selected_popover={false}"}</code> · <code>badges_display_mode="count"</code> · <code>{"show_counter={true}"}</code></.tip>
+        <p>
+          With the badges collapsed to a <code>[N]</code> counter, the built-in popover that opens on
+          clicking the counter is redundant when you render your own selection list. Setting
+          <code>{"enable_selected_popover={false}"}</code> makes every popover trigger inert and drops
+          the pointer cursor — the counter here no longer opens anything.
+        </p>
+        <.form_group>
+          <label for="own-selection">Skills (counter is inert)</label>
+          <.web_multiselect
+            id="own-selection"
+            multiple={true}
+            badges_display_mode="count"
+            show_counter={true}
+            enable_selected_popover={false}
+          />
+        </.form_group>
+      </.card>
 
       <script type="module">
         const wait = (id) => new Promise((resolve) => {
@@ -911,6 +945,34 @@ defmodule TestAppWeb.Examples.TemplatingLive do
                   </div>
               `;
           };
+        });
+
+        // CR16. renderBadgeCallback — the whole badge is a card with its own Remove button.
+        wait('badge-cards').then((el) => {
+          el.options = [
+            { value: 'ada',   label: 'Ada Lovelace',   role: 'Analyst',  avatar: '👩‍💻' },
+            { value: 'alan',  label: 'Alan Turing',    role: 'Cryptographer', avatar: '🧠' },
+            { value: 'grace', label: 'Grace Hopper',   role: 'Compiler',  avatar: '⚓' },
+            { value: 'linus', label: 'Linus Torvalds', role: 'Kernel',    avatar: '🐧' }
+          ];
+          el.renderBadgeCallback = (item) => `
+            <div style="display:flex;align-items:center;gap:.5rem;padding:.35rem .5rem;border:1px solid #e2e8f0;border-radius:.6rem;background:#fff;">
+              <span style="font-size:1.2rem;">${item.avatar}</span>
+              <span style="display:flex;flex-direction:column;line-height:1.15;">
+                <strong style="font-size:.85rem;">${item.label}</strong>
+                <small style="color:#718096;">${item.role}</small>
+              </span>
+              <button type="button" data-action="remove" aria-label="Remove"
+                style="margin-inline-start:.4rem;border:none;background:#f1f5f9;border-radius:.4rem;width:1.4rem;height:1.4rem;cursor:pointer;">×</button>
+            </div>`;
+          el.setSelected(['ada', 'grace']);
+        });
+
+        // CR17. enable-selected-popover=false — own the selection UI, counter is inert.
+        wait('own-selection').then((el) => {
+          el.options = ['Elixir', 'Rust', 'Go', 'TypeScript', 'Python', 'Zig', 'Gleam']
+            .map((label, i) => ({ value: 'skill-' + i, label }));
+          el.setSelected(['skill-0', 'skill-1', 'skill-3']);
         });
       </script>
     </.example_page>

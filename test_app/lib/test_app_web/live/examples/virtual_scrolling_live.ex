@@ -1,4 +1,4 @@
-defmodule TestAppWeb.Examples.PerformanceLive do
+defmodule TestAppWeb.Examples.VirtualScrollingLive do
   use TestAppWeb, :live_view
 
   import Keenmate.WebMultiselect.Components

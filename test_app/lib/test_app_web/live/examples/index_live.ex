@@ -3,18 +3,18 @@ defmodule TestAppWeb.Examples.IndexLive do
 
   @pages [
     %{
-      href: "/examples/classic",
+      href: "/examples/basic",
       icon: "📦",
-      title: "Classic Examples",
+      title: "Basic Usage",
       description:
-        "Declarative `<option>` markup, single/multi select, search hints, badge display modes, badge positioning, tooltips, and RTL."
+        "Declarative `<option>` markup, single/multi select, keyboard-only navigation, rich content, search hints, filter-vs-navigate search, and RTL."
     },
     %{
-      href: "/examples/new-api",
+      href: "/examples/data-api",
       icon: "🚀",
-      title: "Flexible Data API",
+      title: "Data & API",
       description:
-        "Custom objects, tuple arrays, member callbacks, async search, form integration (json/csv/array), and cascading selects."
+        "Custom objects, tuple arrays, member callbacks, async search, form integration (json/csv/array), public API methods, and cascading selects."
     },
     %{
       href: "/examples/tree",
@@ -24,25 +24,25 @@ defmodule TestAppWeb.Examples.IndexLive do
         "Hierarchical options via a materialized `path_member` — always-expanded, indented by depth, branch/leaf theming hooks, ancestor-preserving search, custom separators."
     },
     %{
-      href: "/examples/search-index",
+      href: "/examples/external-search",
       icon: "🔎",
       title: "External Search (FlexSearch)",
       description:
         "Externalize the whole search via `searchCallback` — fuzzy, partial, accent-insensitive, ranked matching from a FlexSearch index. Works on flat lists and trees; FlexSearch never enters the wrapper bundle."
     },
     %{
-      href: "/examples/performance",
+      href: "/examples/virtual-scrolling",
       icon: "⚡",
       title: "Virtual Scrolling",
       description:
         "15,000 options with virtual scrolling, init/render/search timing, plus rich rendering with priority-based badges."
     },
     %{
-      href: "/examples/templating",
+      href: "/examples/custom-rendering",
       icon: "✨",
       title: "Custom Rendering",
       description:
-        "Render callbacks for options, badges, and selected items — frameworks, products, articles, jobs, movies, images."
+        "Render callbacks for options, badges, and selected items — including whole-badge cards (`renderBadgeCallback`) and owning the selection UI (`enable_selected_popover`)."
     },
     %{
       href: "/examples/action-buttons",
@@ -63,7 +63,14 @@ defmodule TestAppWeb.Examples.IndexLive do
       icon: "🔔",
       title: "Events & Interceptors",
       description:
-        "DOM events, the `on*` property twin, and `beforeSelect`/`beforeDeselect` veto interceptors — with live veto demos and the callback-vs-event rule."
+        "DOM events, the `on*` property twin, `beforeSelect`/`beforeDeselect` veto interceptors (now with toast reasons), the `keydownCallback` keyboard hook, and `showMessage()`."
+    },
+    %{
+      href: "/examples/responsive",
+      icon: "📱",
+      title: "Responsive & Mobile",
+      description:
+        "Phone fullscreen overlay (`mobile_presentation`), the fullscreen search toggle, container-responsive badge collapse (`collapse_badges_below`), presentation-aware rendering, and RTL."
     },
     %{
       href: "/examples/sizes",

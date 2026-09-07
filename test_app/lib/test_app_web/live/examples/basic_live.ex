@@ -1,4 +1,4 @@
-defmodule TestAppWeb.Examples.ClassicLive do
+defmodule TestAppWeb.Examples.BasicLive do
   use TestAppWeb, :live_view
 
   import Keenmate.WebMultiselect.Components
@@ -280,7 +280,7 @@ defmodule TestAppWeb.Examples.ClassicLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(:page_title, "Classic Examples — keen_web_multiselect")
+     |> assign(:page_title, "Basic Usage — keen_web_multiselect")
      |> assign(:technologies, @technologies)
      |> assign(:countries, @countries)
      |> assign(:languages, @languages)
@@ -299,8 +299,8 @@ defmodule TestAppWeb.Examples.ClassicLive do
     ~H"""
     <.example_page
       icon="📦"
-      title="Classic Examples"
-      subtitle="Traditional multiselect demos showing basic functionality and common use cases."
+      title="Basic Usage"
+      subtitle="Basic multi/single select, keyboard-only navigation, rich content, search hints, declarative markup, filter-vs-navigate search, and RTL."
     >
       <.card title="✨ Declarative Usage (No JavaScript Required!)">
         <.tip>Pass inline <code>&lt;option&gt;</code>/<code>&lt;optgroup&gt;</code> children with <code>data-icon</code> · <code>data-subtitle</code> · <code>selected</code></.tip>
