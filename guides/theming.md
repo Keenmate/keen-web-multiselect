@@ -248,6 +248,43 @@ web-multiselect {
 the full label appears on hover. See the *Tree of options* guide for the tree
 angle.
 
+## Mobile & fullscreen overlay
+
+On phone-sized touch devices the open dropdown (and the selected-items popover)
+become a full-screen overlay — see the `mobile_presentation` / `fullscreen_autofocus`
+/ `show_search_mode_toggle` attributes on `web_multiselect/1`. The overlay is a
+separate chrome with its own theming layer:
+
+- **One knob to scale it all — `--ms-fullscreen-rem`** (default `12px`). The overlay
+  rebases `--ms-rem` to this, so rows, text, checkboxes, padding, the header, and the
+  search grow together for comfortable ~44–48px touch targets. Raise it for chunkier
+  targets.
+- **Header, close, and search** — `--ms-fullscreen-header-*` (background, border,
+  padding, min-height, gap), `--ms-fullscreen-close-*` (a themeable close chip:
+  background, border, radius, size, edge nudge), and `--ms-fullscreen-search-*`
+  (border, radius, padding, plus the clear-affordance `--ms-fullscreen-search-clear-*`).
+- **Navigate-mode match navigator** (the touch counterpart to desktop `Ctrl`+`Arrow`)
+  — `--ms-fullscreen-nav-*` (the `N of M` count + prev/next buttons) and the search-mode
+  toggle chip `--ms-fullscreen-mode-toggle-*`.
+- **Clipped-label reveal** — `--ms-fullscreen-info-*` (the circled-ⓘ affordance shown on
+  truncated rows, the touch counterpart to the hover tooltip).
+- **Tighter tree indent** — `--ms-fullscreen-tree-base-indent` / `--ms-fullscreen-tree-indent`
+  (deep nesting needs less per-level indent when the labels are enlarged).
+
+For the safe-area insets to apply in landscape (avoiding the system bars / camera
+cutout), the host page must opt into edge-to-edge with
+`<meta name="viewport" content="… viewport-fit=cover">` — a page-level responsibility
+the component can't self-serve.
+
+### Component-anchored messages — `showMessage()`
+
+The JS API `element.showMessage(content, opts)` / `hideMessage()` renders a transient
+toast anchored to the control (pinned over the sheet while a fullscreen overlay is open).
+Theme it via the `--ms-message-*` variables (surface, per-variant `bg`/`color` for
+`info`/`warning`/`error`/`success`, padding, radius, font, shadow, max-width, z-index).
+`beforeSelectCallback` / `beforeDeselectCallback` returning a **string** vetoes the
+change *and* surfaces the string as a warning toast.
+
 ## Dark mode
 
 Since upstream v1.12.0 the component honors **five** dark-mode signals — pick

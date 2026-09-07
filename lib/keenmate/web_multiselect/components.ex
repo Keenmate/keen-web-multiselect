@@ -225,6 +225,24 @@ defmodule Keenmate.WebMultiselect.Components do
     default: nil,
     doc: "Show a count of the selected items."
 
+  attr :collapse_badges_below, :integer,
+    default: nil,
+    doc: """
+    Container-responsive opt-in (off by default). When set to a pixel width, the control watches
+    its **own** border box (not the window) and collapses `badges_display_mode` to `count`
+    ("N selected") while the box is narrower than this — so a picker in a narrow column/sidebar
+    never overflows with pills, even on a wide monitor. Widening back past the threshold restores
+    the configured badges mode. A distinct axis from `mobile_presentation`, and composes with it.
+    """
+
+  attr :enable_selected_popover, :boolean,
+    default: nil,
+    doc: """
+    Whether the selected-items popover may open (from the count/compact/"+X more" badge or the
+    in-input `[N]` counter). Defaults to `true` upstream — set `false` when you render your own
+    selection UI, so those affordances become inert and lose the pointer cursor.
+    """
+
   attr :show_badge_full_title, :boolean,
     default: nil,
     doc: """
@@ -329,6 +347,15 @@ defmodule Keenmate.WebMultiselect.Components do
     doc:
       "What typing does: `filter` narrows the list, `navigate` jumps to matching rows without hiding others."
 
+  attr :show_search_mode_toggle, :boolean,
+    default: nil,
+    doc: """
+    Show a clickable toggle in the phone fullscreen overlay's search header that flips
+    `search_mode` between `filter` and `navigate` live (internal: `isSearchModeToggleShown`).
+    Fullscreen-only — no effect in the floating presentation or when search is disabled. Off by
+    default.
+    """
+
   attr :min_search_length, :integer,
     default: nil,
     doc: "Minimum number of characters before searching/filtering kicks in."
@@ -379,6 +406,28 @@ defmodule Keenmate.WebMultiselect.Components do
   attr :lock_placement, :boolean,
     default: nil,
     doc: "Lock the dropdown's placement instead of auto-flipping/shifting to fit the viewport."
+
+  # -- Mobile / fullscreen presentation -------------------------------------
+
+  attr :mobile_presentation, :string,
+    default: nil,
+    values: [nil, "auto", "floating", "fullscreen"],
+    doc: """
+    How the open dropdown is presented on phones. `auto` (default upstream) keeps the floating
+    panel on desktop/tablet and switches to a full-screen overlay on phone-sized touch devices
+    (touch-primary + shorter viewport side `< 600px`, orientation-robust); `floating` forces the
+    anchored panel everywhere; `fullscreen` forces the overlay on any device (handy for previewing
+    the mobile view on desktop). Resolved reactively from device/viewport/orientation changes.
+    """
+
+  attr :fullscreen_autofocus, :boolean,
+    default: nil,
+    doc: """
+    In the phone fullscreen overlay, auto-focus the search field on open (which pops the soft
+    keyboard immediately). Defaults to `false` upstream — the sheet opens with the list visible and
+    the keyboard closed, appearing only when the user taps the search. Set `true` to type-to-filter
+    right away. No effect in the floating presentation.
+    """
 
   # -- Data extraction members ----------------------------------------------
 

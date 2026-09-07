@@ -186,6 +186,13 @@ Fruit
     Gala
 ```
 
+Set `search_mode="navigate"` to keep the whole tree visible instead — typing jumps
+focus between matches (highlighting the current one) rather than collapsing the
+hierarchy to matches + ancestors. Desktop steps through matches with
+`Ctrl`+`ArrowUp`/`ArrowDown`; on the phone fullscreen overlay the `N of M` match
+navigator (and the optional `show_search_mode_toggle`) drive it. Filter mode (the
+default) is unchanged; async `search_event` results always filter.
+
 ## Full breadcrumb on badges
 
 A leaf can share a name across branches (two "Gala" nodes under different parents),

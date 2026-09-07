@@ -4,6 +4,15 @@ Phoenix LiveView wrapper for [`@keenmate/web-multiselect`](https://github.com/ke
 
 One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundled, so no `npm install` is required.
 
+## What's New in v2.0.0-rc.2
+
+_Aligned with upstream `@keenmate/web-multiselect` `2.0.0-rc10`._
+
+- **Mobile & fullscreen presentation** — on phone-sized touch devices the open dropdown (and the "N selected" popover) can now become a full-screen overlay with its own search field, close button, and page-scroll lock, instead of a floating panel anchored to the input (which thrashes the soft keyboard). Two new typed attributes drive it: `mobile_presentation` (`auto` default / `floating` / `fullscreen` — `fullscreen` forces the overlay on any device, handy for previewing on desktop) and `fullscreen_autofocus` (whether opening the sheet pops the keyboard immediately; default `false`). A third, `show_search_mode_toggle`, adds an in-overlay toggle to flip `search_mode` between `filter` and `navigate` live. All resolve reactively to orientation/resize.
+- **Container-responsive badge collapse — `collapse_badges_below`** — set a pixel width and the control watches its **own** box (not the window) and collapses to the `count` badge mode ("N selected") while narrower than that, so a picker in a narrow column/sidebar never overflows with pills even on a wide monitor. A distinct axis from `mobile_presentation`, and composes with it.
+- **Own the whole selection UI — `enable_selected_popover`** — set `false` to make the built-in selected-items popover inert (and drop its pointer cursor) when you render your own selection list from the `change` event. Pairs with `badges_display_mode="none"` + `show_counter`.
+- **Bundled `@keenmate/web-multiselect` upgraded `2.0.0-rc02` → `2.0.0-rc10`** — the eight intervening RCs are largely the mobile/fullscreen work above (built on `@keenmate/web-components-core` `1.0.0-rc09`), plus: `search_mode="navigate"` now works on trees, RTL rebuilt on CSS logical properties (runtime `dir` switching), a bumped default border colour, a Lucide-consistent close/remove `×`, and rounded-dropdown-corner fixes. New JS-only callbacks are available on the element for hook-based consumers — `keydownCallback` (remap/veto keys), `renderBadgeCallback` (own the whole badge, not just its content), and `showMessage()` / `hideMessage()` (a component-anchored toast); the render callbacks also now carry a `presentation` flag (`isFullscreen`) so a single renderer can vary between the desktop dropdown and the phone sheet. `priv/static/multiselect.{js,css,d.ts}` were re-bundled and `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.0.0-rc10"`. Many new `--ms-fullscreen-*` / `--ms-message-*` theming variables (see the [Theming guide](guides/theming.md)).
+
 ## What's New in v2.0.0-rc.1
 
 _Aligned with upstream `@keenmate/web-multiselect` `2.0.0-rc02`._
@@ -247,7 +256,7 @@ See the **[Theming guide](guides/theming.md)** for the three integration paths:
 
 ```elixir
 Keenmate.WebMultiselect.upstream_version()
-#=> "1.12.0-rc08"
+#=> "2.0.0-rc10"
 ```
 
 ## For LLMs and coding agents

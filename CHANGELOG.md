@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.0.0-rc.2] - 2026-09-07
+
+_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.0.0-rc10`._
+
+### Added
+
+- **Mobile / fullscreen presentation — `mobile_presentation` / `fullscreen_autofocus`.** On phone-sized touch devices the open dropdown (and the selected-items popover) can become a full-screen overlay with its own search field, close button, and page-scroll lock, instead of a floating panel anchored to the input (which thrashes the soft keyboard). `mobile_presentation` (`"auto"` default | `"floating"` | `"fullscreen"`) picks the behaviour — `fullscreen` forces the overlay on any device, handy for previewing on desktop — and resolves reactively to orientation/resize. `fullscreen_autofocus` (default `false`) controls whether opening the sheet pops the soft keyboard immediately; the default opens with the list visible and the keyboard closed.
+- **`show_search_mode_toggle`.** Adds a clickable toggle in the phone fullscreen overlay's search header that flips `search_mode` between `filter` and `navigate` live (internal: `isSearchModeToggleShown`). Fullscreen-only; off by default.
+- **`collapse_badges_below` — container-responsive badge collapse.** A pixel width that makes the control watch its **own** border box (not the window) and collapse `badges_display_mode` to `count` ("N selected") while narrower than that — so a picker in a narrow column/sidebar never overflows with pills, even on a wide monitor. A distinct axis from `mobile_presentation`, and composes with it.
+- **`enable_selected_popover`.** Defaults to `true` upstream; set `false` to make the selected-items popover inert (and drop its pointer cursor) when you render your own selection UI from the `change` event. Pairs with `badges_display_mode="none"` + `show_counter`.
+
+### Changed
+
+- **Bundled `@keenmate/web-multiselect` upgraded to `2.0.0-rc10`** (from `2.0.0-rc02`) — eight RCs, largely the mobile/fullscreen work above (built on `@keenmate/web-components-core` `1.0.0-rc09`'s size/viewport reactivity hooks), plus: `search_mode="navigate"` now works on trees (with a fullscreen `N of M` match navigator); RTL rebuilt on CSS logical properties with runtime `dir` switching; a bumped default `--ms-border-color` (`light-dark(#cbd5e1, #52525b)`) for a visible-but-soft edge; the close/remove `×` swapped to the exact Lucide `x`; the `--ms-checkbox-margin-top` nudge scoped to `[data-checkbox-align="top"]` (default `0`, so centred checkboxes stay centred); and rounded-dropdown-corner fixes (`--ms-dropdown-inner-border-radius`). `priv/static/multiselect.{js,css,d.ts}` re-bundled (still a self-contained bundle — the core is inlined); `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.0.0-rc10"`.
+- **New JS-only element callbacks available for hook-based consumers** (no HEEx attr — set them on the element): `keydownCallback` (remap/veto keys before built-in handling), `renderBadgeCallback` (return the *whole* badge markup, not just its content), and `showMessage()` / `hideMessage()` (a component-anchored toast; `beforeSelect/DeselectCallback` returning a string now vetoes *and* shows that string as a warning toast). The render-callback contexts also carry a `presentation` flag (`isFullscreen`), so one renderer can vary between the desktop dropdown and the phone sheet.
+
+### Internal — docs
+
+- **README "What's New" + Theming guide + Tree guide updated.** New README section for the mobile/fullscreen attrs and the JS-only callbacks; a new "Mobile & fullscreen overlay" section in `guides/theming.md` documenting the `--ms-fullscreen-*` scaling knob + header/close/search/nav/info/tree variable families and the `--ms-message-*` toast variables (plus the `viewport-fit=cover` consumer note); and a note in `guides/tree_of_options.md` that `search_mode="navigate"` now works on trees.
+
+### Internal — demo site
+
+- **`test_app/` demo site re-mirrored 1:1 against upstream `2.0.0-rc10`.** Upstream renamed and split its example pages (coded section headings like `DA01`; `examples-classic` → `examples-data-api` + a new `examples-basic`; `performance` → `virtual-scrolling`; `search-index` → `external-search`; `templating` → `custom-rendering`) and added new **Mobile & Fullscreen** and **Responsive** pages. The wrapper's `/examples/*` LiveViews and routes were realigned to match, with new demos for `mobile_presentation` / `fullscreen_autofocus` / `show_search_mode_toggle`, `collapse_badges_below`, `enable_selected_popover`, `renderBadgeCallback`, `keydownCallback`, and `showMessage()`. (`test_app/` is excluded from the Hex package.)
+
 ## [2.0.0-rc.1] - 2026-08-04 [PUBLISHED]
 
 _Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.0.0-rc02`._

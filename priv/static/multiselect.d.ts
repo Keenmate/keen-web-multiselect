@@ -1,8 +1,22 @@
 import { BlissElement } from '@keenmate/web-components-core';
+import { BreakpointMap } from '@keenmate/web-components-core';
+import { classifyDevice } from '@keenmate/web-components-core';
+import { configureBreakpoints } from '@keenmate/web-components-core';
+import { DeviceClass } from '@keenmate/web-components-core';
+import { ElementSize } from '@keenmate/web-components-core';
+import { EnvironmentSnapshot } from '@keenmate/web-components-core';
+import { getEnvironment } from '@keenmate/web-components-core';
 import { InputDef } from '@keenmate/web-components-core';
 import { Logger } from '@keenmate/web-components-core';
 import { LogLevelDesc } from '@keenmate/web-components-core';
+import { observeEnvironment } from '@keenmate/web-components-core';
+import { observeViewport } from '@keenmate/web-components-core';
+import { Orientation } from '@keenmate/web-components-core';
+import { OS } from '@keenmate/web-components-core';
 import { Placement } from '@keenmate/web-components-core/positioning';
+import { PointerType } from '@keenmate/web-components-core';
+import { PresentationContext } from '@keenmate/web-components-core';
+import { TABLET_MIN_SHORT_SIDE } from '@keenmate/web-components-core';
 
 /**
  * Action button configuration for dropdown actions (Select All, Clear All, custom actions)
@@ -58,7 +72,7 @@ declare type ActionsPosition = 'top' | 'bottom';
 /**
  * Context provided to renderBadgeContentCallback
  */
-declare interface BadgeContentRenderContext {
+declare interface BadgeContentRenderContext extends PresentationContext {
     /** Current badges display mode */
     displayMode: BadgesDisplayMode;
     /** Whether the badge is being rendered in the selected items popover */
@@ -80,13 +94,25 @@ export declare type BadgesPosition = 'top' | 'bottom' | 'left' | 'right';
  */
 export declare type BadgesThresholdMode = 'count' | 'partial';
 
+export { BreakpointMap }
+
+export { classifyDevice }
+
+export { configureBreakpoints }
+
 export declare const dataLogger: Logger;
+
+export { DeviceClass }
 
 /** Disable all logging (silent). */
 export declare function disableLogging(): void;
 
 /** Enable all logging (debug level). */
 export declare function enableLogging(): void;
+
+export { EnvironmentSnapshot }
+
+export { getEnvironment }
 
 export declare const initLogger: Logger;
 
@@ -122,6 +148,31 @@ declare interface LTreeNode<T> {
     /** The original option object this node was built from. */
     data: T | null | undefined;
 }
+
+/**
+ * Options for `showMessage()` — the transient toast the component can surface on top of
+ * itself. It exists mainly so a veto (or any consumer feedback) is visible in the
+ * fullscreen overlay, where page-level UI is covered by the sheet.
+ */
+declare interface MessageOptions {
+    /** Visual tone. Default `'info'`. */
+    variant?: MessageVariant;
+    /** Auto-dismiss after this many ms. `0` keeps it until replaced, tapped, or the panel closes. Default `3000`. */
+    duration?: number;
+    /**
+     * Where the message anchors relative to the control in the **floating/anchored** case
+     * (a floating-ui `Placement`, e.g. `'top'`, `'bottom-start'`, `'right'`). Default
+     * `'bottom'`. Ignored when a fullscreen overlay is open — there the message is pinned
+     * to the bottom-centre of the viewport.
+     */
+    placement?: Placement;
+}
+
+/**
+ * Visual tone of a transient message shown via `showMessage()` (or a veto callback's
+ * returned reason string). Each maps to a `.ms__message--{variant}` theming hook.
+ */
+declare type MessageVariant = 'info' | 'warning' | 'error' | 'success';
 
 /**
  * Generic configuration options for the MultiSelect component
@@ -229,6 +280,17 @@ declare interface MultiSelectConfig<T = any> {
     renderOptionContentCallback?: (item: T, context: OptionContentRenderContext) => string | HTMLElement;
     /** Custom renderer for badge content (main badges area) - return HTML string or HTMLElement */
     renderBadgeContentCallback?: (item: T, context: BadgeContentRenderContext) => string | HTMLElement;
+    /**
+     * Custom renderer for the WHOLE badge (main badges area) — return HTML string or HTMLElement
+     * for the entire pill/card, not just its content. Unlike renderBadgeContentCallback (which fills
+     * the built-in pill), this replaces the badge markup entirely. The component wraps your output in
+     * a `.ms__badge.ms__badge--custom` element carrying `data-value`, and delegates removal to any
+     * element inside it with `data-action="remove"` (or the built-in `.ms__badge-remove` class) — so
+     * put a remove control in your markup and the component handles the deselect. Falls back to the
+     * default pill for a given item if the callback returns null/empty. Main badges area only (the
+     * selected-items popover keeps using renderSelectedItemContentCallback).
+     */
+    renderBadgeCallback?: (item: T, context: BadgeContentRenderContext) => string | HTMLElement | null | undefined;
     /** Custom renderer for selected item content in popover - return HTML string or HTMLElement */
     renderSelectedItemContentCallback?: (item: T) => string | HTMLElement;
     /** Callback to add custom CSS classes to selected items in popover - return string or array of class names */
@@ -261,12 +323,27 @@ declare interface MultiSelectConfig<T = any> {
     isActionsSticky?: boolean;
     /** Close dropdown after selecting an option (internal: isCloseOnSelect) */
     isCloseOnSelect?: boolean;
+    /**
+     * In the phone fullscreen overlay, auto-focus the search field when it opens — which
+     * pops the soft keyboard immediately. Default `false`: the sheet opens showing the list
+     * (keyboard closed), and the keyboard appears only when the user taps the search. Set
+     * `true` to type-to-filter right away (matches native pickers). No effect in the floating
+     * presentation. (internal: fullscreenAutofocus) */
+    fullscreenAutofocus?: boolean;
     /** Lock dropdown placement after first open (internal: isPlacementLocked) */
     isPlacementLocked?: boolean;
     /** Allow adding new options not in the list (internal: isAddNewAllowed) */
     isAddNewAllowed?: boolean;
     /** Show count badge next to toggle icon (internal: isCounterShown) */
     isCounterShown?: boolean;
+    /**
+     * Allow the selected-items popover to open. Defaults to `true`. The popover is triggered by
+     * the count / compact / "+X more" badge and by the in-input counter (`isCounterShown`). Set
+     * to `false` when you render your own selection UI (e.g. an external container fed by the
+     * `change` event) — the badge and counter still show the count, but clicking them does nothing
+     * and they lose the pointer cursor. (internal: isSelectedPopoverEnabled)
+     */
+    isSelectedPopoverEnabled?: boolean;
     /**
      * Make badges display each option's `fullTitleMember` / `getFullTitleCallback` value
      * instead of its display value. Falls back to the display value for options without a
@@ -355,6 +432,17 @@ declare interface MultiSelectConfig<T = any> {
      */
     searchMode?: SearchMode;
     /**
+     * Show a clickable mode toggle in the phone fullscreen overlay's search header that
+     * flips `searchMode` between `filter` and `navigate` live (no reopen). Default `false`.
+     *
+     * The overlay has room for the affordance and touch users can't reach the desktop
+     * `Ctrl`+`Arrow` match-stepping, so this exposes both modes on the device where it
+     * matters most. The toggle sits at the leading edge of the search field; its icon
+     * reflects the current mode (magnifier = navigate, funnel = filter). No effect in the
+     * floating presentation or when search is disabled/hidden.
+     */
+    isSearchModeToggleShown?: boolean;
+    /**
      * Layout mode for the action buttons. Default: `nowrap`.
      *
      * - `nowrap` — buttons stay on a single row
@@ -404,20 +492,23 @@ declare interface MultiSelectConfig<T = any> {
     /**
      * Interceptor: runs before an option is selected via user interaction.
      * Receives the option about to be added and the current selection (before the change).
-     * Return `false` to block the selection; return `true`/`undefined` to allow.
-     * Silent — a blocked action fires no event. Bypassed by programmatic `setSelected`
-     * and the Select-All action button.
+     * Return `false` to block the selection; return `true`/`undefined` to allow. Return a
+     * **string** to block AND surface it as a message (see `showMessage`) — the touch-safe
+     * way to explain a veto in the fullscreen overlay, where page-level UI is hidden behind
+     * it. Silent otherwise — a blocked action fires no event. Bypassed by programmatic
+     * `setSelected` and the Select-All action button.
      */
-    beforeSelectCallback?: ((option: T, selectedOptions: T[]) => boolean | void) | null;
+    beforeSelectCallback?: ((option: T, selectedOptions: T[]) => boolean | string | void) | null;
     /**
      * Interceptor: runs before an option is deselected via user interaction — the dropdown
      * option toggle, a badge's remove (×) button, the selected-items popover's remove button,
      * and the "remove hidden" badge (checked per item). Receives the option about to be
      * removed and the current selection (before the change). Return `false` to block the
-     * deselection; return `true`/`undefined` to allow. Silent — a blocked action fires no
-     * event. Bypassed by programmatic `setSelected` and the Clear-All action button.
+     * deselection; return `true`/`undefined` to allow. Return a **string** to block AND
+     * surface it as a message (see `showMessage`). Silent otherwise — a blocked action fires
+     * no event. Bypassed by programmatic `setSelected` and the Clear-All action button.
      */
-    beforeDeselectCallback?: ((option: T, selectedOptions: T[]) => boolean | void) | null;
+    beforeDeselectCallback?: ((option: T, selectedOptions: T[]) => boolean | string | void) | null;
     /**
      * Async function to load data: `(searchTerm, signal) => Promise<options[]>`.
      * The optional second argument is an `AbortSignal` that fires when a newer search
@@ -427,6 +518,15 @@ declare interface MultiSelectConfig<T = any> {
     searchCallback?: ((searchTerm: string, signal?: AbortSignal) => Promise<T[]>) | null;
     /** Callback to add a new option when isAddNewAllowed is true */
     addNewCallback?: ((value: string) => T | Promise<T>) | null;
+    /**
+     * Intercept keyboard input before the built-in handling. Runs on every keydown (open or
+     * closed) with a {@link MultiSelectKeydownContext} carrying the event, current state, and a
+     * {@link MultiSelectKeyboardController}. Return `true` to mark the key fully handled — the
+     * component then runs none of its own key logic (you own `preventDefault`); return
+     * `false`/`undefined` to fall through to the defaults. Use it to remap keys (Vim `j`/`k`),
+     * add shortcuts (Ctrl+A → select all), or suppress a default. Property-only.
+     */
+    keydownCallback?: ((context: MultiSelectKeydownContext<T>) => boolean | void) | null;
     /** Event handler: an option was selected (fire-and-forget; return value ignored). Mirrors the bubbling `select` CustomEvent on the element. */
     onSelect?: ((option: T) => void) | null;
     /** Event handler: an option was deselected (fire-and-forget). Mirrors the bubbling `deselect` CustomEvent on the element. */
@@ -502,6 +602,11 @@ export declare class MultiSelectElement<T = any> extends BlissElement<MultiSelec
      * picker's selection so the control participates in the standard reset.
      */
     formResetCallback(): void;
+    /** Runtime writing-direction switch (core observes `dir`): re-mirror the live
+     *  picker. Layout mostly follows the inherited `direction` (logical properties);
+     *  refreshDirection() fixes the parts pinned at build time (the `.ms--rtl` class
+     *  and the panels' explicit `dir`). The initial direction is read by the build. */
+    protected directionChanged(_isRTL: boolean): void;
     /** Structural change (or first connect): mirror CSS vars, then (re)build the picker. */
     protected reinit(): void;
     /** Cosmetic change: mirror CSS vars / custom styles / debug, patch the picker in place. */
@@ -510,6 +615,24 @@ export declare class MultiSelectElement<T = any> extends BlissElement<MultiSelec
     protected connect(): void;
     /** Deactivate: tear the picker down (rebuilt on the next connect). */
     protected disconnect(): void;
+    /**
+     * Device/viewport/orientation changed (core §12.9). Overriding this opts the
+     * element into the shared environment observable — core subscribes on connect
+     * (firing immediately with the current snapshot) and unsubscribes on disconnect.
+     * We map it to the picker's floating/fullscreen presentation; the immediate fire
+     * lands right after `connect()` builds the picker, so the initial presentation is
+     * set before the dropdown can open.
+     */
+    protected environmentChanged(env: EnvironmentSnapshot): void;
+    /**
+     * This element's own border box changed (core §12.9 `resized`). Overriding the
+     * hook opts us into a shared page-wide ResizeObserver, subscribed on connect and
+     * dropped on disconnect. Unlike `environmentChanged`/`viewportChanged` (the
+     * WINDOW), this is our OWN box — a picker in a 400px sidebar on a 2560px monitor
+     * reflows on its width, not the viewport's. We only act when `collapse-badges-
+     * below` is set; otherwise it's a cheap no-op.
+     */
+    protected resized({ width }: ElementSize): void;
     /** Form field name (mirrors the `name` attribute → `formFieldId`). */
     get name(): string | null;
     set name(value: string | null);
@@ -520,6 +643,16 @@ export declare class MultiSelectElement<T = any> extends BlissElement<MultiSelec
         notify?: boolean;
     }): void;
     getValue(): string | number | (string | number)[] | null;
+    /**
+     * Surface a transient message ("toast") on top of the component — visible even in the
+     * fullscreen overlay, where page-level UI is hidden behind the sheet. Content is text or
+     * an element; `opts.variant` sets the tone and `opts.duration` the auto-dismiss (0 =
+     * sticky). Also reached automatically when a `beforeSelect`/`beforeDeselect` callback
+     * returns a reason string.
+     */
+    showMessage(content: string | HTMLElement, opts?: MessageOptions): void;
+    /** Dismiss the transient message shown by {@link showMessage}, if any. */
+    hideMessage(): void;
     destroy(): void;
 }
 
@@ -541,6 +674,71 @@ declare type MultiSelectEvents = {
     deselect: MultiSelectEventDetail;
     change: MultiSelectEventDetail;
 };
+
+/**
+ * Imperative facade handed to `keydownCallback` so a consumer can drive the picker without
+ * reaching into internals. Every method mirrors a built-in keyboard action.
+ */
+declare interface MultiSelectKeyboardController<T = any> {
+    /** Move focus to the next / previous option. */
+    focusNext(): void;
+    focusPrevious(): void;
+    /** Move focus to the first / last option. */
+    focusFirst(): void;
+    focusLast(): void;
+    /** Move focus by a page (10 rows). */
+    focusPageUp(): void;
+    focusPageDown(): void;
+    /** Navigate-mode only: jump focus to the next / previous match. */
+    focusNextMatch(): void;
+    focusPreviousMatch(): void;
+    /** Focus a specific index in the filtered list (ignored if out of range). */
+    focusIndex(index: number): void;
+    /** Toggle the currently focused option (no-op if nothing is focused). */
+    toggleFocused(): void;
+    /** Toggle a specific option by its value (select ⇄ deselect). */
+    toggleValue(value: string | number): void;
+    /** Select a specific option by its value (no-op if already selected). */
+    selectValue(value: string | number): void;
+    /** Deselect a specific option by its value (no-op if not selected). */
+    deselectValue(value: string | number): void;
+    /** Open / close the dropdown. */
+    open(): void;
+    close(): void;
+    /** Set the search box text (runs the search). */
+    setSearch(term: string): void;
+    /** Clear the search box and reset the visible list. */
+    clearSearch(): void;
+}
+
+/**
+ * Context passed to `keydownCallback`, which runs before all built-in keyboard handling.
+ * Return `true` to mark the key fully handled (the component then runs none of its own
+ * key logic — you own `preventDefault`); return `false`/`undefined` to fall through to the
+ * defaults. Mirrors the veto-hook shape used across KM components.
+ */
+declare interface MultiSelectKeydownContext<T = any> {
+    /** The raw keyboard event — call `preventDefault()` yourself if you handle the key. */
+    event: KeyboardEvent;
+    /** `event.key`, for convenience. */
+    key: string;
+    /** Whether the dropdown is currently open. */
+    isOpen: boolean;
+    /** How the open panel is presented (`floating` / `fullscreen`). */
+    presentation: 'floating' | 'fullscreen';
+    /** The current search term. */
+    searchTerm: string;
+    /** Index of the focused option in the filtered list (`-1` when nothing is focused). */
+    focusedIndex: number;
+    /** The focused option object, or `null`. */
+    focusedOption: T | null;
+    /** The options currently visible (after filtering). */
+    filteredOptions: ReadonlyArray<T>;
+    /** The currently selected values. */
+    selectedValues: ReadonlyArray<string>;
+    /** Imperative actions mirroring the built-in keyboard behavior. */
+    controller: MultiSelectKeyboardController<T>;
+}
 
 /**
  * Legacy interface for backward reference
@@ -586,10 +784,20 @@ export declare interface MultiSelectOptions extends MultiSelectConfig<MultiSelec
  */
 declare type NodeId = string | number;
 
+export { observeEnvironment }
+
+export { observeViewport }
+
 /**
- * Context provided to renderOptionContentCallback
+ * Context provided to renderOptionContentCallback.
+ *
+ * Extends the shared {@link PresentationContext} from `@keenmate/web-components-core`, so it
+ * also carries `presentation` (`'floating' | 'modal' | 'fullscreen'` — this component only ever
+ * emits `floating`/`fullscreen`), `isFullscreen`, and `isModal`. Branch on `isFullscreen` to
+ * render leaner content in the phone overlay. Reactive: swapping presentation re-renders and
+ * re-invokes the callback with the new value.
  */
-declare interface OptionContentRenderContext {
+declare interface OptionContentRenderContext extends PresentationContext {
     /** Index of the option in the filtered list */
     index: number;
     /** Whether the option is currently selected */
@@ -631,6 +839,10 @@ export declare const OPTIONS_FORMATS: readonly ["json", "csv", "plain"];
 
 export declare type OptionsFormat = (typeof OPTIONS_FORMATS)[number];
 
+export { Orientation }
+
+export { OS }
+
 export declare interface ParsedOptions {
     /** Parsed options: objects for `json`/`csv`, `[value, label]` tuples for `plain`. */
     options: unknown[];
@@ -657,6 +869,8 @@ declare interface ParseOptionsOptions {
     rowSplitter?: string;
 }
 
+export { PointerType }
+
 /**
  * Search input display mode
  */
@@ -678,6 +892,8 @@ export declare function setCategoryLevel(category: string, level: LogLevelDesc):
 
 /** Set the same level on every category. */
 export declare function setLogLevel(level: LogLevelDesc): void;
+
+export { TABLET_MIN_SHORT_SIDE }
 
 export declare const uiLogger: Logger;
 
@@ -701,6 +917,7 @@ export declare class WebMultiSelect<T = any> {
     private cascadeCheckedAtoms;
     private hiddenInputs;
     private focusedIndex;
+    private keyboardController;
     private matchingIndices;
     private searchTerm;
     private isLoading;
@@ -712,11 +929,33 @@ export declare class WebMultiSelect<T = any> {
     private isRTL;
     private effectiveBadgesPosition;
     private justClosedViaClick;
+    private justOpenedViaClick;
     private positioningDriftWarned;
+    private fullscreenContainingBlockWarned;
+    private presentationMode;
+    private fullscreenHeader;
+    private fullscreenSearchInput;
+    private fullscreenSearchClear;
+    private fullscreenModeToggle;
+    private fullscreenNav;
+    private fullscreenNavCount;
+    private fullscreenNavPrev;
+    private fullscreenNavNext;
+    private bodyScrollUnlock;
+    private overflowXClamp;
+    private keyboardInsetCleanup;
+    private overlayHistoryActive;
+    private readonly onOverlayPopstate;
     private dropdownCleanup;
     private hintCleanup;
     private selectedPopoverCleanup;
     private tooltips;
+    private labelRevealTrigger;
+    private labelRevealPanel;
+    private labelRevealPopover;
+    private messageEl;
+    private messageCleanup;
+    private messageTimer;
     private readonly onDropdownScroll;
     private virtualScroll;
     private optionsContainer;
@@ -837,6 +1076,33 @@ export declare class WebMultiSelect<T = any> {
      * here. Pass all options to show the whole tree.
      */
     private rebuildTreeVisibleFromMatches;
+    /**
+     * Tree + `search-mode="navigate"`: keep the ENTIRE tree visible (the tree is always
+     * fully expanded, so `flatNodes` is the whole thing) and record which visible rows
+     * match the term in `matchingIndices` — the flat-list navigate behavior, but over
+     * `treeNodes`. Filter mode collapses the hierarchy to matches + ancestors; navigate
+     * mode instead leaves the structure intact so the user can jump between matches
+     * (Ctrl+Arrow on desktop, the fullscreen navigator on touch). Returns the index of
+     * the first match, or -1 (no term / no matches), so the caller can set focus.
+     */
+    private rebuildTreeVisibleForNavigate;
+    /**
+     * (Re)compute `isRTL` from the host's `dir` (or an RTL ancestor) and derive the
+     * direction-mirrored badges position. Pure state — callers apply the DOM effects
+     * (class toggle, panel `dir`, badge re-render). In Shadow DOM the `dir` lives on
+     * the host element, not the shadow content, so we resolve the host first.
+     */
+    private detectRTL;
+    /**
+     * Re-read `dir` and re-apply RTL mirroring live. The web-component calls this when
+     * its `dir` attribute changes at runtime (e.g. an app-wide language/direction
+     * switch). Most layout follows the inherited CSS `direction` automatically (the
+     * component is authored with logical properties); this fixes the parts pinned at
+     * build time — the `.ms--rtl` class (badges/count-display placement) and the
+     * explicit `dir` on the shadow-root-appended panels (which don't sit under the
+     * `.ms--rtl` element, so they'd otherwise keep a stale build-time direction).
+     */
+    refreshDirection(): void;
     private buildHTML;
     /**
      * Check if virtual scroll should be used
@@ -847,6 +1113,24 @@ export declare class WebMultiSelect<T = any> {
      */
     private hasGroups;
     private renderDropdown;
+    /**
+     * Round the OUTER corners of the row at the very top and the row at the very
+     * bottom of the list so a focused/selected row's background — and crucially its
+     * focus `outline`, which traces the row's OWN box and follows its border-radius
+     * but NOT an ancestor's overflow clip — curves with the panel instead of poking a
+     * square corner past it.
+     *
+     * Keyed off DOM order, not option index, so grouping works: when grouped the top
+     * row is a `.ms__group-label` (not the first option, which sits below it), so we
+     * round whichever element is physically first/last. VirtualScroll renders rows in
+     * index order into one innerHTML, so DOM order == visual order there too.
+     *
+     * Logical corners (`border-start-*` / `border-end-*`) so it mirrors in RTL. A
+     * space-taking vertical scrollbar occupies the inline-END gutter, so the END-side
+     * corners stay square then (the panel's rounded end corner is the scrollbar
+     * track's). The radius is 0 in the fullscreen sheet (that scope zeroes the var).
+     */
+    private applyEdgeOptionRadii;
     /**
      * Render dropdown with virtual scrolling
      */
@@ -866,6 +1150,15 @@ export declare class WebMultiSelect<T = any> {
     private renderActionsHTML;
     private renderOption;
     /**
+     * Trailing info affordance for an option row, emitted only for the fullscreen
+     * overlay. CSS keeps it hidden until `markTruncatedOptions()` tags the row
+     * `.ms__option--truncated`, so it appears only when the label is actually clipped.
+     * Tapping it reveals the full label — the touch substitute for the hover option
+     * tooltip, which never fires on touch (the very devices that get fullscreen).
+     * `tabindex="-1"` keeps it out of the tab order; the search input owns keyboarding.
+     */
+    private renderOptionInfoButton;
+    /**
      * Render a single tree-mode row. Separate from `renderOption`: a tree row is
      * indented by its depth (via the `--ms-tree-depth` custom property) and
      * tagged branch/leaf, but otherwise carries the same selection/checkbox/
@@ -883,6 +1176,16 @@ export declare class WebMultiSelect<T = any> {
      * search is unusable → the search placeholder.
      */
     private getPlaceholderText;
+    /**
+     * The search field placeholder. An explicit `searchPlaceholder` always wins and stays
+     * fixed. Otherwise the default is "Search..." — except when the in-overlay mode toggle
+     * is enabled (`isSearchModeToggleShown`), where it becomes mode-aware so the field labels
+     * the current behavior: "Search…" in navigate mode, "Filter…" in filter mode. Refreshed
+     * on a live mode switch (see setSearchModeLive → refreshSearchPlaceholder).
+     */
+    private getSearchPlaceholder;
+    /** Re-apply the (possibly mode-aware) placeholder to the live inputs after a mode switch. */
+    private refreshSearchPlaceholder;
     private renderBadges;
     private attachEvents;
     private handleSearch;
@@ -924,6 +1227,12 @@ export declare class WebMultiSelect<T = any> {
     private focusPageDown;
     private focusNextMatch;
     private focusPreviousMatch;
+    /** Lazily build (and cache) the imperative facade passed to `keydownCallback`. Bound to the
+     *  same private actions the built-in key handling uses, so consumer shortcuts behave identically. */
+    private getKeyboardController;
+    /** Clear the search box (both the main input and the fullscreen search) and reset the visible
+     *  list. Shared by Escape and the keyboard controller. */
+    private clearSearch;
     private scrollToFocused;
     private toggleOption;
     /**
@@ -973,7 +1282,172 @@ export declare class WebMultiSelect<T = any> {
      * owns the measurement + culprit-finding + CB-CSS diagnostic (`detectFixedDrift`).
      */
     private warnDrift;
+    /**
+     * Fullscreen counterpart of {@link warnDrift}. The overlay is a `position: fixed`,
+     * full-viewport sheet — but if an ancestor of the host establishes a fixed-positioning
+     * containing block (`transform` / `perspective` / `filter` / `backdrop-filter` / a
+     * qualifying `will-change`), the browser anchors the sheet to THAT ancestor's box instead
+     * of the viewport, so it no longer covers the screen (offset, clipped, or mis-sized).
+     *
+     * Unlike the floating path — where core measures real drift after positioning — nothing
+     * anchors the sheet, so there's no drift to observe. Instead we ask core's shared
+     * heuristic (`getFixedPositionOffsetParent`, the same one that feeds the floating platform)
+     * whether the sheet's true offset parent is the viewport (`window`) or an element. An
+     * element means it WILL be mis-anchored; warn once, pointing at the culprit. We only check
+     * the reliably-honoured properties core lists (transform family) — `contain` /
+     * `container-type` are omitted because browsers don't honour them for fixed positioning,
+     * so they don't actually break the sheet.
+     */
+    private warnFullscreenContainingBlock;
     private positionDropdown;
+    /**
+     * Switch how the open panels are presented. 'floating' anchors them to the input
+     * (the default); 'fullscreen' renders them as full-viewport overlays (the phone
+     * pattern) — the dropdown with its own search header + close, the selected-items
+     * popover with its existing header + close. Driven by the element's
+     * `environmentChanged` hook (auto → fullscreen on phones). A no-op when unchanged;
+     * when a panel is already open it re-applies live so an orientation flip / viewport
+     * resize can swap presentation without a reopen.
+     */
+    setPresentation(mode: 'floating' | 'fullscreen'): void;
+    /**
+     * Lock page scroll behind a fullscreen overlay via the core ref-counted helper.
+     * Idempotent per instance: the dropdown and the selected-items popover are mutually
+     * exclusive (opening one closes the other), so we hold at most one lock at a time,
+     * and a redundant call is a no-op rather than acquiring a second.
+     */
+    private lockBodyScroll;
+    /** Restore page scroll (no-op if it wasn't locked). */
+    private unlockBodyScroll;
+    /**
+     * Clip the host document's horizontal overflow while a fullscreen sheet is open.
+     *
+     * A page that overflows horizontally (e.g. an unbreakable-wide token in a heading)
+     * makes the mobile browser SHRINK-TO-FIT: it zooms the page out so the overflow fits,
+     * which desyncs the visual viewport from the layout viewport. Our fullscreen sheet is
+     * `position: fixed` — anchored to the LAYOUT viewport — so under that zoom it no longer
+     * lands flush against the physical screen edges, and the top slips under the system bar
+     * (looks like "the bar covers the sheet"). This is NOT a safe-area problem; safe-area
+     * insets are 0 in that state. Clamping `overflow-x: hidden` on <html>/<body> removes the
+     * overflow, so the browser drops the zoom and the sheet sits flush. Complements
+     * lockBodyScroll() (vertical axis); the saved inline value is restored on close.
+     *
+     * Only <html> is touched (not <body>): clipping the root's horizontal overflow is
+     * enough to collapse the scrollWidth and cancel the shrink-to-fit, and it avoids
+     * conflicting with core's lockBodyScroll(), which owns <body>'s `overflow`. Idempotent.
+     */
+    private clampDocumentOverflowX;
+    /** Restore the <html> `overflow-x` clamped by clampDocumentOverflowX() (no-op if unset). */
+    private releaseDocumentOverflowX;
+    /**
+     * While the fullscreen dropdown is open, keep it sitting above the soft keyboard.
+     * Delegates to core's `observeKeyboardInset` (which tracks `window.visualViewport`
+     * and pins the panel's height/top so its flex column reflows above the keyboard);
+     * we just hold the returned cleanup. No-op where `visualViewport` is unavailable.
+     */
+    private observeKeyboardInset;
+    /** Detach keyboard-inset tracking and restore the panel's CSS-driven geometry. */
+    private unobserveKeyboardInset;
+    /**
+     * The fullscreen size multiplier = `--ms-fullscreen-rem ÷ --ms-rem` (both read off
+     * the host). CSS scales itself — every size is `calc(N × --ms-rem)` and the panel
+     * overrides `--ms-rem` — so this exists only for the JS-driven pixel heights that
+     * CSS can't reach: the virtual/fixed option rows and the popover's virtual badges.
+     * Returns 1 when floating (or when computed styles aren't readable, e.g. jsdom).
+     */
+    private fullscreenScale;
+    /** Virtual/fixed row height (px), scaled up in the fullscreen phone view. */
+    private scaledOptionHeight;
+    /**
+     * Size the virtual options scroll container for the current presentation. Applied on
+     * every render (the container itself is built once), so a floating⇄fullscreen switch
+     * re-sizes it: floating = a fixed maxHeight scroll box; fullscreen = flex-fill the
+     * panel's flex column (no fixed height). Also refreshes --ms-option-height to the
+     * scaled row height so the CSS row height matches the virtual scroller's itemHeight.
+     */
+    private applyVirtualOptionsSizing;
+    /**
+     * Virtual popover badge row height (px). In the fullscreen phone view the rows are
+     * scaled up AND given extra height so a selected item is a comfortable, dropdown-like
+     * touch target (the default 36px pill is short for touch). Mirrors the CSS
+     * `--ms-badge-height` override for the fullscreen popover (floating.css) so the
+     * virtual list's fixed height agrees with the non-virtual pills.
+     */
+    private scaledBadgeHeight;
+    /**
+     * Clear the inline geometry that floating-ui's `anchor` writes on a panel
+     * (position/left/top plus our composed max-width/min-width). Inline styles beat
+     * the stylesheet, so a panel left over from a floating cycle would otherwise pin
+     * itself where it last anchored and ignore the fullscreen CSS (position: fixed;
+     * inset: 0; width: 100vw). Must run when switching a panel floating → fullscreen.
+     */
+    private clearFloatingInlineGeometry;
+    /** Stand up the fullscreen dropdown overlay: modifier class, header, scroll lock, focus. */
+    private enterFullscreen;
+    /** Tear down the fullscreen dropdown chrome and restore page scroll (no-op if floating). */
+    private exitFullscreen;
+    /**
+     * Back-gesture handling for the fullscreen sheet. On open we push a history entry
+     * (same URL) and listen for `popstate`; the phone Back gesture/button then pops that
+     * entry — which we treat as "close the sheet" — instead of navigating away from the
+     * page. A programmatic close (✕, selection, Escape) consumes the entry via
+     * `history.back()` so the stack is left as it was found.
+     */
+    private pushOverlayHistory;
+    /** Back gesture/button fired: our pushed entry is already gone, so just close the
+     *  sheet — WITHOUT popping history again (popOverlayHistory becomes a no-op). */
+    private handleOverlayPopstate;
+    /** Programmatic close: remove the listener and pop the entry we pushed (so the
+     *  history stack returns to its pre-open state). No-op if a Back gesture already
+     *  consumed it (overlayHistoryActive is false by then). */
+    private popOverlayHistory;
+    /**
+     * Build the fullscreen overlay header: a search field (proxying to the same
+     * `handleSearch`/`handleKeydown` path as the main input, since the overlay covers
+     * it) plus a close button. Inserted before the scrolling list so it pins to the
+     * top of the fixed panel. `renderDropdown()` only rewrites `dropdownInner`, so the
+     * header survives re-renders.
+     */
+    private buildFullscreenHeader;
+    /** Build the navigate-mode match navigator (count + prev/next) and append it to the
+     *  fullscreen header, once. No-op if already built or the header isn't present. The
+     *  nav wraps onto its own full-width row under the search box (header is flex-wrap;
+     *  the nav takes 100% basis). */
+    private ensureFullscreenNav;
+    /** Remove the match navigator (switching to filter mode, which has no jump UI). */
+    private removeFullscreenNav;
+    /** Flip searchMode filter<->navigate from the in-overlay toggle. */
+    private toggleSearchModeLive;
+    /**
+     * Switch searchMode in place — the overlay's toggle path. The `search-mode` attribute
+     * is reinit-on-change (it rebuilds and closes the overlay); this instead mutates the
+     * live config, adds/removes the match navigator to match, and re-projects the current
+     * term under the new mode (filter narrows the list / navigate keeps all + highlights),
+     * all without tearing the open sheet down. Focus stays on the search field.
+     */
+    private setSearchModeLive;
+    /** Sync the mode toggle's icon (via data-mode) and labels with the current searchMode.
+     *  No-op when the toggle isn't built (opt-out, floating panel, or search hidden). */
+    private updateFullscreenModeToggle;
+    /**
+     * Sync the fullscreen match navigator (navigate mode only) with the current search
+     * state: hide it until there's a term, then show "N of M" while a match is focused
+     * (or "M matches" / "No matches"), and disable the prev/next buttons when there's
+     * nothing to step through. No-op when the navigator isn't built (floating panel,
+     * filter mode, or search disabled).
+     */
+    private updateFullscreenNav;
+    /**
+     * Show the fullscreen search's inline clear (✕) only while the field has text.
+     * No-op when the button isn't built (floating panel, readonly/hidden search).
+     */
+    private updateFullscreenSearchClear;
+    /**
+     * Clear the fullscreen search term via the same path a keystroke takes, then
+     * refocus the field so the user can keep typing. Touch has no keyboard Escape,
+     * so this button is the on-screen way to reset a search.
+     */
+    private clearFullscreenSearch;
     private positionHint;
     private parseInitialSelection;
     /**
@@ -990,6 +1464,20 @@ export declare class WebMultiSelect<T = any> {
     private hideSelectedPopover;
     private renderSelectedPopover;
     private renderSelectedPopoverVirtual;
+    /**
+     * Coerce a render-callback result to an HTML string. Callbacks may return a string
+     * (HTML) or an HTMLElement (serialized via `outerHTML`); null/undefined → ''. Used by
+     * every "return string | HTMLElement" content callback that builds into an innerHTML
+     * string. (DOM sinks that hold a live node instead — the reveal/message panels — use
+     * textContent/appendChild directly and intentionally don't go through here.)
+     */
+    private toHtml;
+    /**
+     * Normalize a class callback result (`string | string[] | null`) to a single
+     * space-joined string with falsy entries dropped — e.g. `['a', '', 'b'] → "a b"`,
+     * `null → ""`. Callers add their own leading space / base class as needed.
+     */
+    private classSuffix;
     /**
      * Render a removable badge for a selected option (used by the badges/partial display modes
      * and by the selected-items popover).
@@ -1052,6 +1540,42 @@ export declare class WebMultiSelect<T = any> {
      * `filteredOptions`, the same global index `renderOption` was given.
      */
     private attachOptionTooltips;
+    /**
+     * Tag each currently-rendered fullscreen option row whose title is horizontally
+     * clipped with `.ms__option--truncated`, so CSS reveals its info affordance.
+     * Runs per virtual-scroll render (rows recycle) and on the non-virtual render.
+     * Horizontal (ellipsis) overflow only — the truncation mode this pairs with;
+     * a wrapping title isn't "cut", it grows vertically. No-op unless fullscreen.
+     */
+    private markTruncatedOptions;
+    /**
+     * Reveal (or dismiss) the full label of a clipped fullscreen row when its info
+     * affordance is tapped — hover tooltips don't fire on touch, and a hover tooltip's
+     * synthetic mouseleave (from the tap itself, under devtools touch emulation) would
+     * flash it away. So this is a manually-controlled `createPopover` panel, mounted in
+     * the shadow root for component styling, that stays until explicitly dismissed:
+     * a second tap on the same button, a list scroll, a re-render, an outside tap, or
+     * closing the panel (see hideLabelReveal + its call sites). Tapping the same button
+     * while it's shown toggles it off.
+     */
+    private toggleLabelReveal;
+    /** Dismiss the full-label reveal popover, if shown. Idempotent. */
+    private hideLabelReveal;
+    /**
+     * Show a transient message ("toast") on top of the component. Its reason for existing:
+     * in the fullscreen overlay the sheet covers the whole page, so a consumer can't surface
+     * feedback (a blocked veto, a hint) where the user can see it. This renders above the
+     * panel in BOTH presentations — anchored under the control when floating, pinned to the
+     * bottom of the viewport (over the overlay) when fullscreen.
+     *
+     * Content is a string (plain text) or an HTMLElement (rich markup). `opts.variant`
+     * (info | warning | error | success) picks the tone; `opts.duration` sets auto-dismiss
+     * (0 = sticky). Tapping the message dismisses it. Only one shows at a time — a new call
+     * replaces the previous. Also reached automatically when a veto callback returns a string.
+     */
+    showMessage(content: string | HTMLElement, opts?: MessageOptions): void;
+    /** Dismiss the transient message, if shown. Idempotent. */
+    hideMessage(): void;
     /**
      * Hide (don't destroy) every currently-shown option tooltip immediately,
      * ignoring the hide delay. Wired to dropdown scroll so a tooltip can't trail
