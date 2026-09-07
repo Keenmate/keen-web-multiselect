@@ -269,12 +269,9 @@ defmodule TestAppWeb.Examples.TreeLive do
   def render(assigns) do
     ~H"""
     <style>
-      .demo-area { background: #f7fafc; padding: 1.5rem; border-radius: 8px; margin: 1rem 0; }
-      .demo-label { display: block; font-size: 0.85rem; color: #4a5568; margin-bottom: 0.5rem; }
+      /* Page-specific only — .demo-area / .demo-label / .controls come from examples-shared.css. */
       .demo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; }
-      .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-bottom: 0.75rem; }
       .controls[data-disabled="true"] { opacity: 0.5; }
-      .controls label { display: inline-flex; align-items: center; gap: 0.3rem; }
     </style>
 
     <.example_page

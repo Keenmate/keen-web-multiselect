@@ -52,7 +52,8 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
       subtitle="Theme-designer typography integration with --base-* variables for fonts, sizes, and weights"
     >
       <style>
-        .controls { background: white; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); }
+        /* Renamed from .controls to avoid colliding with the shared flex-row .controls. */
+        .control-panel { background: white; border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1); }
         .controls-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         .controls-header h2 { margin: 0; font-size: 1.25rem; border: none; padding: 0; }
         .reset-btn { background: #e53e3e; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; }
@@ -75,7 +76,7 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
       </style>
 
       <.card title="Typography Controls">
-        <div class="controls">
+        <div class="control-panel">
           <div class="controls-header">
             <h2>Typography Controls</h2>
             <button class="reset-btn" id="resetBtn">Reset All</button>
