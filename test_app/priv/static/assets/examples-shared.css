@@ -76,6 +76,14 @@ h1 {
     margin-bottom: 1rem;
     color: #2d3748;
     font-size: 1.5rem;
+    /* Flex so an inline `.badge` sits centered next to the heading text.
+       Single-child headings (the common case) render identically. `flex-wrap`
+       keeps longer headings that mix text with inline `<code>` chips flowing
+       onto new lines instead of squishing each flex item to one word per line. */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .card h3,
@@ -85,10 +93,51 @@ h1 {
     font-size: 1.25rem;
 }
 
+/* Accent sub-heading within a card/section (a step below its h2). */
+.card h3.subsection,
+.example-section h3.subsection {
+    margin: 2rem 0 1rem;
+    font-size: 1.2rem;
+    color: #667eea;
+}
+
 .card p,
 .example-section p {
     margin-bottom: 1rem;
     color: #666;
+}
+
+/* Demo card — a padded box framing a single demo/instance (smaller and lighter
+   than `.card`). The surface is tunable via `--demo-card-bg` / `--demo-card-border`
+   (e.g. a gray fill or a shadow-only look); the inner heading/paragraph/code are
+   standardized so cards read consistently across every example page. */
+.demo-card {
+    background: var(--demo-card-bg, #fff);
+    border: var(--demo-card-border, 1px solid #e5e7eb);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.demo-card h3,
+.demo-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #374151;
+    border: none;
+    padding: 0;
+}
+
+.demo-card p {
+    margin: 0 0 1rem 0;
+    font-size: 0.8125rem;
+    color: #6b7280;
+}
+
+.demo-card code {
+    background: #f3f4f6;
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
 }
 
 /* Description text */
@@ -128,11 +177,19 @@ h1 {
     align-items: center;
 }
 
-.controls label {
-    display: flex;
+/* Inline control label — a clickable row of checkbox/radio + text. Used for
+   each label inside `.controls`, and standalone as `.toggle-label` (a single
+   switch that also carries its own bottom spacing). */
+.controls label,
+.toggle-label {
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+}
+
+.toggle-label {
+    margin-bottom: 0.75rem;
 }
 
 .controls input[type="checkbox"] {
@@ -140,9 +197,20 @@ h1 {
     height: 16px;
 }
 
-/* Demo areas */
+/* Demo areas — a soft panel wrapping a live component demo, optionally
+   introduced by a `.demo-label`. */
 .demo-area {
-    margin-bottom: 1.5rem;
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.demo-label {
+    display: block;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
 }
 
 /* Output display */
@@ -164,6 +232,87 @@ pre {
     overflow-x: auto;
     font-size: 0.875rem;
     border: 1px solid #e2e8f0;
+}
+
+/* Dark output theme — opt in per page with `class="dark-output"` on <body>.
+   Turns the light `.output` panels above into a dark console look. */
+.dark-output .output {
+    background: #2d3748;
+    color: #a0aec0;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    overflow-x: auto;
+    border: none;
+}
+
+.dark-output .output-label {
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.dark-output .output pre {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Section-header badge pill (e.g. a "NEW" tag beside an `.example-section h2`).
+   Landing/templating pages override `.badge` locally for their own look. */
+.badge {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge.new {
+    background: #f56565;
+}
+
+/* Log / console panel — a monospace, scrollable box for streaming demo output
+   (event logs, request activity, registry dumps, live values). Light by
+   default; add `.log-panel--dark` for the console look. Height caps via
+   `--log-max-height`. Pages keep their own entry-color classes
+   (`.entry--*`, `.tag-*`, …). */
+.log-panel {
+    font-family: ui-monospace, SFMono-Regular, Menlo, 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    max-height: var(--log-max-height, 220px);
+    overflow: auto;
+    background: #f7fafc;
+    color: #2d3748;
+    border: 1px solid #e2e8f0;
+}
+
+.log-panel--dark {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-color: transparent;
+}
+
+/* Muted secondary text — used inside log panels and elsewhere. */
+.muted {
+    color: #6b7280;
+}
+
+/* Spacing utility — top margin to separate a follow-up block (a details
+   disclosure, a secondary grid) from the demo above it. */
+.mt-1 {
+    margin-top: 1rem;
 }
 
 /* Code blocks */
@@ -250,17 +399,56 @@ pre code,
     margin-bottom: 0.5rem;
 }
 
-/* Grid layouts */
-.grid {
+/* Grid layouts — one auto-fit grid parameterized by `--grid-min` (min column
+   width) and `--grid-gap`. Pages tune the min inline, e.g.
+   `<div class="card-grid" style="--grid-min: 240px">`. `.grid`/`.grid-2` are
+   kept as named presets. */
+.grid,
+.grid-2,
+.card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(var(--grid-min, 300px), 1fr));
+    gap: var(--grid-gap, 2rem);
 }
 
 .grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
+    --grid-min: 400px;
+}
+
+/* Reference table — bordered spec/lookup table used on a few pages. Add
+   `is-highlight` to a <tr> to emphasize a row (e.g. the default value). */
+.reference-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin-bottom: 2rem;
+}
+
+.reference-table th,
+.reference-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border: 1px solid #e5e7eb;
+}
+
+.reference-table th {
+    background: #f3f4f6;
+    font-weight: 600;
+}
+
+.reference-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.reference-table tr.is-highlight {
+    background: #eff6ff;
+}
+
+.reference-table code {
+    background: #e5e7eb;
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
 }
 
 /* Typography */
@@ -347,6 +535,197 @@ footer a {
     color: #667eea;
 }
 
+/* =============================================================================
+   CHAPTER NAV — floating "on this page" jump navigator (built by
+   examples-chapter-nav.js). A tab pinned to the right edge (~1/3 down the
+   viewport) that expands into a scroll-spied list of the page's chapters.
+   ============================================================================= */
+
+/* Smooth hash-jumps + a little headroom so a jumped-to section isn't flush to the
+   top edge. `scroll-margin-top` applies to the anchor targets the nav assigns ids to. */
+html {
+    scroll-behavior: smooth;
+}
+.card,
+.example-section {
+    scroll-margin-top: 1rem;
+}
+
+/* The grab tab, pinned to the right edge ~1/3 down. The panel is positioned
+   against it by Floating UI (see examples-chapter-nav.js), so it's out of flow
+   here — only the toggle occupies this fixed box. */
+.chapter-nav {
+    position: fixed;
+    top: 33vh;
+    right: 0;
+    z-index: 9000;
+    /* Let clicks fall through to the page; children re-enable. */
+    pointer-events: none;
+}
+
+.chapter-nav__panel,
+.chapter-nav__toggle {
+    pointer-events: auto;
+}
+
+/* The grab tab. Rounded on the left (it hugs the right edge). */
+.chapter-nav__toggle {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 48px;
+    padding: 0;
+    background: #667eea;
+    color: #fff;
+    border: none;
+    border-radius: 10px 0 0 10px;
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.35);
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.chapter-nav__toggle:hover {
+    background: #5a67d8;
+}
+
+.chapter-nav[data-open="true"] .chapter-nav__toggle {
+    background: #4c51bf;
+}
+
+.chapter-nav__toggle svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.chapter-nav__toggle svg circle {
+    fill: currentColor;
+    stroke: none;
+}
+
+/* The list panel — hidden (and non-interactive) until open. Positioned by
+   Floating UI (left/top set inline), so it's taken out of flow with fixed. */
+.chapter-nav__panel {
+    position: fixed;
+    z-index: 9000;
+    width: 260px;
+    max-width: 72vw;
+    max-height: 60vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(8px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+
+.chapter-nav[data-open="true"] .chapter-nav__panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+/* "Back to Examples" link at the top of the panel (example pages only). */
+.chapter-nav__back {
+    display: block;
+    margin-bottom: 0.35rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #4c51bf;
+    text-decoration: none;
+    background: #eef2ff;
+    transition: background 0.15s, color 0.15s;
+}
+
+.chapter-nav__back:hover {
+    background: #e0e7ff;
+    color: #3730a3;
+    text-decoration: none;
+}
+
+.chapter-nav__title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+    padding: 0.25rem 0.5rem 0.4rem;
+}
+
+.chapter-nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chapter-nav__item {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    border-left: 3px solid transparent;
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: #4a5568;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.chapter-nav__item:hover {
+    background: #f3f4f6;
+    color: #2d3748;
+    text-decoration: none;
+}
+
+.chapter-nav__item.is-active {
+    background: #eef2ff;
+    color: #4338ca;
+    border-left-color: #667eea;
+    font-weight: 600;
+}
+
+/* On small screens, go near-fullscreen (touch targets + readability) and bump the
+   font so chapter titles are comfortable to tap. */
+@media (max-width: 768px) {
+    .chapter-nav__panel {
+        width: 80vw;
+        max-width: 80vw;
+        max-height: 80vh;
+    }
+    .chapter-nav__title {
+        font-size: 0.9rem;
+    }
+    .chapter-nav__item {
+        font-size: 1.05rem;
+        padding: 0.7rem 0.85rem;
+    }
+    .chapter-nav__toggle {
+        width: 40px;
+        height: 44px;
+    }
+}
+
+/* Respect reduced-motion: no smooth scroll or slide. */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    .chapter-nav__panel {
+        transition: none;
+    }
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     body {
@@ -358,7 +737,8 @@ footer a {
     }
 
     .grid,
-    .grid-2 {
+    .grid-2,
+    .card-grid {
         grid-template-columns: 1fr;
     }
 

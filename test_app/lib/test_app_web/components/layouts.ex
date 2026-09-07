@@ -85,6 +85,8 @@ defmodule TestAppWeb.Layouts do
       </head>
       <body>
         {@inner_content}
+        <!-- Floating right-edge "on this page" jump navigator (mirrors upstream). -->
+        <script type="module" src="/assets/examples-chapter-nav.js"></script>
       </body>
     </html>
     """

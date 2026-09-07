@@ -114,8 +114,23 @@ defmodule TestAppWeb.Examples.IndexLive do
      socket
      |> assign(:page_title, "keen_web_multiselect — examples")
      |> assign(:pages, @pages)
+     |> assign(:chapter_nav_script, chapter_nav_script(@pages))
      |> assign(:upstream_version, Keenmate.WebMultiselect.upstream_version())
      |> assign(:wrapper_version, Application.spec(:keen_web_multiselect, :vsn) |> to_string())}
+  end
+
+  # Cross-page jump list for the floating chapter-nav (examples-chapter-nav.js):
+  # on the gallery it renders the full example-page registry instead of in-page sections.
+  # HEEx renders <script> contents as literal text (no {..} interpolation), so the whole
+  # tag is emitted via raw/1. `</` is escaped so the JSON can't break out of the element.
+  defp chapter_nav_script(pages) do
+    json =
+      pages
+      |> Enum.map(&%{label: &1.title, href: &1.href})
+      |> Jason.encode!()
+      |> String.replace("</", "<\\/")
+
+    "<script>window.CHAPTER_NAV_ITEMS = #{json};</script>"
   end
 
   def render(assigns) do
@@ -269,6 +284,8 @@ defmodule TestAppWeb.Examples.IndexLive do
         <span class="version-badge">wrapper v{@wrapper_version}</span>
         <span class="version-badge">upstream v{@upstream_version}</span>
       </header>
+
+      {Phoenix.HTML.raw(@chapter_nav_script)}
 
       <div class="cards">
         <a :for={page <- @pages} href={page.href} class="card-link">
