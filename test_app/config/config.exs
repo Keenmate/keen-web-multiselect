@@ -25,8 +25,13 @@ config :logger, level: :debug
 # Shared shadow-DOM styles for every <web-multiselect>, configured once (see the
 # "Elixir Only" example page). Applied via <.shadow_styles/> in the demo root layout;
 # scoped with :host(.elixir-themed) so only opted-in selects change.
+#
+# Read + inlined at COMPILE time (not `{:file, path}`, which does a runtime
+# File.read! against CWD — that breaks in a release, where CWD is the release
+# root and priv lives under Application.app_dir, not ./priv). The `__DIR__`-relative
+# path resolves regardless of the working directory the build runs from.
 config :keen_web_multiselect,
-  shadow_styles: {:file, "priv/static/assets/ms-elixir-theme.css"}
+  shadow_styles: File.read!(Path.join(__DIR__, "../priv/static/assets/ms-elixir-theme.css"))
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
