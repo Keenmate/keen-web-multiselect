@@ -75,11 +75,11 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
         .current-values-header { color: #93c5fd; font-weight: bold; margin-bottom: 0.5rem; }
       </style>
 
-      <.card title="Typography Controls">
+      <.card title="TH11 · Typography Controls">
         <div class="control-panel">
           <div class="controls-header">
             <h2>Typography Controls</h2>
-            <button class="reset-btn" id="resetBtn">Reset All</button>
+            <button class="reset-btn is-client" id="resetBtn">Reset All</button>
           </div>
 
           <div class="control-section">
@@ -94,7 +94,7 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
                   placeholder="e.g., https://fonts.googleapis.com/css2?family=Lexend..."
                 />
               </div>
-              <button id="loadFontBtn" class="btn-outline">Load Font</button>
+              <button id="loadFontBtn" class="btn-outline is-client">Load Font</button>
             </div>
           </div>
 
@@ -344,58 +344,62 @@ defmodule TestAppWeb.Examples.BaseVariablesLive do
         initMultiselects();
       }
 
-      // Set up event listeners
-      Object.keys(variableMap).forEach(inputId => {
-        const input = document.getElementById(inputId);
-        if (input) {
-          input.addEventListener('input', (e) => {
-            updateVariable(inputId, e.target.value);
-          });
+      // Set up event listeners — delegated on document so they survive
+      // LiveView's DOM patch on connect (plain inputs/buttons are re-rendered).
+
+      // One delegated 'input' listener for every variableMap control.
+      document.addEventListener('input', (e) => {
+        if (e.target && variableMap[e.target.id]) {
+          updateVariable(e.target.id, e.target.value);
         }
       });
 
-      // Reset button
-      document.getElementById('resetBtn').addEventListener('click', resetAll);
-
-      // Load font button
-      document.getElementById('loadFontBtn').addEventListener('click', () => {
-        const input = document.getElementById('fontLink');
-        let value = input.value.trim();
-
-        if (!value) return;
-
-        // Extract URL if it's a full <link> tag
-        const hrefMatch = value.match(/href=["']([^"']+)["']/);
-        if (hrefMatch) {
-          value = hrefMatch[1];
+      // Delegated click for the reset button and the load-font button.
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('#resetBtn')) {
+          resetAll();
+          return;
         }
 
-        currentFontUrl = value;
+        if (e.target.closest('#loadFontBtn')) {
+          const input = document.getElementById('fontLink');
+          let value = input.value.trim();
 
-        // Remove existing font link if present
-        const existingLink = document.getElementById('customFontLink');
-        if (existingLink) {
-          existingLink.remove();
+          if (!value) return;
+
+          // Extract URL if it's a full <link> tag
+          const hrefMatch = value.match(/href=["']([^"']+)["']/);
+          if (hrefMatch) {
+            value = hrefMatch[1];
+          }
+
+          currentFontUrl = value;
+
+          // Remove existing font link if present
+          const existingLink = document.getElementById('customFontLink');
+          if (existingLink) {
+            existingLink.remove();
+          }
+
+          // Create and add new link
+          const link = document.createElement('link');
+          link.id = 'customFontLink';
+          link.rel = 'stylesheet';
+          link.href = value;
+          document.head.appendChild(link);
+
+          // Try to extract font family name from URL
+          const familyMatch = value.match(/family=([^:&]+)/);
+          if (familyMatch) {
+            const fontName = decodeURIComponent(familyMatch[1].replace(/\+/g, ' '));
+            const fontFamilyInput = document.getElementById('fontFamily');
+            fontFamilyInput.value = `'${fontName}', sans-serif`;
+            updateVariable('fontFamily', fontFamilyInput.value);
+          }
+
+          // Re-initialize multiselects to inject fonts into Shadow DOM
+          initMultiselects();
         }
-
-        // Create and add new link
-        const link = document.createElement('link');
-        link.id = 'customFontLink';
-        link.rel = 'stylesheet';
-        link.href = value;
-        document.head.appendChild(link);
-
-        // Try to extract font family name from URL
-        const familyMatch = value.match(/family=([^:&]+)/);
-        if (familyMatch) {
-          const fontName = decodeURIComponent(familyMatch[1].replace(/\+/g, ' '));
-          const fontFamilyInput = document.getElementById('fontFamily');
-          fontFamilyInput.value = `'${fontName}', sans-serif`;
-          updateVariable('fontFamily', fontFamilyInput.value);
-        }
-
-        // Re-initialize multiselects to inject fonts into Shadow DOM
-        initMultiselects();
       });
 
       async function initMultiselects() {

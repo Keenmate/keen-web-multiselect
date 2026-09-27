@@ -105,7 +105,7 @@ defmodule TestAppWeb.Examples.SizesLive do
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Fira+Code:wght@400;500&family=Quicksand:wght@400;500;600&family=Lexend:wght@400;500;600&display=swap');
       </style>
 
-      <.card title="Global Scaling with --ms-rem">
+      <.card title="TH12 · Global Scaling with --ms-rem">
         <.tip>Scale everything from one variable: <code>style="--ms-rem: 8px"</code> (default <code>10px</code>)</.tip>
         <p>
           The <code>--ms-rem</code>
@@ -136,7 +136,7 @@ defmodule TestAppWeb.Examples.SizesLive do
         </.grid>
       </.card>
 
-      <.card title="Fine-Grained Control">
+      <.card title="TH13 · Fine-Grained Control">
         <.tip>Target one dimension at a time: <code>--ms-input-font-size</code> · <code>--ms-input-padding</code> · <code>--ms-option-title-font-size</code></.tip>
         <p>Override individual CSS variables for precise control over specific dimensions.</p>
 
@@ -167,7 +167,7 @@ defmodule TestAppWeb.Examples.SizesLive do
         </.grid>
       </.card>
 
-      <.card title="Narrow Input, Wide Dropdown">
+      <.card title="TH14 · Narrow Input, Wide Dropdown">
         <.tip><code>dropdown_min_width="18rem"</code> keeps the panel readable while <code>style="width: 6rem"</code> shrinks the input</.tip>
         <p>
           For dense forms where input space is limited: show just a code in the input, but use <code>dropdown-min-width</code>
@@ -224,7 +224,7 @@ defmodule TestAppWeb.Examples.SizesLive do
         </.grid>
       </.card>
 
-      <.card title="Scaled with Multiple Selection">
+      <.card title="TH15 · Scaled with Multiple Selection">
         <.tip><code>style="--ms-rem: 8px"</code> · <code>{"show_checkboxes={true}"}</code> · <code>badges_display_mode="badges | count"</code></.tip>
         <p>All component parts (badges, options, checkboxes) scale together.</p>
 
@@ -286,7 +286,7 @@ defmodule TestAppWeb.Examples.SizesLive do
         </.grid>
       </.card>
 
-      <.card title="Font Families">
+      <.card title="TH16 · Font Families">
         <.tip><code>style="--base-font-family: 'Inter', sans-serif"</code> — any CSS font stack works</.tip>
         <p>
           Set <code>--base-font-family</code>
@@ -318,7 +318,7 @@ defmodule TestAppWeb.Examples.SizesLive do
         </.grid>
       </.card>
 
-      <.card title="Key CSS Variables">
+      <.card title="TH17 · Key CSS Variables">
         <p>Important variables for sizing and typography:</p>
 
         <table class="reference-table">
@@ -365,7 +365,7 @@ defmodule TestAppWeb.Examples.SizesLive do
         </p>
       </.card>
 
-      <.card title="Typography Variables">
+      <.card title="TH18 · Typography Variables">
         <p>All typography variables with their theme-designer integration:</p>
 
         <table class="reference-table">

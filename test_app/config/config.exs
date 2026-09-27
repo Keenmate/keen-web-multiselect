@@ -22,6 +22,12 @@ config :test_app, :analytics, false
 
 config :logger, level: :debug
 
+# Shared shadow-DOM styles for every <web-multiselect>, configured once (see the
+# "Elixir Only" example page). Applied via <.shadow_styles/> in the demo root layout;
+# scoped with :host(.elixir-themed) so only opted-in selects change.
+config :keen_web_multiselect,
+  shadow_styles: {:file, "priv/static/assets/ms-elixir-theme.css"}
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

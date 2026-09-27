@@ -22,15 +22,26 @@ defmodule Keenmate.WebMultiselect.Components do
 
   ## LiveView events
 
-  When `hook={true}` is set (see the README), the underlying `select`, `deselect`, and
-  `change` events are forwarded to the server. Listen for them with `handle_event/3`:
+  When `hook={true}` is set (see the README), the underlying `select`, `deselect`,
+  `change`, and `add` events are forwarded to the server. Listen for them with
+  `handle_event/3`:
 
       def handle_event("web_multiselect:change", %{"id" => id, "values" => values}, socket) do
         ...
       end
 
+  With `allow_add_new`, choosing the "Add new …" prompt fires `"web_multiselect:add"` with
+  `%{"id" => id, "value" => typed_text, "option" => created_value_or_nil}` — let the server
+  own creation without a JS `addNewCallback`:
+
+      def handle_event("web_multiselect:add", %{"id" => id, "value" => text}, socket) do
+        ...
+      end
+
   To push option or selection changes back from the server, use
-  `Keenmate.WebMultiselect.push_update/3`.
+  `Keenmate.WebMultiselect.push_update/3`. To drive the dropdown imperatively from the
+  server (open/close, scroll to an option/group, set the search text), use
+  `Keenmate.WebMultiselect.push_command/3`.
 
   ## Attribute defaults
 
@@ -100,6 +111,18 @@ defmodule Keenmate.WebMultiselect.Components do
     element that pushes this event name to the LV with `%{"query" => q, "id" => id}` and
     awaits a `{:reply, %{results: [...]}, socket}` response. The results populate the
     dropdown asynchronously. Requires `hook={true}`.
+    """
+
+  attr :ready_event, :string,
+    default: nil,
+    doc: """
+    Fires this event to LiveView once, when the picker has finished its first build
+    (element upgraded, and with `defer`, released). Opt-in — when unset, no ready event
+    is sent. Payload: `%{"id" => id}`. Use it as the reliable trigger for a
+    `push_command/3` that drives the widget on page entry (open + scroll), since the
+    element and the hook's listeners are guaranteed to exist by then. Requires
+    `hook={true}`. The hook also replays it if the build finished before the hook
+    mounted, so your handler always runs — treat it as a one-shot on the server.
     """
 
   # -- Behaviour -------------------------------------------------------------
@@ -221,9 +244,34 @@ defmodule Keenmate.WebMultiselect.Components do
     values: [nil, "top", "bottom", "left", "right"],
     doc: "Where the badges render relative to the input."
 
+  attr :selected_order, :string,
+    default: nil,
+    values: [nil, "as-selected", "label-asc", "label-desc", "member", "custom"],
+    doc: """
+    Order of the SELECTED items where they are displayed — badges, partial mode (which items sit
+    behind the "+N more" badge), and the selected-items popover: `as-selected` (default),
+    `label-asc` / `label-desc` (by badge label), `member` (by `selected_order_member`), or `custom`
+    (JS `selectedOrderCompareCallback`). Display only — the submitted value keeps as-selected order,
+    and the options dropdown is never reordered.
+    """
+
+  attr :selected_order_member, :string,
+    default: nil,
+    doc:
+      "Property name used as the sort key when `selected_order=\"member\"` (selected-items display only)."
+
   attr :show_counter, :boolean,
     default: nil,
     doc: "Show a count of the selected items."
+
+  attr :show_clear, :boolean,
+    default: nil,
+    doc: """
+    Render an inline clear (✕) button inside the input, just left of the toggle chevron. It appears
+    only while something is selected and the control is enabled; clicking it wipes the whole
+    selection and any search text, fires a single `change`, and refocuses the input. Off by default
+    upstream. Themeable via the `--ms-input-clear-*` CSS variables.
+    """
 
   attr :collapse_badges_below, :integer,
     default: nil,
@@ -370,7 +418,34 @@ defmodule Keenmate.WebMultiselect.Components do
 
   attr :allow_add_new, :boolean,
     default: nil,
-    doc: "Allow creating a new option from the search text when nothing matches."
+    doc: """
+    Turn the picker into an inline creation tool. When on and a search yields no matches, the
+    empty dropdown shows a clickable **"Add new …"** prompt (label from `add_new_text` /
+    the JS-only `getAddNewTextCallback`) instead of the plain `empty_message`; choosing it
+    (click or <kbd>Enter</kbd>) commits the creation and fires a bubbling **`add`** event
+    (forwarded to the server as `"web_multiselect:add"` when a hook is attached). Creation works
+    **with or without** a JS-side `addNewCallback`: supply the callback to auto-create + select
+    the option (it may return a rich option object and is **async + cancelable** — resolve to
+    `null`/`undefined` to abort after a validation/confirm/server round-trip), or omit it and
+    handle creation yourself off the `add` event. While an async `addNewCallback` is in flight the
+    prompt shows a pending state (`add_new_pending_text`). Off by default.
+    """
+
+  attr :add_new_text, :string,
+    default: nil,
+    doc: """
+    Template for the clickable "Add new …" prompt (see `allow_add_new`). The substring `{value}`
+    is replaced with the (HTML-escaped) typed text. Defaults to `Add "{value}"` upstream. The
+    JS-only `getAddNewTextCallback` takes precedence when set.
+    """
+
+  attr :add_new_pending_text, :string,
+    default: nil,
+    doc: """
+    Template for the pending prompt (spinner + this text) shown while an async `addNewCallback`
+    is in flight. `{value}` is replaced with the (HTML-escaped) typed text. Defaults to
+    `Adding "{value}"…` upstream.
+    """
 
   attr :search_debounce, :integer,
     default: nil,
@@ -406,6 +481,17 @@ defmodule Keenmate.WebMultiselect.Components do
   attr :lock_placement, :boolean,
     default: nil,
     doc: "Lock the dropdown's placement instead of auto-flipping/shifting to fit the viewport."
+
+  attr :overlay_group, :string,
+    default: nil,
+    doc: """
+    Scope the "one overlay open at a time" coordination to a named group. Overlays (other
+    multiselects, datepickers, or any external popover that dispatches the `km-overlay-activated`
+    document event) that **share a group** dismiss each other when one opens; different groups are
+    independent. Unset means the default (ungrouped) group, in which every ungrouped overlay
+    coordinates. Outside-click dismissal is always on regardless — this only governs the
+    open-broadcast between components.
+    """
 
   # -- Mobile / fullscreen presentation -------------------------------------
 
@@ -465,6 +551,17 @@ defmodule Keenmate.WebMultiselect.Components do
     doc:
       ~s(Object key for an option's group name \(used when `allow_groups`\). The wrapper defaults this to `"group"`.)
 
+  attr :group_select_mode, :string,
+    default: nil,
+    values: [nil, "none", "cascade"],
+    doc: """
+    Group-header selection in a flat (non-tree) grouped, multi-select list. `"cascade"` puts
+    a **tristate** checkbox on each group header that checks/unchecks all of that group's
+    currently-visible members; the group itself is never a selected value (badges/form/value
+    carry member values only). `"none"` (default) leaves headers inert. No effect in tree mode
+    (use `checkbox_mode`) or single-select.
+    """
+
   attr :disabled_member, :string,
     default: nil,
     doc: ~s(Object key marking an option disabled. The wrapper defaults this to `"disabled"`.)
@@ -511,10 +608,11 @@ defmodule Keenmate.WebMultiselect.Components do
     default: nil,
     values: [nil, "independent", "cascade"],
     doc: """
-    Tree checkbox interaction. `"independent"` (default) toggles only the clicked node.
-    `"cascade"` checks a node's whole subtree and shows a **tristate** (checked /
-    indeterminate / unchecked) box on partially-selected branches. Tree + multiple only.
-    Pair with `cascade_select_policy` to control which values a cascade selection emits.
+    Tree checkbox interaction. `"cascade"` (default) checks a node's whole subtree and shows
+    a **tristate** (checked / indeterminate / unchecked) box on partially-selected branches —
+    what most tree-select UIs do. `"independent"` toggles only the clicked node. Tree +
+    multiple only (no subtree to cascade otherwise). Pair with `cascade_select_policy` to
+    control which values a cascade selection emits.
     """
 
   attr :cascade_select_policy, :string,
@@ -571,6 +669,28 @@ defmodule Keenmate.WebMultiselect.Components do
   attr :class, :string, default: nil, doc: "CSS class(es) applied to the `<web-multiselect>` element."
   attr :style, :string, default: nil, doc: "Inline `style` applied to the `<web-multiselect>` element."
 
+  attr :defer, :boolean,
+    default: nil,
+    doc: """
+    Upstream's `defer` render gate (2.1.0+). When present the element builds **nothing** on
+    upgrade — it only reserves space — so options, callbacks and shared styles can be wired
+    *before* anything paints; the build then happens **once**, flash-free, when the gate is
+    released (removing the attribute, or `el.ready()` from JS).
+
+    Left unset, the wrapper emits `defer` **automatically whenever a release mechanism is
+    guaranteed present** — i.e. when project-wide shared styles are configured
+    (`config :keen_web_multiselect, :shadow_styles` — see
+    `Keenmate.WebMultiselect.Components.shadow_styles/1`) **or** the element is wired with the
+    bundled hook (`hook={true}`). In both cases the client registry adopts any shared sheet into
+    the deferred shadow root and then releases the gate, so the picker (and themed badges) paint
+    in one shot with no default-style flash. A **plain attribute-only** render — options via
+    `data-options` / declarative `<option>` children, with neither shared styles nor the bundled
+    hook — stays NON-deferred, since nothing would release the gate. Pass `defer={false}` to opt a
+    single instance out, or `defer={true}` to force it with a custom hook / hand-released async
+    wiring (marked `data-kwms-manual` so the registry adopts the shared sheet but leaves the
+    `el.ready()` release to you).
+    """
+
   attr :show_debug_info, :boolean,
     default: nil,
     doc: """
@@ -588,6 +708,7 @@ defmodule Keenmate.WebMultiselect.Components do
   def web_multiselect(assigns) do
     assigns = FormHelpers.assign_from_field(assigns)
     assigns = assign(assigns, :hook, resolve_hook(assigns.hook))
+    assigns = assign(assigns, :defer?, resolve_defer(assigns.defer, assigns.hook))
     assigns = assign(assigns, :attributes, OptionHelpers.to_html_attributes(assigns))
 
     ~H"""
@@ -598,8 +719,11 @@ defmodule Keenmate.WebMultiselect.Components do
       phx-update={@id && "ignore"}
       class={@class}
       style={@style}
-      data-ready=""
+      defer={@defer? != false}
+      data-kwms-manual={@defer? == :manual}
+      data-placeholder-ready=""
       data-search-event={@search_event}
+      data-ready-event={@ready_event}
       {@attributes}
       {@rest}
     >
@@ -608,8 +732,97 @@ defmodule Keenmate.WebMultiselect.Components do
     """
   end
 
+  @doc """
+  Renders the project-wide shared shadow-DOM styles once, so every `<web-multiselect>` on
+  the page picks them up — configure the look in one place instead of on each instance.
+
+  Reads the CSS from the `:shadow_styles` application config (see
+  `Keenmate.WebMultiselect.shadow_styles_css/0` for the accepted shapes: inline string,
+  `{:file, path}`, or a function/MFA), inlines it into a `<template>`, and emits the tiny
+  client registry that compiles it into one Constructable Stylesheet and **adopts it into
+  every element's shadow root** (`adoptedStyleSheets`). One shared sheet, applied
+  deterministically, that survives the component's own re-renders and isn't duplicated per
+  instance. Because the sheet lives in each shadow root, `:host(.your-class) .ms__badge`
+  selectors work — a select opts into (or diverges from) the shared theme with a plain
+  `class`, no per-instance JavaScript.
+
+  Drop it **once** in your root layout (e.g. in `<head>`):
+
+      <Keenmate.WebMultiselect.Components.shadow_styles />
+
+  Renders nothing when `:shadow_styles` is unset. Under a strict Content-Security-Policy,
+  pass a `nonce` for the inline `<script>`.
+
+  > This handles arbitrary shadow-DOM CSS. For anything expressible as CSS custom
+  > properties (`--base-*` / `--ms-*`), prefer plain global CSS at `:root` — those pierce
+  > the shadow DOM with no JavaScript. See the theming guide.
+  """
+  attr :nonce, :string, default: nil, doc: "CSP nonce for the inline <script>, if your app sets one."
+
+  def shadow_styles(assigns) do
+    css = Keenmate.WebMultiselect.shadow_styles_css()
+
+    # HEEx does not interpolate inside <script> (its body is raw text), so the whole
+    # <script> element is built as a raw safe string and emitted at the top level. The
+    # CSS goes in a <template> where HEEx escapes it (and the browser decodes it back on
+    # `.textContent`) — so no fragile escaping of CSS into a JS string.
+    assigns =
+      assigns
+      |> assign(:css, css)
+      |> assign(:script_tag, css && Phoenix.HTML.raw(shadow_styles_script_tag(assigns[:nonce])))
+
+    ~H"""
+    <template :if={@css} id="kwms-shadow-styles">{@css}</template>{@script_tag}
+    """
+  end
+
+  defp shadow_styles_script_tag(nonce) do
+    "<script" <>
+      nonce_attr(nonce) <>
+      ">" <>
+      Keenmate.WebMultiselect.defaults_js() <>
+      ~s[\nwindow.KeenWebMultiselect&&window.KeenWebMultiselect.registerShadowStyles(document.getElementById("kwms-shadow-styles").content.textContent);\n] <>
+      "</script>"
+  end
+
+  defp nonce_attr(nil), do: ""
+
+  defp nonce_attr(nonce) do
+    escaped = nonce |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
+    ~s( nonce="#{escaped}")
+  end
+
   # `hook={true}` is sugar for the bundled hook name; a string names a custom hook.
   defp resolve_hook(true), do: "KeenWebMultiselectHook"
   defp resolve_hook(hook) when is_binary(hook), do: hook
   defp resolve_hook(_), do: nil
+
+  # `defer` gate ownership:
+  #   :auto   — wrapper-added by default (see below). The client registry (loaded by the
+  #             bundled hook or `<.shadow_styles/>`) adopts any shared sheet then RELEASES
+  #             the gate (removes `defer`), for a flash-free paint. Emits a bare `defer` —
+  #             after the client removes it, LiveView's DOM patch on connect leaves it off,
+  #             so the element settles with a clean DOM.
+  #   :manual — the author asked for `defer={true}`. Marked with `data-kwms-manual` so the
+  #             registry adopts the sheet but does NOT release; the author releases (their
+  #             `hook`/`el.ready()`), e.g. after wiring async options.
+  #   false   — no gate.
+  defp resolve_defer(true, _hook), do: :manual
+  defp resolve_defer(false, _hook), do: false
+
+  # Always-on by default: defer whenever a release mechanism is GUARANTEED present, so a
+  # flash-free build is the norm rather than opt-in. Two mechanisms load the client
+  # registry that adopts shared styles and then releases the gate (removes `defer`):
+  #   * configured shared styles — the `<.shadow_styles/>` registry, or
+  #   * the bundled hook — `KeenWebMultiselectHook` side-imports the same registry.
+  # A *plain attribute-only* render (options via `data-options` / `<option>` children, no
+  # shared styles, and no bundled hook) has nothing to release the gate, so it stays
+  # NON-deferred and can never be stranded blank. A custom-hook or hand-released instance
+  # that wants the gate opts in explicitly with `defer={true}` (`:manual`) and releases it
+  # itself. Opt a single instance out with `defer={false}`.
+  defp resolve_defer(_, hook) do
+    if Keenmate.WebMultiselect.shadow_styles_configured?() or hook == "KeenWebMultiselectHook",
+      do: :auto,
+      else: false
+  end
 end

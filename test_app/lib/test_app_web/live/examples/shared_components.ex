@@ -22,6 +22,10 @@ defmodule TestAppWeb.Examples.SharedComponents do
         <a href={@back_to} class="back-link">← Back to Examples</a>
         <h1>{@icon} {@title}</h1>
         <p class="subtitle">{@subtitle}</p>
+        <p class="control-legend">
+          <span class="control-legend__item">🌐 client — runs in the browser (element JS API)</span>
+          <span class="control-legend__item">🖥️ server — LiveView round-trip</span>
+        </p>
       </header>
       {render_slot(@inner_block)}
     </div>
@@ -29,18 +33,36 @@ defmodule TestAppWeb.Examples.SharedComponents do
     """
   end
 
+  attr :id, :string, default: nil
   attr :title, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global
   slot :inner_block, required: true
 
   def card(assigns) do
+    assigns = assign(assigns, :id, assigns[:id] || slug_id(assigns[:title]))
+
     ~H"""
-    <div class={["card", @class]} {@rest}>
+    <div id={@id} class={["card", @class]} {@rest}>
       <h2 :if={@title}>{@title}</h2>
       {render_slot(@inner_block)}
     </div>
     """
+  end
+
+  # Stable, server-rendered anchor id derived from a card title, so the floating
+  # chapter-nav's #id jumps survive LiveView's morphdom (a client-assigned id would
+  # be stripped when the static subtree is patched on connect). Nil title -> no id.
+  defp slug_id(nil), do: nil
+
+  defp slug_id(title) do
+    slug =
+      title
+      |> String.downcase()
+      |> String.replace(~r/[^a-z0-9]+/u, "-")
+      |> String.trim("-")
+
+    if slug == "", do: nil, else: slug
   end
 
   @doc """
@@ -48,14 +70,17 @@ defmodule TestAppWeb.Examples.SharedComponents do
   upstream). Renders with a dashed border and a "keen extra" badge so it's
   obvious at a glance in a side-by-side diff against the upstream examples.
   """
+  attr :id, :string, default: nil
   attr :title, :string, required: true
   attr :badge, :string, default: "keen extra"
   attr :rest, :global
   slot :inner_block, required: true
 
   def keen_card(assigns) do
+    assigns = assign(assigns, :id, assigns[:id] || slug_id(assigns[:title]))
+
     ~H"""
-    <div class="card card--keen" {@rest}>
+    <div id={@id} class="card card--keen" {@rest}>
       <h2>{@title} <span class="keen-badge">{@badge}</span></h2>
       {render_slot(@inner_block)}
     </div>

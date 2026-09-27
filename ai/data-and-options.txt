@@ -87,6 +87,15 @@ Add a `group` member to each option and set allow_groups={true}:
 Use group_member if your grouping key isn't "group". Grouped option lists are the
 basis of the cascade recipe (see server-updates.txt, cookbook.txt).
 
+Set group_select_mode="cascade" to put a tristate select-all checkbox on each group
+header — clicking it checks/unchecks all of that group's visible members. The group
+itself is never a selected value (the value list only ever holds member values); a
+partially-selected group reads indeterminate. Multiple-select only; no effect in tree
+mode (that has checkbox_mode) or single-select. Default is "none" (inert headers).
+
+    <.web_multiselect id="langs" allow_groups={true}
+      group_select_mode="cascade" options={@grouped_langs} />
+
 SELECTED VALUE
 --------------
 `value` is a LIST of the selected values (matched against value_member):

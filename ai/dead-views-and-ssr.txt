@@ -37,8 +37,10 @@ wrapper applies all three for you, so it "just works" in a LiveView too:
    over its own DOM). CONSEQUENCE: LV can't push option/selection changes by
    re-rendering — use push_update/3 for that (server-updates.txt).
 
-2. data-ready="" — pre-emitted so the placeholder doesn't flash before the JS
-   upgrades on WebSocket connect.
+2. data-placeholder-ready="" — pre-emitted so the search-input placeholder
+   doesn't flash before the JS upgrades on WebSocket connect. (Renamed from
+   data-ready upstream; it gates only placeholder opacity, distinct from the
+   is-ready build/defer gate.)
 
 3. a `.form` getter is polyfilled onto the element — without it, Phoenix's
    phx-change delegation silently drops the component's CustomEvents. Installed

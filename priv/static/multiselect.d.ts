@@ -72,7 +72,7 @@ declare type ActionsPosition = 'top' | 'bottom';
 /**
  * Context provided to renderBadgeContentCallback
  */
-declare interface BadgeContentRenderContext extends PresentationContext {
+export declare interface BadgeContentRenderContext extends PresentationContext {
     /** Current badges display mode */
     displayMode: BadgesDisplayMode;
     /** Whether the badge is being rendered in the selected items popover */
@@ -113,6 +113,35 @@ export declare function enableLogging(): void;
 export { EnvironmentSnapshot }
 
 export { getEnvironment }
+
+/**
+ * Context handed to `renderGroupLabelContentCallback` as its second argument, so a custom group
+ * header can reflect the selection — e.g. render a "3 / 8" count next to the title. The fields are
+ * populated for every group header; the selection fields are meaningful mainly under
+ * `groupSelectMode: 'cascade'` (a flat multi-select grouped list). Under the default rendering
+ * (no callback) the component draws the count itself; with a callback, YOU own the content and can
+ * render the count however you like from these fields.
+ *
+ * Like {@link OptionContentRenderContext} / {@link BadgeContentRenderContext}, it extends the
+ * shared {@link PresentationContext} (`presentation` / `isFullscreen` / `isModal`), so a group
+ * header can also render leaner in the phone fullscreen overlay.
+ */
+export declare interface GroupLabelRenderContext<T = any> extends PresentationContext {
+    /** The group name (identical to the callback's first argument). */
+    groupName: string;
+    /** The group's currently-visible (filtered) members, in render order. */
+    members: T[];
+    /** The subset of `members` that are currently selected (includes disabled-but-selected). */
+    selectedMembers: T[];
+    /** `selectedMembers.length` — the number to show "behind the group title". */
+    selectedCount: number;
+    /** `members.length` — total visible members in the group. */
+    memberCount: number;
+    /** Visible, non-disabled members — the cascade "select-all" denominator. */
+    selectableCount: number;
+    /** Tristate roll-up of the group under cascade selection. */
+    checkState: 'checked' | 'indeterminate' | 'unchecked';
+}
 
 export declare const initLogger: Logger;
 
@@ -192,6 +221,25 @@ declare interface MultiSelectConfig<T = any> {
     /** Callback to customize badge display text (defaults to display value if not provided) */
     getBadgeDisplayCallback?: (item: T) => string;
     /**
+     * Order of the CURRENTLY-SELECTED items *where they are displayed* — badges, partial mode
+     * (i.e. which items sit behind the "+N more" badge), and the selected-items popover. This is a
+     * display concern only: `getValue()`, the form output, and `getSelected()` always keep
+     * as-selected (insertion) order regardless of this setting, and the options dropdown is never
+     * reordered.
+     * - `as-selected` (default) — the order items were picked.
+     * - `label-asc` / `label-desc` — by the badge label, A→Z / Z→A (locale-aware).
+     * - `member` — by the `selectedOrderMember` property (or `getSelectedOrderCallback`); numeric
+     *   keys sort numerically, everything else with a locale string compare.
+     * - `custom` — delegate to `selectedOrderCompareCallback`.
+     */
+    selectedOrder?: 'as-selected' | 'label-asc' | 'label-desc' | 'member' | 'custom';
+    /** Property name used as the sort key when `selectedOrder === 'member'` (selected-items display only). */
+    selectedOrderMember?: string;
+    /** Extract the sort key when `selectedOrder === 'member'` (overrides `selectedOrderMember`). */
+    getSelectedOrderCallback?: (item: T) => string | number;
+    /** Comparator used when `selectedOrder === 'custom'`; standard `(a,b) => number` contract. */
+    selectedOrderCompareCallback?: (a: T, b: T) => number;
+    /**
      * Member property name for a "full title" — a fully-qualified label that ships with the
      * data (e.g. a breadcrumb like "Fruit / Pome fruit / Apple"). It is never computed by the
      * component. When `isBadgeFullTitleShown` is on, badges display this instead of the display
@@ -250,9 +298,10 @@ declare interface MultiSelectConfig<T = any> {
      */
     getIsSelectableCallback?: (node: LTreeNode<T>) => boolean;
     /**
-     * Tree checkbox interaction. `independent` (default) toggles only the clicked
-     * node. `cascade` checks a node's whole subtree and shows a tristate
-     * (checked / indeterminate / unchecked) box on branches. Tree + multiple only.
+     * Tree checkbox interaction. `cascade` (default) checks a node's whole subtree
+     * and shows a tristate (checked / indeterminate / unchecked) box on branches —
+     * what most tree-select UIs do. `independent` toggles only the clicked node.
+     * Tree + multiple only (no subtree to cascade otherwise). Unset → cascade.
      */
     checkboxMode?: 'independent' | 'cascade';
     /**
@@ -270,8 +319,23 @@ declare interface MultiSelectConfig<T = any> {
     groupMember?: string;
     /** Callback to extract group from item */
     getGroupCallback?: (item: T) => string;
-    /** Callback to customize group label content (can return HTML) */
-    renderGroupLabelContentCallback?: (groupName: string) => string | HTMLElement;
+    /**
+     * Callback to customize group label content (can return HTML). Receives the group name and a
+     * {@link GroupLabelRenderContext} with the group's members and selection (e.g. `selectedCount`),
+     * so a custom header can show a per-group count. The second argument is additive — existing
+     * one-argument callbacks keep working.
+     */
+    renderGroupLabelContentCallback?: (groupName: string, context: GroupLabelRenderContext<T>) => string | HTMLElement;
+    /**
+     * Group-header selection in a flat (non-tree) grouped, multi-select list.
+     * - `none` (default) — group headers are inert labels.
+     * - `cascade` — each header shows a **tristate** checkbox that checks/unchecks
+     *   all of that group's currently-visible members. The group itself is never a
+     *   selected value (`getValue()`/badges/form carry member values only); a
+     *   partially-selected group reads indeterminate. Flat + multiple only — no
+     *   effect in tree mode (use `checkboxMode`) or single-select.
+     */
+    groupSelectMode?: 'none' | 'cascade';
     /** Member property name for disabled state extraction */
     disabledMember?: string;
     /** Callback to extract disabled state from item */
@@ -291,12 +355,22 @@ declare interface MultiSelectConfig<T = any> {
      * selected-items popover keeps using renderSelectedItemContentCallback).
      */
     renderBadgeCallback?: (item: T, context: BadgeContentRenderContext) => string | HTMLElement | null | undefined;
-    /** Custom renderer for selected item content in popover - return HTML string or HTMLElement */
-    renderSelectedItemContentCallback?: (item: T) => string | HTMLElement;
+    /**
+     * Custom renderer for selected item content in the selected-items popover — return HTML string
+     * or HTMLElement. Receives a {@link BadgeContentRenderContext} (2nd arg) since a popover item
+     * is rendered through the same badge path: `isInPopover` is `true`, plus the shared
+     * presentation fields. The second argument is additive; one-argument callbacks keep working.
+     */
+    renderSelectedItemContentCallback?: (item: T, context: BadgeContentRenderContext) => string | HTMLElement;
     /** Callback to add custom CSS classes to selected items in popover - return string or array of class names */
     getSelectedItemClassCallback?: (item: T) => string | string[];
-    /** Custom renderer for selected item display in single-select mode - return plain text */
-    renderSelectedContentCallback?: (item: T) => string;
+    /**
+     * Custom renderer for the selected item display in single-select mode — return plain text (it
+     * becomes the input value). Receives a {@link SelectedContentRenderContext} (2nd arg) carrying
+     * the shared presentation fields. The second argument is additive; one-argument callbacks keep
+     * working.
+     */
+    renderSelectedContentCallback?: (item: T, context: SelectedContentRenderContext) => string;
     /** HTML form field ID/name for hidden input */
     formFieldId?: string;
     /**
@@ -332,10 +406,48 @@ declare interface MultiSelectConfig<T = any> {
     fullscreenAutofocus?: boolean;
     /** Lock dropdown placement after first open (internal: isPlacementLocked) */
     isPlacementLocked?: boolean;
-    /** Allow adding new options not in the list (internal: isAddNewAllowed) */
+    /**
+     * Allow adding new options not in the list (internal: isAddNewAllowed).
+     * When on and a search yields no matches, the empty dropdown shows a clickable
+     * "add new" prompt (text from `addNewText` / `getAddNewTextCallback`) instead of
+     * the `emptyMessage`; choosing it (click or Enter) fires the `add` event and, if
+     * `addNewCallback` is set, materializes + selects the created option.
+     */
     isAddNewAllowed?: boolean;
+    /**
+     * Template for the clickable "add new" prompt (see `isAddNewAllowed`). The substring
+     * `{value}` is replaced with the (HTML-escaped) typed text. Default: `Add "{value}"`.
+     * `getAddNewTextCallback` takes precedence. (internal: addNewText)
+     */
+    addNewText?: string;
+    /**
+     * Dynamically compute the "add new" prompt label from the typed text. Takes precedence
+     * over `addNewText`. Returns plain text (inserted as text, not HTML). Use it for i18n or
+     * context-aware wording, e.g. `(v) => \`Add new member: ${v}\``.
+     */
+    getAddNewTextCallback?: ((value: string) => string) | null;
+    /**
+     * Template for the pending prompt shown (spinner + this text) while an async `addNewCallback`
+     * is in flight. `{value}` is replaced with the (HTML-escaped) typed text. Default:
+     * `Adding "{value}"…`. (internal: addNewPendingText)
+     */
+    addNewPendingText?: string;
     /** Show count badge next to toggle icon (internal: isCounterShown) */
     isCounterShown?: boolean;
+    /**
+     * Show an inline clear (✕) button inside the input that wipes the whole selection.
+     * Appears only while something is selected (and the control is enabled). Clicking it
+     * clears the selection and any search text, fires `change`, and refocuses the input.
+     * Default `false`. (internal: isClearShown)
+     */
+    isClearShown?: boolean;
+    /**
+     * Scope the "one overlay open at a time" coordination to a named group. Overlays
+     * (multiselects, datepickers, external popovers) sharing a group dismiss each other
+     * when one opens; different groups are independent. Unset = the default (ungrouped)
+     * group, in which every ungrouped overlay coordinates. (internal: overlayGroup)
+     */
+    overlayGroup?: string;
     /**
      * Allow the selected-items popover to open. Defaults to `true`. The popover is triggered by
      * the count / compact / "+X more" badge and by the in-input counter (`isCounterShown`). Set
@@ -516,8 +628,32 @@ declare interface MultiSelectConfig<T = any> {
      * to cancel the in-flight request; ignoring it is fine — stale results are discarded.
      */
     searchCallback?: ((searchTerm: string, signal?: AbortSignal) => Promise<T[]>) | null;
-    /** Callback to add a new option when isAddNewAllowed is true */
-    addNewCallback?: ((value: string) => T | Promise<T>) | null;
+    /**
+     * Callback to create the new option object from the typed text when `isAddNewAllowed` is on.
+     * Return (or resolve to) the new option — it is appended to the list and auto-selected. The
+     * returned `T` can be a rich option object (icon/subtitle/custom-render fields and all): it flows
+     * through the same `get*` / `render*` callbacks as any other option, so the created row and its
+     * badge render exactly like the rest.
+     *
+     * **Cancelable (async):** return `null` or `undefined` (or a Promise of either) to abort — nothing
+     * is added or selected, the search is left intact, and the `add` event does NOT fire. Use it for
+     * async validation, a confirm dialog, or a server round-trip that may say no. The cancel sentinel
+     * is strictly `null`/`undefined` (checked with `== null`), so a falsy-but-valid option in
+     * primitive mode (`0`, `false`, `""`) still creates normally.
+     *
+     * Omit the callback entirely to handle creation yourself via the `add` event / `onAddNew` (e.g.
+     * open a modal, POST to a server, then add the option imperatively).
+     */
+    addNewCallback?: ((value: string) => T | null | undefined | Promise<T | null | undefined>) | null;
+    /**
+     * Event handler: the user chose to create a new option from the typed text (via the "add new"
+     * row or Enter). `value` is the typed text; `option` is the created item when `addNewCallback`
+     * produced one (absent otherwise). Mirrors the bubbling `add` CustomEvent on the element.
+     */
+    onAddNew?: ((detail: {
+        value: string;
+        option?: T;
+    }) => void) | null;
     /**
      * Intercept keyboard input before the built-in handling. Runs on every keydown (open or
      * closed) with a {@link MultiSelectKeydownContext} carrying the event, current state, and a
@@ -533,8 +669,22 @@ declare interface MultiSelectConfig<T = any> {
     onDeselect?: ((option: T) => void) | null;
     /** Event handler: the selection set changed (fire-and-forget). Mirrors the bubbling `change` CustomEvent on the element. */
     onChange?: ((selectedOptions: T[]) => void) | null;
-    /** Callback to format count badge text (for i18n/pluralization). When moreCount is provided, it's for the "+X more" badge in partial mode. */
+    /**
+     * Formats the badges-area count/summary text: the `count` mode badge ("N selected") and the
+     * partial-mode "+X more" badge (when `moreCount` is provided). NOT the small `[N]` chip — that's
+     * {@link getCountLabelCallback}. For i18n/pluralization.
+     */
     getCounterCallback?: ((count: number, moreCount?: number) => string) | null;
+    /**
+     * Formats the small count CHIP shared by the in-input counter (`show-counter`) and each group
+     * header's per-group count. Distinct from {@link getCounterCallback}, which formats the
+     * badges-area "N selected" / "+X more" text. Receives `selected` and `total`: for the in-input
+     * counter `total` is the whole option list; for a group header it's that group's member count.
+     * Return the label as plain text. Default `[selected]` (e.g. `[3]`). Set it to
+     * `` (s, t) => `${s}/${t}` `` for an "x / y" style. One callback drives both so they always
+     * read the same way.
+     */
+    getCountLabelCallback?: ((selected: number, total: number) => string) | null;
     /** Enable tooltips on selected item badges (internal: isBadgeTooltipsEnabled) */
     isBadgeTooltipsEnabled?: boolean;
     /** Callback to generate custom tooltip content for a badge */
@@ -592,10 +742,18 @@ export declare class MultiSelectElement<T = any> extends BlissElement<MultiSelec
     }, {
         readonly name: "change";
         readonly description: "The selection changed. `detail.selectedOptions`/`detail.selectedValues` are the full selection.";
+    }, {
+        readonly name: "add";
+        readonly description: "The user chose to create a new option from the typed text (via the \"add new\" prompt or Enter) — requires `allow-add-new`. `detail.value` is the typed text; `detail.option` is the created item when `addNewCallback` produced one.";
+    }, {
+        readonly name: "ready";
+        readonly description: "The picker was built and painted for the first time (once per element lifetime). Fires right after the first build — synchronously during upgrade for a normal element, or when the render gate is released (`el.ready()` / removing `defer`) for a deferred one. No detail.";
     }];
     onSelect: ((e: CustomEvent<MultiSelectEventDetail<T>>) => void) | null;
     onDeselect: ((e: CustomEvent<MultiSelectEventDetail<T>>) => void) | null;
     onChange: ((e: CustomEvent<MultiSelectEventDetail<T>>) => void) | null;
+    onAdd: ((e: CustomEvent<MultiSelectEventDetail<T>>) => void) | null;
+    onReady: ((e: CustomEvent<undefined>) => void) | null;
     constructor();
     /**
      * Called by the browser when the surrounding <form> is reset. Clears the
@@ -653,7 +811,64 @@ export declare class MultiSelectElement<T = any> extends BlissElement<MultiSelec
     showMessage(content: string | HTMLElement, opts?: MessageOptions): void;
     /** Dismiss the transient message shown by {@link showMessage}, if any. */
     hideMessage(): void;
+    /**
+     * Clear the search box and restore the full option list (does not touch the selection — use
+     * {@link clearAll} for that). Pair with {@link scrollToValue} to reveal then scroll to an option
+     * a search had filtered out: `el.clearSearch(); el.scrollToValue(v)`.
+     */
+    clearSearch(): void;
+    /** The current search box text (empty string when nothing is typed). Read via this getter, write with {@link search}. */
+    get searchText(): string;
+    /**
+     * Programmatically set the search text and filter, as if the user typed it (runs
+     * `beforeSearchCallback` / `minSearchLength` / async `searchCallback`). Does not open the dropdown
+     * — call {@link open} if you want it visible. Pass `''` to clear (same as {@link clearSearch}).
+     */
+    search(term: string): void;
+    /**
+     * Scroll the open dropdown to the option at `index` (into the current filtered list). Returns
+     * false if closed or out of range. Deferred internally so `el.open(); el.scrollToIndex(i)` works.
+     */
+    scrollToIndex(index: number, opts?: {
+        block?: ScrollLogicalPosition;
+    }): boolean;
+    /**
+     * Scroll the open dropdown to the option with this `value`. Returns false if it isn't in the
+     * currently visible list (filtered out by search, or under a collapsed tree branch) — call
+     * {@link clearSearch} / expand first.
+     */
+    scrollToValue(value: string | number, opts?: {
+        block?: ScrollLogicalPosition;
+    }): boolean;
+    /**
+     * Scroll to a group: its header in standard rendering, or the group's first option in
+     * virtual-scroll mode (no headers there). Returns false in tree mode or if the group is empty
+     * in the current filtered list.
+     */
+    scrollToGroup(name: string, opts?: {
+        block?: ScrollLogicalPosition;
+    }): boolean;
+    /** Open the dropdown. */
+    open(): void;
+    /** Close the dropdown. */
+    close(): void;
+    /** Toggle the dropdown open/closed. */
+    toggle(): void;
+    /** Whether the dropdown is currently open. Assigning opens/closes it. */
+    get isOpen(): boolean;
+    set isOpen(value: boolean);
     destroy(): void;
+    /**
+     * Release the `defer` render gate: build the picker now (once), with every
+     * option, callback and listener wired while deferred already in place. No-op
+     * when the element wasn't deferred or is already built. `flush()` first so a
+     * synchronous `el.options = …; el.customStylesCallback = …; el.ready()` lands
+     * those pending writes in the single build rather than after it. Latched — the
+     * gate never re-closes. Fires the `ready` event on the first build.
+     */
+    ready(): void;
+    /** Whether the picker has been built (the `ready` event has fired). False while a `defer` gate is still held. */
+    get isReady(): boolean;
 }
 
 /**
@@ -665,14 +880,18 @@ export declare interface MultiSelectEventDetail<T = any> {
     selectedOptions: T[];
     /** Selected values array */
     selectedValues: (string | number)[];
-    /** The option that triggered the event (for select/deselect) */
+    /** The option that triggered the event (for select/deselect/add) */
     option?: T;
+    /** The typed text that triggered the `add` event (add only) */
+    value?: string;
 }
 
 declare type MultiSelectEvents = {
     select: MultiSelectEventDetail;
     deselect: MultiSelectEventDetail;
     change: MultiSelectEventDetail;
+    add: MultiSelectEventDetail;
+    ready: undefined;
 };
 
 /**
@@ -797,7 +1016,7 @@ export { observeViewport }
  * render leaner content in the phone overlay. Reactive: swapping presentation re-renders and
  * re-invokes the callback with the new value.
  */
-declare interface OptionContentRenderContext extends PresentationContext {
+export declare interface OptionContentRenderContext extends PresentationContext {
     /** Index of the option in the filtered list */
     index: number;
     /** Whether the option is currently selected */
@@ -884,6 +1103,13 @@ export declare type SearchInputMode = 'normal' | 'readonly' | 'hidden';
 export declare type SearchMode = 'filter' | 'navigate';
 
 /**
+ * Context handed to `renderSelectedContentCallback` (single-select selected-value display). Carries
+ * only the shared {@link PresentationContext} fields (`presentation` / `isFullscreen` / `isModal`),
+ * so the single-select label can render leaner in the phone fullscreen overlay.
+ */
+export declare type SelectedContentRenderContext = PresentationContext;
+
+/**
  * Set the level of one category. Accepts the full prefixed name
  * (`MULTISELECT:UI`) or the bare suffix (`UI`) — both normalize to the category
  * key the core bundle expects.
@@ -903,10 +1129,10 @@ export declare const uiLogger: Logger;
 export declare type ValueFormat = 'json' | 'csv' | 'array';
 
 export declare class WebMultiSelect<T = any> {
+    #private;
     private element;
     private instanceId;
     private options;
-    private isOpen;
     private selectedValues;
     private selectedOptions;
     private allOptions;
@@ -920,6 +1146,10 @@ export declare class WebMultiSelect<T = any> {
     private keyboardController;
     private matchingIndices;
     private searchTerm;
+    /** Keyboard focus sits on the empty-state "add new" prompt (arrow-navigated). */
+    private addNewFocused;
+    /** An async addNewCallback is in flight — the prompt shows a spinner + pending text. */
+    private addNewPending;
     private isLoading;
     private searchDebounceTimer?;
     private searchAbortController?;
@@ -962,14 +1192,17 @@ export declare class WebMultiSelect<T = any> {
     private selectedPopoverVirtualScroll;
     private selectedPopoverContainer;
     private input;
+    private inputWrapper;
     private dropdown;
     private dropdownInner;
     private badgesContainer;
     private counter;
+    private clearButton;
     private hint?;
     private selectedPopover;
     private documentKeydownHandler;
     private documentClickHandler;
+    private overlayCoord;
     /**
      * Generic field extractor with the precedence:
      *   tuple short-circuit -> member property -> callback -> fallback
@@ -998,6 +1231,14 @@ export declare class WebMultiSelect<T = any> {
      */
     private getItemFullTitle;
     private getItemSearchValue;
+    /** Sort key for `selectedOrder === 'member'` (member/callback pattern). */
+    private getItemSortKey;
+    /**
+     * Selected options in the order they should be DISPLAYED (badges / partial "+N more" / popover).
+     * Never mutates state — always returns a fresh array. Display concern only: getValue()/form
+     * output/getSelected() keep as-selected (insertion) order. See `selectedOrder`.
+     */
+    private getOrderedSelectedOptions;
     private getItemIcon;
     private getItemSubtitle;
     private getItemGroup;
@@ -1020,8 +1261,10 @@ export declare class WebMultiSelect<T = any> {
     private buildTree;
     /**
      * Whether cascade checkbox mode is active: a multi-select tree with
-     * `checkbox-mode="cascade"`. Checking a node then toggles its whole subtree
-     * and branches show a tristate box.
+     * `checkbox-mode` NOT set to `independent`. Checking a node then toggles its
+     * whole subtree and branches show a tristate box. Cascade is the DEFAULT
+     * (unset → cascade); opt out per-instance with `checkbox-mode="independent"`.
+     * Only ever active in tree + multiple — no subtree to cascade otherwise.
      */
     private isCascadeMode;
     private cascadePolicy;
@@ -1112,6 +1355,46 @@ export declare class WebMultiSelect<T = any> {
      * Check if any options have groups
      */
     private hasGroups;
+    /**
+     * Whether the flat-group cascade checkbox is active: a multi-select, grouped,
+     * non-tree list with `group-select-mode="cascade"`. When on, each group header
+     * gets a tristate checkbox that toggles all of that group's visible members.
+     * Tree mode has its own `checkbox-mode` cascade, so this stays flat-only.
+     */
+    private isGroupCascadeActive;
+    /**
+     * Tristate check-state of a group from its members: `checked` if every
+     * non-disabled member is selected, `unchecked` if none are, else
+     * `indeterminate`. Disabled members are excluded from the denominator so a
+     * group with a stuck-disabled member can still read fully checked. An empty
+     * (or all-disabled) group reads `unchecked`.
+     */
+    private groupCheckState;
+    /**
+     * Selection roll-up for a flat group's (visible) members: which are selected, how many, and
+     * the tristate check-state. `selectedCount` counts every selected member (including a
+     * disabled-but-selected one) — it's the "N behind the group title". `checkState` excludes
+     * disabled members from its denominator (mirrors the select-all), so a group with a stuck
+     * disabled member can still read fully `checked`. Shared by the header count, the tristate
+     * checkbox, and the `renderGroupLabelContentCallback` context.
+     */
+    private groupSelectionInfo;
+    /**
+     * Formats the small count chip shared by the in-input counter and the per-group header count.
+     * Default `[selected]` (matches the historical in-input `[N]`); a `getCountLabelCallback` can
+     * switch both to e.g. `selected/total`.
+     */
+    private formatCountLabel;
+    /** Trailing count chip for a group header — any grouped list (rendered only when >0 selected). */
+    private groupCountHtml;
+    /**
+     * Shared markup for a `.ms__checkbox` input — the single source of truth for option rows, tree
+     * nodes, and group headers. Indeterminate is a pure CSS state (the box is `appearance: none`, so
+     * no native `input.indeterminate` is needed — virtual-scroll-safe) plus `aria-checked="mixed"`.
+     */
+    private checkboxHtml;
+    /** Group-header tristate checkbox (maps the group's roll-up state onto `checkboxHtml`). */
+    private groupCheckboxHtml;
     private renderDropdown;
     /**
      * Round the OUTER corners of the row at the very top and the row at the very
@@ -1166,6 +1449,25 @@ export declare class WebMultiSelect<T = any> {
      * chevron/toggle — every node is just a normal, selectable option.
      */
     private renderTreeNode;
+    /**
+     * Empty-dropdown content. When "add new" is enabled (isAddNewAllowed) AND the user has typed
+     * a non-empty search term, show a clickable "add new" prompt instead of the plain emptyMessage —
+     * choosing it (click via handleDropdownClick, or Enter via the keydown handler) runs handleAddNew.
+     * Otherwise fall back to the emptyMessage.
+     */
+    private renderEmptyStateHTML;
+    /** True when the empty dropdown is currently showing the clickable "add new" prompt. */
+    private isAddNewPromptShown;
+    /**
+     * Resolve the "add new" prompt label for the typed text. Priority: getAddNewTextCallback
+     * (returns plain text — fully escaped here) → addNewText template (trusted config string;
+     * only the `{value}` substitution is escaped) → the default `Add "{value}"`.
+     */
+    private getAddNewText;
+    /** Pending-prompt label shown (with a spinner) while an async addNewCallback runs. */
+    private getAddNewPendingText;
+    /** Minimal HTML entity escape for untrusted text spliced into an innerHTML string. */
+    private escapeHtml;
     private highlightMatch;
     private groupOptions;
     /** Whether the input currently functions as a usable search field (drives placeholder wording). */
@@ -1225,6 +1527,8 @@ export declare class WebMultiSelect<T = any> {
     private focusLast;
     private focusPageUp;
     private focusPageDown;
+    /** Move keyboard focus onto the empty-state "add new" prompt (the only actionable row). */
+    private focusAddNewPrompt;
     private focusNextMatch;
     private focusPreviousMatch;
     /** Lazily build (and cache) the imperative facade passed to `keydownCallback`. Bound to the
@@ -1232,8 +1536,64 @@ export declare class WebMultiSelect<T = any> {
     private getKeyboardController;
     /** Clear the search box (both the main input and the fullscreen search) and reset the visible
      *  list. Shared by Escape and the keyboard controller. */
-    private clearSearch;
+    /**
+     * Clear the search box and restore the full option list (resets the visible/matched sets and
+     * drops keyboard focus). Public building block: pair it with `scrollToValue()` to reveal then
+     * scroll to an option the current search had filtered out — `el.clearSearch(); el.scrollToValue(v)`.
+     * Does not touch the selection (use `clearAll()` for that).
+     */
+    clearSearch(): void;
+    /**
+     * Programmatically set the search text and filter — exactly as if the user typed it, so
+     * `beforeSearchCallback`, `minSearchLength` and async `searchCallback` all apply the same way.
+     * Reflects into the search box (and the fullscreen sheet's field). Does NOT open the dropdown —
+     * call `open()` if you want it visible. Passing `''` clears (equivalent to `clearSearch()`).
+     */
+    search(term: string): void;
     private scrollToFocused;
+    /**
+     * scrollIntoView with the fullscreen-safe default. In the fullscreen sheet the soft keyboard
+     * covers the lower viewport, so `block:'nearest'` can bottom-align a match BEHIND the keyboard;
+     * centre it instead and scroll INSTANTLY (a smooth animation kicked off per-keystroke is torn
+     * down by the next re-render and never settles — the "list jumps every letter" bug). Floating
+     * scrolls the nearest edge smoothly. The caller may override `block`.
+     */
+    private applyScrollIntoView;
+    /**
+     * Scroll the open dropdown so the option at `index` (into the current `filteredOptions`) is
+     * visible. Works in floating, fullscreen (mobile), virtual-scroll and tree modes. Returns
+     * false if the dropdown is closed or the index is out of range. The scroll is deferred a frame
+     * when the list isn't rendered yet (e.g. right after `open()` in virtual mode / the fullscreen
+     * sheet build), so `el.open(); el.scrollToIndex(i)` works.
+     */
+    scrollToIndex(index: number, opts?: {
+        block?: ScrollLogicalPosition;
+    }): boolean;
+    /**
+     * Scroll to the option whose value matches `value` (resolved within the current
+     * `filteredOptions`). Returns false if it isn't in the currently visible list — e.g. filtered
+     * out by a search, or (tree) under a collapsed ancestor. Call `clearSearch()` (or expand the
+     * branch) first to reveal it, then scroll.
+     */
+    scrollToValue(value: string | number, opts?: {
+        block?: ScrollLogicalPosition;
+    }): boolean;
+    /**
+     * Scroll to a group. In standard rendering the group's header (`.ms__group-label`) is brought
+     * into view; in virtual-scroll mode (which renders no headers) it scrolls to the group's FIRST
+     * option instead. Returns false in tree mode (groups don't apply) or if the group has no
+     * options in the current filtered list.
+     */
+    scrollToGroup(name: string, opts?: {
+        block?: ScrollLogicalPosition;
+    }): boolean;
+    /**
+     * Shared scroll worker for the public scrollTo* methods. Virtual mode uses the fixed-height
+     * math (works even if the row isn't currently rendered); otherwise scrolls the
+     * `.ms__option[data-index]` element into view. Defers one frame if the list isn't ready yet
+     * (post-open virtual init / fullscreen sheet build), then retries once.
+     */
+    private scrollToRenderedIndex;
     private toggleOption;
     /**
      * The single funnel for an interactive (user-initiated) selection. Consults
@@ -1252,19 +1612,67 @@ export declare class WebMultiSelect<T = any> {
      * Returns true if the option was deselected, false if the veto blocked it.
      */
     private interactiveDeselect;
+    /**
+     * Commit the "add new" affordance for the typed text. Two modes:
+     *  - `addNewCallback` set → create the option, append it, select it, clear the search.
+     *  - no callback → the consumer owns creation; we only notify (via the `add` event) so they
+     *    can open a modal / POST / add the option imperatively.
+     * The `add` event fires in BOTH modes (with `option` present only when one was created).
+     */
     private handleAddNew;
     private selectOption;
     private deselectOption;
     private selectAll;
     clearAll(): void;
     /**
+     * Flat-group cascade toggle: check or uncheck every (visible) member of a group
+     * in one shot. If the group is fully checked → deselect all its members; else →
+     * select all its non-disabled members. Operates on the currently-filtered
+     * members (same scope as Select-All) and, like Select-All / Clear-All,
+     * batch-mutates then fires a single `commit` — so one render and one `change`
+     * event, and it deliberately bypasses the per-item beforeSelect/beforeDeselect
+     * veto. The group name itself is never added to the selection.
+     */
+    private toggleGroup;
+    /**
+     * Inline clear (✕) handler: wipe the whole selection and any search text, then
+     * restore focus to the input. clearAll() → commit() → renderBadges() already
+     * refreshes this button's visibility (it hides once nothing is selected).
+     */
+    private clearClick;
+    /**
+     * Show the inline clear (✕) only when it is opted in (isClearShown), something is
+     * selected, and the control is enabled. Called from renderBadges() so it tracks
+     * every selection change. Uses inline display like the counter / fullscreen clear.
+     */
+    private updateClearButton;
+    /**
      * Re-render and fire callbacks after a selection state change.
      * `added` / `removed` drive per-item select/deselect callbacks.
      * `onChange` fires once if anything actually changed.
      */
     private commit;
-    private open;
-    private close;
+    /**
+     * Shield the trailing document `click` for one tick. A consumer that drives the
+     * dropdown from their OWN button's click handler (`el.open()` / `el.toggle()`, or a
+     * scrollTo* command re-driving the already-open panel) would otherwise have that
+     * same click bubble to our document-level outside-click listener and immediately
+     * close it. Centralizing it here means every entry point — open(), the internal
+     * pointer path, and the public scrollTo* API — is covered. Cleared next tick, so a
+     * genuine later outside-click still closes as normal. Harmless for non-click
+     * callers (typing, programmatic-on-load, server-driven): no trailing click arrives
+     * before it clears.
+     */
+    private armClickGuard;
+    /** Open the dropdown (no-op if already open, or if there is nothing to show). */
+    open(): void;
+    /** Close the dropdown (no-op if already closed). */
+    close(): void;
+    /** Toggle the dropdown open/closed. */
+    toggle(): void;
+    /** Whether the dropdown is currently open. Assigning opens/closes it. */
+    get isOpen(): boolean;
+    set isOpen(value: boolean);
     /**
      * Anchor a floating panel (dropdown or selected-items popover) below/above the input with
      * placement-locking and width-syncing. Returns the `autoUpdate` cleanup.
@@ -1518,6 +1926,8 @@ export declare class WebMultiSelect<T = any> {
      */
     updateOptions(partial: Partial<MultiSelectConfig<T>>): boolean;
     get selectedItem(): T | null;
+    /** The current search box text (empty string when nothing is typed). Read-only; clear it with `clearSearch()`. */
+    get searchText(): string;
     get selectedValue(): string | number | (string | number)[] | null;
     getValue(): string | number | (string | number)[] | null;
     /**

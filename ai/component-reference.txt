@@ -49,7 +49,14 @@ BEHAVIOR
   min_search_length
   keep_options_on_search
   should_keep_search_on_close
-  allow_add_new       - allow creating a new option from the query
+  allow_add_new       - creation mode: when the query matches nothing, show a
+                        clickable "Add new ..." prompt; choosing it fires the `add`
+                        event (forwarded as "web_multiselect:add"). Works with or
+                        without a JS addNewCallback. (liveview-events.txt)
+  add_new_text        - "Add new ..." prompt template; {value} = typed text
+                        (default: Add "{value}")
+  add_new_pending_text- pending label while an async addNewCallback runs
+                        (default: Adding "{value}"...)
   search_debounce     - ms to collapse keystroke bursts (server-search.txt)
   close_on_select
   allow_groups        - honor an option `group` member and render optgroup-style groups
@@ -57,6 +64,8 @@ BEHAVIOR
   show_select_all
   checkbox_align      - top | center | bottom
   lock_placement
+  overlay_group       - named single-active-overlay group: pickers sharing a group
+                        dismiss each other when one opens (unset = default group)
 
 PLACEHOLDERS / MESSAGES
 -----------------------
@@ -76,6 +85,9 @@ BADGES / SELECTED DISPLAY
   badges_max_visible
   badges_position
   show_counter
+  show_clear                  - inline clear (X) button in the input; appears only
+                                while something is selected; wipes selection + search
+                                (themeable via --ms-input-clear-*)
   show_badge_full_title       - render each badge's full_title_member breadcrumb
                                 instead of the display value (tree mode; see below)
   remove_button_tooltip_text  (supports {0} interpolation)
@@ -133,10 +145,15 @@ hierarchy. Setting path_member ENABLES tree mode. Full guide: guides/tree_of_opt
                           (renders normally, no checkbox, skipped by Select All /
                           keyboard). NOT the same as disabled (which greys out).
   tree_path_separator   - path separator (default ".")
-  checkbox_mode         - "independent" (default) | "cascade". Cascade checks a
+  checkbox_mode         - "cascade" (default) | "independent". Cascade checks a
                           node's whole subtree; a partial branch shows a tristate box.
+                          "independent" toggles only the clicked node. Tree+multiple only.
   cascade_select_policy - which values a cascade selection emits (badges/form/change):
                           "rolled-up" (default, minimal cover) | "leaves" | "all".
+  group_select_mode     - FLAT grouped lists: "none" (default) | "cascade". Cascade puts a
+                          tristate select-all checkbox on each group header (toggles the
+                          group's visible members; the group is never itself a value).
+                          Multiple only; no effect in tree mode or single-select.
   full_title_member     - key holding a fully-qualified breadcrumb label; pair with
                           show_badge_full_title (see BADGES). Never computed.
 
@@ -156,6 +173,12 @@ STYLING PASSTHROUGH
 -------------------
   class, style   - applied to the <web-multiselect> element
   rest (:global) - any extra HTML / phx-* / data-* attribute, verbatim
+  defer          - upstream 2.1.0 render gate. Unset: auto-added when :shadow_styles
+                   is configured, so the shared sheet adopts BEFORE the first paint
+                   (flash-free); the client registry releases it. defer={false} opts
+                   one select out; defer={true} holds the build for your own async
+                   wiring — release it from a hook's mounted() via el.ready(). See
+                   theming.txt.
 
 Full per-attribute descriptions + exact defaults: hexdocs `web_multiselect/1`.
 Upstream semantics for what each does:

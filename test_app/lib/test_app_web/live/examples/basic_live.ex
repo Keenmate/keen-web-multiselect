@@ -4,30 +4,10 @@ defmodule TestAppWeb.Examples.BasicLive do
   import Keenmate.WebMultiselect.Components
   import TestAppWeb.Examples.SharedComponents
 
+  alias Keenmate.WebMultiselect
+
   # Datasets below mirror upstream's examples-classic.0.js verbatim so this page
   # can be diffed card-for-card against the upstream demo.
-
-  @technologies [
-    %{value: "js", label: "JavaScript"},
-    %{value: "ts", label: "TypeScript"},
-    %{value: "python", label: "Python"},
-    %{value: "java", label: "Java"},
-    %{value: "csharp", label: "C#"},
-    %{value: "php", label: "PHP"},
-    %{value: "ruby", label: "Ruby"},
-    %{value: "go", label: "Go"}
-  ]
-
-  @countries [
-    %{value: "us", label: "United States"},
-    %{value: "uk", label: "United Kingdom"},
-    %{value: "de", label: "Germany"},
-    %{value: "fr", label: "France"},
-    %{value: "es", label: "Spain"},
-    %{value: "it", label: "Italy"},
-    %{value: "jp", label: "Japan"},
-    %{value: "cn", label: "China"}
-  ]
 
   @languages [
     %{value: "js", label: "JavaScript", icon: "🟨"},
@@ -40,34 +20,13 @@ defmodule TestAppWeb.Examples.BasicLive do
     %{value: "go", label: "Go", icon: "🐹"}
   ]
 
+  # `year` is the sort key behind BU02's selected-order="member" demo.
   @frameworks [
-    %{value: "react", label: "React", icon: "⚛️", subtitle: "A JavaScript library for building user interfaces"},
-    %{value: "vue", label: "Vue.js", icon: "🖖", subtitle: "The Progressive JavaScript Framework"},
-    %{value: "angular", label: "Angular", icon: "🅰️", subtitle: "Platform for building web applications"},
-    %{value: "svelte", label: "Svelte", icon: "🔥", subtitle: "Cybernetically enhanced web apps"},
-    %{value: "solid", label: "Solid", icon: "💎", subtitle: "Simple and performant reactivity"}
-  ]
-
-  @categories [
-    %{value: "cat1", label: "Category 1"},
-    %{value: "cat2", label: "Category 2"},
-    %{value: "cat3", label: "Category 3"},
-    %{value: "cat4", label: "Category 4"},
-    %{value: "cat5", label: "Category 5"},
-    %{value: "cat6", label: "Category 6"}
-  ]
-
-  @cities [
-    %{value: "nyc", label: "New York", icon: "🗽"},
-    %{value: "lon", label: "London", icon: "🇬🇧"},
-    %{value: "par", label: "Paris", icon: "🇫🇷"},
-    %{value: "tok", label: "Tokyo", icon: "🇯🇵"},
-    %{value: "syd", label: "Sydney", icon: "🇦🇺"},
-    %{value: "ber", label: "Berlin", icon: "🇩🇪"},
-    %{value: "rom", label: "Rome", icon: "🇮🇹"},
-    %{value: "bar", label: "Barcelona", icon: "🇪🇸"},
-    %{value: "ams", label: "Amsterdam", icon: "🇳🇱"},
-    %{value: "dub", label: "Dubai", icon: "🇦🇪"}
+    %{value: "react", label: "React", icon: "⚛️", subtitle: "A JavaScript library for building user interfaces", year: 2013},
+    %{value: "vue", label: "Vue.js", icon: "🖖", subtitle: "The Progressive JavaScript Framework", year: 2014},
+    %{value: "angular", label: "Angular", icon: "🅰️", subtitle: "Platform for building web applications", year: 2016},
+    %{value: "svelte", label: "Svelte", icon: "🔥", subtitle: "Cybernetically enhanced web apps", year: 2016},
+    %{value: "solid", label: "Solid", icon: "💎", subtitle: "Simple and performant reactivity", year: 2021}
   ]
 
   @grouped_techs [
@@ -82,29 +41,6 @@ defmodule TestAppWeb.Examples.BasicLive do
     %{value: "postgres", label: "PostgreSQL", icon: "🐘", group: "database"},
     %{value: "mongodb", label: "MongoDB", icon: "🍃", group: "database"},
     %{value: "redis", label: "Redis", icon: "🔴", group: "database"}
-  ]
-
-  # Tech stack used across the Display Modes / Tooltip demos.
-  @tech_stack [
-    %{value: "js", label: "JavaScript", icon: "🟨"},
-    %{value: "ts", label: "TypeScript", icon: "🔷"},
-    %{value: "py", label: "Python", icon: "🐍"},
-    %{value: "java", label: "Java", icon: "☕"},
-    %{value: "cpp", label: "C++", icon: "⚡"},
-    %{value: "rust", label: "Rust", icon: "🦀"},
-    %{value: "go", label: "Go", icon: "🔵"},
-    %{value: "ruby", label: "Ruby", icon: "💎"},
-    %{value: "php", label: "PHP", icon: "🐘"},
-    %{value: "swift", label: "Swift", icon: "🍎"}
-  ]
-
-  @arabic_langs [
-    %{value: "js", label: "جافا سكريبت", icon: "🟨"},
-    %{value: "ts", label: "تايب سكريبت", icon: "🔷"},
-    %{value: "python", label: "بايثون", icon: "🐍"},
-    %{value: "java", label: "جافا", icon: "☕"},
-    %{value: "react", label: "ري أكت", icon: "⚛️"},
-    %{value: "vue", label: "فيو", icon: "💚"}
   ]
 
   @all_countries [
@@ -267,42 +203,364 @@ defmodule TestAppWeb.Examples.BasicLive do
     %{id: 50, name: "Ukraine", flag: "🇺🇦"}
   ]
 
-  # Initial 5 security groups (non-canonical id/name/description keys). The full
-  # async search list lives in the inline script as a searchCallback.
-  @security_groups [
-    %{id: "sg-001", name: "Web Servers", description: "HTTP/HTTPS access (80, 443)", icon: "🌐"},
-    %{id: "sg-002", name: "Database Servers", description: "MySQL/PostgreSQL (3306, 5432)", icon: "🗄️"},
-    %{id: "sg-003", name: "Application Servers", description: "Internal API access (8080)", icon: "⚙️"},
-    %{id: "sg-004", name: "Load Balancers", description: "ALB/NLB traffic", icon: "⚖️"},
-    %{id: "sg-005", name: "Cache Servers", description: "Redis/Memcached (6379, 11211)", icon: "💾"}
-  ]
+  # BU06b code sample — kept in a heredoc so the literal backticks / parens / JS
+  # comments never hit the HEEx parser (which would try to read `{...}` as
+  # interpolation). Rendered verbatim inside the card's <pre><code>.
+  @bu06b_code """
+  el.open();
+  el.scrollToGroup('backend');   // header centered (or the group's first row in virtual mode)
+  el.scrollToValue('redis');     // → false if filtered out by the current search
+  el.scrollToIndex(0);
+
+  // Reveal a filtered-out option, then scroll to it:
+  el.clearSearch();
+  el.scrollToValue('jp');\
+  """
 
   def mount(_params, _session, socket) do
     {:ok,
      socket
      |> assign(:page_title, "Basic Usage — keen_web_multiselect")
-     |> assign(:technologies, @technologies)
-     |> assign(:countries, @countries)
      |> assign(:languages, @languages)
      |> assign(:frameworks, @frameworks)
-     |> assign(:categories, @categories)
-     |> assign(:cities, @cities)
      |> assign(:grouped_techs, @grouped_techs)
-     |> assign(:tech_stack, @tech_stack)
-     |> assign(:arabic_langs, @arabic_langs)
+     |> assign(:cmd_log, [])
+     |> assign(:cmd_auto_opened, false)
+     # Consolidated live-control cards (BU01–BU03). Each control panel is a
+     # phx-change form; on change we rebuild the config and the picker is
+     # re-keyed (its id encodes the config), so LiveView tears it down and
+     # remounts it with the new attributes. This is the wrapper-side answer to
+     # the upstream JS demos: phx-update="ignore" stops morphdom from patching
+     # attributes onto a live element, so we remount instead of mutating.
+     # The trade-off is that the selection resets to the seeded `value` on each
+     # toggle — which is exactly what makes every attribute combination easy to
+     # eyeball.
+     |> assign(:bu01, %{
+       multiple: true,
+       show_clear: false,
+       show_counter: false,
+       close_on_select: false,
+       sim: "normal",
+       dir: "ltr"
+     })
+     |> assign(:bu02, %{
+       icons: true,
+       subtitles: true,
+       mode: "badges",
+       pos: "bottom",
+       max_visible: 3,
+       order: "as-selected"
+     })
+     |> assign(:bu03, %{mode: "none", custom_labels: false, count_format: "bracket"})
      |> assign(:all_countries, @all_countries)
      |> assign(:countries_with_flags, @countries_with_flags)
-     |> assign(:security_groups, @security_groups)}
+     |> assign(:bu06b_code, @bu06b_code)}
   end
+
+  # -- BU06c · server-driven push_command/3 -----------------------------------
+
+  def handle_event("cmd", %{"kind" => kind, "arg" => arg}, socket) do
+    {:noreply, run_cmd(socket, "cmd-grouped", kind, arg)}
+  end
+
+  # Auto-open on entry: fires once when #cmd-onentry signals its first build is
+  # done (opt-in via ready_event=). One-shot guard — the hook can replay it and
+  # a reconnect re-mounts.
+  def handle_event("web_multiselect:ready", %{"id" => "cmd-onentry"}, socket) do
+    if socket.assigns.cmd_auto_opened do
+      {:noreply, socket}
+    else
+      socket
+      |> assign(:cmd_auto_opened, true)
+      |> WebMultiselect.push_command("cmd-onentry", open: true, scroll_to_group: "database")
+      |> log_cmd(~s|ready → push_command("cmd-onentry", open: true, scroll_to_group: "database")|)
+      |> then(&{:noreply, &1})
+    end
+  end
+
+  # The BU06c widgets carry the hook, so they forward select/deselect/change (and
+  # #cmd-onentry's ready). Drain any we don't act on so an unhandled event can't
+  # crash the page. (See ai/server-updates.txt — a new hook event must never be
+  # left unhandled.)
+  def handle_event("web_multiselect:" <> _, _payload, socket), do: {:noreply, socket}
+
+  # -- BU01–BU03 · live-control panels (remount on change) --------------------
+
+  def handle_event("bu01", params, socket) do
+    {:noreply,
+     assign(socket, :bu01, %{
+       multiple: params["multiple"] == "on",
+       show_clear: params["show_clear"] == "on",
+       show_counter: params["show_counter"] == "on",
+       close_on_select: params["close_on_select"] == "on",
+       sim: params["sim"] || "normal",
+       dir: params["dir"] || "ltr"
+     })}
+  end
+
+  def handle_event("bu02", params, socket) do
+    {:noreply,
+     assign(socket, :bu02, %{
+       icons: params["icons"] == "on",
+       subtitles: params["subtitles"] == "on",
+       mode: params["mode"] || "badges",
+       pos: params["pos"] || "bottom",
+       max_visible: parse_max_visible(params["max_visible"]),
+       order: params["order"] || "as-selected"
+     })}
+  end
+
+  def handle_event("bu03", params, socket) do
+    {:noreply,
+     assign(socket, :bu03, %{
+       mode: params["mode"] || "none",
+       custom_labels: params["custom_labels"] == "on",
+       count_format: params["count_format"] || "bracket"
+     })}
+  end
+
+  defp parse_max_visible(nil), do: 3
+
+  defp parse_max_visible(str) do
+    case Integer.parse(str) do
+      {n, _} when n >= 1 -> n
+      _ -> 3
+    end
+  end
+
+  # The element id encodes the config, so any control change yields a new id →
+  # LiveView remounts the picker with the new attributes.
+  defp bu01_sig(c),
+    do: "#{flag(c.multiple)}#{flag(c.show_clear)}#{flag(c.show_counter)}#{flag(c.close_on_select)}-#{c.sim}-#{c.dir}"
+
+  defp bu02_sig(c),
+    do: "#{flag(c.icons)}#{flag(c.subtitles)}-#{c.mode}-#{c.pos}-#{c.max_visible}-#{c.order}"
+
+  defp bu03_sig(c), do: "#{c.mode}-#{flag(c.custom_labels)}-#{c.count_format}"
+
+  defp flag(true), do: "1"
+  defp flag(false), do: "0"
+
+  # The wrapper always defaults icon-member/subtitle-member, so the icons/subtitles
+  # toggles work by stripping those keys from the data rather than unsetting the member.
+  defp bu02_options(frameworks, bu02) do
+    frameworks
+    |> then(fn list -> if bu02.icons, do: list, else: Enum.map(list, &Map.delete(&1, :icon)) end)
+    |> then(fn list -> if bu02.subtitles, do: list, else: Enum.map(list, &Map.delete(&1, :subtitle)) end)
+  end
+
+  defp run_cmd(socket, id, "group", g) do
+    socket
+    |> WebMultiselect.push_command(id, open: true, scroll_to_group: g)
+    |> log_cmd(~s|push_command("#{id}", open: true, scroll_to_group: "#{g}")|)
+  end
+
+  defp run_cmd(socket, id, "value", v) do
+    socket
+    |> WebMultiselect.push_command(id, open: true, scroll_to_value: v)
+    |> log_cmd(~s|push_command("#{id}", open: true, scroll_to_value: "#{v}")|)
+  end
+
+  defp run_cmd(socket, id, "index", i) do
+    socket
+    |> WebMultiselect.push_command(id, open: true, scroll_to_index: String.to_integer(i))
+    |> log_cmd(~s|push_command("#{id}", open: true, scroll_to_index: #{i})|)
+  end
+
+  defp run_cmd(socket, id, "search", q) do
+    socket
+    |> WebMultiselect.push_command(id, open: true, search: q)
+    |> log_cmd(~s|push_command("#{id}", open: true, search: "#{q}")|)
+  end
+
+  defp run_cmd(socket, id, "clear", _) do
+    socket
+    |> WebMultiselect.push_command(id, clear_search: true)
+    |> log_cmd(~s|push_command("#{id}", clear_search: true)|)
+  end
+
+  defp run_cmd(socket, id, "close", _) do
+    socket
+    |> WebMultiselect.push_command(id, close: true)
+    |> log_cmd(~s|push_command("#{id}", close: true)|)
+  end
+
+  defp log_cmd(socket, line), do: update(socket, :cmd_log, &Enum.take([line | &1], 8))
 
   def render(assigns) do
     ~H"""
     <.example_page
       icon="📦"
       title="Basic Usage"
-      subtitle="Basic multi/single select, keyboard-only navigation, rich content, search hints, declarative markup, filter-vs-navigate search, and RTL."
+      subtitle="The essentials, each as ONE live picker you configure with control switches — selection & input mode, content & display, and groups — plus declarative markup, the scroll-to API, and filter-vs-navigate search."
     >
-      <.card title="✨ Declarative Usage (No JavaScript Required!)">
+      <.card title="BU01 · Selection & Input Mode">
+        <p>
+          One picker, many behaviors. Flip between multi- and single-select, add the inline
+          clear (✕) and the count badge, change the <code>search_input_mode</code> (a
+          <code>readonly</code> or <code>hidden</code> search gives keyboard-only navigation),
+          toggle <code>close_on_select</code>, and switch text direction (LTR / RTL).
+        </p>
+        <.note variant="warning">
+          The wrapper emits <code>phx-update="ignore"</code> so morphdom stays out of the
+          component's shadow-managed DOM — which means a control change here
+          <strong>remounts</strong> the element with the new attributes instead of patching
+          them in place, so the selection resets to the seeded <code>{"value={~w(js ts)}"}</code>
+          on each toggle. (For runtime option/value changes without a remount, use
+          <code>push_update/3</code>; see BU05b.)
+        </.note>
+
+        <form phx-change="bu01" style="display: contents">
+          <div class="controls">
+            <label><input type="checkbox" name="multiple" checked={@bu01.multiple} /> <code>multiple</code></label>
+            <label><input type="checkbox" name="show_clear" checked={@bu01.show_clear} /> <code>show_clear</code> (✕)</label>
+            <label><input type="checkbox" name="show_counter" checked={@bu01.show_counter} /> <code>show_counter</code></label>
+            <label><input type="checkbox" name="close_on_select" checked={@bu01.close_on_select} /> <code>close_on_select</code></label>
+          </div>
+          <div class="controls">
+            <span><code>search_input_mode</code>:</span>
+            <label><input type="radio" name="sim" value="normal" checked={@bu01.sim == "normal"} /> normal</label>
+            <label><input type="radio" name="sim" value="readonly" checked={@bu01.sim == "readonly"} /> readonly</label>
+            <label><input type="radio" name="sim" value="hidden" checked={@bu01.sim == "hidden"} /> hidden</label>
+          </div>
+          <div class="controls">
+            <span><code>dir</code>:</span>
+            <label><input type="radio" name="dir" value="ltr" checked={@bu01.dir == "ltr"} /> ltr</label>
+            <label><input type="radio" name="dir" value="rtl" checked={@bu01.dir == "rtl"} /> rtl</label>
+          </div>
+        </form>
+
+        <div class="demo-area">
+          <.web_multiselect
+            id={"ex-selection-" <> bu01_sig(@bu01)}
+            multiple={@bu01.multiple}
+            show_clear={@bu01.show_clear}
+            show_counter={@bu01.show_counter}
+            close_on_select={@bu01.close_on_select}
+            search_input_mode={@bu01.sim}
+            dir={@bu01.dir}
+            options={@languages}
+            value={~w(js ts)}
+            icon_member="icon"
+            search_placeholder="Search…"
+            defer={false}
+          />
+        </div>
+      </.card>
+
+      <.card title="BU02 · Content & Display">
+        <p>
+          Icons and subtitles on the option rows, plus how the current selection is shown in the
+          control: the <code>badges_display_mode</code>, where badges sit
+          (<code>badges_position</code>), and the order the selected items appear in
+          (<code>selected_order</code>).
+        </p>
+
+        <form phx-change="bu02" style="display: contents">
+          <div class="controls">
+            <label><input type="checkbox" name="icons" checked={@bu02.icons} /> icons</label>
+            <label><input type="checkbox" name="subtitles" checked={@bu02.subtitles} /> subtitles</label>
+          </div>
+          <div class="controls">
+            <span><code>badges_display_mode</code>:</span>
+            <label :for={m <- ~w(badges count compact partial none)}>
+              <input type="radio" name="mode" value={m} checked={@bu02.mode == m} /> {m}
+            </label>
+            <label :if={@bu02.mode == "partial"} style="margin-inline-start:1rem"><code>badges_max_visible</code>:
+              <input type="number" name="max_visible" min="1" max="10" value={@bu02.max_visible} style="width:3.5rem" />
+            </label>
+          </div>
+          <div class="controls">
+            <span><code>badges_position</code>:</span>
+            <label :for={p <- ~w(bottom top left right)}>
+              <input type="radio" name="pos" value={p} checked={@bu02.pos == p} /> {p}
+            </label>
+          </div>
+          <div class="controls">
+            <span><code>selected_order</code>:</span>
+            <label><input type="radio" name="order" value="as-selected" checked={@bu02.order == "as-selected"} /> as-selected</label>
+            <label><input type="radio" name="order" value="label-asc" checked={@bu02.order == "label-asc"} /> label A→Z</label>
+            <label><input type="radio" name="order" value="label-desc" checked={@bu02.order == "label-desc"} /> label Z→A</label>
+            <label><input type="radio" name="order" value="member" checked={@bu02.order == "member"} /> member (year)</label>
+            <span class="muted" style="margin-inline-start:0.5rem">selected badges reorder; the value stays as-picked</span>
+          </div>
+        </form>
+
+        <div class="demo-area">
+          <.web_multiselect
+            id={"ex-display-" <> bu02_sig(@bu02)}
+            options={bu02_options(@frameworks, @bu02)}
+            value={~w(react vue svelte)}
+            badges_display_mode={@bu02.mode}
+            badges_position={@bu02.pos}
+            badges_max_visible={@bu02.max_visible}
+            selected_order={@bu02.order}
+            selected_order_member={if @bu02.order == "member", do: "year"}
+            search_placeholder="Search frameworks…"
+            defer={false}
+          />
+        </div>
+        <small class="form-text">
+          <code>selected_order="custom"</code> needs a comparator (<code>selectedOrderCompareCallback</code>),
+          a JS-only callback — see the Custom Rendering page. Same for the group custom-label and
+          ratio-counter callbacks in BU03.
+        </small>
+      </.card>
+
+      <.card title="BU03 · Groups">
+        <p>
+          Group options under headers with a <code>group</code> member. Each group header shows a
+          <strong>count of that group's selected items</strong> (in any mode — open the dropdown
+          to see it). Turn on <strong>per-group select-all</strong>
+          (<code>group_select_mode="cascade"</code>) to also put a tristate checkbox on each
+          header that toggles the whole group — the group name is never itself a value, so the
+          selection carries member values only and a partially-selected group reads indeterminate.
+          Turning on <strong>custom labels</strong> renders the header via
+          <code>renderGroupLabelContentCallback</code>, whose 2nd arg carries the per-group
+          selection — here it writes <code>GROUP — N remaining</code>
+          (<code>selectableCount − selectedCount</code>).
+        </p>
+
+        <form phx-change="bu03" style="display: contents">
+          <div class="controls">
+            <span><code>group_select_mode</code>:</span>
+            <label><input type="radio" name="mode" value="none" checked={@bu03.mode == "none"} /> none</label>
+            <label><input type="radio" name="mode" value="cascade" checked={@bu03.mode == "cascade"} /> cascade</label>
+            <label style="margin-inline-start:1rem"><input type="checkbox" name="custom_labels" checked={@bu03.custom_labels} /> custom labels (<code>renderGroupLabelContentCallback</code>)</label>
+          </div>
+          <div class="controls">
+            <span><code>getCountLabelCallback</code>:</span>
+            <label><input type="radio" name="count_format" value="bracket" checked={@bu03.count_format == "bracket"} /> <code>[x]</code> (default)</label>
+            <label><input type="radio" name="count_format" value="ratio" checked={@bu03.count_format == "ratio"} /> <code>x/y</code></label>
+            <span class="muted" style="margin-inline-start:0.5rem">drives the in-input counter <em>and</em> each group's count</span>
+          </div>
+        </form>
+
+        <div class="demo-area">
+          <.web_multiselect
+            id={"ex-groups-" <> bu03_sig(@bu03)}
+            hook="Bu03Callbacks"
+            data-custom-labels={to_string(@bu03.custom_labels)}
+            data-count-format={@bu03.count_format}
+            options={@grouped_techs}
+            value={~w(react nodejs)}
+            allow_groups={true}
+            group_select_mode={@bu03.mode}
+            show_counter={true}
+            icon_member="icon"
+            search_placeholder="Search…"
+            defer={false}
+          />
+        </div>
+        <small class="form-text">
+          <code>renderGroupLabelContentCallback</code> / <code>getCountLabelCallback</code> are
+          JS function props (no attribute equivalent), installed here by a small
+          <code>Bu03Callbacks</code> hook on (re)mount — see the Custom Rendering page for more
+          callback examples.
+        </small>
+      </.card>
+
+      <.card title="BU04 · Declarative Usage (No JavaScript)">
         <.tip>Pass inline <code>&lt;option&gt;</code>/<code>&lt;optgroup&gt;</code> children with <code>data-icon</code> · <code>data-subtitle</code> · <code>selected</code></.tip>
         <p>
           Use standard HTML <code>&lt;option&gt;</code>
@@ -403,661 +661,149 @@ defmodule TestAppWeb.Examples.BasicLive do
         </.grid>
       </.card>
 
-      <.card title="Single-Select Mode">
-        <.tip><code>{"multiple={false}"}</code> — a single-select (multiple defaults to <code>true</code> upstream)</.tip>
+      <.card title="BU05 · Scroll-to API — scrollToGroup / scrollToValue / scrollToIndex">
+        <.tip>
+          JS-only element methods (no wrapper attribute): <code>el.scrollToGroup(name)</code>
+          · <code>el.scrollToValue(value)</code>
+          · <code>el.scrollToIndex(i)</code>
+          · <code>el.clearSearch()</code> — wired in the inline <code>&lt;script&gt;</code>
+        </.tip>
         <p>
-          Only one item can be selected at a time. Use <code>{"multiple={false}"}</code>
-        </p>
-
-        <.grid>
-          <.form_group>
-            <label>Select Programming Language</label>
-            <.web_multiselect
-              id="single-select"
-              multiple={false}
-              search_placeholder="Select language..."
-              options={@languages}
-              value={["python"]}
-            />
-            <small class="form-text">Only one language can be selected</small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="Single-Select: Keyboard Navigation Only">
-        <.tip><code>{"enable_search={false}"}</code> · <code>search_input_mode="readonly"</code></.tip>
-        <p>
-          No search - use arrow keys, PageUp/PageDown, Home/End to navigate. Press Enter to select.
-        </p>
-
-        <.grid>
-          <.form_group>
-            <label>Select Country (No Search)</label>
-            <.web_multiselect
-              id="keyboard-nav-select"
-              multiple={false}
-              enable_search={false}
-              search_input_mode="readonly"
-              search_placeholder="Use arrow keys to navigate..."
-              options={@all_countries}
-              value={["us"]}
-            />
-            <small class="form-text">
-              Try: ↑/↓ arrows, PageUp/Down (10 items), Home/End, Enter to select
-            </small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="Basic MultiSelect">
-        <.tip><code>search_placeholder="Search technologies..."</code> · pre-select with <code>{"value={[\"js\", \"ts\"]}"}</code></.tip>
-        <p>Simple multiselect with basic options</p>
-
-        <.grid>
-          <.form_group>
-            <label>Select Technologies</label>
-            <.web_multiselect
-              id="basic-select"
-              search_placeholder="Search technologies..."
-              options={@technologies}
-              value={["js", "ts"]}
-            />
-            <small class="form-text">Select multiple programming languages</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Select Countries</label>
-            <.web_multiselect
-              id="countries-select"
-              search_placeholder="Search countries..."
-              options={@countries}
-            />
-            <small class="form-text">Start typing to filter options</small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="Rich Content with Icons">
-        <.tip>Options carry <code>icon</code>/<code>subtitle</code> keys — read via the default <code>icon_member="icon"</code> · <code>subtitle_member="subtitle"</code></.tip>
-        <p>Options with icons, subtitles, and multiline content</p>
-
-        <.grid>
-          <.form_group>
-            <label>Select Frameworks</label>
-            <.web_multiselect
-              id="frameworks-select"
-              search_placeholder="Search frameworks..."
-              options={@frameworks}
-            />
-            <small class="form-text">Options with icons and descriptions</small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="Search Hint">
-        <.tip><code>search_hint="💡 Start typing to filter options"</code></.tip>
-        <p>Display helpful text above the input to guide users</p>
-
-        <.grid>
-          <.form_group>
-            <label>With Search Hint</label>
-            <.web_multiselect
-              id="hint-select"
-              search_hint="💡 Start typing to filter options"
-              search_placeholder="Search cities..."
-              options={@cities}
-            />
-            <small class="form-text">Open the dropdown to see the hint above the input</small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="Display Modes">
-        <.tip><code>badges_display_mode="badges | count | compact | partial | none"</code> · pair with <code>{"show_counter={true}"}</code> · <code>{"badges_threshold={5}"}</code></.tip>
-        <p>Different ways to display selected items</p>
-
-        <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; font-size: 1.2rem; color: #667eea;">
-          Basic Display Modes
-        </h3>
-        <.grid>
-          <.form_group>
-            <label>Badges Mode (Default)</label>
-            <.web_multiselect
-              id="badges-mode"
-              badges_display_mode="badges"
-              search_placeholder="Select technologies..."
-              options={@tech_stack}
-              value={~w(js ts py)}
-            />
-            <small class="form-text">Shows each selection as a removable badge</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Count Mode</label>
-            <.web_multiselect
-              id="count-mode"
-              badges_display_mode="count"
-              search_placeholder="Select technologies..."
-              options={@tech_stack}
-              value={~w(js ts py java)}
-            />
-            <small class="form-text">Shows "X selected" text with clear button</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Compact Mode</label>
-            <.web_multiselect
-              id="compact-mode"
-              badges_display_mode="compact"
-              search_placeholder="Select technologies..."
-              options={@tech_stack}
-              value={~w(js ts py)}
-            />
-            <small class="form-text">First item + count in single badge: "JavaScript (+2 more)"</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Partial Mode</label>
-            <.web_multiselect
-              id="partial-mode"
-              badges_threshold={5}
-              badges_threshold_mode="partial"
-              badges_max_visible={3}
-              search_placeholder="Select technologies..."
-              options={@tech_stack}
-              value={~w(js ts py java cpp rust)}
-            />
-            <small class="form-text">Shows first 3 badges + "+X more" badge (when >5 selected)</small>
-          </.form_group>
-
-          <.form_group>
-            <label>None Mode (Minimal)</label>
-            <.web_multiselect
-              id="none-mode"
-              badges_display_mode="none"
-              show_counter={true}
-              search_placeholder="Select technologies..."
-              options={@tech_stack}
-              value={~w(js ts py java cpp)}
-            />
-            <small class="form-text">No badges shown - only [X] badge next to toggle</small>
-          </.form_group>
-        </.grid>
-
-        <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.2rem; color: #667eea;">
-          Display Mode + Counter Combinations
-        </h3>
-        <.grid>
-          <.form_group>
-            <label>Badges + Counter</label>
-            <.web_multiselect
-              id="badges-badge"
-              badges_display_mode="badges"
-              show_counter={true}
-              search_placeholder="Select..."
-              options={@tech_stack}
-              value={~w(js ts)}
-            />
-            <small class="form-text">Individual badges + [X] badge</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Count + Counter</label>
-            <.web_multiselect
-              id="count-badge"
-              badges_display_mode="count"
-              show_counter={true}
-              search_placeholder="Select..."
-              options={@tech_stack}
-              value={~w(js ts py)}
-            />
-            <small class="form-text">"X selected" text + [X] badge (double count display)</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Compact + Counter</label>
-            <.web_multiselect
-              id="compact-badge"
-              badges_display_mode="compact"
-              show_counter={true}
-              search_placeholder="Select..."
-              options={@tech_stack}
-              value={~w(js ts py)}
-            />
-            <small class="form-text">First item + count badge + [X] badge</small>
-          </.form_group>
-        </.grid>
-
-        <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.2rem; color: #667eea;">
-          Threshold Auto-Switching
-        </h3>
-        <.grid>
-          <.form_group>
-            <label>Badges → Count at 3</label>
-            <.web_multiselect
-              id="threshold-count"
-              badges_display_mode="badges"
-              badges_threshold={3}
-              badges_threshold_mode="count"
-              show_counter={true}
-              search_placeholder="Select..."
-              options={@tech_stack}
-              value={~w(js)}
-            />
-            <small class="form-text">Badges when ≤3, switches to count when >3</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Badges → Partial at 5</label>
-            <.web_multiselect
-              id="threshold-partial"
-              badges_threshold={5}
-              badges_threshold_mode="partial"
-              badges_max_visible={3}
-              search_placeholder="Select..."
-              options={@tech_stack}
-              value={~w(js ts)}
-            />
-            <small class="form-text">Badges when ≤5, shows 3 badges + "+X more" when >5</small>
-          </.form_group>
-        </.grid>
-
-        <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.2rem; color: #667eea;">
-          Internationalization (i18n)
-        </h3>
-        <.grid>
-          <.form_group>
-            <label>English Pluralization</label>
-            <.web_multiselect
-              id="i18n-english"
-              badges_display_mode="count"
-              search_placeholder="Select..."
-              options={@categories}
-              value={~w(cat1 cat2 cat3)}
-            />
-            <small class="form-text">"1 item selected" vs "3 items selected"</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Czech Pluralization</label>
-            <.web_multiselect
-              id="i18n-czech"
-              badges_display_mode="count"
-              search_placeholder="Vyberte..."
-              options={@categories}
-              value={~w(cat1 cat2)}
-            />
-            <small class="form-text">1 položka | 2-4 položky | 5+ položek</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Spanish Partial Mode</label>
-            <.web_multiselect
-              id="i18n-partial"
-              badges_threshold={5}
-              badges_threshold_mode="partial"
-              badges_max_visible={3}
-              search_placeholder="Seleccionar..."
-              options={@tech_stack}
-              value={~w(js ts py java cpp rust)}
-            />
-            <small class="form-text">Shows "+X más" instead of "+X more"</small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="Badge Tooltips">
-        <.tip><code>{"enable_badge_tooltips={true}"}</code> · <code>badge_tooltip_placement="top | bottom"</code> · <code>{"badge_tooltip_delay={100}"}</code></.tip>
-        <p>Display helpful tooltips when hovering over selected item badges</p>
-
-        <.grid>
-          <.form_group>
-            <label>Basic Tooltips</label>
-            <.web_multiselect
-              id="tooltip-basic"
-              enable_badge_tooltips={true}
-              badge_tooltip_placement="top"
-              search_placeholder="Select frameworks..."
-              options={@frameworks}
-              value={~w(react vue svelte)}
-            />
-            <small class="form-text">Hover over badges to see default tooltip</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Custom Tooltip Content</label>
-            <.web_multiselect
-              id="tooltip-custom"
-              enable_badge_tooltips={true}
-              badge_tooltip_placement="top"
-              search_placeholder="Select frameworks..."
-              options={@frameworks}
-              value={~w(react vue)}
-            />
-            <small class="form-text">Shows custom tooltip with description</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Tooltip Placement: Bottom</label>
-            <.web_multiselect
-              id="tooltip-bottom"
-              enable_badge_tooltips={true}
-              badge_tooltip_placement="bottom"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts python)}
-            />
-            <small class="form-text">Tooltip appears below the badge</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Custom Delay (100ms)</label>
-            <.web_multiselect
-              id="tooltip-fast"
-              enable_badge_tooltips={true}
-              badge_tooltip_delay={100}
-              search_placeholder="Select frameworks..."
-              options={@frameworks}
-              value={~w(react vue)}
-            />
-            <small class="form-text">Faster tooltip appearance (default is 300ms)</small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="Badge Positioning">
-        <.tip><code>badges_position="bottom | top | left | right"</code></.tip>
-        <p>
-          Control where selected badges appear relative to the input: <code>badges-position</code>
-        </p>
-
-        <.grid>
-          <.form_group>
-            <label>Badge Position: Bottom (Default)</label>
-            <.web_multiselect
-              id="badges-bottom"
-              badges_position="bottom"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts python)}
-            />
-            <small class="form-text">Badges appear below the input (default)</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Badge Position: Top</label>
-            <.web_multiselect
-              id="badges-top"
-              badges_position="top"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts python)}
-            />
-            <small class="form-text">Badges appear above the input</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Badge Position: Left</label>
-            <.web_multiselect
-              id="badges-left"
-              badges_position="left"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts)}
-            />
-            <small class="form-text">Badges appear inline to the left of input</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Badge Position: Right</label>
-            <.web_multiselect
-              id="badges-right"
-              badges_position="right"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts)}
-            />
-            <small class="form-text">Badges appear inline to the right of input</small>
-          </.form_group>
-        </.grid>
-
-        <h3 style="margin-top: 2rem; margin-bottom: 1rem; font-size: 1.2rem; color: #667eea;">
-          Inline Vertical Alignment
-        </h3>
-        <p>
-          Control vertical alignment for left/right badge positions with <code>--ms-inline-align</code>
+          Imperative commands that bring an option or group into view. Pair with <code>open()</code>
+          for an "open + jump" gesture (deep-linking to a member, revealing the active row on open).
+          They work in floating, mobile fullscreen, virtual-scroll and tree modes and return
+          <code>false</code>
+          when the target isn't in the current filtered list. A companion <code>clearSearch()</code>
+          reveals an option a search had filtered out so you can then scroll to it.
         </p>
         <.grid>
           <.form_group>
-            <label>Right + Center Align (Default)</label>
-            <.web_multiselect
-              id="badges-right-center"
-              badges_position="right"
-              style="--ms-inline-align: center;"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts python java)}
-            />
-            <small class="form-text"><code>--ms-inline-align: center</code></small>
+            <label>Grouped (headers)</label>
+            <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
+              <div style="flex:1 1 220px; min-width:220px;">
+                <.web_multiselect id="scroll-grouped" options={@grouped_techs} />
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.5rem; flex:0 0 auto; min-width:190px;">
+                <button type="button" data-scroll-grouped="group:backend">▶ group "backend"</button>
+                <button type="button" data-scroll-grouped="group:database">▶ group "database"</button>
+                <button type="button" data-scroll-grouped="value:redis">◎ value "redis"</button>
+                <button type="button" data-scroll-grouped="index:0">⇱ index 0</button>
+              </div>
+            </div>
+            <small class="form-text"><code>scrollToGroup</code> centers the group header.</small>
           </.form_group>
 
           <.form_group>
-            <label>Right + Top Align</label>
-            <.web_multiselect
-              id="badges-right-top"
-              badges_position="right"
-              style="--ms-inline-align: flex-start;"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts python java)}
-            />
-            <small class="form-text"><code>--ms-inline-align: flex-start</code></small>
-          </.form_group>
-
-          <.form_group>
-            <label>Left + Center Align (Default)</label>
-            <.web_multiselect
-              id="badges-left-center"
-              badges_position="left"
-              style="--ms-inline-align: center;"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts python java)}
-            />
-            <small class="form-text"><code>--ms-inline-align: center</code></small>
-          </.form_group>
-
-          <.form_group>
-            <label>Left + Top Align</label>
-            <.web_multiselect
-              id="badges-left-top"
-              badges_position="left"
-              style="--ms-inline-align: flex-start;"
-              search_placeholder="Select technologies..."
-              options={@languages}
-              value={~w(js ts python java)}
-            />
-            <small class="form-text"><code>--ms-inline-align: flex-start</code></small>
-          </.form_group>
-        </.grid>
-      </.card>
-
-      <.card title="RTL (Right-to-Left) Support">
-        <.tip><code>dir="rtl"</code> — passed through verbatim; auto-flips layout, alignment, and badge flow</.tip>
-        <p>
-          Full support for RTL languages (Arabic, Hebrew, Persian, etc.) with automatic detection from <code>dir="rtl"</code>
-        </p>
-
-        <.grid>
-          <.form_group>
-            <label>Basic RTL Example</label>
-            <.web_multiselect
-              id="rtl-basic"
-              dir="rtl"
-              search_placeholder="...بحث"
-              options={@languages}
-              value={~w(js ts python)}
-            />
-            <small class="form-text">Toggle on left, text right-aligned, badges flow right-to-left</small>
-          </.form_group>
-
-          <.form_group>
-            <label>RTL with Arabic Text</label>
-            <.web_multiselect
-              id="rtl-arabic"
-              dir="rtl"
-              search_placeholder="البحث عن التقنيات..."
-              options={@arabic_langs}
-              value={~w(js react)}
-            />
-            <small class="form-text">Real Arabic technology terms</small>
-          </.form_group>
-
-          <.form_group>
-            <label>RTL Count Mode</label>
-            <.web_multiselect
-              id="rtl-count"
-              dir="rtl"
-              badges_display_mode="count"
-              show_counter={true}
-              search_placeholder="...بحث"
-              options={@languages}
-              value={~w(js ts python java)}
-            />
-            <small class="form-text">Count badge on left side in RTL mode</small>
-          </.form_group>
-
-          <.form_group>
-            <label>LTR vs RTL Comparison</label>
-            <div style="display: flex; gap: 1rem; flex-direction: column;">
-              <div>
-                <small style="display: block; margin-bottom: 0.25rem;">LTR (Left-to-Right)</small>
+            <label>Long list + virtual scroll</label>
+            <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
+              <div style="flex:1 1 220px; min-width:220px;">
                 <.web_multiselect
-                  id="rtl-comparison-ltr"
-                  search_placeholder="Search..."
-                  options={@languages}
-                  value={~w(js ts)}
+                  id="scroll-virtual"
+                  enable_virtual_scroll={true}
+                  options={@all_countries}
                 />
               </div>
-              <div>
-                <small style="display: block; margin-bottom: 0.25rem;">RTL (Right-to-Left)</small>
-                <.web_multiselect
-                  id="rtl-comparison-rtl"
-                  dir="rtl"
-                  search_placeholder="...بحث"
-                  options={@languages}
-                  value={~w(js ts)}
-                />
+              <div style="display:flex; flex-direction:column; gap:0.5rem; flex:0 0 auto; min-width:190px;">
+                <button type="button" data-scroll-virtual="value:jp">Japan</button>
+                <button type="button" data-scroll-virtual="value:us">United States</button>
+                <button type="button" data-scroll-virtual="value:vn">Vietnam (last)</button>
+                <button type="button" data-scroll-virtual="clear">clearSearch()</button>
               </div>
             </div>
             <small class="form-text">
-              Notice toggle position, text alignment, and badge layout differences
+              Virtual mode scrolls by index math — the row need not be rendered yet.
             </small>
           </.form_group>
-
-          <.form_group>
-            <label>RTL + Badges Position: Right</label>
-            <.web_multiselect
-              id="rtl-badges-right"
-              dir="rtl"
-              badges_position="right"
-              search_placeholder="...بحث"
-              options={@languages}
-              value={~w(js ts python)}
-            />
-            <small class="form-text">Badges inline on left (visually) with proper margin</small>
-          </.form_group>
-
-          <.form_group>
-            <label>RTL + Badges Position: Left</label>
-            <.web_multiselect
-              id="rtl-badges-left"
-              dir="rtl"
-              badges_position="left"
-              search_placeholder="...بحث"
-              options={@languages}
-              value={~w(js ts python)}
-            />
-            <small class="form-text">Badges inline on right (visually) with proper margin</small>
-          </.form_group>
         </.grid>
+        <div id="scroll-log" class="log-panel">
+          <div class="muted">scrollTo* return values log here…</div>
+        </div>
+
+        <details class="mt-1">
+          <summary>Show code</summary>
+          <pre><code>{@bu06b_code}</code></pre>
+        </details>
       </.card>
 
-      <.card title="Async Search / Lookup">
-        <.tip><code>{"min_search_length={2}"}</code> · <code>{"keep_options_on_search={true}"}</code> · map non-canonical keys with <code>value_member="id"</code> · <code>display_value_member="name"</code> · <code>subtitle_member="description"</code></.tip>
+      <.card title="BU05b · Server-driven Scroll-to — push_command/3 (Elixir-only, no JS)">
+        <.tip>
+          The SAME commands as BU05, but driven from the LiveView with
+          <code>Keenmate.WebMultiselect.push_command/3</code> — no inline
+          <code>&lt;script&gt;</code>. The element only needs <code>hook={true}</code>.
+        </.tip>
         <p>
-          Load options dynamically as users type. Perfect for large datasets, API searches, or real-time filtering.
+          Every button below is a plain <code>phx-click</code>: the server receives it and
+          replies with a <code>push_command</code> that opens/closes/scrolls the widget. The
+          "auto-open on entry" widget uses <code>ready_event=</code> — when the picker signals
+          it has finished building, the server opens it and jumps to a group, with zero user
+          interaction. This is the reliable "land on the page with it already open + scrolled"
+          pattern.
         </p>
-
         <.grid>
           <.form_group>
-            <label>Search GitHub Users</label>
-            <.web_multiselect
-              id="github-search"
-              min_search_length={2}
-              subtitle_member="subtitle"
-              search_placeholder="Type to search GitHub users..."
-              search_hint="💡 Type at least 2 characters to search"
-            />
-            <small class="form-text">Tries GitHub API, uses mock data if rate-limited</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Search Products</label>
-            <.web_multiselect
-              id="product-search-classic"
-              min_search_length={1}
-              subtitle_member="subtitle"
-              search_placeholder="Search products..."
-            />
-            <small class="form-text">Simulated product database search</small>
-          </.form_group>
-
-          <.form_group>
-            <label>Security Groups (Initial + Async)</label>
-            <.web_multiselect
-              id="security-groups-search"
-              min_search_length={2}
-              keep_options_on_search={true}
-              value_member="id"
-              display_value_member="name"
-              subtitle_member="description"
-              search_placeholder="Type to search all security groups..."
-              search_hint="💡 Shows 5 most used groups initially, type to search all"
-              options={@security_groups}
-              value={~w(sg-001 sg-002)}
-            />
+            <label>Grouped — commanded from the server</label>
+            <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
+              <div style="flex:1 1 220px; min-width:220px;">
+                <.web_multiselect
+                  id="cmd-grouped"
+                  hook="KeenWebMultiselectHook"
+                  options={@grouped_techs}
+                  allow_groups={true}
+                />
+              </div>
+              <div style="display:flex; flex-direction:column; gap:0.5rem; flex:0 0 auto; min-width:210px;">
+                <button type="button" phx-click="cmd" phx-value-kind="group" phx-value-arg="backend">
+                  ▶ open + group "backend"
+                </button>
+                <button type="button" phx-click="cmd" phx-value-kind="group" phx-value-arg="database">
+                  ▶ open + group "database"
+                </button>
+                <button type="button" phx-click="cmd" phx-value-kind="value" phx-value-arg="redis">
+                  ◎ open + value "redis"
+                </button>
+                <button type="button" phx-click="cmd" phx-value-kind="index" phx-value-arg="0">
+                  ⇱ open + index 0
+                </button>
+                <button type="button" phx-click="cmd" phx-value-kind="search" phx-value-arg="back">
+                  🔎 search "back"
+                </button>
+                <button type="button" phx-click="cmd" phx-value-kind="clear" phx-value-arg="">
+                  clear_search
+                </button>
+                <button type="button" phx-click="cmd" phx-value-kind="close" phx-value-arg="">
+                  ✕ close
+                </button>
+              </div>
+            </div>
             <small class="form-text">
-              Initial favorites + full search on typing (type at least 2 characters)
+              Each click round-trips to the server, which calls <code>push_command/3</code>.
+            </small>
+          </.form_group>
+
+          <.form_group>
+            <label>Auto-open on entry — ready_event → push_command</label>
+            <div style="flex:1 1 220px; min-width:220px;">
+              <.web_multiselect
+                id="cmd-onentry"
+                hook="KeenWebMultiselectHook"
+                options={@grouped_techs}
+                allow_groups={true}
+                ready_event="web_multiselect:ready"
+              />
+            </div>
+            <small class="form-text">
+              Opened and scrolled to group "database" by the server when its
+              <code>ready</code> event fired — no click. (Reset by reloading the page.)
             </small>
           </.form_group>
         </.grid>
-
-        <.note>
-          <p><strong>Initial Options + Async Search Pattern:</strong></p>
-          <p>The Security Groups example demonstrates a common UX pattern:</p>
-          <ul>
-            <li>
-              <strong>Initial State:</strong>
-              Shows 5 most frequently used security groups when dropdown opens
-            </li>
-            <li>
-              <strong>On Typing:</strong>
-              Calls server API to search ALL security groups (after 2+ characters)
-            </li>
-            <li><strong>On Clear:</strong> Returns to showing the 5 initial favorites</li>
-            <li>
-              <strong>Configuration:</strong>
-              <code>options</code>
-              (initial data) + <code>searchCallback</code>
-              (async) + <code>keep-options-on-search="true"</code>
-              + <code>min-search-length="2"</code>
-            </li>
-          </ul>
-        </.note>
+        <div class="log-panel">
+          <div :if={@cmd_log == []} class="muted">push_command/3 calls log here…</div>
+          <div :for={line <- @cmd_log}>{line}</div>
+        </div>
       </.card>
 
-      <.card title="Search Modes: Filter vs Navigate">
+      <.card title="BU06 · Search Modes: Filter vs Navigate">
         <.tip><code>search_mode="filter"</code> hides non-matches · <code>search_mode="navigate"</code> jumps to matches while keeping all rows visible</.tip>
         <p>
           Choose between <strong>filter</strong>
@@ -1124,33 +870,6 @@ defmodule TestAppWeb.Examples.BasicLive do
         </.note>
       </.card>
 
-      <.card title="Event Handling">
-        <.tip>DOM events (no attribute): <code>el.addEventListener("select" | "deselect" | "change", …)</code> — see the inline <code>&lt;script&gt;</code></.tip>
-        <p>
-          Listen to <code>select</code>, <code>deselect</code>, and <code>change</code> events
-        </p>
-
-        <.form_group>
-          <label>Select Options (Check Console)</label>
-          <.web_multiselect
-            id="events-select"
-            search_placeholder="Select options..."
-            options={@technologies}
-          />
-          <small class="form-text">Open browser console to see events</small>
-        </.form_group>
-        <div
-          id="event-log"
-          style="background: #f9f9f9; padding: 1rem; border-radius: 4px; margin-top: 1rem; font-family: monospace; font-size: 0.875rem; max-height: 200px; overflow-y: auto;"
-        >
-          <div style="color: #666;">Event log will appear here...</div>
-        </div>
-        <small class="form-text" style="margin-top: 0.75rem; display: block;">
-          Looking for the <code>on*</code> property handlers and the
-          <code>beforeSelect</code>/<code>beforeDeselect</code> interceptors?
-          See <.link navigate="/examples/events-callbacks">Events, Handlers &amp; Interceptors</.link>.
-        </small>
-      </.card>
     </.example_page>
 
     <script type="module">
@@ -1176,254 +895,72 @@ defmodule TestAppWeb.Examples.BasicLive do
         };
       });
 
-      // I18n English - Simple English pluralization
-      wait('i18n-english').then((el) => {
-        el.getCounterCallback = (count) => {
-          return count === 1 ? '1 item selected' : `${count} items selected`;
-        };
-      });
-
-      // I18n Czech - Complex Czech pluralization rules (1 = singular, 2-4 = paucal, 5+ = plural)
-      wait('i18n-czech').then((el) => {
-        el.getCounterCallback = (count) => {
-          if (count === 1) {
-            return '1 položka vybrána';
-          } else if (count >= 2 && count <= 4) {
-            return `${count} položky vybrány`;
-          } else {
-            return `${count} položek vybráno`;
-          }
-        };
-      });
-
-      // I18n Partial - Spanish pluralization for partial mode and count mode
-      wait('i18n-partial').then((el) => {
-        el.getCounterCallback = (count, moreCount) => {
-          if (moreCount !== undefined) {
-            return moreCount === 1 ? '+1 más' : `+${moreCount} más`;
-          }
-          return count === 1 ? '1 elemento seleccionado' : `${count} elementos seleccionados`;
-        };
-      });
-
-      // Tooltip Custom - Custom tooltip content with callback (shows subtitle)
-      wait('tooltip-custom').then((el) => {
-        el.getBadgeTooltipCallback = (item) => {
-          return item.subtitle || item.label;
-        };
-      });
-
-      // RTL Count Mode - Custom Arabic count callback
-      wait('rtl-count').then((el) => {
-        el.getCounterCallback = (count) => {
-          return `${count} محدد`; // "selected" in Arabic
-        };
-      });
-
-      // Async Search: GitHub Users
-      wait('github-search').then((githubSearch) => {
-        const mockGitHubUsers = [
-          { login: 'octocat', id: 583231 },
-          { login: 'torvalds', id: 1024025 },
-          { login: 'gaearon', id: 810438 },
-          { login: 'tj', id: 25254 },
-          { login: 'sindresorhus', id: 170270 },
-          { login: 'addyosmani', id: 110953 },
-          { login: 'paulirish', id: 39191 },
-          { login: 'substack', id: 12631 },
-          { login: 'mbostock', id: 230541 },
-          { login: 'defunkt', id: 2 }
-        ];
-
-        githubSearch.searchCallback = async (searchTerm) => {
-          try {
-            const response = await fetch(`https://api.github.com/search/users?q=${searchTerm}&per_page=10`);
-
-            if (!response.ok) {
-              console.warn('GitHub API rate limit reached, using mock data');
-              const term = searchTerm.toLowerCase();
-              const filtered = mockGitHubUsers.filter(user =>
-                user.login.toLowerCase().includes(term)
-              );
-
-              return [
-                {
-                  value: '__error__',
-                  label: '⚠️ GitHub API Rate Limit - Showing Mock Data',
-                  subtitle: 'API is temporarily unavailable',
-                  disabled: true
-                },
-                ...filtered.map(user => ({
-                  value: user.login,
-                  label: user.login,
-                  subtitle: `ID: ${user.id} (mock)`,
-                  icon: '👤'
-                }))
-              ];
-            }
-
-            const data = await response.json();
-
-            if (!data.items || !Array.isArray(data.items)) {
-              console.warn('Invalid GitHub API response, using mock data');
-              const term = searchTerm.toLowerCase();
-              const filtered = mockGitHubUsers.filter(user =>
-                user.login.toLowerCase().includes(term)
-              );
-
-              return [
-                {
-                  value: '__error__',
-                  label: '⚠️ Invalid API Response - Showing Mock Data',
-                  subtitle: 'Could not parse GitHub API response',
-                  disabled: true
-                },
-                ...filtered.map(user => ({
-                  value: user.login,
-                  label: user.login,
-                  subtitle: `ID: ${user.id} (mock)`,
-                  icon: '👤'
-                }))
-              ];
-            }
-
-            return data.items.map(user => ({
-              value: user.login,
-              label: user.login,
-              subtitle: `ID: ${user.id}`,
-              icon: '👤'
-            }));
-          } catch (error) {
-            console.error('GitHub search error:', error);
-            const term = searchTerm.toLowerCase();
-            const filtered = mockGitHubUsers.filter(user =>
-              user.login.toLowerCase().includes(term)
-            );
-
-            return [
-              {
-                value: '__error__',
-                label: '⚠️ Network Error - Showing Mock Data',
-                subtitle: error.message || 'Could not connect to GitHub API',
-                disabled: true
-              },
-              ...filtered.map(user => ({
-                value: user.login,
-                label: user.login,
-                subtitle: `ID: ${user.id} (mock)`,
-                icon: '👤'
-              }))
-            ];
-          }
-        };
-      });
-
-      // Async Search: Products
-      wait('product-search-classic').then((productSearchClassic) => {
-        const allProducts = [
-          { value: '1', label: 'Laptop Pro 15', subtitle: 'Electronics - $1299' },
-          { value: '2', label: 'Wireless Mouse', subtitle: 'Electronics - $29' },
-          { value: '3', label: 'Mechanical Keyboard', subtitle: 'Electronics - $89' },
-          { value: '4', label: 'USB-C Hub', subtitle: 'Electronics - $49' },
-          { value: '5', label: 'Office Chair Deluxe', subtitle: 'Furniture - $299' },
-          { value: '6', label: 'Standing Desk', subtitle: 'Furniture - $499' },
-          { value: '7', label: 'Desk Lamp LED', subtitle: 'Furniture - $39' },
-          { value: '8', label: 'Monitor 27"', subtitle: 'Electronics - $349' },
-          { value: '9', label: 'Webcam HD', subtitle: 'Electronics - $79' },
-          { value: '10', label: 'Headphones', subtitle: 'Electronics - $199' }
-        ];
-
-        productSearchClassic.searchCallback = async (searchTerm) => {
-          await new Promise(resolve => setTimeout(resolve, 300));
-
-          const term = searchTerm.toLowerCase();
-          return allProducts.filter(product =>
-            product.label.toLowerCase().includes(term) ||
-            product.subtitle.toLowerCase().includes(term)
-          );
-        };
-      });
-
-      // Async Search: Security Groups (Initial + Async Pattern)
-      wait('security-groups-search').then((securityGroupsSearch) => {
-        const mostUsedSecurityGroups = [
-          { id: 'sg-001', name: 'Web Servers', description: 'HTTP/HTTPS access (80, 443)', icon: '🌐', usageCount: 150 },
-          { id: 'sg-002', name: 'Database Servers', description: 'MySQL/PostgreSQL (3306, 5432)', icon: '🗄️', usageCount: 120 },
-          { id: 'sg-003', name: 'Application Servers', description: 'Internal API access (8080)', icon: '⚙️', usageCount: 100 },
-          { id: 'sg-004', name: 'Load Balancers', description: 'ALB/NLB traffic', icon: '⚖️', usageCount: 80 },
-          { id: 'sg-005', name: 'Cache Servers', description: 'Redis/Memcached (6379, 11211)', icon: '💾', usageCount: 60 }
-        ];
-
-        const allSecurityGroups = [
-          ...mostUsedSecurityGroups,
-          { id: 'sg-006', name: 'SSH Bastion', description: 'SSH access (22)', icon: '🔐', usageCount: 45 },
-          { id: 'sg-007', name: 'Monitoring Agents', description: 'Metrics collection', icon: '📊', usageCount: 40 },
-          { id: 'sg-008', name: 'Message Queue', description: 'RabbitMQ/SQS', icon: '📬', usageCount: 35 },
-          { id: 'sg-009', name: 'File Storage', description: 'NFS/S3 gateway', icon: '📁', usageCount: 30 },
-          { id: 'sg-010', name: 'VPN Gateway', description: 'VPN access (1194)', icon: '🔒', usageCount: 25 },
-          { id: 'sg-011', name: 'Email Servers', description: 'SMTP/IMAP (25, 143, 587)', icon: '📧', usageCount: 20 },
-          { id: 'sg-012', name: 'DNS Servers', description: 'DNS queries (53)', icon: '🌍', usageCount: 18 },
-          { id: 'sg-013', name: 'FTP Servers', description: 'FTP/SFTP (21, 22)', icon: '📤', usageCount: 15 },
-          { id: 'sg-014', name: 'CI/CD Pipeline', description: 'Jenkins/GitLab runners', icon: '🚀', usageCount: 12 },
-          { id: 'sg-015', name: 'Container Registry', description: 'Docker registry (5000)', icon: '🐳', usageCount: 10 },
-          { id: 'sg-016', name: 'Elasticsearch', description: 'Search cluster (9200, 9300)', icon: '🔍', usageCount: 8 },
-          { id: 'sg-017', name: 'Kafka Brokers', description: 'Message streaming (9092)', icon: '📨', usageCount: 7 },
-          { id: 'sg-018', name: 'Development', description: 'Dev environment access', icon: '💻', usageCount: 6 },
-          { id: 'sg-019', name: 'Staging', description: 'Staging environment', icon: '🧪', usageCount: 5 },
-          { id: 'sg-020', name: 'Legacy Systems', description: 'Old infrastructure', icon: '🏚️', usageCount: 2 }
-        ];
-
-        securityGroupsSearch.searchCallback = async (searchTerm) => {
-          await new Promise(resolve => setTimeout(resolve, 400));
-
-          const term = searchTerm.toLowerCase();
-
-          const results = allSecurityGroups.filter(sg =>
-            sg.name.toLowerCase().includes(term) ||
-            sg.description.toLowerCase().includes(term) ||
-            sg.id.toLowerCase().includes(term)
-          );
-
-          return results.sort((a, b) => b.usageCount - a.usageCount);
-        };
-      });
-
-      // Events select - log select / deselect / change to the on-page event log
-      wait('events-select').then((eventsSelect) => {
-        const eventLog = document.getElementById('event-log');
-
-        const logEvent = (eventName, detail) => {
-          const timestamp = new Date().toLocaleTimeString();
-          const logEntry = document.createElement('div');
-          logEntry.style.marginBottom = '0.5rem';
-          logEntry.innerHTML = `<strong style="color: #0066cc;">[${timestamp}] ${eventName}:</strong> ${JSON.stringify(detail, null, 2)}`;
-          eventLog.appendChild(logEntry);
-          eventLog.scrollTop = eventLog.scrollHeight;
+      // Scroll-to API (BU06b) — scrollToGroup / scrollToValue / scrollToIndex / clearSearch.
+      // These are JS-only element methods with no wrapper attribute; reproduced verbatim
+      // (adapted to the wrapper's element ids) from upstream examples-basic.
+      Promise.all([wait('scroll-grouped'), wait('scroll-virtual')]).then(([scrollGrouped, scrollVirtual]) => {
+        const scrollLogEl = document.getElementById('scroll-log');
+        const scrollLog = (msg) => {
+          if (!scrollLogEl) return;
+          if (scrollLogEl.querySelector('.muted')) scrollLogEl.innerHTML = '';
+          const row = document.createElement('div');
+          row.style.marginBottom = '0.4rem';
+          row.textContent = msg;
+          scrollLogEl.appendChild(row);
+          scrollLogEl.scrollTop = scrollLogEl.scrollHeight;
         };
 
-        eventsSelect.addEventListener('select', (e) => {
-          console.log('select event:', e.detail);
-          logEvent('select', {
-            option: e.detail.option?.label,
-            selectedValues: e.detail.selectedValues
+        // Inspect the (open) shadow DOM and report which option rows are actually in view —
+        // so we can SEE where a scrollTo* call landed. Runs after a tick so the scroll settles.
+        const describeViewport = (el, targetValue) => {
+          const container = el.shadowRoot && el.shadowRoot.querySelector('.ms__options');
+          if (!container) { scrollLog('   ↳ (dropdown not open / no list)'); return; }
+          const crect = container.getBoundingClientRect();
+          const rows = [...container.querySelectorAll('.ms__option')];
+          const visible = rows.filter((o) => {
+            const r = o.getBoundingClientRect();
+            return r.bottom > crect.top + 1 && r.top < crect.bottom - 1;
           });
-        });
+          const label = (o) => (o.querySelector('.ms__option-title') || o).textContent.trim();
+          const first = visible[0] ? label(visible[0]) : '—';
+          const last = visible.length ? label(visible[visible.length - 1]) : '—';
+          let targetNote = '';
+          if (targetValue != null) {
+            const hit = visible.find((o) => o.dataset.value === String(targetValue));
+            targetNote = hit
+              ? ` · target "${label(hit)}" VISIBLE`
+              : ` · target "${targetValue}" NOT in view`;
+          }
+          scrollLog(`   ↳ scrollTop=${Math.round(container.scrollTop)} · shows "${first}" … "${last}" (${visible.length} rows)${targetNote}`);
+        };
 
-        eventsSelect.addEventListener('deselect', (e) => {
-          console.log('deselect event:', e.detail);
-          logEvent('deselect', {
-            option: e.detail.option?.label,
-            selectedValues: e.detail.selectedValues
-          });
-        });
+        const runScroll = (el, spec) => {
+          el.open(); // scrollTo* defers internally, so open()+scroll in one gesture works
+          if (spec === 'clear') { el.clearSearch(); scrollLog('clearSearch() — search reset, full list restored'); return; }
+          const [kind, arg] = spec.split(':');
+          let ok, target = null;
+          if (kind === 'group')      { ok = el.scrollToGroup(arg); }
+          else if (kind === 'value') { ok = el.scrollToValue(arg); target = arg; }
+          else if (kind === 'index') { ok = el.scrollToIndex(Number(arg)); }
+          const call = kind === 'index' ? `scrollToIndex(${arg})`
+            : kind === 'group' ? `scrollToGroup('${arg}')`
+            : `scrollToValue('${arg}')`;
+          scrollLog(`▶ ${call} → ${ok}`);
+          // Give the (possibly deferred) scroll a moment, then report where we landed.
+          setTimeout(() => describeViewport(el, target), 90);
+        };
 
-        eventsSelect.addEventListener('change', (e) => {
-          console.log('change event:', e.detail);
-          logEvent('change', {
-            count: e.detail.selectedOptions?.length,
-            selectedValues: e.detail.selectedValues,
-            selectedLabels: e.detail.selectedOptions?.map(o => o.label)
-          });
+        // Delegate on document so the listeners survive LiveView's DOM patch on connect
+        // (plain <button>s bound directly lose their listeners; the <web-multiselect> is
+        // protected by phx-update="ignore"). As of @keenmate/web-multiselect 2.1.0 no
+        // stopPropagation()/capture-phase workaround is needed: open() and every scrollTo*
+        // arm a one-tick outside-click guard, so re-driving an already-open dropdown from an
+        // external button no longer closes it (the old "0 rows / 11 rows" alternation).
+        document.addEventListener('click', (e) => {
+          const gBtn = e.target.closest('[data-scroll-grouped]');
+          if (gBtn) { runScroll(scrollGrouped, gBtn.dataset.scrollGrouped); return; }
+          const vBtn = e.target.closest('[data-scroll-virtual]');
+          if (vBtn) { runScroll(scrollVirtual, vBtn.dataset.scrollVirtual); }
         });
       });
     </script>

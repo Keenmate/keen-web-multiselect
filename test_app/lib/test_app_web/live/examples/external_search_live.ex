@@ -76,7 +76,7 @@ defmodule TestAppWeb.Examples.ExternalSearchLive do
       title="External Search (FlexSearch)"
       subtitle="Externalize the whole search with a searchCallback — the library stays lean"
     >
-      <.card title="Why & how">
+      <.card title="ES01 · Why">
         <.tip>Set <code>el.searchCallback</code> (JS) to delegate the entire search to your own engine — here, a FlexSearch index.</.tip>
         <p>
           The built-in search is a lean case-insensitive <strong>substring</strong> match. When you need
@@ -90,7 +90,7 @@ defmodule TestAppWeb.Examples.ExternalSearchLive do
         <.code_block>{@wire_code}</.code_block>
       </.card>
 
-      <.card title="Fuzzy & accent-insensitive (flat list)">
+      <.card title="ES02 · Fuzzy & Accent-Insensitive (flat list)">
         <.tip>FlexSearch <code>Charset.Normalize</code> folds accents; <code>tokenize: "full"</code> matches partial tokens.</.tip>
         <p>
           Cities with accented names. Try <code>zurich</code> → <em>Zürich</em>, <code>sao</code> →
@@ -104,7 +104,7 @@ defmodule TestAppWeb.Examples.ExternalSearchLive do
         />
       </.card>
 
-      <.card title={"External search on a tree (full ISCO-08, #{@isco_count} groups)"}>
+      <.card title={"ES03 · External Search on a Tree (full ISCO-08, #{@isco_count} groups)"}>
         <.tip>External search now composes with tree mode — matches keep their ancestors, and the index covers title + code + breadcrumb.</.tip>
         <p>
           The whole ISCO-08 occupation tree, searched through FlexSearch. The component rebuilds the hierarchy from

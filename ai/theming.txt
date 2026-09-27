@@ -75,4 +75,24 @@ The component's internal CSS uses @layer. A global unlayered reset
 (* { margin:0; padding:0 }) beats the component's layered defaults and breaks
 spacing. Wrap your reset: @layer reset { * { ... } }.
 
+SHARED SHADOW-DOM CSS ACROSS EVERY INSTANCE (escape hatch)
+----------------------------------------------------------
+CSS variables are the FIRST choice. For arbitrary shadow-DOM rules variables
+can't express (e.g. restyling `.ms__badge`), theme every select ONCE:
+  1. config :keen_web_multiselect, shadow_styles: {:file, "assets/ms-shadow.css"}
+     (also accepts an inline string, or a 0-arity fn / {mod,fun,args} returning CSS)
+  2. <Keenmate.WebMultiselect.Components.shadow_styles /> once in the root layout <head>.
+The client registry compiles it into ONE Constructable Stylesheet and adopts it
+into every <web-multiselect> shadow root (adoptedStyleSheets) — survives re-renders,
+not duplicated per instance. Scope with :host(.your-class) so a select opts in with
+a plain class. Serving files individually? add keen_web_multiselect_defaults.js to
+the Plug.Static only: allowlist.
+
+FLASH-FREE (upstream 2.1.0 `defer`): when :shadow_styles is set the wrapper adds the
+`defer` attribute to each select automatically — it reserves space but builds nothing
+until the registry adopts the shared sheet, then releases the gate. No default-badge
+flash. <.shadow_styles/> in <head> is REQUIRED in that setup (it ships the releaser).
+Per-instance: defer={false} opts out; defer={true} holds the build for your own async
+wiring (release via el.ready() in a hook's mounted()).
+
 Full details, tables, and per-variable notes: guides/theming.md.

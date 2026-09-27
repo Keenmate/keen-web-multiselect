@@ -6,7 +6,7 @@ custom element. One package covers plain HEEx AND LiveView. The upstream JS + CS
 are bundled in the Hex package — no `npm install`.
 
 Bundled upstream version at runtime:
-  Keenmate.WebMultiselect.upstream_version()  #=> "1.12.0-rc08"
+  Keenmate.WebMultiselect.upstream_version()  #=> "2.1.0"
 
 1. INSTALL (Hex)
 ----------------
@@ -14,13 +14,11 @@ In mix.exs:
 
     def deps do
       [
-        {:keen_web_multiselect, "~> 1.0.0-rc"}
+        {:keen_web_multiselect, "~> 2.0"}
       ]
     end
 
-NOTE ON THE CONSTRAINT: only 1.0.0-rc.* is published so far. A plain `~> 1.0`
-SKIPS pre-releases (SemVer), so until 1.0.0 is final you must opt into the
-release candidate with `~> 1.0.0-rc` (or pin an exact version). Then:
+Then:
 
     mix deps.get
 
@@ -58,7 +56,11 @@ OPTION C — serve straight from the dep's priv/static via Plug.Static:
       at: "/keen_web_multiselect",
       from: {:keen_web_multiselect, "priv/static"},
       gzip: false,
-      only: ~w(multiselect.js multiselect.css keen_web_multiselect_hook.js)
+      only: ~w(multiselect.js multiselect.css keen_web_multiselect_hook.js keen_web_multiselect_defaults.js)
+
+    (keen_web_multiselect_hook.js imports keen_web_multiselect_defaults.js — the
+    shared-styles registry. Bundlers inline it; when serving files individually,
+    include it in the allowlist or the hook's import 404s.)
 
 Then reference /keen_web_multiselect/multiselect.js from a <script type="module">
 and the CSS from a <link>. (Keenmate.WebMultiselect.asset_path/1 gives the on-disk

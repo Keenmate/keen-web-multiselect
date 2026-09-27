@@ -18,6 +18,7 @@ or `ai/cookbook.txt`.
 | The `<.web_multiselect>` attributes | `ai/component-reference.txt` (full list: hexdocs `web_multiselect/1`) |
 | React to selection changes in LiveView | `ai/liveview-events.txt` |
 | Change options/selection from the server | `ai/server-updates.txt` (`push_update/3`) |
+| Drive the dropdown from the server (open/scroll/search) | `ai/server-updates.txt` (`push_command/3`) |
 | Async / server-side search | `ai/server-search.txt` (`search_event`) |
 | Use it in a form | `ai/forms.txt` |
 | Option shapes / custom data keys | `ai/data-and-options.txt` |
@@ -35,9 +36,14 @@ or `ai/cookbook.txt`.
 - LiveView events are **opt-in** via `hook={true}` (resolves to
   `"KeenWebMultiselectHook"`). Events: `"web_multiselect:change"`
   (`%{"id","values"}`), `":select"` / `":deselect"` (`%{"id","value","values"}` —
-  `value` is the delta, `values` the full selection after it).
+  `value` is the delta, `values` the full selection after it), and `":add"`
+  (`%{"id","value","option"}` — fires with `allow_add_new` when the user picks the
+  "Add new …" prompt; let the server create the option).
 - The element renders `phx-update="ignore"`, so re-rendering will **not** push new
-  options/selection. Use `Keenmate.WebMultiselect.push_update(socket, id, options:/value:)`.
+  options/selection. Use `Keenmate.WebMultiselect.push_update(socket, id, options:/value:)`
+  for data, and `Keenmate.WebMultiselect.push_command(socket, id, open:/close:/toggle:/
+  search:/clear_search:/scroll_to_value:/scroll_to_group:/scroll_to_index:)` to drive the
+  dropdown imperatively.
 - Server-side search replies with `{:reply, %{results: [...]}, socket}` — not
   `{:noreply, ...}`.
 - Options: maps `%{value:, label:, icon?:, subtitle?:, group?:, disabled?:}` or

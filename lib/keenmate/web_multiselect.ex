@@ -7,7 +7,7 @@ defmodule Keenmate.WebMultiselect do
   for how to wire up the bundled JS, CSS, and the optional LiveView hook.
   """
 
-  @upstream_version "2.0.0-rc10"
+  @upstream_version "2.2.0-rc01"
 
   @doc """
   The version of `@keenmate/web-multiselect` bundled with this release.
@@ -30,6 +30,69 @@ defmodule Keenmate.WebMultiselect do
     |> to_string()
     |> Path.join(["static/", filename])
   end
+
+  # The client-side defaults registry, compile-embedded so `shadow_styles_js/0` can
+  # inline it into the page without runtime IO. `@external_resource` recompiles this
+  # module when the shipped file changes.
+  @defaults_js_path Path.join(__DIR__, "../../priv/static/keen_web_multiselect_defaults.js")
+  @external_resource @defaults_js_path
+  @defaults_js File.read!(@defaults_js_path)
+
+  @doc """
+  Resolves the project-wide shadow-DOM CSS from application config, or `nil` when
+  none is configured.
+
+  Configure it once — the `Keenmate.WebMultiselect.Components.shadow_styles/1` component
+  compiles it into one stylesheet and adopts it into every `<web-multiselect>` shadow root
+  on the page. Accepted shapes:
+
+    * a binary — treated as inline CSS
+    * `{:inline, css}` — inline CSS (explicit)
+    * `{:file, path}` — read the CSS from a file (`path` as given, i.e. relative to
+      the app's working directory unless absolute)
+    * a 0-arity function or `{module, function, args}` — called to produce the CSS
+      string (computed on the server, e.g. from theme config)
+
+  ## Examples
+
+      config :keen_web_multiselect, shadow_styles: "assets/ms-shadow.css" |> File.read!()
+      config :keen_web_multiselect, shadow_styles: {:file, "assets/ms-shadow.css"}
+      config :keen_web_multiselect, shadow_styles: {MyApp.Theme, :multiselect_css, []}
+  """
+  @spec shadow_styles_css() :: String.t() | nil
+  def shadow_styles_css do
+    case Application.get_env(:keen_web_multiselect, :shadow_styles) do
+      nil -> nil
+      css when is_binary(css) -> css
+      {:inline, css} when is_binary(css) -> css
+      {:file, path} when is_binary(path) -> File.read!(path)
+      fun when is_function(fun, 0) -> fun.()
+      {mod, fun, args} when is_atom(mod) and is_atom(fun) and is_list(args) -> apply(mod, fun, args)
+    end
+  end
+
+  @doc """
+  Whether project-wide shared shadow styles are configured (`:shadow_styles` is set).
+
+  A cheap presence check that — unlike `shadow_styles_css/0` — never resolves the value
+  (no `File.read!`, no function call). The component uses it to decide whether to emit the
+  `defer` attribute automatically: when a shared sheet is in play, deferring the first render
+  until the sheet is adopted closes the upgrade-then-restyle flash (the client registry from
+  `shadow_styles/1` releases the gate after adopting). No shared styles → no `defer`, so
+  behaviour is unchanged for consumers that don't use the feature.
+  """
+  @spec shadow_styles_configured?() :: boolean()
+  def shadow_styles_configured? do
+    Application.get_env(:keen_web_multiselect, :shadow_styles) != nil
+  end
+
+  @doc """
+  The client-side defaults-registry JavaScript (contents of the shipped
+  `keen_web_multiselect_defaults.js`). Inlined by `shadow_styles/1`; also useful if
+  you serve it yourself.
+  """
+  @spec defaults_js() :: String.t()
+  def defaults_js, do: @defaults_js
 
   @doc """
   Pushes an update to a mounted `<web-multiselect>` from the server.
@@ -79,5 +142,52 @@ defmodule Keenmate.WebMultiselect do
       {:ok, value} -> Map.put(payload, key, value)
       :error -> payload
     end
+  end
+
+  # Keys accepted by push_command/3, each mapping to an element method the hook calls.
+  @command_keys ~w(open close toggle search clear_search scroll_to_value scroll_to_group scroll_to_index)a
+
+  @doc """
+  Drives a mounted `<web-multiselect>` imperatively from the server — open/close the
+  dropdown, scroll to an option or group, or set the search text — without changing its
+  options or selection (use `push_update/3` for those).
+
+  Sends the `"web_multiselect:command"` event that `KeenWebMultiselectHook` listens for and
+  dispatches to the matching element method. Requires the target element to have `hook={true}`
+  (or `hook="KeenWebMultiselectHook"`) and a matching `id`.
+
+  ## Options
+
+    * `:open` — open the dropdown (truthy).
+    * `:close` — close the dropdown (truthy).
+    * `:toggle` — toggle open/closed (truthy).
+    * `:search` — set the search box text and filter as if typed (`""` clears it).
+    * `:clear_search` — clear the search box and restore the full list (truthy).
+    * `:scroll_to_value` — scroll the open dropdown to the option with this value.
+    * `:scroll_to_group` — scroll to this group's header (first option in virtual mode).
+    * `:scroll_to_index` — scroll to the option at this index in the filtered list.
+
+  Only the keys you pass are sent. Scroll/`search` act on the currently open, filtered list;
+  pair them with `:open` (or `:clear_search`) in a prior/same call as needed — the element
+  defers `scroll_to_*` one frame so `open: true` in the same payload works.
+
+  ## Examples
+
+      # Open and jump to a group
+      Keenmate.WebMultiselect.push_command(socket, "skills", open: true, scroll_to_group: "backend")
+
+      # Reveal a filtered-out option, then scroll to it
+      socket
+      |> Keenmate.WebMultiselect.push_command("skills", clear_search: true)
+      |> Keenmate.WebMultiselect.push_command("skills", scroll_to_value: "py")
+
+      # Preset the search box from the server
+      Keenmate.WebMultiselect.push_command(socket, "skills", search: "back")
+  """
+  @spec push_command(Phoenix.LiveView.Socket.t(), String.t(), keyword()) ::
+          Phoenix.LiveView.Socket.t()
+  def push_command(socket, id, opts \\ []) when is_binary(id) and is_list(opts) do
+    payload = Enum.reduce(@command_keys, %{id: id}, &maybe_put(&2, opts, &1))
+    Phoenix.LiveView.push_event(socket, "web_multiselect:command", payload)
   end
 end

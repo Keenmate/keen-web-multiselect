@@ -54,6 +54,91 @@ defmodule TestAppWeb.Examples.DataApiLive do
     {"opt3", "Option 3"}
   ]
 
+  # API07 — imperative open/close/toggle demo dataset.
+  @openclose_options [
+    {"opt1", "Option 1"},
+    {"opt2", "Option 2"},
+    {"opt3", "Option 3"},
+    {"opt4", "Option 4"}
+  ]
+
+  # API08 — programmatic search demo dataset.
+  @fruits [
+    {"apple", "Apple"},
+    {"apricot", "Apricot"},
+    {"banana", "Banana"},
+    {"blueberry", "Blueberry"},
+    {"cherry", "Cherry"},
+    {"grape", "Grape"},
+    {"mango", "Mango"},
+    {"melon", "Melon"},
+    {"orange", "Orange"},
+    {"peach", "Peach"},
+    {"pear", "Pear"},
+    {"pineapple", "Pineapple"}
+  ]
+
+  # Code samples rendered verbatim (backticks / ${} / {} break HEEx interpolation).
+  @api07_code """
+  const multiselect = document.querySelector('web-multiselect');
+
+  multiselect.open();      // Open the dropdown
+  multiselect.close();     // Close the dropdown
+  multiselect.toggle();    // Toggle open/closed
+
+  multiselect.isOpen;          // → true / false
+  multiselect.isOpen = true;   // open by assignment
+  multiselect.isOpen = false;  // close by assignment\
+  """
+
+  @api08_code """
+  const el = document.querySelector('web-multiselect');
+
+  el.searchMode = 'filter';  // or 'navigate' — governs how the query behaves
+  el.search('an');           // apply (as if typed); flush() applies the mode first
+  el.open();                 // …call open() to see the effect
+  el.searchText;             // → "an"
+  el.clearSearch();          // → ""\
+  """
+
+  # API09 — deferred initialization (defer / ready()). Backticks / ${} break HEEx.
+  @api09_code """
+  // <.web_multiselect id="defer-demo" defer={true} value={["js", "ts"]} />
+  // `defer` holds the build, so the element paints NOTHING until ready().
+  const el = document.querySelector('#defer-demo');
+
+  // Wire everything WHILE HELD — nothing renders yet:
+  el.customStylesCallback = () => `.ms__badge { background: #6d28d9; color: #fff; }`;
+  el.addEventListener('ready', () => console.log('built flash-free', el.isReady));
+
+  const langs = await loadLanguages();  // e.g. a 2 s fetch
+  el.options = langs;                   // assign options…
+  el.ready();                           // …then release: builds ONCE, styled, in one shot
+
+  // In LiveView you'd wire this from a phx-hook's mounted() and call el.ready() after your
+  // async options land. For the shared-theme case you need NONE of this — configure
+  // :shadow_styles and the wrapper defers + releases every select for you (see Elixir Only).\
+  """
+
+  # API05 — event-handling demo dataset (canonical value/label).
+  @technologies [
+    %{value: "js", label: "JavaScript"},
+    %{value: "ts", label: "TypeScript"},
+    %{value: "python", label: "Python"},
+    %{value: "java", label: "Java"},
+    %{value: "csharp", label: "C#"},
+    %{value: "php", label: "PHP"},
+    %{value: "ruby", label: "Ruby"},
+    %{value: "go", label: "Go"}
+  ]
+
+  # API06 — synchronous options + setSelected code sample (backticks / ${} break HEEx).
+  @api06_code """
+  const el = document.querySelector('#api06-compact');
+  el.options = languages;          // reactive write (coalesces on a microtask)
+  el.setSelected(['js', 'ts', 'py']); // imperative call flushes it synchronously\
+  """
+
   # Example 9 — basic badge tooltips dataset.
   @laptops [
     %{value: "1", label: "MacBook Pro 16\"", subtitle: "M3 Max, 36GB RAM, 1TB SSD"},
@@ -62,65 +147,6 @@ defmodule TestAppWeb.Examples.DataApiLive do
     %{value: "4", label: "Surface Laptop 5", subtitle: "Intel i5, 8GB RAM, 256GB SSD"},
     %{value: "5", label: "HP Spectre x360", subtitle: "Intel i7, 16GB RAM, 512GB SSD"}
   ]
-
-  # ---- Wrapper-specific extras (LiveView-driven cascade + LV-tunneled search) ----
-
-  @organizations [
-    %{value: "acme", label: "Acme Corp"},
-    %{value: "globex", label: "Globex"},
-    %{value: "initech", label: "Initech"}
-  ]
-
-  @units_by_org %{
-    "acme" => [
-      %{value: "acme-eng", label: "Engineering"},
-      %{value: "acme-sales", label: "Sales"},
-      %{value: "acme-ops", label: "Operations"}
-    ],
-    "globex" => [
-      %{value: "globex-rd", label: "Research"},
-      %{value: "globex-mfg", label: "Manufacturing"}
-    ],
-    "initech" => [
-      %{value: "initech-tps", label: "TPS Reports"},
-      %{value: "initech-it", label: "IT"}
-    ]
-  }
-
-  @depts_by_unit %{
-    "acme-eng" => [
-      %{value: "acme-eng-be", label: "Backend"},
-      %{value: "acme-eng-fe", label: "Frontend"},
-      %{value: "acme-eng-data", label: "Data"}
-    ],
-    "acme-sales" => [
-      %{value: "acme-sales-emea", label: "EMEA"},
-      %{value: "acme-sales-amer", label: "Americas"}
-    ],
-    "acme-ops" => [
-      %{value: "acme-ops-it", label: "IT"},
-      %{value: "acme-ops-fac", label: "Facilities"},
-      %{value: "acme-ops-hr", label: "HR"}
-    ],
-    "globex-rd" => [
-      %{value: "globex-rd-bio", label: "Biotech"},
-      %{value: "globex-rd-chem", label: "Chemistry"}
-    ],
-    "globex-mfg" => [
-      %{value: "globex-mfg-assembly", label: "Assembly"},
-      %{value: "globex-mfg-qa", label: "Quality Assurance"},
-      %{value: "globex-mfg-logistics", label: "Logistics"}
-    ],
-    "initech-tps" => [
-      %{value: "initech-tps-coversheet", label: "Cover Sheet Compliance"},
-      %{value: "initech-tps-archive", label: "Archive"}
-    ],
-    "initech-it" => [
-      %{value: "initech-it-support", label: "Support"},
-      %{value: "initech-it-infra", label: "Infrastructure"},
-      %{value: "initech-it-printers", label: "Printers"}
-    ]
-  }
 
   def mount(_params, _session, socket) do
     {:ok,
@@ -132,96 +158,20 @@ defmodule TestAppWeb.Examples.DataApiLive do
      |> assign(:categories, @categories)
      |> assign(:tags, @tags)
      |> assign(:options_simple, @options_simple)
+     |> assign(:openclose_options, @openclose_options)
+     |> assign(:fruits, @fruits)
+     |> assign(:api07_code, @api07_code)
+     |> assign(:api08_code, @api08_code)
+     |> assign(:api09_code, @api09_code)
+     |> assign(:technologies, @technologies)
+     |> assign(:api06_code, @api06_code)
      |> assign(:laptops, @laptops)
-     |> assign(:organizations, @organizations)
-     |> assign(:selected_org, nil)
-     |> assign(:business_units, [])
-     |> assign(:selected_unit, nil)
-     |> assign(:departments, [])
      |> assign(:form_payload, "(submit the form to see captured params)")}
-  end
-
-  # ---- Wrapper-specific extras: LiveView-driven cascade --------------------
-
-  def handle_event("web_multiselect:change", %{"id" => "cascade-org", "values" => [org | _]}, socket) do
-    units = Map.get(@units_by_org, org, [])
-
-    {:noreply,
-     socket
-     |> assign(:selected_org, org)
-     |> assign(:business_units, units)
-     |> assign(:selected_unit, nil)
-     |> assign(:departments, [])
-     |> push_event("web_multiselect:update", %{id: "cascade-unit", options: units, value: []})
-     |> push_event("web_multiselect:update", %{id: "cascade-dept", options: [], value: []})}
-  end
-
-  def handle_event("web_multiselect:change", %{"id" => "cascade-org", "values" => []}, socket) do
-    {:noreply,
-     socket
-     |> assign(:selected_org, nil)
-     |> assign(:business_units, [])
-     |> assign(:selected_unit, nil)
-     |> assign(:departments, [])
-     |> push_event("web_multiselect:update", %{id: "cascade-unit", options: [], value: []})
-     |> push_event("web_multiselect:update", %{id: "cascade-dept", options: [], value: []})}
-  end
-
-  def handle_event("web_multiselect:change", %{"id" => "cascade-unit", "values" => [unit | _]}, socket) do
-    depts = Map.get(@depts_by_unit, unit, [])
-
-    {:noreply,
-     socket
-     |> assign(:selected_unit, unit)
-     |> assign(:departments, depts)
-     |> push_event("web_multiselect:update", %{id: "cascade-dept", options: depts, value: []})}
-  end
-
-  def handle_event("web_multiselect:change", %{"id" => "cascade-unit", "values" => []}, socket) do
-    {:noreply,
-     socket
-     |> assign(:selected_unit, nil)
-     |> assign(:departments, [])
-     |> push_event("web_multiselect:update", %{id: "cascade-dept", options: [], value: []})}
-  end
-
-  def handle_event("web_multiselect:change", _params, socket), do: {:noreply, socket}
-  def handle_event("web_multiselect:select", _params, socket), do: {:noreply, socket}
-  def handle_event("web_multiselect:deselect", _params, socket), do: {:noreply, socket}
-
-  def handle_event("github_search", %{"query" => query, "id" => _id}, socket) do
-    {:reply, %{results: github_search_users(query)}, socket}
   end
 
   def handle_event("form_submit", params, socket) do
     {:noreply, assign(socket, :form_payload, inspect(params, pretty: true))}
   end
-
-  # Hits the GitHub public user-search API. Unauthenticated requests are
-  # rate-limited to ~10/min; the demo accepts that. Returns a list of
-  # %{value, label, subtitle} maps that the wrapper consumes as options.
-  defp github_search_users(query) when is_binary(query) and byte_size(query) > 0 do
-    url = ~c"https://api.github.com/search/users?per_page=10&q=" ++ to_charlist(URI.encode(query))
-    headers = [{~c"user-agent", ~c"keen_web_multiselect-demo"}, {~c"accept", ~c"application/vnd.github+json"}]
-
-    case :httpc.request(:get, {url, headers}, [{:timeout, 5_000}], []) do
-      {:ok, {{_, 200, _}, _resp_headers, body}} ->
-        case Jason.decode(to_string(body)) do
-          {:ok, %{"items" => items}} ->
-            Enum.map(items, fn item ->
-              %{value: item["login"], label: item["login"], subtitle: item["html_url"]}
-            end)
-
-          _ ->
-            []
-        end
-
-      _ ->
-        []
-    end
-  end
-
-  defp github_search_users(_), do: []
 
   def render(assigns) do
     ~H"""
@@ -230,7 +180,7 @@ defmodule TestAppWeb.Examples.DataApiLive do
       title="Data & API"
       subtitle="Custom objects, tuple arrays, member/getter callbacks, async search, form integration (json/csv/array), public API methods, and cascading selects."
     >
-      <.card title="1. Custom Object Structure">
+      <.card title="DA01 · Custom Object Structure">
         <.tip><code>value_member="userId"</code> · <code>display_value_member="fullName"</code> · <code>subtitle_member="email"</code></.tip>
         <p>
           Use your own data structure! Specify which properties to use for value, display, and other fields using <code>value_member</code>
@@ -249,7 +199,7 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </.form_group>
       </.card>
 
-      <.card title="2. [key, value] Tuple Arrays">
+      <.card title="DA02 · [key, value] Tuple Arrays">
         <.tip>Just pass tuples to <code>{"options={@languages}"}</code> — no <code>value_member</code>/<code>display_value_member</code> needed</.tip>
         <p>
           Auto-detected! Simply pass an array of <code>[key, value]</code>
@@ -262,7 +212,7 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </.form_group>
       </.card>
 
-      <.card title="3. Callbacks for Complex Logic">
+      <.card title="DA03 · Callbacks for Complex Logic">
         <p>
           Use callbacks when you need complex logic to extract values. Callbacks take precedence over members.
         </p>
@@ -279,7 +229,7 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </.note>
       </.card>
 
-      <.card title="4. Form Integration - JSON Format">
+      <.card title="API01 · Form Integration — JSON Format">
         <.tip><code>name="skills"</code> + <code>value_format="json"</code> writes a hidden input the form submits</.tip>
         <p>
           Seamless HTML form integration! Hidden inputs are automatically created and updated. Choose from 3 formats: <code>json</code>, <code>csv</code>, or <code>array</code>.
@@ -295,7 +245,7 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </form>
       </.card>
 
-      <.card title="5. Form Integration - CSV Format">
+      <.card title="API02 · Form Integration — CSV Format">
         <.tip><code>value_format="csv"</code> submits a single comma-separated hidden input</.tip>
         <p>
           Use CSV format for traditional comma-separated values. Great for legacy systems.
@@ -311,7 +261,7 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </form>
       </.card>
 
-      <.card title="6. Form Integration - Array Format">
+      <.card title="API03 · Form Integration — Array Format">
         <.tip><code>value_format="array"</code> emits one hidden input per value as <code>tags[]</code></.tip>
         <p>
           Use array format to create multiple hidden inputs. Standard HTML array handling with <code>name[]</code>.
@@ -330,7 +280,7 @@ defmodule TestAppWeb.Examples.DataApiLive do
         <pre style="background:#f7fafc;padding:1rem;border-radius:8px;font-family:'Courier New',monospace;font-size:0.85rem;white-space:pre-wrap">{@form_payload}</pre>
       </.card>
 
-      <.card title="7. New Public API Methods">
+      <.card title="API04 · Public API Methods">
         <.tip><code>{"multiple={false}"}</code> switches single-select mode (returns a scalar); omit it for multi-select</.tip>
         <p>
           New properties and methods for easier value access:
@@ -346,16 +296,171 @@ defmodule TestAppWeb.Examples.DataApiLive do
         <.grid_2>
           <.form_group>
             <label>Single Select:</label>
-            <.web_multiselect id="single-mode" multiple={false} options={@options_simple} />
+            <.web_multiselect id="single-mode" multiple={false} options={@options_simple} value="opt2" />
+            <div class="controls" style="margin-top: 0.75rem;">
+              <button type="button" onclick="apiMethodsDemo('single-mode', 'getValue')">getValue()</button>
+              <button type="button" onclick="apiMethodsDemo('single-mode', 'selectedValue')">selectedValue</button>
+              <button type="button" onclick="apiMethodsDemo('single-mode', 'selectedItem')">selectedItem</button>
+              <button type="button" onclick="apiMethodsDemo('single-mode', 'getSelected')">getSelected()</button>
+            </div>
+            <div class="output">
+              <div class="output-label">Result:</div>
+              <pre id="output-single-mode" phx-update="ignore">Change the selection, then click a method above.</pre>
+            </div>
           </.form_group>
           <.form_group>
             <label>Multi Select:</label>
-            <.web_multiselect id="multi-mode" options={@options_simple} />
+            <.web_multiselect id="multi-mode" options={@options_simple} value={["opt1", "opt3"]} />
+            <div class="controls" style="margin-top: 0.75rem;">
+              <button type="button" onclick="apiMethodsDemo('multi-mode', 'getValue')">getValue()</button>
+              <button type="button" onclick="apiMethodsDemo('multi-mode', 'selectedValue')">selectedValue</button>
+              <button type="button" onclick="apiMethodsDemo('multi-mode', 'selectedItem')">selectedItem</button>
+              <button type="button" onclick="apiMethodsDemo('multi-mode', 'getSelected')">getSelected()</button>
+            </div>
+            <div class="output">
+              <div class="output-label">Result:</div>
+              <pre id="output-multi-mode" phx-update="ignore">Change the selection, then click a method above.</pre>
+            </div>
           </.form_group>
         </.grid_2>
       </.card>
 
-      <.card title="8. Async Search / Lookup">
+      <.card title="API07 · Open / Close API">
+        <p>
+          Drive the dropdown open state from your own code — wizards, "open on step", or custom trigger buttons. Calling <code>open()</code> from a button's own click handler works directly: the component ignores that opening click so it won't immediately re-close.
+        </p>
+
+        <ul class="feature-list">
+          <li><code>open()</code> - Open the dropdown</li>
+          <li><code>close()</code> - Close the dropdown</li>
+          <li><code>toggle()</code> - Toggle the dropdown open/closed</li>
+          <li><code>isOpen</code> - Boolean property; reading returns the state, assigning <code>true</code>/<code>false</code> opens/closes it</li>
+        </ul>
+
+        <.form_group>
+          <label>Controlled Multiselect:</label>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+            <.web_multiselect id="openclose-demo" options={@openclose_options} style="flex: 1 1 240px;" />
+
+            <div class="controls" style="margin-bottom: 0;">
+              <button type="button" onclick="openCloseDemo('open')">open()</button>
+              <button type="button" onclick="openCloseDemo('close')">close()</button>
+              <button type="button" onclick="openCloseDemo('toggle')">toggle()</button>
+              <button type="button" onclick="showOpenState()">Read isOpen</button>
+            </div>
+          </div>
+
+          <div class="output">
+            <div class="output-label">isOpen:</div>
+            <pre id="output-openclose" phx-update="ignore">false</pre>
+          </div>
+        </.form_group>
+
+        <.code_block lang="javascript">{@api07_code}</.code_block>
+      </.card>
+
+      <.card title="API08 · Search text — read & drive the query">
+        <p>
+          Read the current search box text with <code>searchText</code>, set it programmatically with <code>search(term)</code> — it applies exactly as if the user typed (runs <code>beforeSearchCallback</code> / <code>minSearchLength</code> / async <code>searchCallback</code>) and does <em>not</em> open the dropdown — and reset it with <code>clearSearch()</code>. <strong>There's no separate "filter" method:</strong> what the query <em>does</em> is governed by <code>searchMode</code> — set <code>el.searchMode = 'filter'</code> (narrow the list) or <code>'navigate'</code> (keep all options, jump focus to the match) before searching. Handy for deep-links ("open with a query pre-filled"), syncing an external field, or restoring saved state.
+        </p>
+
+        <ul class="feature-list">
+          <li><code>searchText</code> - read the current query (empty string when nothing is typed)</li>
+          <li><code>search(term)</code> - set the query and apply it (does not open the dropdown)</li>
+          <li><code>searchMode</code> - <code>'filter'</code> | <code>'navigate'</code>; governs what the query does</li>
+          <li><code>clearSearch()</code> - clear the query and restore the full list</li>
+        </ul>
+
+        <.form_group>
+          <label>Pick a mode, type a query, then apply:</label>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+            <.web_multiselect id="search-api-demo" options={@fruits} style="flex: 1 1 240px;" />
+
+            <div class="controls" style="margin-bottom: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center;">
+              <label><input type="radio" name="search-api-mode" value="filter" checked /> filter</label>
+              <label style="margin-right: 0.5rem;"><input type="radio" name="search-api-mode" value="navigate" /> navigate</label>
+              <input type="text" id="search-api-input" placeholder="query, e.g. an" value="an" style="padding: 0.4rem;" />
+              <button type="button" onclick="searchApiDemo('apply')">searchMode + search + open</button>
+              <button type="button" onclick="searchApiDemo('clear')">clearSearch()</button>
+              <button type="button" onclick="searchApiDemo('read')">read searchText</button>
+            </div>
+          </div>
+
+          <p class="description" style="font-size: 0.85rem; opacity: 0.8; margin: 0.5rem 0 0;">
+            Try <code>an</code> in each mode: <strong>filter</strong> narrows to Banana / Mango / Orange; <strong>navigate</strong> keeps every fruit visible and just focuses the first match.
+          </p>
+
+          <div class="output">
+            <div class="output-label">searchText:</div>
+            <pre id="output-search-api" phx-update="ignore">""</pre>
+          </div>
+        </.form_group>
+
+        <.code_block lang="javascript">{@api08_code}</.code_block>
+      </.card>
+
+      <.card title="API09 · Deferred initialization — defer / ready()">
+        <.tip>
+          <code>defer</code> attribute holds the first render · release with <code>el.ready()</code>
+          or by removing the attribute
+        </.tip>
+        <p>
+          With <code>defer={"{true}"}</code> the element builds <strong>nothing</strong> on upgrade —
+          it only reserves space. Wire options, callbacks (<code>customStylesCallback</code>) and
+          listeners first, then call <code>el.ready()</code> to build <strong>once</strong>,
+          flash-free. This closes the classic upgrade-then-restyle flash where a component paints
+          with its <em>default</em> styles for a beat before a post-upgrade callback (or a framework's
+          shared-stylesheet adoption) restyles it — the styled result appears in one shot.
+        </p>
+
+        <ul class="feature-list">
+          <li><code>defer</code> — boolean attribute; present = hold the first render</li>
+          <li><code>ready()</code> — release the gate and build once (latched — never re-closes)</li>
+          <li>
+            Removing the <code>defer</code> attribute also releases it — this is how the wrapper's
+            shared-styles registry does it, server-driven, with no JS hook
+          </li>
+          <li>
+            <code>isReady</code> — reflected as the <code>is-ready</code> attribute (CSS hook
+            <code>:host([defer]:not([is-ready]))</code> reserves space while held)
+          </li>
+          <li><code>ready</code> — event dispatched once, right after the first build</li>
+        </ul>
+
+        <.form_group>
+          <label>
+            Deferred with a simulated 2 s data load — the reserved space stays empty while held, then
+            the purple, pre-selected badges appear in <strong>one shot</strong> on release (no
+            default-style flash). The badge color + options are wired while held:
+          </label>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 1rem;">
+            <.web_multiselect id="defer-demo" defer={true} value={["js", "ts"]} style="flex: 1 1 240px;" />
+
+            <div class="controls" style="margin-bottom: 0;">
+              <button type="button" onclick="releaseDeferDemo()">release now (ready())</button>
+              <button type="button" onclick="location.reload()">Reload to replay</button>
+            </div>
+          </div>
+
+          <div class="output">
+            <div class="output-label">state:</div>
+            <pre id="output-defer" phx-update="ignore">held — waiting for data…</pre>
+          </div>
+        </.form_group>
+
+        <.note title="How LiveView releases it (and why you rarely call ready() yourself)">
+          When <code>:shadow_styles</code> is configured the wrapper adds <code>defer</code> to every
+          <code>&lt;web-multiselect&gt;</code> automatically, and its registry adopts the shared sheet
+          then removes the attribute — themed badges paint flash-free with no per-instance JS. See the
+          💧&nbsp;Elixir&nbsp;Only page. Reach for <code>defer={"{true}"}</code> + your own
+          <code>hook</code>/<code>ready()</code> (as below) only when you need to hold the build for
+          async wiring.
+        </.note>
+
+        <.code_block lang="javascript">{@api09_code}</.code_block>
+      </.card>
+
+      <.card title="DA04 · Async Search / Lookup">
         <.tip><code>{"min_search_length={2}"}</code> · <code>{"search_debounce={300}"}</code> · <code>icon_member="flag"</code></.tip>
         <p>
           Load options dynamically as users type. Perfect for large datasets, API searches, or real-time filtering.
@@ -445,6 +550,61 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </.form_group>
       </.card>
 
+      <.card title="DA05 · Cascading Selects (Reactive Options)">
+        <p>
+          Create dependent dropdowns that automatically update! Setting <code>element.options = newArray</code>
+          triggers automatic re-rendering. Perfect for Organization → Business Unit → Department flows. This card mirrors upstream's pure-JS reactive cascade; for the server-driven (LiveView) variant see <strong>EO03</strong> on the <a href="/examples/elixir-only">Elixir Only</a> page.
+        </p>
+
+        <.form_group>
+          <label>Organization → Business Unit → Department Cascade:</label>
+
+          <div style="display: grid; gap: 1rem; margin: 1rem 0;">
+            <div>
+              <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
+                1️⃣ Select Organization
+              </label>
+              <.web_multiselect
+                id="js-cascade-org"
+                multiple={false}
+                search_placeholder="Select organization..."
+              />
+            </div>
+
+            <div style="padding-left: 1.5rem; border-left: 3px solid #e2e8f0;">
+              <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
+                2️⃣ Select Business Unit
+                <span id="bu-status" style="color: #a0aec0; font-weight: normal; font-size: 0.875rem;">(select organization first)</span>
+              </label>
+              <.web_multiselect
+                id="js-cascade-bu"
+                multiple={false}
+                search_placeholder="Select business unit..."
+              />
+            </div>
+
+            <div style="padding-left: 3rem; border-left: 3px solid #e2e8f0;">
+              <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
+                3️⃣ Select Department
+                <span id="dept-status" style="color: #a0aec0; font-weight: normal; font-size: 0.875rem;">(select business unit first)</span>
+              </label>
+              <.web_multiselect
+                id="js-cascade-dept"
+                multiple={false}
+                search_placeholder="Select department..."
+              />
+            </div>
+          </div>
+
+          <div class="output">
+            <div class="output-label">Selected Path:</div>
+            <pre id="output-cascade" phx-update="ignore">{"{\n  \"organization\": null,\n  \"businessUnit\": null,\n  \"department\": null\n}"}</pre>
+          </div>
+
+          <button type="button" onclick="resetCascade()">Reset Cascade</button>
+        </.form_group>
+      </.card>
+
       <.card title="💬 Badge Tooltips">
         <.tip><code>{"enable_badge_tooltips={true}"}</code> · <code>badge_tooltip_placement="top"</code></.tip>
         <p>
@@ -523,61 +683,6 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </.note>
       </.card>
 
-      <.card title="🔗 Cascading Selects (Reactive Options)">
-        <p>
-          Create dependent dropdowns that automatically update! Setting <code>element.options = newArray</code>
-          triggers automatic re-rendering. Perfect for Organization → Business Unit → Department flows. This card mirrors upstream's pure-JS reactive cascade; a LiveView-driven variant lives in the extras section below.
-        </p>
-
-        <.form_group>
-          <label>Organization → Business Unit → Department Cascade:</label>
-
-          <div style="display: grid; gap: 1rem; margin: 1rem 0;">
-            <div>
-              <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
-                1️⃣ Select Organization
-              </label>
-              <.web_multiselect
-                id="js-cascade-org"
-                multiple={false}
-                search_placeholder="Select organization..."
-              />
-            </div>
-
-            <div style="padding-left: 1.5rem; border-left: 3px solid #e2e8f0;">
-              <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
-                2️⃣ Select Business Unit
-                <span id="bu-status" style="color: #a0aec0; font-weight: normal; font-size: 0.875rem;">(select organization first)</span>
-              </label>
-              <.web_multiselect
-                id="js-cascade-bu"
-                multiple={false}
-                search_placeholder="Select business unit..."
-              />
-            </div>
-
-            <div style="padding-left: 3rem; border-left: 3px solid #e2e8f0;">
-              <label style="display: block; margin-bottom: 0.5rem; color: #4a5568; font-weight: 600;">
-                3️⃣ Select Department
-                <span id="dept-status" style="color: #a0aec0; font-weight: normal; font-size: 0.875rem;">(select business unit first)</span>
-              </label>
-              <.web_multiselect
-                id="js-cascade-dept"
-                multiple={false}
-                search_placeholder="Select department..."
-              />
-            </div>
-          </div>
-
-          <div class="output">
-            <div class="output-label">Selected Path:</div>
-            <pre id="output-cascade" phx-update="ignore">{"{\n  \"organization\": null,\n  \"businessUnit\": null,\n  \"department\": null\n}"}</pre>
-          </div>
-
-          <button type="button" onclick="resetCascade()">Reset Cascade</button>
-        </.form_group>
-      </.card>
-
       <.card title="✨ Benefits Summary">
         <.grid_2>
           <div>
@@ -603,91 +708,64 @@ defmodule TestAppWeb.Examples.DataApiLive do
         </.grid_2>
       </.card>
 
-      <.card title="🧩 Wrapper-specific extras (not in upstream)">
-        <.tip><code>hook="KeenWebMultiselectHook"</code> · server-driven <code>{"options={@business_units}"}</code> · <code>search_event="github_search"</code></.tip>
-        <.note>
-          These examples go beyond upstream's example page — they show the same cascading and async-search
-          features driven through Phoenix LiveView (server-side) instead of pure browser JavaScript.
-        </.note>
-
-        <h3>🔗 Cascading selects (LiveView-driven)</h3>
+      <.card title="API05 · Event Handling">
+        <.tip>
+          DOM events (no attribute): <code>el.addEventListener("select" | "deselect" | "change", …)</code> — see the inline <code>&lt;script&gt;</code>
+        </.tip>
         <p>
-          Three coupled multiselects. Selecting an organization sends a <code>change</code>
-          event through the LV hook, the server fetches the matching business units, then pushes the new options back to the dependent multiselect via <code>push_event(socket, "web_multiselect:update", %{"{id, options, value}"})</code>. Same flow from unit → department.
-        </p>
-
-        <.note>
-          Why push_event instead of just re-rendering <code>options={"{@business_units}"}</code>? The wrapper auto-emits <code>phx-update="ignore"</code>
-          on the element so morphdom doesn't tear down the component's internally-managed children. That ignore also blocks LV from morphing the <code>data-options</code>
-          attribute on subsequent renders — so the canonical way to mutate option-list or selection state from the server is through the hook's <code>handleEvent</code>
-          channel.
-        </.note>
-
-        <.grid>
-          <.form_group>
-            <label>1. Organization</label>
-            <.web_multiselect
-              id="cascade-org"
-              hook="KeenWebMultiselectHook"
-              multiple={false}
-              placeholder="Pick an org"
-              options={@organizations}
-            />
-          </.form_group>
-
-          <.form_group>
-            <label>2. Business unit</label>
-            <.web_multiselect
-              id="cascade-unit"
-              hook="KeenWebMultiselectHook"
-              multiple={false}
-              placeholder={if @selected_org, do: "Pick a unit", else: "Select an org first"}
-              options={@business_units}
-            />
-          </.form_group>
-
-          <.form_group>
-            <label>3. Department</label>
-            <.web_multiselect
-              id="cascade-dept"
-              hook="KeenWebMultiselectHook"
-              multiple={false}
-              placeholder={if @selected_unit, do: "Pick a department", else: "Select a unit first"}
-              options={@departments}
-            />
-          </.form_group>
-        </.grid>
-
-        <div style="margin-top:1rem;font-size:0.9rem;color:#4a5568">
-          Selected: org = <code>{@selected_org || "—"}</code>, unit = <code>{@selected_unit || "—"}</code>
-        </div>
-
-        <h3 style="margin-top:1.5rem">🛜 Async search — LiveView tunneled (Elixir fetches GitHub)</h3>
-        <p>
-          Set <code>{"search_event=\"github_search\""}</code>
-          on the wrapper. The hook installs a <code>searchCallback</code>
-          that pushes <code>{"%{\"query\" => q, \"id\" => id}"}</code>
-          to the LV; the server fetches GitHub, returns <code>{"{:reply, %{results: [...]}, socket}"}</code>, and the reply resolves the promise in the browser.
+          Listen to <code>select</code>, <code>deselect</code>, and <code>change</code> events
         </p>
 
         <.form_group>
-          <label>Search GitHub users (browser → LiveView → GitHub)</label>
+          <label>Select Options (Check Console)</label>
           <.web_multiselect
-            id="search-lv"
-            hook="KeenWebMultiselectHook"
-            search_event="github_search"
-            placeholder="Type a name"
-            search_placeholder="Search via Elixir..."
-            min_search_length={3}
-            search_debounce={250}
-            multiple={false}
+            id="api05-events-select"
+            options={@technologies}
+            search_placeholder="Select options..."
           />
+          <small class="form-text">Open browser console to see events</small>
         </.form_group>
 
-        <.note>
-          Why route through the server? (1) attach an auth token without leaking it to the client, (2) transform the response (filter, cache, enrich), (3) reach any backend API that doesn't allow CORS from the browser.
-        </.note>
+        <div id="api05-event-log" class="log-panel" phx-update="ignore">
+          <div class="muted">Event log will appear here...</div>
+        </div>
+
+        <small class="form-text" style="margin-top: 0.75rem; display: block;">
+          Looking for the <code>on*</code> property handlers and the
+          <code>beforeSelect</code>/<code>beforeDeselect</code> interceptors?
+          See <.link navigate="/examples/events-callbacks">Events, Handlers &amp; Interceptors</.link>.
+        </small>
       </.card>
+
+      <.card title="API06 · Synchronous options + setSelected">
+        <p>
+          Assign <code>.options</code>
+          and call <code>setSelected(...)</code>
+          on the very next line — no <code>await</code>. The property write coalesces onto a microtask, but the
+          imperative call flushes it, so the pre-set selection renders immediately. Shown for the
+          <code>partial</code>
+          and <code>compact</code>
+          badge modes (the compact composite badge is what previously mis-rendered when the two calls raced).
+        </p>
+
+        <.code_block lang="javascript">{@api06_code}</.code_block>
+
+        <.grid_2>
+          <.form_group>
+            <label>Partial badges (pre-selected):</label>
+            <.web_multiselect
+              id="api06-partial"
+              badges_display_mode="partial"
+              badges_max_visible={2}
+            />
+          </.form_group>
+          <.form_group>
+            <label>Compact badges (pre-selected):</label>
+            <.web_multiselect id="api06-compact" badges_display_mode="compact" />
+          </.form_group>
+        </.grid_2>
+      </.card>
+
     </.example_page>
 
     <script type="module">
@@ -698,6 +776,84 @@ defmodule TestAppWeb.Examples.DataApiLive do
           else requestAnimationFrame(check);
         };
         check();
+      });
+
+      // API09: deferred initialization. #defer-demo carries `defer` (defer={true}), so it
+      // builds NOTHING until ready(). We set a purple-badge customStylesCallback up front, then
+      // SIMULATE a 2 s data load: the picker stays held (reserved empty space, live countdown)
+      // until "data arrives", when we assign options and call ready(). The styled, pre-selected
+      // (value={["js","ts"]}) badges paint in ONE shot — no default-style flash. Because this is
+      // a manual defer (flagged `data-kwms-manual`) the shared-styles registry adopts the sheet
+      // but leaves the release to us. The `ready` event fires once, after the first build.
+      wait('defer-demo').then((deferDemo) => {
+        const deferOut = document.getElementById('output-defer');
+        deferDemo.customStylesCallback = () => `
+          .ms__badge { background: #6d28d9; color: #fff; border-color: #6d28d9; }
+        `;
+        deferDemo.addEventListener('ready', () => {
+          deferOut.textContent = `isReady: ${deferDemo.isReady} — built flash-free ✓`;
+        });
+
+        const DELAY_MS = 2000;
+        let released = false;
+        const started = performance.now();
+        (function tick() {
+          if (released) return;
+          const remain = Math.max(0, DELAY_MS - (performance.now() - started));
+          deferOut.textContent = `held — building in ${(remain / 1000).toFixed(1)}s (loading options, no flash)`;
+          if (remain > 0) requestAnimationFrame(tick);
+        })();
+
+        window.releaseDeferDemo = () => {
+          if (released) return;
+          released = true;
+          // "Data" arrived: assign options, THEN release — both land in the single build.
+          deferDemo.options = [
+            { value: 'js', label: 'JavaScript' },
+            { value: 'ts', label: 'TypeScript' },
+            { value: 'py', label: 'Python' },
+            { value: 'go', label: 'Go' },
+            { value: 'rust', label: 'Rust' }
+          ];
+          deferDemo.ready();
+        };
+        setTimeout(() => window.releaseDeferDemo(), DELAY_MS);
+      });
+
+      // Event Handling (API05): listen to select / deselect / change.
+      wait('api05-events-select').then((eventsSelect) => {
+        const eventLog = document.getElementById('api05-event-log');
+        const logEvent = (eventName, detail) => {
+          const timestamp = new Date().toLocaleTimeString();
+          const logEntry = document.createElement('div');
+          logEntry.style.marginBottom = '0.5rem';
+          logEntry.innerHTML = `<strong style="color: #0066cc;">[${timestamp}] ${eventName}:</strong> ${JSON.stringify(detail, null, 2)}`;
+          eventLog.appendChild(logEntry);
+          eventLog.scrollTop = eventLog.scrollHeight;
+        };
+        eventsSelect.addEventListener('select', (e) => logEvent('select', { option: e.detail.option?.label, selectedValues: e.detail.selectedValues }));
+        eventsSelect.addEventListener('deselect', (e) => logEvent('deselect', { option: e.detail.option?.label, selectedValues: e.detail.selectedValues }));
+        eventsSelect.addEventListener('change', (e) => logEvent('change', { count: e.detail.selectedOptions?.length, selectedValues: e.detail.selectedValues, selectedLabels: e.detail.selectedOptions?.map(o => o.label) }));
+      });
+
+      // API06: synchronous options-then-setSelected across badge modes. Assigning
+      // .options then calling setSelected() on the next line (no await) must render the
+      // pre-set selection right away — the imperative call flushes the coalesced options
+      // write. Compact mode's composite badge is the one that regressed when they raced.
+      const badgeModeData = [
+        { value: 'js', label: 'JavaScript' },
+        { value: 'ts', label: 'TypeScript' },
+        { value: 'py', label: 'Python' },
+        { value: 'go', label: 'Go' },
+        { value: 'rust', label: 'Rust' }
+      ];
+      wait('api06-partial').then((partialMode) => {
+        partialMode.options = badgeModeData;
+        partialMode.setSelected(['js', 'ts', 'py']);
+      });
+      wait('api06-compact').then((compactMode) => {
+        compactMode.options = badgeModeData;
+        compactMode.setSelected(['js', 'ts', 'py']);
       });
 
       // Example 3: Callbacks
@@ -876,11 +1032,10 @@ defmodule TestAppWeb.Examples.DataApiLive do
         window.__allProducts = allProducts;
 
         let productApiDelay = 1500;
-        const productDelaySlider = document.getElementById('product-delay');
-        const productDelayValue = document.getElementById('product-delay-value');
-        productDelaySlider.addEventListener('input', (e) => {
+        document.addEventListener('input', (e) => {
+          if (e.target.id !== 'product-delay') return;
           productApiDelay = Number(e.target.value);
-          productDelayValue.textContent = `${productApiDelay} ms`;
+          document.getElementById('product-delay-value').textContent = `${productApiDelay} ms`;
         });
 
         productSearchSelect.searchCallback = async (searchTerm, signal) => {
@@ -906,15 +1061,14 @@ defmodule TestAppWeb.Examples.DataApiLive do
 
       // 8b-2. Debounced Search
       wait('debounce-search').then((debounceSearchSelect) => {
-        const debounceMsSlider = document.getElementById('debounce-ms');
-        const debounceMsValue = document.getElementById('debounce-ms-value');
         let debounceKeystrokes = 0;
         let debounceApiCalls = 0;
         const allProducts = window.__allProducts || [];
 
-        debounceMsSlider.addEventListener('input', (e) => {
+        document.addEventListener('input', (e) => {
+          if (e.target.id !== 'debounce-ms') return;
           debounceSearchSelect.setAttribute('search-debounce', e.target.value);
-          debounceMsValue.textContent = `${e.target.value} ms`;
+          document.getElementById('debounce-ms-value').textContent = `${e.target.value} ms`;
         });
 
         debounceSearchSelect.beforeSearchCallback = (term) => {
@@ -1255,6 +1409,54 @@ defmodule TestAppWeb.Examples.DataApiLive do
           updateCascadeOutput();
         };
       });
+
+      // API04: exercise the value-access API. getValue()/getSelected() are methods;
+      // selectedValue/selectedItem are properties. Reflect the result into the card's
+      // own output pane so single- vs multi-select return shapes are visible side by side.
+      window.apiMethodsDemo = (id, what) => {
+        const el = document.getElementById(id);
+        let result;
+        switch (what) {
+          case 'getValue':      result = el.getValue(); break;
+          case 'selectedValue': result = el.selectedValue; break;
+          case 'selectedItem':  result = el.selectedItem; break;
+          case 'getSelected':   result = el.getSelected(); break;
+        }
+        const label = (what === 'getValue' || what === 'getSelected') ? what + '()' : what;
+        document.getElementById('output-' + id).textContent =
+          label + ' → ' + JSON.stringify(result, null, 2);
+      };
+
+      // API07: call the imperative method, then reflect the resulting isOpen state.
+      window.openCloseDemo = (method) => {
+        const select = document.getElementById('openclose-demo');
+        select[method]();
+        window.showOpenState();
+      };
+
+      window.showOpenState = () => {
+        const select = document.getElementById('openclose-demo');
+        document.getElementById('output-openclose').textContent = JSON.stringify({
+          'isOpen': select.isOpen
+        }, null, 2);
+      };
+
+      // API08: set searchMode, drive/read the search text, then reflect el.searchText.
+      window.searchApiDemo = (action) => {
+        const select = document.getElementById('search-api-demo');
+        const input = document.getElementById('search-api-input');
+        if (action === 'apply') {
+          const mode = document.querySelector('input[name="search-api-mode"]:checked').value;
+          select.searchMode = mode;   // reactive; search()'s flush() applies the mode first
+          select.search(input.value);
+          select.open();              // open so filter-vs-navigate is visible
+        } else if (action === 'clear') {
+          select.clearSearch();
+          input.value = '';
+        }
+        // 'read' just falls through to the reflect below.
+        document.getElementById('output-search-api').textContent = JSON.stringify(select.searchText);
+      };
     </script>
     """
   end

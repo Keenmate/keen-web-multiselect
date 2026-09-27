@@ -33,4 +33,26 @@ defmodule Keenmate.WebMultiselectTest do
     socket = Keenmate.WebMultiselect.push_update(%Phoenix.LiveView.Socket{}, "region")
     assert [["web_multiselect:update", %{id: "region"}]] = events(socket)
   end
+
+  test "push_command/3 sends a web_multiselect:command event scoped to the id" do
+    socket =
+      Keenmate.WebMultiselect.push_command(%Phoenix.LiveView.Socket{}, "skills",
+        open: true,
+        scroll_to_group: "backend"
+      )
+
+    assert [["web_multiselect:command", %{id: "skills", open: true, scroll_to_group: "backend"}]] =
+             events(socket)
+  end
+
+  test "push_command/3 only includes the command keys that were passed" do
+    socket = Keenmate.WebMultiselect.push_command(%Phoenix.LiveView.Socket{}, "skills", search: "back")
+    assert [["web_multiselect:command", payload]] = events(socket)
+    assert payload == %{id: "skills", search: "back"}
+  end
+
+  test "push_command/3 with no opts still targets the element (id-only payload)" do
+    socket = Keenmate.WebMultiselect.push_command(%Phoenix.LiveView.Socket{}, "skills")
+    assert [["web_multiselect:command", %{id: "skills"}]] = events(socket)
+  end
 end

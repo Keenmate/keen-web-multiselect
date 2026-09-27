@@ -168,6 +168,23 @@ h1 {
     color: #666;
 }
 
+/* Demo form panel — a soft card wrapping a live `<form>` (the form-integration
+   examples). The `.form-actions` footer holds the submit/inspect buttons, set off
+   from the field above by a top rule + spacing so the buttons never sit flush
+   against the component. */
+form {
+    background: #edf2f7;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.form-actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #cbd5e0;
+}
+
 /* Controls */
 .controls {
     display: flex;
@@ -211,6 +228,18 @@ h1 {
     font-weight: 600;
     color: #2d3748;
     margin-bottom: 0.5rem;
+}
+
+/* Trailing action buttons in a demo panel (e.g. "Show Selected Data") sit as
+   direct children after the component / `.output` box. Give them top spacing so
+   they don't butt up against the content above. Scoped to DIRECT children so it
+   never touches buttons nested in a `.controls` row (which lays out its own way).
+   Adjacent buttons on the same line share the margin, so they stay aligned. */
+.demo-area > button {
+    margin-top: 1rem;
+}
+.demo-area > button + button {
+    margin-inline-start: 0.5rem;
 }
 
 /* Output display */
@@ -523,6 +552,51 @@ button.btn-outline:hover {
     border-color: #9ca3af;
 }
 
+/* =============================================================================
+   CONTROL PROVENANCE MARKERS — at a glance, does a demo control run in the
+   browser or take a server round-trip? Injected via ::before so the common cases
+   need no per-button markup:
+     🌐 client — calls the <web-multiselect> element's JS API in the browser
+                 (onclick handlers, delegated data-* buttons, or an .is-client tag)
+     🖥️ server — a LiveView round-trip (phx-click, a phx-submit form's submit
+                 button, or an .is-server tag)
+   The client rules are scoped to `.card` so they never touch the element's own
+   badge "×" buttons, the chapter-nav tab, or copy-link / copy-code chrome. The
+   server rule is global (only real phx-click buttons match — e.g. the round-trip
+   panel's Clear, which lives outside `.card`). See the legend in the page header. */
+.card button[onclick]::before,
+.card button[data-scroll-grouped]::before,
+.card button[data-scroll-virtual]::before,
+.card button[data-vs]::before,
+.card button[data-tr]::before,
+.is-client::before {
+    content: "🌐 ";
+    font-size: 0.95em;
+}
+button[phx-click]::before,
+.card form[phx-submit] button[type="submit"]::before,
+.is-server::before {
+    content: "🖥️ ";
+    font-size: 0.95em;
+}
+
+/* Header legend explaining the 🌐 / 🖥️ control markers (see above). Sits on the
+   colored header, so it uses light text like the subtitle/back-link. */
+.control-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    margin: 0.8rem 0 0;
+    font-size: 0.8rem;
+    color: #fff;
+    opacity: 0.85;
+}
+.control-legend__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
 /* Footer */
 footer {
     text-align: center;
@@ -549,6 +623,82 @@ html {
 .card,
 .example-section {
     scroll-margin-top: 1rem;
+}
+
+/* Copy-link button — a small chain-link icon appended inside every section <h2>
+   (see examples-copy-link.js). Click copies a share-ready deep link to the section.
+   The h2 is already a flex row, so this sits as the trailing inline item; it fades
+   up on header hover to stay unobtrusive, and briefly flips to a check + "Copied!". */
+.copy-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    /* Icon size tracks the heading. */
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 0.25rem 0.4rem;
+    margin-inline-start: 0.15rem;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: #a0aec0;
+    cursor: pointer;
+    /* Unobtrusive until you hover the header (or focus the button for keyboard users). */
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.card h2:hover .copy-link,
+.example-section h2:hover .copy-link,
+.copy-link:focus-visible {
+    opacity: 1;
+}
+.copy-link:hover {
+    color: #667eea;
+    background: #edf2ff;
+    border-color: #c3cbf5;
+}
+.copy-link:focus-visible {
+    outline: 2px solid #667eea;
+    outline-offset: 1px;
+}
+.copy-link .copy-link__icon {
+    width: 1.05em;
+    height: 1.05em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+/* Default: link icon shown, check + label hidden. */
+.copy-link .copy-link__icon--check,
+.copy-link .copy-link__label {
+    display: none;
+}
+.copy-link .copy-link__label {
+    font-weight: 600;
+    font-size: 0.7rem;
+}
+/* Copied: swap to the green check + "Copied!" pill. */
+.copy-link.is-copied {
+    opacity: 1;
+    color: #2f855a;
+    background: #f0fff4;
+    border-color: #9ae6b4;
+}
+.copy-link.is-copied .copy-link__icon--link {
+    display: none;
+}
+.copy-link.is-copied .copy-link__icon--check,
+.copy-link.is-copied .copy-link__label {
+    display: inline-flex;
+}
+/* Copy failed (e.g. clipboard blocked): red hint; JS also updates the tooltip. */
+.copy-link.is-failed {
+    opacity: 1;
+    color: #c53030;
+    background: #fff5f5;
+    border-color: #feb2b2;
 }
 
 /* The grab tab, pinned to the right edge ~1/3 down. The panel is positioned

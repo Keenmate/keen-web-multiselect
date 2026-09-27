@@ -114,9 +114,23 @@
       a.className = 'chapter-nav__item';
       a.href = c.href;
       a.textContent = c.label;
-      // Chapters: native hash jump scrolls (smooth via CSS). Pages: the href navigates.
+      // Chapters: re-resolve the target by id AT CLICK TIME and scroll it. On a LiveView
+      // page morphdom replaces the static section subtree on connect, so both a captured
+      // node reference and any JS-added id go stale — but the server now renders stable
+      // ids on each card, so a fresh document.getElementById always finds the live node.
+      // Pages (cross-page list, c.id == null): fall through to the href's navigation.
       // Either way, close the panel on pick so it gets out of the way.
-      a.addEventListener('click', function () { if (c.id) setActive(c.id); setOpen(false); });
+      a.addEventListener('click', function (e) {
+        if (c.id) {
+          var target = document.getElementById(c.id);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setActive(c.id);
+          }
+        }
+        setOpen(false);
+      });
       li.appendChild(a);
       list.appendChild(li);
       if (c.id) itemsById[c.id] = a;
@@ -231,7 +245,11 @@
     function updateActive() {
       var current = chapters[0].id;
       for (var i = 0; i < chapters.length; i++) {
-        if (chapters[i].section.getBoundingClientRect().top <= 120) current = chapters[i].id;
+        // Re-resolve by id: the captured section node goes stale after LiveView's
+        // morphdom replaces the static subtree on connect. The server-rendered id
+        // is stable, so a fresh lookup always tracks the live node.
+        var sec = document.getElementById(chapters[i].id);
+        if (sec && sec.getBoundingClientRect().top <= 120) current = chapters[i].id;
         else break;
       }
       setActive(current);

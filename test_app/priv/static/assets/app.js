@@ -45,31 +45,51 @@ const ServerMonitor = {
       deselect: this._forward("deselect")
     };
 
-    this._attach = () => {
-      document.querySelectorAll("web-multiselect").forEach((el) => {
-        // idempotent — addEventListener dedupes identical (type, fn) pairs
-        el.addEventListener("change", this._handlers.change);
-        el.addEventListener("select", this._handlers.select);
-        el.addEventListener("deselect", this._handlers.deselect);
-      });
-    };
-
-    // Attach now and again once the element is upgraded (covers both orders).
-    this._attach();
-    customElements.whenDefined("web-multiselect").then(this._attach);
+    // Delegate at the document level. select / deselect / change bubble AND are
+    // composed, so a single set of document listeners catches EVERY <web-multiselect>
+    // on the page — including pickers added after this hook mounted, or ones on a
+    // page reached via LiveView navigation (the monitor lives in the persistent
+    // layout, so the old per-element attach-on-mount silently missed those). The
+    // _forward guard ignores any non-multiselect event that happens to bubble up.
+    document.addEventListener("change", this._handlers.change);
+    document.addEventListener("select", this._handlers.select);
+    document.addEventListener("deselect", this._handlers.deselect);
   },
 
   destroyed() {
-    document.querySelectorAll("web-multiselect").forEach((el) => {
-      el.removeEventListener("change", this._handlers.change);
-      el.removeEventListener("select", this._handlers.select);
-      el.removeEventListener("deselect", this._handlers.deselect);
-    });
+    document.removeEventListener("change", this._handlers.change);
+    document.removeEventListener("select", this._handlers.select);
+    document.removeEventListener("deselect", this._handlers.deselect);
+  }
+};
+
+// Bu03Callbacks — BU03 (Groups) on the Basic Usage page. renderGroupLabelContentCallback
+// and getCountLabelCallback are function props with no attribute equivalent, so the demo's
+// live controls can't drive them via LiveView attrs. The control choices ride in on
+// data-custom-labels / data-count-format, and this hook installs the callbacks on (re)mount
+// — the card re-keys the element on any control change, so mounted() re-runs with the fresh
+// dataset. Both props are `on: 'update'`, so assigning them re-renders in place.
+const Bu03Callbacks = {
+  mounted() {
+    const el = this.el;
+    el.renderGroupLabelContentCallback =
+      el.dataset.customLabels === "true"
+        ? (groupName, ctx) => {
+            const remaining = (ctx.selectableCount ?? ctx.memberCount ?? 0) - (ctx.selectedCount ?? 0);
+            // GroupLabelRenderContext carries the presentation (it's re-invoked when it
+            // changes). On the phone fullscreen overlay the base rem scales UP for touch, so
+            // render the custom label a notch smaller to keep "NAME — N remaining" on one line.
+            const scale = ctx.isFullscreen ? ' style="font-size:0.8em"' : '';
+            return `<span class="js-custom-label"${scale}><strong>${(groupName || "").toUpperCase()}</strong> — ${remaining} remaining</span>`;
+          }
+        : null;
+    el.getCountLabelCallback =
+      el.dataset.countFormat === "ratio" ? (s, t) => `${s}/${t}` : null;
   }
 };
 
 const liveSocket = new LiveSocket("/live", Socket, {
-  hooks: { KeenWebMultiselectHook, LvReady, ServerMonitor },
+  hooks: { KeenWebMultiselectHook, LvReady, ServerMonitor, Bu03Callbacks },
   params: { _csrf_token: csrfToken }
 });
 

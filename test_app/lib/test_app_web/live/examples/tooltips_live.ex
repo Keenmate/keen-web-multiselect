@@ -107,7 +107,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
       title="Tooltips"
       subtitle="Hover tooltips on dropdown options and selected badges"
     >
-      <.card title="1. Option Tooltips (default content)">
+      <.card title="TT01 · Option Tooltips (default content)">
         <.tip><code>{"enable_option_tooltips={true}"}</code> · <code>subtitle_member="description"</code> for a second line</.tip>
         <p class="description">
           Enable hover tooltips on the dropdown rows with <code>enable_option_tooltips</code>. With no
@@ -129,7 +129,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
         </.note>
       </.card>
 
-      <.card title="2. Option Tooltips (custom getOptionTooltipCallback)">
+      <.card title="TT02 · Option Tooltips (custom getOptionTooltipCallback)">
         <.tip><code>{"enable_option_tooltips={true}"}</code> + JS <code>el.getOptionTooltipCallback</code> for rich content</.tip>
         <p class="description">
           Build rich, per-option tooltip content with <code>getOptionTooltipCallback</code>. It receives
@@ -143,7 +143,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
         <.code_block lang="js">{@code_custom}</.code_block>
       </.card>
 
-      <.card title="3. Option Tooltips with Virtual Scrolling">
+      <.card title="TT03 · Option Tooltips with Virtual Scrolling">
         <.tip><code>{"enable_option_tooltips={true}"}</code> — tooltips re-attach as virtual rows recycle</.tip>
         <p class="description">
           Tooltips re-attach as rows recycle into view, so they work seamlessly with the
@@ -156,7 +156,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
         <.code_block lang="js">{@code_virtual}</.code_block>
       </.card>
 
-      <.card title="4. Full-Width Rows — Placement & Follow-Cursor">
+      <.card title="TT04 · Full-Width Rows — Placement & Follow-Cursor">
         <.tip><code>option_tooltip_placement="top-start"</code> (default anchor) · <code>{"option_tooltip_follow_cursor={true}"}</code> to track the pointer</.tip>
         <p class="description">
           On a wide multiselect, a row-centered tooltip lands in the middle of the screen. Two fixes:
@@ -186,7 +186,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
         <.code_block lang="html">{@code_placement}</.code_block>
       </.card>
 
-      <.card title="5. Narrow Multiselect — Side (start/end) Placement">
+      <.card title="TT05 · Narrow Multiselect — Side (start/end) Placement">
         <.tip><code>option_tooltip_placement="right"</code> (end side) or <code>"left"</code> (start side)</.tip>
         <p class="description">
           For a small/narrow multiselect, show the tooltip on the side of the row instead of above it.
@@ -206,7 +206,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
         <.code_block lang="html">{@code_side}</.code_block>
       </.card>
 
-      <.card title="6. Independent Styling (--ms-option-tooltip-*)">
+      <.card title="TT06 · Independent Styling (--ms-option-tooltip-*)">
         <.tip><code>{"enable_option_tooltips={true}"}</code> + <code>style="--ms-option-tooltip-bg: #4338ca"</code> to style independently</.tip>
         <p class="description">
           Option tooltips render with class <code>.ms__option-tooltip</code> and read their own
@@ -226,7 +226,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
         <.code_block lang="css">{@code_styling}</.code_block>
       </.card>
 
-      <.card title="7. Badge Tooltips">
+      <.card title="TT07 · Badge Tooltips">
         <.tip><code>{"enable_badge_tooltips={true}"}</code> · <code>{~S(remove_button_tooltip_text="Remove {0}")}</code></.tip>
         <p class="description">
           The same tooltip engine drives the selected-badge tooltips. Enable with
@@ -245,7 +245,7 @@ defmodule TestAppWeb.Examples.TooltipsLive do
         <.code_block lang="html">{@code_badge}</.code_block>
       </.card>
 
-      <.card title="📋 Summary">
+      <.card title="TT08 · Summary">
         <h3>Option tooltips</h3>
         <.code_block lang="js">{@code_summary_option}</.code_block>
 

@@ -15,11 +15,23 @@ defmodule TestAppWeb.Examples.PositioningLive do
   computed CSS.\
   """
 
+  @fullscreen_warning_text """
+  [@keenmate/web-multiselect] Fullscreen overlay is anchored to an ancestor
+  <div.wrap-transform> (has transform) instead of the viewport, so it may not cover
+  the screen (offset, clipped, or mis-sized). An ancestor of <web-multiselect>
+  establishes a fixed-positioning containing block (transform / perspective / filter /
+  backdrop-filter / will-change). Fix on your side: move the component out of that
+  ancestor's subtree, OR remove/replace that property. If neither is acceptable, please
+  file an issue at https://github.com/keenmate/web-multiselect/issues with the
+  ancestor's computed CSS.\
+  """
+
   def mount(_params, _session, socket) do
     {:ok,
      socket
      |> assign(:page_title, "Positioning Edge Cases — keen_web_multiselect")
-     |> assign(:drift_warning_text, @drift_warning_text)}
+     |> assign(:drift_warning_text, @drift_warning_text)
+     |> assign(:fullscreen_warning_text, @fullscreen_warning_text)}
   end
 
   def render(assigns) do
@@ -53,7 +65,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
         .status.drifted { background: #fbd6d6; color: #6a1a1a; }
       </style>
 
-      <.card title="1. Baseline (no special ancestor CSS)">
+      <.card title="PO01 · Baseline (no special ancestor CSS)">
         <.tip>Ancestor CSS under test: <code>(none)</code> — dropdown anchors to the viewport</.tip>
         <p>
           The simplest case: no ancestor establishes a containing block for fixed positioning. The
@@ -76,7 +88,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
         </div>
       </.card>
 
-      <.card title="2. Ancestor with <code>transform</code> (works correctly)">
+      <.card title="PO02 · Ancestor with <code>transform</code> (works correctly)">
         <.tip>Ancestor CSS under test: <code>transform: translateZ(0)</code></.tip>
         <p>
           <code>transform</code>, <code>perspective</code>, <code>filter</code>, <code>backdrop-filter</code>,
@@ -102,7 +114,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
         </div>
       </.card>
 
-      <.card title="3. Ancestor with <code>container-type</code> (the heuristic-override case)">
+      <.card title="PO03 · Ancestor with <code>container-type</code> (the heuristic-override case)">
         <.tip>Ancestor CSS under test: <code>container-type: inline-size</code></.tip>
         <p>
           <code>container-type</code>
@@ -142,7 +154,7 @@ defmodule TestAppWeb.Examples.PositioningLive do
         </div>
       </.card>
 
-      <.card title="4. The drift-detection warning (interactive)">
+      <.card title="PO04 · The drift-detection warning (interactive)">
         <.tip>Ancestor CSS under test: <code>contain: paint</code> — toggle it to trigger a <code>console.warn</code></.tip>
         <p>
           The library's containing-block heuristic isn't bulletproof — an ancestor can genuinely anchor
@@ -173,8 +185,8 @@ defmodule TestAppWeb.Examples.PositioningLive do
           </.web_multiselect>
           <small class="form-text">wrapper CSS: <code id="drift-current-css">(plain)</code></small>
           <div class="controls" style="margin-top: 0.75rem; margin-bottom: 0;">
-            <button class="btn-outline" id="toggle-drift">Toggle <code>contain: paint</code></button>
-            <button class="btn-outline" id="reset-warning">Reset (re-arm warning)</button>
+            <button class="btn-outline is-client" id="toggle-drift">Toggle <code>contain: paint</code></button>
+            <button class="btn-outline is-client" id="reset-warning">Reset (re-arm warning)</button>
           </div>
           <div id="drift-status" class="status">
             Open the dropdown to position it, then toggle the wrapper CSS.
@@ -186,7 +198,46 @@ defmodule TestAppWeb.Examples.PositioningLive do
         </.note>
       </.card>
 
-      <.card title="Background">
+      <.card title="PO05 · Fullscreen overlay & containing blocks (mobile)">
+        <p>
+          On phones the dropdown switches to a <code>position: fixed</code>, full-viewport
+          <strong>sheet</strong>
+          (see <.link navigate="/examples/responsive">Responsive & Mobile</.link>) instead of
+          anchoring under the input. The same containing-block rule applies — but the failure mode is worse.
+          A fixed element whose ancestor establishes a containing block is anchored to <em>that ancestor's box</em>,
+          not the viewport, so the sheet no longer covers the screen: it ends up offset, clipped, or mis-sized.
+        </p>
+        <p>
+          Note the asymmetry with PO02: an ancestor <code>transform</code>
+          is <em>harmless</em>
+          for the floating
+          dropdown (it just anchors under the input), but it <em>breaks</em>
+          the fullscreen sheet, because the sheet
+          needs the viewport as its containing block to span it. The properties that trigger this are the ones
+          browsers reliably honor — <code>transform</code>, <code>perspective</code>, <code>filter</code>,
+          <code>backdrop-filter</code>, and qualifying <code>will-change</code>. <code>contain</code>
+          and
+          <code>container-type</code>
+          do <strong>not</strong>
+          break the sheet (browsers don't honor them for fixed
+          positioning), which is exactly why the floating path has to override them but the sheet doesn't care.
+        </p>
+        <p>
+          Because nothing anchors the sheet, there's no drift to measure the way PO04 does. Instead the library
+          asks its containing-block heuristic, when the sheet opens, whether the true offset parent is the viewport
+          or an element — and if it's an element, fires a <code>console.warn</code>
+          once per instance pointing at
+          the culprit. The consumer-side fixes are the same: move the <code>&lt;web-multiselect&gt;</code>
+          out of
+          that subtree, or remove the property.
+        </p>
+
+        <.note variant="warning" title="What the fullscreen warning looks like">
+          <pre>{@fullscreen_warning_text}</pre>
+        </.note>
+      </.card>
+
+      <.card title="PO06 · Background">
         <p>
           The CSS spec lists seven properties as containing-block-establishing for fixed positioning:
           <code>transform</code>, <code>perspective</code>, <code>filter</code>,
@@ -228,26 +279,29 @@ defmodule TestAppWeb.Examples.PositioningLive do
       const driftWrapper = document.getElementById('drift-wrapper');
       const driftLabel = document.getElementById('drift-current-css');
       const driftStatus = document.getElementById('drift-status');
-      const toggleBtn = document.getElementById('toggle-drift');
-      const resetBtn = document.getElementById('reset-warning');
 
+      // Delegated on document so the buttons keep working after LiveView patches
+      // the DOM on connect (plain <button>s are re-rendered, losing direct listeners).
       let containPaint = false;
-      toggleBtn.addEventListener('click', () => {
-          containPaint = !containPaint;
-          driftWrapper.classList.toggle('wrap-contain-paint', containPaint);
-          driftWrapper.classList.toggle('wrap-plain', !containPaint);
-          driftLabel.textContent = containPaint ? 'contain: paint' : '(plain)';
-          measureDrift();
-      });
+      document.addEventListener('click', (e) => {
+          if (e.target.closest('#toggle-drift')) {
+              containPaint = !containPaint;
+              driftWrapper.classList.toggle('wrap-contain-paint', containPaint);
+              driftWrapper.classList.toggle('wrap-plain', !containPaint);
+              driftLabel.textContent = containPaint ? 'contain: paint' : '(plain)';
+              measureDrift();
+              return;
+          }
 
-      // Reset: replace the multiselect with a fresh clone so its once-per-instance warning re-arms.
-      resetBtn.addEventListener('click', () => {
-          const current = document.getElementById('ms-drift');
-          const next = current.cloneNode(true);
-          current.replaceWith(next);
-          attachOpenListener(next);
-          driftStatus.className = 'status';
-          driftStatus.textContent = 'Multiselect reinitialized — open the dropdown to re-arm.';
+          // Reset: replace the multiselect with a fresh clone so its once-per-instance warning re-arms.
+          if (e.target.closest('#reset-warning')) {
+              const current = document.getElementById('ms-drift');
+              const next = current.cloneNode(true);
+              current.replaceWith(next);
+              attachOpenListener(next);
+              driftStatus.className = 'status';
+              driftStatus.textContent = 'Multiselect reinitialized — open the dropdown to re-arm.';
+          }
       });
 
       function attachOpenListener(el) {

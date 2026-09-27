@@ -8,7 +8,7 @@ defmodule Keenmate.WebMultiselect.OptionHelpers do
   # in the template) and must NOT be re-emitted as data attributes.
   @passthrough_keys ~w(
     id name value field hook search_event options class style placeholder rest inner_block
-    __changed__ attributes
+    defer defer? __changed__ attributes
   )a
 
   @doc """

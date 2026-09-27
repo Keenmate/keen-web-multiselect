@@ -54,6 +54,75 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
   el.setSelected(['lead']);    // pre-select (bypasses the veto)
   """
 
+  # Add-new demos (EV4b / EV4c). Options are canonical {value,label(,subtitle,icon)}
+  # rows, so no *_member overrides beyond the rich subtitle/icon on EV4c.
+  @create_members [
+    %{value: "anna", label: "Anna"},
+    %{value: "ben", label: "Ben"},
+    %{value: "carla", label: "Carla"}
+  ]
+
+  @project_members [
+    %{value: "audrey", label: "Audrey Horne", subtitle: "One Eyed Jack's", icon: "👩"},
+    %{value: "benjamin", label: "Benjamin Horne", subtitle: "Great Northern Hotel", icon: "👨"},
+    %{value: "jerry", label: "Jerry Horne", subtitle: "Horne's Dept. Store", icon: "🧑"}
+  ]
+
+  # EV4b prose mentions the {value} placeholder literally — through a heredoc so
+  # HEEx doesn't try to interpolate it.
+  @ev4b_intro ~S"""
+  With allow-add-new on, a search that finds nothing shows a clickable
+  "Add new …" prompt instead of the empty message. Choosing it (click or Enter)
+  fires the add event. The prompt label is set statically via add-new-text (the
+  {value} placeholder is the typed text) or dynamically via getAddNewTextCallback.
+  addNewCallback is async and cancelable — return a rich option to create + select
+  it, or null to abort (try adding a name that already exists, e.g. "Anna").
+  """
+
+  @code_add_new_basics ~S"""
+  <web-multiselect allow-add-new add-new-text='Add new member: "{value}"'></web-multiselect>
+
+  // Async + cancelable. Return a rich option to create + select it,
+  // or null/undefined to abort (no add, no `add` event, search kept).
+  el.addNewCallback = async (value) => {
+    if (await api.exists(value)) return null;        // ← cancel
+    return await api.create(value);                  // ← rich option → create + select
+  };
+
+  // …and/or just listen for the intent (fires whether or not a callback ran):
+  el.addEventListener('add', (e) => {
+    // e.detail = { value, option?, selectedOptions, selectedValues }
+    log('event', 'add', e.detail.value);
+  });
+
+  // Dynamic label instead of the {value} template:
+  el.getAddNewTextCallback = (v) => `Create "${v}"`;
+  """
+
+  @code_add_new_async ~S"""
+  <web-multiselect allow-add-new subtitle-member="subtitle" icon-member="icon"
+    add-new-text='➕ Add new member: "{value}"'
+    add-new-pending-text='Adding "{value}" to the project…'></web-multiselect>
+
+  el.options = [
+    { value: 'audrey',   label: 'Audrey Horne',   subtitle: "One Eyed Jack's",        icon: '👩' },
+    { value: 'benjamin', label: 'Benjamin Horne', subtitle: 'Great Northern Hotel',   icon: '👨' },
+    { value: 'jerry',    label: 'Jerry Horne',    subtitle: "Horne's Dept. Store",    icon: '🧑' },
+  ];
+
+  // Async: a short delay shows the pending spinner. Returns a RICH option
+  // (subtitle + icon) so the created member renders like every other row.
+  el.addNewCallback = async (value) => {
+    await new Promise(r => setTimeout(r, 1200));      // ← server round-trip
+    return {
+      value: value.trim().toLowerCase().replace(/\s+/g, '-'),
+      label: value.trim(),
+      subtitle: 'New member · just added',
+      icon: '🆕',
+    };
+  };
+  """
+
   # Server-side (hook-bound) demos. A small catalog with a `price` the browser
   # never sees — the point is that the total is derived on the server.
   @catalog [
@@ -99,6 +168,11 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
      |> assign(:code_events, @code_events)
      |> assign(:code_before_select, @code_before_select)
      |> assign(:code_before_deselect, @code_before_deselect)
+     |> assign(:ev4b_intro, @ev4b_intro)
+     |> assign(:code_add_new_basics, @code_add_new_basics)
+     |> assign(:code_add_new_async, @code_add_new_async)
+     |> assign(:create_members, @create_members)
+     |> assign(:project_members, @project_members)
      |> assign(:code_server_state, @code_server_state)
      |> assign(:code_server_limit, @code_server_limit)
      |> assign(:catalog, @catalog)
@@ -134,7 +208,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
       title="Events, Handlers & Interceptors"
       subtitle="DOM events, the on* property twin, and before* veto interceptors"
     >
-      <.card title="1 · Events — addEventListener & the on* twin">
+      <.card title="EV01 · Events — addEventListener & the on* twin">
         <.tip>Client-only: DOM <code>change</code>/<code>select</code>/<code>deselect</code> events and their <code>on*</code> property twins — wired in JS, no wrapper attribute.</.tip>
         <p>
           Every notification is available two ways and <strong>both fire for the same action</strong>:
@@ -161,7 +235,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
         </details>
       </.card>
 
-      <.card title="2 · beforeSelectCallback — block a selection">
+      <.card title="EV02 · beforeSelectCallback — block a selection">
         <.tip>Client-only interceptor: set <code>el.beforeSelectCallback</code> in JS and return <code>false</code> to veto — no wrapper attribute.</.tip>
         <p>
           An <strong>interceptor</strong>: runs <em>before</em> an option is added and returns
@@ -183,7 +257,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
         </details>
       </.card>
 
-      <.card title="3 · beforeDeselectCallback — protect a required item">
+      <.card title="EV03 · beforeDeselectCallback — protect a required item">
         <.tip>Client-only interceptor: set <code>el.beforeDeselectCallback</code> in JS and return <code>false</code> to protect an item — no wrapper attribute.</.tip>
         <p>
           The mirror interceptor on the way out. <strong>Team Lead</strong> is pre-selected and required
@@ -205,22 +279,7 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
         </details>
       </.card>
 
-      <.card title="4 · keydownCallback — a keyboard hook">
-        <.tip>Client-only: set <code>el.keydownCallback = (ctx) => …</code>; return <code>true</code> to mark the key fully handled — no wrapper attribute.</.tip>
-        <p>
-          Runs on <strong>every</strong> keydown before all built-in handling, with a context
-          (<code>event</code>, <code>key</code>, <code>isOpen</code>, <code>focusedOption</code>,
-          <code>selectedValues</code>, …) and an imperative <code>controller</code>. Here
-          <kbd>Ctrl</kbd>+<kbd>A</kbd> selects every option while the dropdown is open.
-        </p>
-        <.form_group>
-          <label>Letters (Ctrl+A selects all)</label>
-          <.web_multiselect id="keydown-select" show_select_all={true} />
-          <small class="form-text">Open the dropdown, then press Ctrl+A.</small>
-        </.form_group>
-      </.card>
-
-      <.card title="5 · showMessage() — a component-anchored toast">
+      <.card title="EV04 · showMessage() — surface a message over the component">
         <.tip>Client-only: <code>el.showMessage(text, {"{ variant }"})</code> / <code>el.hideMessage()</code>. A <code>beforeSelect</code> callback returning a <em>string</em> vetoes and shows it as a warning toast.</.tip>
         <p>
           <code>showMessage</code> surfaces a transient toast anchored to the control (pinned over the
@@ -231,13 +290,69 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
         <.form_group>
           <label>Toppings (max 3)</label>
           <.web_multiselect id="message-select" />
-          <button type="button" id="message-btn" class="btn" style="margin-top:0.5rem;">
+          <button type="button" id="message-btn" class="btn is-client" style="margin-top:0.5rem;">
             Show a success toast
           </button>
         </.form_group>
       </.card>
 
-      <.card title="Callback vs event — the one rule">
+      <.card title="EV4b · Add new — turn the picker into a creation tool">
+        <.tip>Client-only: <code>allow_add_new</code> + <code>add_new_text</code> turn a no-match search into a clickable prompt; the <code>addNewCallback</code> (async, cancelable) and the <code>add</code> event are wired in JS with no wrapper attribute.</.tip>
+        <p>{@ev4b_intro}</p>
+        <.form_group>
+          <label>Group members — type a name that isn't listed</label>
+          <.web_multiselect
+            id="create-select"
+            allow_add_new={true}
+            add_new_text={"Add new member: “{value}”"}
+            options={@create_members}
+            search_placeholder="Search or add a member..."
+          />
+          <small class="form-text">Try typing "Dana", then click the prompt (or press Enter).</small>
+        </.form_group>
+        <div id="create-log" class="log" phx-update="ignore">
+          <div class="muted">The add event and resulting selection log here…</div>
+        </div>
+        <details style="margin-top: 1rem;">
+          <summary>Show code</summary>
+          <.code_block lang="js">{@code_add_new_basics}</.code_block>
+        </details>
+      </.card>
+
+      <.card title="EV4c · Add new — async creation with a rich option">
+        <.tip>Client-only: an async <code>addNewCallback</code> plus <code>add_new_pending_text</code> shows a spinner while the create round-trips; the returned rich option renders like the seeded rows.</.tip>
+        <p>
+          A real creation usually hits a server. Here <code>addNewCallback</code> is
+          <strong>async with a deliberate ~1.2 s delay</strong>, so you can watch the picker show a
+          <strong>spinner + "Adding …"</strong> in the prompt while it works, then drop the created
+          member into the list. The new option comes back as a <strong>rich object</strong>
+          (avatar + role subtitle) and renders exactly like the seeded members.
+        </p>
+        <.form_group>
+          <label>Project members</label>
+          <.web_multiselect
+            id="members-select"
+            allow_add_new={true}
+            add_new_text={"➕ Add new member: “{value}”"}
+            add_new_pending_text={"Adding “{value}” to the project…"}
+            options={@project_members}
+            search_placeholder="Search or add a member..."
+          />
+          <small class="form-text">
+            Seeded with the Hornes — Audrey, Benjamin &amp; Jerry.
+            <strong>Type <code>Bobby Briggs</code></strong> (not in the list) and pick the prompt to add him.
+          </small>
+        </.form_group>
+        <div id="members-log" class="log" phx-update="ignore">
+          <div class="muted">The add event logs here after the delay…</div>
+        </div>
+        <details style="margin-top: 1rem;">
+          <summary>Show code</summary>
+          <.code_block lang="js">{@code_add_new_async}</.code_block>
+        </details>
+      </.card>
+
+      <.card title="EV05 · Callback vs event — the one rule">
         <p>The line is drawn by <strong>whether the component uses the return value</strong>:</p>
         <ul>
           <li>
@@ -263,6 +378,29 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
           (<code>select</code>/<code>deselect</code>/<code>change</code>) are unchanged, so the
           <code>KeenWebMultiselectHook</code> is unaffected.
         </.note>
+      </.card>
+
+      <.card title="🧩 Wrapper-specific extras (not in upstream)">
+        <p>
+          Below are demos that exist only in this wrapper's example page — they have no
+          upstream <code>EV</code> counterpart: an extra client-only callback, and the
+          LiveView-native server-side binding path.
+        </p>
+      </.card>
+
+      <.card title="keydownCallback — a keyboard hook">
+        <.tip>Client-only: set <code>el.keydownCallback = (ctx) => …</code>; return <code>true</code> to mark the key fully handled — no wrapper attribute.</.tip>
+        <p>
+          Runs on <strong>every</strong> keydown before all built-in handling, with a context
+          (<code>event</code>, <code>key</code>, <code>isOpen</code>, <code>focusedOption</code>,
+          <code>selectedValues</code>, …) and an imperative <code>controller</code>. Here
+          <kbd>Ctrl</kbd>+<kbd>A</kbd> selects every option while the dropdown is open.
+        </p>
+        <.form_group>
+          <label>Letters (Ctrl+A selects all)</label>
+          <.web_multiselect id="keydown-select" show_select_all={true} />
+          <small class="form-text">Open the dropdown, then press Ctrl+A.</small>
+        </.form_group>
       </.card>
 
       <.card title="🔌 Server-side binding — crossing to LiveView">
@@ -477,9 +615,55 @@ defmodule TestAppWeb.Examples.EventsCallbacksLive do
           messageSelect.beforeSelectCallback = (option, selected) => {
             if (selected.length >= 3) return 'You can pick at most 3 toppings.'; // vetoes + warning toast
           };
-          document.getElementById('message-btn').addEventListener('click', () => {
-            messageSelect.showMessage('Saved your toppings!', { variant: 'success', duration: 2500 });
+          // Delegated on document (kept in this closure so it can reference
+          // `messageSelect`) so the button survives LiveView's DOM patch on connect.
+          document.addEventListener('click', (e) => {
+            if (e.target.closest('#message-btn')) {
+              messageSelect.showMessage('Saved your toppings!', { variant: 'success', duration: 2500 });
+            }
           });
+        });
+
+        // --- 4b. Add new (creation tool) --------------------------
+        wait('create-select').then((createSelect) => {
+          const createLog = logger(document.getElementById('create-log'));
+          // Async + cancelable: return a rich option to create + select it, or null to abort.
+          // Here we reject a name that already exists (case-insensitive) — the search is left
+          // intact and no `add` event fires.
+          createSelect.addNewCallback = async (value) => {
+            const key = value.trim().toLowerCase();
+            const exists = createSelect.options.some(o => o.value === key);
+            if (exists) {
+              createSelect.showMessage(`"${value}" already exists`, { variant: 'warning' });
+              return null;                          // ← cancel
+            }
+            // (a real app might `await api.create(value)` here)
+            return { value: key, label: value };      // ← rich option → create + select
+          };
+          // The add event fires only when creation actually happened (not on cancel).
+          createSelect.addEventListener('add', (e) =>
+            createLog('tag-ok', '[event] add', `value="${e.detail.value}" → now: ` +
+              JSON.stringify(e.detail.selectedValues)));
+        });
+
+        // --- 4c. Add new — async creation + rich option -----------
+        wait('members-select').then((membersSelect) => {
+          const membersLog = logger(document.getElementById('members-log'));
+          // Async: the delay lets the pending spinner show; returns a rich option so the
+          // created member renders (avatar + subtitle) like the seeded rows.
+          membersSelect.addNewCallback = async (value) => {
+            membersLog('tag-prop', '[pending] addNewCallback', `creating "${value}"… (~1.2s)`);
+            await new Promise(r => setTimeout(r, 1200));
+            return {
+              value: value.trim().toLowerCase().replace(/\s+/g, '-'),
+              label: value.trim(),
+              subtitle: 'New member · just added',
+              icon: '🆕'
+            };
+          };
+          membersSelect.addEventListener('add', (e) =>
+            membersLog('tag-ok', '[event] add', `created "${e.detail.option.label}" ` +
+              `(${e.detail.option.subtitle}) → now: ` + JSON.stringify(e.detail.selectedValues)));
         });
       </script>
     </.example_page>

@@ -4,8 +4,34 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
   import Keenmate.WebMultiselect.Components
   import TestAppWeb.Examples.SharedComponents
 
+  @cr03_code ~S"""
+  // 1) Own the badge CONTENT (rendered inside .ms__badge-text)
+  el.renderBadgeContentCallback = (item) =>
+    `<img class="ava" src="${item.avatar}" alt=""><span>${item.name}</span>`;
+
+  // 2) Tag special items so their pill can be styled
+  el.getBadgeClassCallback = (item) => item.vip ? 'badge--vip' : '';
+
+  // 3) Inject CSS into the shadow DOM (page CSS can't reach the pill)
+  el.customStylesCallback = () => `
+    .ms__badge { border-radius: 999px; }                 /* pill shape */
+    .ms__badge-text { gap: .4rem; padding-inline-start: .35rem; }
+    .ms__badge .ava { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+
+    /* VIP: one continuous gradient across the whole pill */
+    .ms__badge.badge--vip { background: linear-gradient(135deg, #7c3aed, #ec4899); }
+    .ms__badge.badge--vip .ms__badge-text,
+    .ms__badge.badge--vip .ms__badge-remove {
+      background: transparent; color: #fff; border-color: transparent;
+    }
+  `;
+  """
+
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :page_title, "Custom Rendering — keen_web_multiselect")}
+    {:ok,
+     socket
+     |> assign(:page_title, "Custom Rendering — keen_web_multiselect")
+     |> assign(:cr03_code, @cr03_code)}
   end
 
   def render(assigns) do
@@ -21,7 +47,7 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
         page script after the custom element upgrades.
       </.note>
 
-      <.card title="Option Rendering Examples">
+      <.card title="CR01 · Option Rendering Examples">
         <.tip>
           JS callback (no attribute): set <code>el.renderOptionContentCallback</code> · size rows with <code>{"option_height={75}"}</code> · overflow badges with <code>{"badges_threshold={2}"}</code>
         </.tip>
@@ -80,7 +106,7 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
         </.form_group>
       </.card>
 
-      <.card title="Badge Rendering Examples">
+      <.card title="CR02 · Badge Rendering Examples">
         <.tip>
           JS callback (no attribute): set <code>el.renderBadgeContentCallback</code> — return compact vs detailed markup via <code>context.isInPopover</code>
         </.tip>
@@ -104,7 +130,69 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
         </.form_group>
       </.card>
 
-      <.card title="Single-Select Custom Rendering">
+      <.card title="CR03 · Fully Restyled Badges (make them sexy)">
+        <.tip>
+          JS callbacks (no attribute): <code>el.renderBadgeContentCallback</code> · <code>el.getBadgeClassCallback</code> · <code>el.customStylesCallback</code>
+        </.tip>
+        <p>
+          Own the whole pill's <em>look</em> without a special hook — three callbacks working
+          together. The wrapper (<code>.ms__badge</code>) and the remove <code>×</code> stay
+          component-owned so removal keeps working; you own the content and the styling.
+        </p>
+        <.form_group>
+          <label for="sexy-badges">Select Team Members</label>
+          <.web_multiselect id="sexy-badges" />
+          <small class="form-text">
+            Pill-shaped badges with avatars; VIPs get a gradient fill. The remove button still works.
+          </small>
+        </.form_group>
+
+        <.note title="The pill is two layers">
+          The visible fill is split between <code>.ms__badge-text</code>
+          (<code>--ms-badge-text-bg</code>) and <code>.ms__badge-remove</code>
+          (<code>--ms-badge-remove-bg</code>). For a <strong>continuous</strong> gradient, paint it
+          on the wrapper <code>.ms__badge</code> and make those two transparent (the wrapper has
+          <code>overflow: hidden</code>, so it clips into one clean pill).
+        </.note>
+
+        <.code_block lang="js">{@cr03_code}</.code_block>
+      </.card>
+
+      <.card title="CR04 · Whole-Badge Render (icon-pack picker)">
+        <.tip>JS callback: <code>el.renderBadgeCallback = (item) => …</code> · returns the entire badge markup, not just its content</.tip>
+        <p>
+          <code>renderBadgeCallback</code> returns the <em>whole</em> badge, so a selection can be a
+          full card rather than a pill. The component wraps your markup in
+          <code>.ms__badge.ms__badge--custom</code> and delegates removal to any element inside with
+          <code>data-action="remove"</code>.
+        </p>
+        <.form_group>
+          <label for="badge-cards">Team members</label>
+          <.web_multiselect id="badge-cards" />
+        </.form_group>
+      </.card>
+
+      <.card title="CR05 · Own the Whole Selection UI (external container)">
+        <.tip><code>{"enable_selected_popover={false}"}</code> · <code>badges_display_mode="count"</code> · <code>{"show_counter={true}"}</code></.tip>
+        <p>
+          With the badges collapsed to a <code>[N]</code> counter, the built-in popover that opens on
+          clicking the counter is redundant when you render your own selection list. Setting
+          <code>{"enable_selected_popover={false}"}</code> makes every popover trigger inert and drops
+          the pointer cursor — the counter here no longer opens anything.
+        </p>
+        <.form_group>
+          <label for="own-selection">Skills (counter is inert)</label>
+          <.web_multiselect
+            id="own-selection"
+            multiple={true}
+            badges_display_mode="count"
+            show_counter={true}
+            enable_selected_popover={false}
+          />
+        </.form_group>
+      </.card>
+
+      <.card title="CR06 · Single-Select Custom Rendering">
         <.tip>
           <code>{"multiple={false}"}</code> · JS callback (no attribute): set <code>el.renderSelectedContentCallback</code> for the closed-input text and <code>el.getDisplayValueCallback</code> for the dropdown label
         </.tip>
@@ -128,7 +216,7 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
         </.form_group>
       </.card>
 
-      <.card title="Combined Callbacks">
+      <.card title="CR07 · Combined Callbacks">
         <.tip>
           <code>{"badges_threshold={3}"}</code> · <code>badges_threshold_mode="partial"</code> · <code>{"enable_badge_tooltips={true}"}</code> — plus JS <code>el.renderOptionContentCallback</code> / <code>el.renderBadgeContentCallback</code> / <code>el.getBadgeDisplayCallback</code>
         </.tip>
@@ -182,7 +270,7 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
         </.form_group>
       </.card>
 
-      <.card title="Advanced Layout Examples">
+      <.card title="CR08 · Advanced Layout Examples">
         <.tip>
           <code>checkbox_align="center | top"</code> · <code>{"option_height={90}"}</code> — CSS-grid/flex markup comes from JS <code>el.renderOptionContentCallback</code>
         </.tip>
@@ -246,40 +334,6 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
         /* Custom checkbox sizing for example #15 */
         #large-checkbox { --ml-checkbox-scale: 1.5; --ml-checkbox-margin-top: 0; }
       </style>
-
-      <.card title="renderBadgeCallback — own the whole badge">
-        <.tip>JS callback: <code>el.renderBadgeCallback = (item) => …</code> · returns the entire badge markup, not just its content</.tip>
-        <p>
-          <code>renderBadgeCallback</code> returns the <em>whole</em> badge, so a selection can be a
-          full card rather than a pill. The component wraps your markup in
-          <code>.ms__badge.ms__badge--custom</code> and delegates removal to any element inside with
-          <code>data-action="remove"</code>.
-        </p>
-        <.form_group>
-          <label for="badge-cards">Team members</label>
-          <.web_multiselect id="badge-cards" />
-        </.form_group>
-      </.card>
-
-      <.card title="enable_selected_popover={false} — own the selection UI">
-        <.tip><code>{"enable_selected_popover={false}"}</code> · <code>badges_display_mode="count"</code> · <code>{"show_counter={true}"}</code></.tip>
-        <p>
-          With the badges collapsed to a <code>[N]</code> counter, the built-in popover that opens on
-          clicking the counter is redundant when you render your own selection list. Setting
-          <code>{"enable_selected_popover={false}"}</code> makes every popover trigger inert and drops
-          the pointer cursor — the counter here no longer opens anything.
-        </p>
-        <.form_group>
-          <label for="own-selection">Skills (counter is inert)</label>
-          <.web_multiselect
-            id="own-selection"
-            multiple={true}
-            badges_display_mode="count"
-            show_counter={true}
-            enable_selected_popover={false}
-          />
-        </.form_group>
-      </.card>
 
       <script type="module">
         const wait = (id) => new Promise((resolve) => {
@@ -966,6 +1020,44 @@ defmodule TestAppWeb.Examples.CustomRenderingLive do
                 style="margin-inline-start:.4rem;border:none;background:#f1f5f9;border-radius:.4rem;width:1.4rem;height:1.4rem;cursor:pointer;">×</button>
             </div>`;
           el.setSelected(['ada', 'grace']);
+        });
+
+        // CR03. Fully Restyled "sexy" badges — own the whole pill via content + class + injected CSS.
+        wait('sexy-badges').then((sexy) => {
+          sexy.options = [
+              { id: 1, name: 'Ada Lovelace',      avatar: 'https://i.pravatar.cc/40?img=5',  vip: true },
+              { id: 2, name: 'Alan Turing',       avatar: 'https://i.pravatar.cc/40?img=12', vip: false },
+              { id: 3, name: 'Grace Hopper',      avatar: 'https://i.pravatar.cc/40?img=45', vip: true },
+              { id: 4, name: 'Linus Torvalds',    avatar: 'https://i.pravatar.cc/40?img=15', vip: false },
+              { id: 5, name: 'Margaret Hamilton', avatar: 'https://i.pravatar.cc/40?img=32', vip: true }
+          ];
+          sexy.valueMember = 'id';
+          sexy.displayValueMember = 'name';
+
+          // 1) Own the badge CONTENT (goes inside .ms__badge-text).
+          sexy.renderBadgeContentCallback = (item) =>
+              `<img class="ava" src="${item.avatar}" alt=""><span>${item.name}</span>`;
+
+          // 2) Tag special items so we can style their pill.
+          sexy.getBadgeClassCallback = (item) => item.vip ? 'badge--vip' : '';
+
+          // 3) Inject CSS into the shadow DOM (page CSS can't reach the pill). The visible
+          //    fill is split between .ms__badge-text and .ms__badge-remove, so for a
+          //    continuous VIP gradient we paint the wrapper and make those two transparent —
+          //    the remove × stays fully functional (still component-owned).
+          sexy.customStylesCallback = () => `
+              .ms__badge { border-radius: 999px; }
+              .ms__badge-text { gap: .4rem; padding-inline-start: .35rem; }
+              .ms__badge .ava { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+
+              .ms__badge.badge--vip { background: linear-gradient(135deg, #7c3aed, #ec4899); }
+              .ms__badge.badge--vip .ms__badge-text,
+              .ms__badge.badge--vip .ms__badge-remove {
+                  background: transparent; color: #fff; border-color: transparent;
+              }
+          `;
+
+          sexy.setSelected([1, 2, 3]);
         });
 
         // CR17. enable-selected-popover=false — own the selection UI, counter is inert.

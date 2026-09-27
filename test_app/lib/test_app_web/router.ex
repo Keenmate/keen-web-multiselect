@@ -24,6 +24,9 @@ defmodule TestAppWeb.Router do
 
     live "/", Examples.IndexLive
 
+    # Wrapper-specific: the declarative / config-driven surface (no per-instance JS).
+    live "/examples/elixir-only", Examples.ElixirOnlyLive
+
     # Example pages mirror upstream @keenmate/web-multiselect examples-*.html 1:1.
     live "/examples/basic", Examples.BasicLive
     live "/examples/data-api", Examples.DataApiLive
@@ -63,5 +66,6 @@ defmodule TestAppWeb.Router do
     live "/virtual-scroll", Fixtures.VirtualScrollLive
     live "/badges-popover", Fixtures.BadgesPopoverLive
     live "/add-new", Fixtures.AddNewLive
+    live "/command", Fixtures.CommandLive
   end
 end

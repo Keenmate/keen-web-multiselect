@@ -22,6 +22,14 @@ defmodule TestAppWeb.Examples.ServerEventsPanel do
   end
 
   @impl true
+  def update(%{monitor_event: ev}, socket) do
+    # A server-side round-trip pushed in from a parent LiveView via send_update/3
+    # (e.g. EO04's tunneled GitHub search, which isn't a select/deselect/change
+    # DOM event so the ServerMonitor JS hook can't observe it). Logged the same
+    # way as the DOM events below so it ticks the same counter.
+    {:ok, log_event(socket, ev.kind, ev.id, ev.shown)}
+  end
+
   def update(assigns, socket) do
     {:ok,
      socket
@@ -67,22 +75,28 @@ defmodule TestAppWeb.Examples.ServerEventsPanel do
   @impl true
   def handle_event("web_multiselect:" <> kind, payload, socket)
       when kind in ["change", "select", "deselect"] do
-    seq = socket.assigns.count + 1
-    stamp = Calendar.strftime(DateTime.utc_now(), "%H:%M:%S")
     id = payload["id"] || "(unnamed)"
     shown = payload["value"] || payload["values"] || ""
-    entry = "##{seq} [#{stamp} UTC] #{kind} · #{id} → #{inspect(shown)}"
-
-    {:noreply,
-     assign(socket,
-       count: seq,
-       last: format_last(shown),
-       events: Enum.take([entry | socket.assigns.events], 10)
-     )}
+    {:noreply, log_event(socket, kind, id, shown)}
   end
 
   def handle_event("clear", _params, socket) do
     {:noreply, assign(socket, count: 0, last: nil, events: [])}
+  end
+
+  # Append one round-trip to the counter + log. Shared by the DOM-event path
+  # (ServerMonitor JS hook → handle_event) and the send_update/3 path (a parent
+  # LiveView forwarding a server-only event like EO04's tunneled search).
+  defp log_event(socket, kind, id, shown) do
+    seq = socket.assigns.count + 1
+    stamp = Calendar.strftime(DateTime.utc_now(), "%H:%M:%S")
+    entry = "##{seq} [#{stamp} UTC] #{kind} · #{id} → #{inspect(shown)}"
+
+    assign(socket,
+      count: seq,
+      last: format_last(shown),
+      events: Enum.take([entry | socket.assigns.events], 10)
+    )
   end
 
   defp format_last(shown) when is_list(shown), do: Enum.join(shown, ", ")

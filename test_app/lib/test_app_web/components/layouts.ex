@@ -81,6 +81,7 @@ defmodule TestAppWeb.Layouts do
           }
         </script>
         <script type="module" src="/assets/app.js"></script>
+        <Keenmate.WebMultiselect.Components.shadow_styles />
         {analytics_html()}
       </head>
       <body>

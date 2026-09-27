@@ -134,4 +134,25 @@ defmodule Keenmate.WebMultiselect.ComponentsTest do
     assert html =~ ~s(full-title-member="fullTitle")
     assert html =~ ~s(show-badge-full-title="true")
   end
+
+  # `defer` render gate. These run with no :shadow_styles configured (the auto path is
+  # covered in shadow_styles_test.exs, which manages the app env). A bare `defer` attribute
+  # renders without a value; `~r/\sdefer[\s>]/` matches it without matching `data-kwms-manual`.
+  test "emits no defer attribute by default (no shared styles configured)" do
+    html = render_multiselect(id: "x")
+    refute html =~ ~r/\sdefer[\s>]/
+    refute html =~ "data-kwms-manual"
+  end
+
+  test "defer={true} emits a manual gate (defer + data-kwms-manual opt-out)" do
+    html = render_multiselect(id: "x", defer: true)
+    assert html =~ ~r/\sdefer[\s>]/
+    assert html =~ "data-kwms-manual"
+  end
+
+  test "defer={false} emits no defer attribute" do
+    html = render_multiselect(id: "x", defer: false)
+    refute html =~ ~r/\sdefer[\s>]/
+    refute html =~ "data-kwms-manual"
+  end
 end

@@ -80,3 +80,89 @@ Build option maps with a `group` member and set allow_groups on the child:
 
 See cookbook.txt for the full cascade recipe. Related: liveview-events.txt,
 dead-views-and-ssr.txt (why phx-update="ignore" is there).
+
+
+IMPERATIVE CONTROL — push_command/3
+===================================
+push_update/3 changes DATA (options / selection). To DRIVE the dropdown itself
+from the server — open/close it, scroll an option into view, or preset the search
+box — use push_command/3. It changes neither options nor selection.
+
+    Keenmate.WebMultiselect.push_command(socket, id, opts \\ [])
+
+  opts - keyword list, any of:
+           open: true             # open the dropdown
+           close: true            # close it
+           toggle: true           # toggle open/closed
+           search: "term"         # set the search box + filter as if typed ("" clears)
+           clear_search: true     # clear the search box, restore the full list
+           scroll_to_value: v     # scroll the open dropdown to the option with value v
+           scroll_to_group: name  # scroll to a group's header
+           scroll_to_index: i     # scroll to the option at index i (filtered list)
+
+Only the keys you pass are sent. Like push_update/3, the target must have
+hook={true} (or a custom hook) and a matching id; it sends the
+"web_multiselect:command" event the hook dispatches to the element's imperative
+methods (open/close/toggle/isOpen, search/searchText/clearSearch, scrollTo*).
+
+EXAMPLES
+--------
+Open and jump to a group:
+
+    Keenmate.WebMultiselect.push_command(socket, "skills", open: true, scroll_to_group: "backend")
+
+Reveal a filtered-out option, then scroll to it (chain — clear first, then scroll):
+
+    socket
+    |> Keenmate.WebMultiselect.push_command("skills", clear_search: true)
+    |> Keenmate.WebMultiselect.push_command("skills", scroll_to_value: "py")
+
+Preset the search box from the server:
+
+    Keenmate.WebMultiselect.push_command(socket, "skills", search: "back")
+
+OPEN (AND SCROLL) ON PAGE ENTRY
+-------------------------------
+To land on a page with the dropdown ALREADY open and scrolled to a group/option,
+you must push the command only AFTER the element exists and its hook is listening
+— not from mount. Pushing during the disconnected mount is a no-op, and even on
+the connected mount there's a race: the command can fire before the element has
+upgraded (and, with `defer`, before it's released), so the event is dropped.
+
+The safe trigger is the opt-in "ready" event the hook forwards once the picker's
+first build completes (liveview-events.txt). Enable it with ready_event="<name>"
+on the element, then handle it and reply with the command:
+
+    <.web_multiselect id="skills" hook={true} options={@skills}
+      ready_event="web_multiselect:ready" />
+
+    def handle_event("web_multiselect:ready", %{"id" => "skills"}, socket) do
+      {:noreply,
+       Keenmate.WebMultiselect.push_command(socket, "skills", open: true, scroll_to_group: "backend")}
+    end
+
+(ready_event is opt-in — without it no ready event is sent, so consumers that
+don't want it never need a handler for it.)
+
+Because the element defers scroll_to_* one frame internally, open + scroll in the
+SAME call works — no chained round-trip needed. The element must have hook={true}
+(or a custom hook) and a matching id.
+
+The hook makes this robust in both directions: if `ready` already fired before the
+hook mounted (the non-deferred fast path), the hook replays it from `el.isReady`,
+so your handler still runs exactly once. Treat it as a one-shot on the server if
+you keep per-widget state (e.g. an "already auto-opened?" flag), since a
+disconnect/reconnect re-mounts the hook and can re-emit it.
+
+Simpler but racier alternative — phx-mounted straight to a command, no ready event:
+
+    <.web_multiselect id="skills" hook={true} options={@skills}
+      phx-mounted={JS.push("open_skills")} />
+
+    def handle_event("open_skills", _p, socket) do
+      {:noreply, Keenmate.WebMultiselect.push_command(socket, "skills", open: true)}
+    end
+
+phx-mounted fires when LV attaches the node, which is after the hook mounts — fine
+for a demo. Prefer the "ready" event when a `defer` gate or slow first build means
+"attached" and "built" aren't the same instant.

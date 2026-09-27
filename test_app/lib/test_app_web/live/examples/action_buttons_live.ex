@@ -325,6 +325,34 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
   ];
   """
 
+  @code_adaptive ~S"""
+  // Device + viewport signal, re-exported from the component package — one import,
+  // one dependency, the same signal the component reacts to internally.
+  import { observeViewport, classifyDevice } from '@keenmate/web-multiselect';
+
+  // Two configurations. Full toolbar for roomy layouts; essentials for a phone.
+  const desktopActions = [ /* Select All, Clear, First 3, Even, Odd, Invert, … 12 total */ ];
+  const mobileActions  = [
+    { action: 'select-all', text: 'All' },
+    { action: 'clear-all',  text: 'Clear' },
+    { action: 'custom', text: 'Invert', onClick: (ms) => { /* … */ } },
+  ];
+
+  // observeViewport fires on every (throttled) width change, so the ≤600px desktop
+  // rule updates smoothly; classifyDevice adds the capability axis (phone/tablet).
+  observeViewport((env) => {
+    const device = classifyDevice(env);           // 'mobile' | 'tablet' | 'desktop'
+    if (device === 'mobile') {                     // phone: essentials, wrapped
+      el.actionButtons = mobileActions;  el.actionsLayout = 'wrap';
+    } else if (device === 'tablet') {              // tablet: full set, wrapped (won't fit one row)
+      el.actionButtons = desktopActions; el.actionsLayout = 'wrap';
+    } else {                                        // desktop: two rows once ≤ 600px, else one
+      el.actionButtons = desktopActions;
+      el.actionsLayout = env.viewportWidth <= 600 ? 'wrap' : 'nowrap';
+    }
+  });
+  """
+
   @code_layout ~S"""
   // Example with 12 action buttons
   multiselect.actionButtons = [
@@ -469,6 +497,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
      |> assign(:code_tooltip, @code_tooltip)
      |> assign(:code_custom, @code_custom)
      |> assign(:code_combined, @code_combined)
+     |> assign(:code_adaptive, @code_adaptive)
      |> assign(:code_layout, @code_layout)
      |> assign(:code_fa, @code_fa)
      |> assign(:code_lucide, @code_lucide)
@@ -491,7 +520,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         config to the wrapper element by id after the custom element upgrades.
       </.note>
 
-      <.card title="1. Basic Built-in Actions">
+      <.card title="AB01 · Basic Built-in Actions">
         <.tip>JS property (no attribute): set <code>el.actionButtons</code> with <code>action: 'select-all'</code> · <code>action: 'clear-all'</code></.tip>
         <p class="description">
           Simple select-all and clear-all buttons with default settings.
@@ -504,7 +533,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         <.code_block lang="js">{@code_basic}</.code_block>
       </.card>
 
-      <.card title="2. Static Properties">
+      <.card title="AB02 · Static Properties">
         <.tip>Per-button static props on <code>el.actionButtons</code>: <code>isVisible</code> · <code>isDisabled</code> · <code>cssClass</code> · <code>tooltip</code></.tip>
         <p class="description">
           Using static properties: <code>isVisible</code>, <code>isDisabled</code>,
@@ -518,7 +547,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         <.code_block lang="js">{@code_static}</.code_block>
       </.card>
 
-      <.card title="3. Dynamic Visibility (getIsVisibleCallback)">
+      <.card title="AB03 · Dynamic Visibility (getIsVisibleCallback)">
         <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getIsVisibleCallback: (ms) => …</code></.tip>
         <p class="description">
           Show/hide buttons based on current selection state using
@@ -535,7 +564,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="4. Dynamic Disabled State (getIsDisabledCallback)">
+      <.card title="AB04 · Dynamic Disabled State (getIsDisabledCallback)">
         <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getIsDisabledCallback: (ms) => …</code></.tip>
         <p class="description">
           Enable/disable buttons based on conditions using <code>getIsDisabledCallback</code>.
@@ -548,7 +577,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         <.code_block lang="js">{@code_disabled}</.code_block>
       </.card>
 
-      <.card title="5. Dynamic Text (getTextCallback)">
+      <.card title="AB05 · Dynamic Text (getTextCallback)">
         <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getTextCallback: (ms) => …</code></.tip>
         <p class="description">
           Change button text based on current state using <code>getTextCallback</code>.
@@ -564,7 +593,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="6. Dynamic CSS Classes (getClassCallback)">
+      <.card title="AB06 · Dynamic CSS Classes (getClassCallback)">
         <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getClassCallback: (ms) => …</code> · classes injected via <code>el.customStylesCallback</code></.tip>
         <p class="description">
           Apply CSS classes dynamically based on state using <code>getClassCallback</code>.
@@ -583,7 +612,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="7. Dynamic Tooltip (getTooltipCallback)">
+      <.card title="AB07 · Dynamic Tooltip (getTooltipCallback)">
         <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getTooltipCallback: (ms) => …</code></.tip>
         <p class="description">
           Show contextual information in tooltips using <code>getTooltipCallback</code>.
@@ -599,7 +628,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="8. Custom Actions with onClick">
+      <.card title="AB08 · Custom Actions with onClick">
         <.tip>Per-button config on <code>el.actionButtons</code>: <code>action: 'custom'</code> + <code>onClick: (ms) => …</code></.tip>
         <p class="description">
           Create custom buttons with <code>action: 'custom'</code> and custom
@@ -613,7 +642,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         <.code_block lang="js">{@code_custom}</.code_block>
       </.card>
 
-      <.card title="9. Combined Features & Callback Priority">
+      <.card title="AB09 · Combined Features & Callback Priority">
         <.tip>Callbacks on <code>el.actionButtons</code> override static props: <code>getTextCallback</code> · <code>getClassCallback</code> · <code>getIsVisibleCallback</code></.tip>
         <p class="description">
           Demonstrating multiple callbacks working together and callback priority
@@ -632,40 +661,42 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="10. Actions Layout - Wrap Mode">
-        <.tip><code>actions_layout="wrap"</code> · <code>actions_layout="nowrap"</code> (default)</.tip>
+      <.card title="AB10 · Device-Adaptive Actions">
+        <.tip>JS: <code>import &lbrace; observeViewport, classifyDevice &rbrace;</code> → swap <code>el.actionButtons</code> + <code>el.actionsLayout</code> per device/width</.tip>
         <p class="description">
-          When you have many action buttons, use <code>actions-layout="wrap"</code>
-          to allow buttons to wrap to multiple rows instead of being squeezed into a
-          single row. Compare the behavior with 12 buttons below.
+          Twelve action buttons fit one row on a wide desktop, but there's no room on a phone, a
+          tablet, or a narrowed window — squeezed into one line they run past the edge or become
+          unreadable. The fix isn't a CSS trick: define your action sets and pick the right one for
+          the space. The library re-exports the same device/viewport signal the component uses
+          internally, so you react to the <em>event that tells you the device and width</em> and
+          choose accordingly — here, granularly:
         </p>
-        <.grid_2>
-          <div>
-            <h3>Default (nowrap)</h3>
-            <.form_group>
-              <label class="demo-label">12 buttons squeezed into one row:</label>
-              <.web_multiselect id="layout-nowrap" multiple={true} actions_layout="nowrap" />
-              <.output_panel id="output-nowrap" label="Selected:" placeholder="[]" />
-            </.form_group>
-          </div>
-          <div>
-            <h3>Wrap Mode</h3>
-            <.form_group>
-              <label class="demo-label">12 buttons wrap naturally across rows:</label>
-              <.web_multiselect id="layout-wrap" multiple={true} actions_layout="wrap" />
-              <.output_panel id="output-wrap" label="Selected:" placeholder="[]" />
-            </.form_group>
-          </div>
-        </.grid_2>
-        <.code_block lang="js">{@code_layout}</.code_block>
-        <.note title="Visual Difference:">
-          With 12 buttons, the difference is clear: <strong>nowrap</strong> forces all
-          buttons into one row (they become very narrow), while <strong>wrap</strong>
-          allows them to flow naturally across multiple rows with comfortable sizing.
+        <ul>
+          <li><strong>Desktop, wide (&gt; 600px):</strong> all twelve buttons, one row (<code>nowrap</code>).</li>
+          <li><strong>Desktop, narrowed (≤ 600px):</strong> all twelve, but flowed onto two rows (<code>wrap</code>).</li>
+          <li><strong>Tablet:</strong> all twelve wrapped — a single row would run beyond the edge.</li>
+          <li><strong>Phone:</strong> the three essentials only, wrapped.</li>
+        </ul>
+        <.form_group>
+          <label class="demo-label" id="adaptive-device-label" phx-update="ignore">
+            <code id="adaptive-device">…</code>
+            <span class="form-text" style="display:inline;">— resize the window (cross 600px) or toggle the device toolbar (DevTools) to see the toolbar re-shape.</span>
+          </label>
+          <.web_multiselect id="layout-adaptive" multiple={true} />
+          <.output_panel id="output-adaptive" label="Selected:" placeholder="[]" />
+        </.form_group>
+        <.code_block lang="js">{@code_adaptive}</.code_block>
+        <.note title="Device class and width, together">
+          <code>classifyDevice(env)</code> keys off capability + physical size (orientation-robust —
+          a landscape phone still reads as <code>mobile</code>), which is the right axis for the
+          phone/tablet split. But whether twelve buttons <em>fit one row</em> is a width question, so
+          the desktop branch also consults <code>env.viewportWidth</code> for the 600px rule.
+          <code>observeViewport</code> (vs. <code>observeEnvironment</code>) is what makes that
+          threshold react continuously as you drag the window, not just on discrete breakpoint flips.
         </.note>
       </.card>
 
-      <.card title="11. Font Awesome Icons in Buttons">
+      <.card title="AB11 · Font Awesome Icons in Buttons">
         <.tip>Icon HTML in a button's <code>text</code> (JS <code>el.actionButtons</code>) · font-face at document level + rules via <code>el.customStylesCallback</code></.tip>
         <p class="description">
           Action buttons accept HTML, so Font Awesome icons work — but Font Awesome is
@@ -727,7 +758,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="12. Lucide (SVG) Icons in Buttons">
+      <.card title="AB12 · Lucide (SVG) Icons in Buttons">
         <.tip>Inline SVG in a button's <code>text</code> (JS <code>el.actionButtons</code>) — no <code>customStylesCallback</code>, renders natively in Shadow DOM</.tip>
         <p class="description">
           Unlike font icons, <strong>inline SVG icons render natively inside Shadow DOM</strong>
@@ -771,7 +802,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="13. Positioning, Rows & Alignment">
+      <.card title="AB13 · Positioning, Rows & Alignment">
         <.tip><code>actions_position="top | bottom"</code> · <code>actions_align="right | space-between"</code> · per-button <code>row</code> (JS)</.tip>
         <p class="description">
           Place the actions block at the <code>top</code> (default) or <code>bottom</code> of the
@@ -821,7 +852,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="📋 Summary">
+      <.card title="AB14 · Summary">
         <h3>Static Properties</h3>
         <.code_block lang="js">{@code_summary_static}</.code_block>
 
@@ -840,7 +871,43 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
+      <.card title="🧩 Wrapper-specific extras (not in upstream)">
+        <h3>Actions Layout - Wrap Mode</h3>
+        <.tip><code>actions_layout="wrap"</code> · <code>actions_layout="nowrap"</code> (default)</.tip>
+        <p class="description">
+          When you have many action buttons, use <code>actions-layout="wrap"</code>
+          to allow buttons to wrap to multiple rows instead of being squeezed into a
+          single row. Compare the behavior with 12 buttons below.
+        </p>
+        <.grid_2>
+          <div>
+            <h3>Default (nowrap)</h3>
+            <.form_group>
+              <label class="demo-label">12 buttons squeezed into one row:</label>
+              <.web_multiselect id="layout-nowrap" multiple={true} actions_layout="nowrap" />
+              <.output_panel id="output-nowrap" label="Selected:" placeholder="[]" />
+            </.form_group>
+          </div>
+          <div>
+            <h3>Wrap Mode</h3>
+            <.form_group>
+              <label class="demo-label">12 buttons wrap naturally across rows:</label>
+              <.web_multiselect id="layout-wrap" multiple={true} actions_layout="wrap" />
+              <.output_panel id="output-wrap" label="Selected:" placeholder="[]" />
+            </.form_group>
+          </div>
+        </.grid_2>
+        <.code_block lang="js">{@code_layout}</.code_block>
+        <.note title="Visual Difference:">
+          With 12 buttons, the difference is clear: <strong>nowrap</strong> forces all
+          buttons into one row (they become very narrow), while <strong>wrap</strong>
+          allows them to flow naturally across multiple rows with comfortable sizing.
+        </.note>
+      </.card>
+
       <script type="module">
+        import { observeViewport, classifyDevice } from 'keen_web_multiselect';
+
         const wait = (id) => new Promise((resolve) => {
           const check = () => {
             const el = document.getElementById(id);
@@ -1297,6 +1364,57 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
           layoutWrap.actionButtons = manyButtons;
           layoutWrap.addEventListener('change', () => {
             document.getElementById('output-wrap').textContent = JSON.stringify(layoutWrap.getValue(), null, 2);
+          });
+        });
+
+        // Example AB10: Device-Adaptive Actions
+        const desktopActions = manyButtons;
+        const mobileActions = [
+          { action: 'select-all', text: 'All' },
+          { action: 'clear-all', text: 'Clear' },
+          { action: 'custom', text: 'Invert', onClick: (ms) => {
+            const allValues = itemOptions.map(o => o[0]);
+            const selectedValues = ms.getValue();
+            ms.setSelected(allValues.filter(v => !selectedValues.includes(v)));
+          }}
+        ];
+
+        wait('layout-adaptive').then((adaptive) => {
+          adaptive.options = itemOptions;
+          adaptive.addEventListener('change', () => {
+            document.getElementById('output-adaptive').textContent = JSON.stringify(adaptive.getValue(), null, 2);
+          });
+
+          // React to the viewport signal: pick the action set + layout granularly by
+          // BOTH device class (capability) and width. observeViewport fires on every
+          // (throttled) width change, so the ≤600px desktop rule reacts continuously
+          // as the window is dragged — not just on discrete breakpoint flips.
+          const deviceReadout = document.getElementById('adaptive-device');
+          let lastKey = '';
+          observeViewport((env) => {
+            const device = classifyDevice(env);          // 'mobile' | 'tablet' | 'desktop'
+            let actions, layout;
+            if (device === 'mobile') {
+              actions = mobileActions;  layout = 'wrap';           // phone: essentials, two rows
+            } else if (device === 'tablet') {
+              actions = desktopActions; layout = 'wrap';           // tablet: full set, wrapped (won't fit one row)
+            } else {
+              actions = desktopActions;
+              layout = env.viewportWidth <= 600 ? 'wrap' : 'nowrap'; // desktop: two rows once narrow
+            }
+            // Only touch the component when the resolved config actually changes —
+            // observeViewport ticks on every resize, but actionButtons/actionsLayout
+            // are reinit inputs, so re-assigning identical values would rebuild needlessly.
+            const key = `${device}|${layout}|${actions.length}`;
+            if (key !== lastKey) {
+              lastKey = key;
+              adaptive.actionButtons = actions;
+              adaptive.actionsLayout = layout;
+            }
+            if (deviceReadout) {
+              const rows = layout === 'wrap' ? 'two rows' : 'one row';
+              deviceReadout.textContent = `${device} · ${Math.round(env.viewportWidth)}px · ${actions.length} buttons · ${rows}`;
+            }
           });
         });
 

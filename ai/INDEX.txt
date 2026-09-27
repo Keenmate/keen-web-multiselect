@@ -38,7 +38,8 @@ theming (full)            - see guides/theming.md in the repo / on hexdocs
 PUBLIC API SURFACE (Elixir)
 ---------------------------
 Keenmate.WebMultiselect.Components.web_multiselect/1   - the HEEx component
-Keenmate.WebMultiselect.push_update/3                  - server -> client mutation
+Keenmate.WebMultiselect.push_update/3                  - server -> client mutation (options/value)
+Keenmate.WebMultiselect.push_command/3                 - server -> client imperative control (open/close/scroll/search)
 Keenmate.WebMultiselect.upstream_version/0            - bundled upstream version
 Keenmate.WebMultiselect.asset_path/1                  - on-disk path to a priv asset
 Keenmate.WebMultiselect.OptionHelpers                 - option encoding (internal-ish)
@@ -46,14 +47,16 @@ Keenmate.WebMultiselect.FormHelpers.assign_from_field/1 - FormField -> assigns
 mix keen_web_multiselect.install                      - one-command asset installer
 
 JS hook: KeenWebMultiselectHook (in priv/static/keen_web_multiselect_hook.js)
-Server->client event listened for: "web_multiselect:update"
-Client->server events emitted:     "web_multiselect:select" | ":deselect" | ":change"
+Server->client events listened for: "web_multiselect:update" | ":command"
+Client->server events emitted:     "web_multiselect:select" | ":deselect" | ":change" | ":add"
 
 KEYWORD INDEX
 =============
 
 A
 -
+add event ("web_multiselect:add") -> liveview-events.txt
+add-new / creation mode (allow_add_new, add_new_text) -> component-reference.txt, liveview-events.txt
 allow_groups -> component-reference.txt, data-and-options.txt
 asset_path/1 -> getting-started.txt
 async search -> server-search.txt, cookbook.txt
@@ -119,17 +122,23 @@ O
 options={...} -> data-and-options.txt, component-reference.txt
 OptionHelpers -> data-and-options.txt
 
+O (cont.)
+-
+overlay_group (single-active overlays) -> component-reference.txt
+
 P
 -
 path_member (enables tree mode) -> component-reference.txt, guides/tree_of_options.md
 phx-update="ignore" -> dead-views-and-ssr.txt, server-updates.txt
 Plug.Static (serve assets) -> getting-started.txt
+push_command/3 (open/close/scroll/search) -> server-updates.txt
 push_update/3 -> server-updates.txt, cookbook.txt
 
 S
 -
 search_event -> server-search.txt
 search_debounce -> server-search.txt
+show_clear (inline clear button) -> component-reference.txt
 single-select -> component-reference.txt, cookbook.txt
 SSR / dead view -> dead-views-and-ssr.txt
 

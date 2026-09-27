@@ -1,0 +1,19 @@
+/* keen-web-multiselect — shared shadow-DOM theme, configured ONCE from Elixir:
+
+     config :keen_web_multiselect,
+       shadow_styles: {:file, "priv/static/assets/ms-elixir-theme.css"}
+
+   <.shadow_styles/> in the root layout injects this into every element's shadow DOM
+   (page CSS can't reach it). Scoped with :host(.elixir-themed) so only selects that
+   opt in — <.web_multiselect class="elixir-themed" .../> — pick up the look. No JS. */
+:host(.elixir-themed) .ms__badge {
+  border-radius: 999px;
+  background: linear-gradient(135deg, #7c3aed, #ec4899);
+  border-color: transparent;
+}
+:host(.elixir-themed) .ms__badge-text,
+:host(.elixir-themed) .ms__badge-remove {
+  background: transparent;
+  color: #fff;
+  border-color: transparent;
+}

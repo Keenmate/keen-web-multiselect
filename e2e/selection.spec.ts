@@ -69,9 +69,9 @@ test('multi-select round-trips two clicks into a two-value array', async ({ page
 /**
  * Wrapper-only morph guards: the component renders phx-update="ignore" on
  * every element that has an :id (so morphdom leaves upstream's shadow-DOM
- * children alone), and pre-emits data-ready="" so LV's mergeAttrs doesn't
- * strip it on the first patch — without that, the placeholder flashes for
- * one frame on every re-render. Spot-check both attributes are present.
+ * children alone), and pre-emits data-placeholder-ready="" so LV's mergeAttrs
+ * doesn't strip it on the first patch — without that, the placeholder flashes
+ * for one frame on every re-render. Spot-check both attributes are present.
  */
 test('phx-update="ignore" is auto-emitted on every multiselect with an id', async ({ page }) => {
     for (const id of ['multi', 'single', 'initial', 'close-on-select']) {
@@ -79,10 +79,10 @@ test('phx-update="ignore" is auto-emitted on every multiselect with an id', asyn
     }
 });
 
-test('data-ready="" is pre-emitted on first render so placeholder does not flash', async ({ page }) => {
+test('data-placeholder-ready="" is pre-emitted on first render so placeholder does not flash', async ({ page }) => {
     for (const id of ['multi', 'single', 'initial', 'close-on-select']) {
         // toHaveAttribute with an empty string asserts the attribute exists
         // and has an empty value — exactly what the template emits.
-        await expect(picker(page, id)).toHaveAttribute('data-ready', '');
+        await expect(picker(page, id)).toHaveAttribute('data-placeholder-ready', '');
     }
 });

@@ -23,8 +23,9 @@ getting-started.txt / installer.txt).
 
 EVENTS FORWARDED TO THE SERVER
 ------------------------------
-Three events, each matched by name in handle_event/3. Match on "id" to route when
-a page has several multiselects.
+Four always-on events, each matched by name in handle_event/3. Match on "id" to
+route when a page has several multiselects. (A fifth, opt-in "ready" event is
+described below.)
 
   "web_multiselect:change"   - fired on any selection change
       payload: %{"id" => id, "values" => [ ...all selected values... ]}
@@ -35,8 +36,37 @@ a page has several multiselects.
   "web_multiselect:deselect" - fired when one option is removed
       payload: %{"id" => id, "value" => removed_value, "values" => [ ...full selection after the remove... ]}
 
+  "web_multiselect:add"      - fired when the user chose the "Add new ..." prompt
+                               (requires allow_add_new={true}); lets the server own
+                               option creation with no JS addNewCallback
+      payload: %{"id" => id, "value" => typed_text, "option" => created_value_or_nil}
+
 USE "change" for authoritative state (it carries the full list). Use
-"select"/"deselect" when you care about the individual delta.
+"select"/"deselect" when you care about the individual delta. Use "add" to create
+an option server-side (persist it, then push_update/3 the new options + selection).
+
+OPT-IN: the "ready" event
+-------------------------
+There is a fifth event, but it is NOT always-on — you enable it per element by
+passing ready_event="<name>". It fires ONCE when the picker has finished its first
+build (element upgraded, and with defer, released):
+
+      payload: %{"id" => id}
+
+    <.web_multiselect id="skills" hook={true} options={@skills}
+      ready_event="web_multiselect:ready" />
+
+    def handle_event("web_multiselect:ready", %{"id" => "skills"}, socket) do
+      # element + hook are guaranteed live here — safe to command it
+      {:noreply, Keenmate.WebMultiselect.push_command(socket, "skills", open: true)}
+    end
+
+It is opt-in on purpose: if the hook pushed a brand-new event to EVERY consumer,
+any LiveView without a matching handle_event/3 clause would crash. So you only get
+it when you name it. It's the reliable "element exists and is listening" trigger
+for a push_command/3 on page entry (open + scroll) — see the recipe in
+server-updates.txt. The hook also replays it if the build finished before the hook
+mounted, so your handler always runs; treat it as a one-shot on the server.
 
 HANDLING THEM
 -------------
@@ -52,6 +82,15 @@ HANDLING THEM
 
     def handle_event("web_multiselect:deselect", %{"id" => "tags", "value" => value}, socket) do
       {:noreply, update(socket, :audit, &[{:removed, value} | &1])}
+    end
+
+    # server-owned creation (allow_add_new, no JS addNewCallback): persist, then
+    # push the updated options + selection back to the element
+    def handle_event("web_multiselect:add", %{"id" => "tags", "value" => text}, socket) do
+      tag = create_tag!(text)
+      opts = load_tags()
+      {:noreply,
+       Keenmate.WebMultiselect.push_update(socket, "tags", options: opts, value: [tag.value])}
     end
 
 ROUTING MULTIPLE WIDGETS

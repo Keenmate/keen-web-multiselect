@@ -1,10 +1,10 @@
-var Lo = Object.defineProperty;
-var gs = (s) => {
+var Ho = Object.defineProperty;
+var Ss = (s) => {
   throw TypeError(s);
 };
-var Eo = (s, e, t) => e in s ? Lo(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t;
-var m = (s, e, t) => Eo(s, typeof e != "symbol" ? e + "" : e, t), Rt = (s, e, t) => e.has(s) || gs("Cannot " + t);
-var p = (s, e, t) => (Rt(s, e, "read from private field"), t ? t.call(s) : e.get(s)), L = (s, e, t) => e.has(s) ? gs("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(s) : e.set(s, t), I = (s, e, t, o) => (Rt(s, e, "write to private field"), o ? o.call(s, t) : e.set(s, t), t), v = (s, e, t) => (Rt(s, e, "access private method"), t);
+var Fo = (s, e, t) => e in s ? Ho(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t;
+var m = (s, e, t) => Fo(s, typeof e != "symbol" ? e + "" : e, t), Ut = (s, e, t) => e.has(s) || Ss("Cannot " + t);
+var h = (s, e, t) => (Ut(s, e, "read from private field"), t ? t.call(s) : e.get(s)), L = (s, e, t) => e.has(s) ? Ss("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(s) : e.set(s, t), I = (s, e, t, o) => (Ut(s, e, "write to private field"), o ? o.call(s, t) : e.set(s, t), t), v = (s, e, t) => (Ut(s, e, "access private method"), t);
 function K(s, e = {}) {
   const t = new Set(s), o = e.shouldNullOnInvalid ? null : e.default ?? null;
   return {
@@ -20,7 +20,7 @@ function K(s, e = {}) {
     }
   };
 }
-function q(s = {}) {
+function X(s = {}) {
   const e = (o) => (s.min == null || o >= s.min) && (s.max == null || o <= s.max), t = s.default;
   return {
     fromAttribute(o) {
@@ -37,7 +37,7 @@ function q(s = {}) {
     }
   };
 }
-function D(s = {}) {
+function z(s = {}) {
   const e = s.isNullable === !0, t = s.default ?? (e ? null : ""), o = (i) => s.shouldTrim ? i.trim() : i;
   return {
     fromAttribute(i) {
@@ -54,11 +54,11 @@ function D(s = {}) {
     }
   };
 }
-const Ao = /* @__PURE__ */ new Set(["", "true", "1", "yes", "on"]), zo = /* @__PURE__ */ new Set(["false", "0", "no", "off"]);
-function R(s = "presence") {
+const Ko = /* @__PURE__ */ new Set(["", "true", "1", "yes", "on"]), Wo = /* @__PURE__ */ new Set(["false", "0", "no", "off"]);
+function H(s = "presence") {
   const e = (t) => {
     const o = t.trim().toLowerCase();
-    return Ao.has(o) ? !0 : zo.has(o) ? !1 : null;
+    return Ko.has(o) ? !0 : Wo.has(o) ? !1 : null;
   };
   return {
     fromAttribute(t) {
@@ -81,7 +81,7 @@ function R(s = "presence") {
     }
   };
 }
-function No(s = {}) {
+function jo(s = {}) {
   const e = s.default;
   return {
     fromAttribute(t) {
@@ -101,7 +101,7 @@ function No(s = {}) {
     }
   };
 }
-function Do(s = {}) {
+function Go(s = {}) {
   const e = s.default ?? [], t = (o) => Array.isArray(o) && (!s.validateItem || o.every(s.validateItem));
   return {
     fromAttribute(o) {
@@ -121,22 +121,22 @@ function Do(s = {}) {
     }
   };
 }
-function $o() {
+function Uo() {
   return {
     validate(s) {
       return s == null || typeof s == "function";
     }
   };
 }
-function Vo(s, e, t) {
+function qo(s, e, t) {
   const o = s.converter, i = o != null && o.fromAttribute ? o.fromAttribute(e, t, s.attribute ?? s.configKey) : e ?? s.default;
   return { configKey: s.configKey, field: s.field, value: i, on: s.on ?? "update" };
 }
-function Ro(s, e) {
+function Xo(s, e) {
   const t = s.converter;
   return t != null && t.validate && !t.validate(e) ? null : { configKey: s.configKey, field: s.field, value: e, on: s.on ?? "update" };
 }
-function Bo() {
+function Jo() {
   const s = /* @__PURE__ */ new Set();
   let e = !1;
   const t = () => {
@@ -164,7 +164,7 @@ function Bo() {
     }
   };
 }
-const Us = {
+const to = {
   pointer: "fine",
   hasCoarsePointer: !1,
   canHover: !0,
@@ -176,29 +176,29 @@ const Us = {
   os: "unknown",
   isApple: !1,
   isAndroid: !1
-}, Ho = { mobile: 640, tablet: 1024, desktop: 1 / 0 };
-let ft = Gs(Ho);
-const et = /* @__PURE__ */ new Set(), tt = /* @__PURE__ */ new Set();
-let Oe = null, xt = [], gt = !1;
-const bs = 30;
-let Le, bt = 0;
-function Gs(s) {
+}, Yo = { mobile: 640, tablet: 1024, desktop: 1 / 0 };
+let xt = so(Yo);
+const rt = /* @__PURE__ */ new Set(), nt = /* @__PURE__ */ new Set();
+let Oe = null, It = [], _t = !1;
+const Ts = 30;
+let Ae, kt = 0;
+function so(s) {
   return Object.entries(s).sort((e, t) => e[1] - t[1]);
 }
-function Fo(s) {
-  for (const [t, o] of ft)
+function Zo(s) {
+  for (const [t, o] of xt)
     if (s <= o)
       return t;
-  const e = ft[ft.length - 1];
+  const e = xt[xt.length - 1];
   return e ? e[0] : "desktop";
 }
-function ls() {
+function fs() {
   return typeof window < "u" && typeof window.matchMedia == "function";
 }
-function vs() {
+function Is() {
   return typeof navigator < "u" && (navigator.maxTouchPoints ?? 0) > 1;
 }
-function Ko() {
+function Qo() {
   var o;
   if (typeof navigator > "u")
     return "unknown";
@@ -209,219 +209,219 @@ function Ko() {
     if (e.includes("ios"))
       return "ios";
     if (e.includes("mac"))
-      return vs() ? "ios" : "macos";
+      return Is() ? "ios" : "macos";
     if (e.includes("windows"))
       return "windows";
     if (e.includes("linux"))
       return "linux";
   }
   const t = navigator.userAgent ?? "";
-  return /android/i.test(t) ? "android" : /iphone|ipod|ipad/i.test(t) ? "ios" : /macintosh|mac os x/i.test(t) ? vs() ? "ios" : "macos" : /windows/i.test(t) ? "windows" : /linux/i.test(t) ? "linux" : "unknown";
+  return /android/i.test(t) ? "android" : /iphone|ipod|ipad/i.test(t) ? "ios" : /macintosh|mac os x/i.test(t) ? Is() ? "ios" : "macos" : /windows/i.test(t) ? "windows" : /linux/i.test(t) ? "linux" : "unknown";
 }
-let Wo;
-function jo() {
-  return Wo ?? (Wo = Ko());
+let ei;
+function ti() {
+  return ei ?? (ei = Qo());
 }
-function je(s) {
-  return ls() && window.matchMedia(s).matches;
+function qe(s) {
+  return fs() && window.matchMedia(s).matches;
 }
-function cs() {
-  if (!ls())
-    return { ...Us };
-  const s = je("(any-pointer: coarse)"), e = je("(pointer: coarse)"), t = je("(pointer: fine)"), o = je("(hover: hover)"), i = e ? "coarse" : t ? "fine" : "none", r = window.innerWidth, n = window.innerHeight, a = jo();
+function gs() {
+  if (!fs())
+    return { ...to };
+  const s = qe("(any-pointer: coarse)"), e = qe("(pointer: coarse)"), t = qe("(pointer: fine)"), o = qe("(hover: hover)"), i = e ? "coarse" : t ? "fine" : "none", r = window.innerWidth, n = window.innerHeight, a = ti();
   return {
     pointer: i,
     hasCoarsePointer: s,
     canHover: o,
     isTouchPrimary: e && !o,
-    orientation: je("(orientation: portrait)") ? "portrait" : "landscape",
+    orientation: qe("(orientation: portrait)") ? "portrait" : "landscape",
     viewportWidth: r,
     viewportHeight: n,
-    breakpoint: Fo(r),
+    breakpoint: Zo(r),
     os: a,
     isApple: a === "ios" || a === "macos",
     isAndroid: a === "android"
   };
 }
-function Uo(s, e) {
+function si(s, e) {
   return s.pointer === e.pointer && s.hasCoarsePointer === e.hasCoarsePointer && s.canHover === e.canHover && s.isTouchPrimary === e.isTouchPrimary && s.orientation === e.orientation && s.breakpoint === e.breakpoint;
 }
-function Go(s, e) {
+function oi(s, e) {
   return s.viewportWidth === e.viewportWidth && s.viewportHeight === e.viewportHeight;
 }
-function _t() {
-  const s = cs(), e = Oe;
-  if (Oe = s, !e || !Uo(e, s))
-    for (const t of [...et])
+function Ot() {
+  const s = gs(), e = Oe;
+  if (Oe = s, !e || !si(e, s))
+    for (const t of [...rt])
       t(s);
-  tt.size > 0 && (!e || !Go(e, s)) && qo();
+  nt.size > 0 && (!e || !oi(e, s)) && ii();
 }
-function ys() {
+function Os() {
   const s = Oe;
   if (s)
-    for (const e of [...tt])
+    for (const e of [...nt])
       e(s);
 }
-function qo() {
-  if (Le !== void 0)
+function ii() {
+  if (Ae !== void 0)
     return;
-  const s = Date.now() - bt;
-  s >= bs ? (bt = Date.now(), ys()) : Le = setTimeout(() => {
-    Le = void 0, bt = Date.now(), ys();
-  }, bs - s);
+  const s = Date.now() - kt;
+  s >= Ts ? (kt = Date.now(), Os()) : Ae = setTimeout(() => {
+    Ae = void 0, kt = Date.now(), Os();
+  }, Ts - s);
 }
-const kt = () => _t(), qs = () => {
+const Pt = () => Ot(), oo = () => {
   if (typeof requestAnimationFrame == "function") {
-    if (gt)
+    if (_t)
       return;
-    gt = !0, requestAnimationFrame(() => {
-      gt = !1, _t();
+    _t = !0, requestAnimationFrame(() => {
+      _t = !1, Ot();
     });
   } else
-    _t();
+    Ot();
 };
-function Xo(s) {
-  typeof s.addEventListener == "function" ? s.addEventListener("change", kt) : typeof s.addListener == "function" && s.addListener(kt);
+function ri(s) {
+  typeof s.addEventListener == "function" ? s.addEventListener("change", Pt) : typeof s.addListener == "function" && s.addListener(Pt);
 }
-function Yo(s) {
-  typeof s.removeEventListener == "function" ? s.removeEventListener("change", kt) : typeof s.removeListener == "function" && s.removeListener(kt);
+function ni(s) {
+  typeof s.removeEventListener == "function" ? s.removeEventListener("change", Pt) : typeof s.removeListener == "function" && s.removeListener(Pt);
 }
-function Xs() {
-  if (!ls()) {
-    Oe = { ...Us };
+function io() {
+  if (!fs()) {
+    Oe = { ...to };
     return;
   }
-  xt = [
+  It = [
     window.matchMedia("(pointer: coarse)"),
     window.matchMedia("(pointer: fine)"),
     window.matchMedia("(any-pointer: coarse)"),
     window.matchMedia("(hover: hover)"),
     window.matchMedia("(orientation: portrait)")
   ];
-  for (const s of xt)
-    Xo(s);
-  typeof window.addEventListener == "function" && window.addEventListener("resize", qs), Oe = cs();
+  for (const s of It)
+    ri(s);
+  typeof window.addEventListener == "function" && window.addEventListener("resize", oo), Oe = gs();
 }
-function Ys() {
-  for (const s of xt)
-    Yo(s);
-  xt = [], typeof window < "u" && typeof window.removeEventListener == "function" && window.removeEventListener("resize", qs), gt = !1, Le !== void 0 && (clearTimeout(Le), Le = void 0), bt = 0, Oe = null;
+function ro() {
+  for (const s of It)
+    ni(s);
+  It = [], typeof window < "u" && typeof window.removeEventListener == "function" && window.removeEventListener("resize", oo), _t = !1, Ae !== void 0 && (clearTimeout(Ae), Ae = void 0), kt = 0, Oe = null;
 }
-function Ct() {
-  return et.size + tt.size;
+function Mt() {
+  return rt.size + nt.size;
 }
-function St() {
-  return Oe ?? cs();
+function Lt() {
+  return Oe ?? gs();
 }
-function Jo(s, e = {}) {
-  const t = Ct() === 0;
-  et.add(s), t && Xs(), e.immediate !== !1 && s(St());
+function ai(s, e = {}) {
+  const t = Mt() === 0;
+  rt.add(s), t && io(), e.immediate !== !1 && s(Lt());
   let o = !0;
   return () => {
-    o && (o = !1, et.delete(s), Ct() === 0 && Ys());
+    o && (o = !1, rt.delete(s), Mt() === 0 && ro());
   };
 }
-function Qo(s, e = {}) {
-  const t = Ct() === 0;
-  tt.add(s), t && Xs(), e.immediate !== !1 && s(St());
+function li(s, e = {}) {
+  const t = Mt() === 0;
+  nt.add(s), t && io(), e.immediate !== !1 && s(Lt());
   let o = !0;
   return () => {
-    o && (o = !1, tt.delete(s), Ct() === 0 && Ys());
+    o && (o = !1, nt.delete(s), Mt() === 0 && ro());
   };
 }
-function cn(s) {
-  ft = Gs(s), et.size > 0 && _t();
+function Sn(s) {
+  xt = so(s), rt.size > 0 && Ot();
 }
-const Zo = 600;
-function ei(s) {
-  return s.isTouchPrimary ? Math.min(s.viewportWidth, s.viewportHeight) < Zo ? "mobile" : "tablet" : "desktop";
+const ci = 600;
+function di(s) {
+  return s.isTouchPrimary ? Math.min(s.viewportWidth, s.viewportHeight) < ci ? "mobile" : "tablet" : "desktop";
 }
-const ti = 30;
-let se = null;
-const Xe = /* @__PURE__ */ new WeakMap();
-let Bt = 0;
-function si() {
+const hi = 30;
+let oe = null;
+const et = /* @__PURE__ */ new WeakMap();
+let qt = 0;
+function ui() {
   return typeof ResizeObserver < "u";
 }
-function Js(s) {
+function no(s) {
   if (typeof s.getBoundingClientRect != "function")
     return { width: 0, height: 0 };
   const e = s.getBoundingClientRect();
   return { width: e.width, height: e.height };
 }
-function oi(s, e) {
+function mi(s, e) {
   return !!s && s.width === e.width && s.height === e.height;
 }
-function ii(s, e) {
-  if (oi(s.lastFired, e) || (s.pendingSize = e, s.timer !== void 0))
+function pi(s, e) {
+  if (mi(s.lastFired, e) || (s.pendingSize = e, s.timer !== void 0))
     return;
   const t = Date.now() - s.lastNotify;
-  t >= s.throttleMs ? (s.lastNotify = Date.now(), ws(s)) : s.timer = setTimeout(() => {
-    s.timer = void 0, s.lastNotify = Date.now(), ws(s);
+  t >= s.throttleMs ? (s.lastNotify = Date.now(), Ps(s)) : s.timer = setTimeout(() => {
+    s.timer = void 0, s.lastNotify = Date.now(), Ps(s);
   }, s.throttleMs - t);
 }
-function ws(s) {
+function Ps(s) {
   const e = s.pendingSize;
   e && (s.lastFired = e, s.cb(e, s.el));
 }
-function ri(s) {
+function fi(s) {
   for (const e of s) {
-    const t = Xe.get(e.target);
+    const t = et.get(e.target);
     if (!t)
       continue;
-    const o = Js(e.target);
+    const o = no(e.target);
     for (const i of [...t])
-      ii(i, o);
+      pi(i, o);
   }
 }
-function ni() {
-  return si() ? (se || (se = new ResizeObserver(ri)), se) : null;
+function gi() {
+  return ui() ? (oe || (oe = new ResizeObserver(fi)), oe) : null;
 }
-function ai(s, e, t = {}) {
+function bi(s, e, t = {}) {
   const o = {
     el: s,
     cb: e,
-    throttleMs: t.throttleMs ?? ti,
+    throttleMs: t.throttleMs ?? hi,
     lastNotify: 0
   };
   if (t.immediate !== !1) {
-    const n = Js(s);
+    const n = no(s);
     o.lastFired = n, o.lastNotify = Date.now(), e(n, s);
   }
-  const i = ni();
+  const i = gi();
   if (i) {
-    let n = Xe.get(s);
-    n || (Xe.set(s, n = /* @__PURE__ */ new Set()), Bt++, i.observe(s)), n.add(o);
+    let n = et.get(s);
+    n || (et.set(s, n = /* @__PURE__ */ new Set()), qt++, i.observe(s)), n.add(o);
   }
   let r = !0;
   return () => {
     if (!r)
       return;
     r = !1, o.timer !== void 0 && (clearTimeout(o.timer), o.timer = void 0);
-    const n = Xe.get(s);
-    n && (n.delete(o), n.size === 0 && (Xe.delete(s), se == null || se.unobserve(s), Bt--, Bt === 0 && se && (se.disconnect(), se = null)));
+    const n = et.get(s);
+    n && (n.delete(o), n.size === 0 && (et.delete(s), oe == null || oe.unobserve(s), qt--, qt === 0 && oe && (oe.disconnect(), oe = null)));
   };
 }
-const Tt = /* @__PURE__ */ new Map();
-function li(s, e) {
-  let t = Tt.get(s);
-  t || Tt.set(s, t = /* @__PURE__ */ new Set()), t.add(e);
+const Et = /* @__PURE__ */ new Map();
+function vi(s, e) {
+  let t = Et.get(s);
+  t || Et.set(s, t = /* @__PURE__ */ new Set()), t.add(e);
 }
-function ci(s, e) {
+function wi(s, e) {
   var t;
-  (t = Tt.get(s)) == null || t.delete(e);
+  (t = Et.get(s)) == null || t.delete(e);
 }
-function di(s) {
-  return Array.from(Tt.get(s) ?? []);
+function yi(s) {
+  return Array.from(Et.get(s) ?? []);
 }
-const Qs = /* @__PURE__ */ new Map();
-function hi(s, e) {
-  Qs.set(s.toLowerCase(), e);
+const ao = /* @__PURE__ */ new Map();
+function xi(s, e) {
+  ao.set(s.toLowerCase(), e);
 }
-function ui(s) {
-  return Qs.get(s.toLowerCase());
+function _i(s) {
+  return ao.get(s.toLowerCase());
 }
-function mi(s, e, t, o = {}) {
+function ki(s, e, t, o = {}) {
   return s.dispatchEvent(new CustomEvent(e, {
     detail: t,
     bubbles: o.bubbles ?? !0,
@@ -429,44 +429,44 @@ function mi(s, e, t, o = {}) {
     cancelable: o.cancelable ?? !1
   }));
 }
-function pi(s) {
+function Ci(s) {
   return s.split(/[-_]/).filter(Boolean).map((e) => e[0].toUpperCase() + e.slice(1)).join("");
 }
-function fi(s) {
-  return `on${pi(s)}`;
+function Si(s) {
+  return `on${Ci(s)}`;
 }
-function gi(s) {
+function Ti(s) {
   return s ? s.map((e) => {
-    const t = typeof e == "string" ? { name: e } : e, o = t.property === !1 ? null : t.property ?? fi(t.name);
+    const t = typeof e == "string" ? { name: e } : e, o = t.property === !1 ? null : t.property ?? Si(t.name);
     return { name: t.name, property: o, bubbles: t.bubbles, composed: t.composed, cancelable: t.cancelable };
   }) : [];
 }
-const bi = typeof HTMLElement < "u" ? HTMLElement : class {
-}, xs = /* @__PURE__ */ new WeakSet();
-let vi = 0;
-const yi = { trace() {
+const Ii = typeof HTMLElement < "u" ? HTMLElement : class {
+}, Ms = /* @__PURE__ */ new WeakSet();
+let Oi = 0;
+const Pi = { trace() {
 }, debug() {
 }, info() {
 }, warn() {
 }, error() {
-} }, wi = new Proxy({}, { get: () => yi });
-var ue, it, xe, rt, _e, nt, Et, ke, me, Ce, Se, Ae, ze, Ne, De, $e, Ve, At, oe, Re, T, Zs, eo, to, J, so, oo, Gt, qt, Ye, Xt, io;
-const we = class we extends bi {
+} }, Mi = new Proxy({}, { get: () => Pi });
+var me, ct, _e, dt, ke, ht, Bt, Ce, pe, Se, Te, Ne, $e, Ve, De, Re, Be, Ht, ie, He, O, lo, co, ho, Z, uo, mo, es, ts, tt, ss, po;
+const xe = class xe extends Ii {
   constructor() {
     super();
-    L(this, T);
-    L(this, ue, {});
-    L(this, it, /* @__PURE__ */ new Map());
-    L(this, xe, /* @__PURE__ */ new Map());
-    L(this, rt, /* @__PURE__ */ new Map());
-    /** Live handler currently bound via each managed `on<Name>` property, keyed by event name. */
+    L(this, O);
+    L(this, me, {});
+    L(this, ct, /* @__PURE__ */ new Map());
     L(this, _e, /* @__PURE__ */ new Map());
-    L(this, nt, Bo());
-    L(this, Et, () => v(this, T, Xt).call(this));
-    L(this, ke, null);
-    L(this, me, !1);
-    L(this, Ce, []);
-    L(this, Se, !1);
+    L(this, dt, /* @__PURE__ */ new Map());
+    /** Live handler currently bound via each managed `on<Name>` property, keyed by event name. */
+    L(this, ke, /* @__PURE__ */ new Map());
+    L(this, ht, Jo());
+    L(this, Bt, () => v(this, O, ss).call(this));
+    L(this, Ce, null);
+    L(this, pe, !1);
+    L(this, Se, []);
+    L(this, Te, !1);
     /**
      * configKeys that carried a value assigned BEFORE the element was upgraded
      * (`el.foo = …` before its class was defined). The browser fires the initial
@@ -476,25 +476,25 @@ const we = class we extends bi {
      * guarantee); post-connect attribute changes react normally. Cleared on first
      * connect.
      */
-    L(this, Ae, null);
-    L(this, ze, !1);
+    L(this, Ne, null);
+    L(this, $e, !1);
     /** Unsubscribe from the environment observable; set only while connected AND `environmentChanged` is overridden. */
-    L(this, Ne);
+    L(this, Ve);
     /** Unsubscribe from the throttled viewport observable; set only while connected AND `viewportChanged` is overridden. */
     L(this, De);
     /** Unsubscribe from the per-element ResizeObserver; set only while connected AND `resized` is overridden. */
-    L(this, $e);
-    L(this, Ve);
-    L(this, At);
-    L(this, oe);
     L(this, Re);
-    const t = this.constructor, o = t.inputs ?? [], i = gi(t.events);
-    v(this, T, to).call(this, o, i);
+    L(this, Be);
+    L(this, Ht);
+    L(this, ie);
+    L(this, He);
+    const t = this.constructor, o = t.inputs ?? [], i = Ti(t.events);
+    v(this, O, ho).call(this, o, i);
     for (const r of o)
-      p(this, it).set(r.configKey, r), r.attribute && p(this, xe).set(r.attribute, r);
+      h(this, ct).set(r.configKey, r), r.attribute && h(this, _e).set(r.attribute, r);
     for (const r of i)
-      p(this, rt).set(r.name, r);
-    v(this, T, Zs).call(this, o), v(this, T, so).call(this, o), v(this, T, oo).call(this, i);
+      h(this, dt).set(r.name, r);
+    v(this, O, lo).call(this, o), v(this, O, uo).call(this, o), v(this, O, mo).call(this, i);
   }
   static get observedAttributes() {
     const t = (this.inputs ?? []).filter((o) => o.attribute).map((o) => o.attribute);
@@ -503,42 +503,42 @@ const we = class we extends bi {
   // ── lifecycle ──────────────────────────────────────────────────────────
   attributeChangedCallback(t, o, i) {
     var a;
-    if (p(this, ze))
+    if (h(this, $e))
       return;
-    if (t === "dir" && !p(this, xe).has("dir")) {
-      p(this, Se) && this.directionChanged(this.isRTL);
+    if (t === "dir" && !h(this, _e).has("dir")) {
+      h(this, Te) && this.directionChanged(this.isRTL);
       return;
     }
-    const r = p(this, xe).get(t);
-    if (!r || !p(this, Se) && ((a = p(this, Ae)) != null && a.has(r.configKey)))
+    const r = h(this, _e).get(t);
+    if (!r || !h(this, Te) && ((a = h(this, Ne)) != null && a.has(r.configKey)))
       return;
     let n;
     try {
-      n = Vo(r, i, this);
+      n = qo(r, i, this);
     } catch (l) {
-      v(this, T, J).call(this, `converter for "${r.configKey}" threw parsing attribute ${t}="${i}"; using default`, l), n = v(this, T, eo).call(this, r);
+      v(this, O, Z).call(this, `converter for "${r.configKey}" threw parsing attribute ${t}="${i}"; using default`, l), n = v(this, O, co).call(this, r);
     }
-    v(this, T, qt).call(this, n);
+    v(this, O, ts).call(this, n);
   }
   connectedCallback() {
-    li(this.localName, this), p(this, Se) || (I(this, Se, !0), I(this, Ae, null), I(this, me, !0)), v(this, T, Ye).call(this), this.connect(), this.environmentChanged !== we.prototype.environmentChanged && I(this, Ne, Jo((t) => this.environmentChanged(t))), this.viewportChanged !== we.prototype.viewportChanged && I(this, De, Qo((t) => this.viewportChanged(t))), this.resized !== we.prototype.resized && I(this, $e, ai(this, (t) => this.resized(t), { immediate: !1 }));
+    vi(this.localName, this), h(this, Te) || (I(this, Te, !0), I(this, Ne, null), I(this, pe, !0)), v(this, O, tt).call(this), this.connect(), this.environmentChanged !== xe.prototype.environmentChanged && I(this, Ve, ai((t) => this.environmentChanged(t))), this.viewportChanged !== xe.prototype.viewportChanged && I(this, De, li((t) => this.viewportChanged(t))), this.resized !== xe.prototype.resized && I(this, Re, bi(this, (t) => this.resized(t), { immediate: !1 }));
   }
   disconnectedCallback() {
     var t, o, i;
-    ci(this.localName, this), (t = p(this, Ne)) == null || t.call(this), I(this, Ne, void 0), (o = p(this, De)) == null || o.call(this), I(this, De, void 0), (i = p(this, $e)) == null || i.call(this), I(this, $e, void 0), this.disconnect();
+    wi(this.localName, this), (t = h(this, Ve)) == null || t.call(this), I(this, Ve, void 0), (o = h(this, De)) == null || o.call(this), I(this, De, void 0), (i = h(this, Re)) == null || i.call(this), I(this, Re, void 0), this.disconnect();
   }
   // ── public batching API ─────────────────────────────────────────────────
   /** Apply many inputs (by `configKey` or attribute name) as ONE reinit/update. */
   setAttributes(t) {
     for (const [o, i] of Object.entries(t)) {
-      const r = p(this, it).get(o) ?? p(this, xe).get(o);
-      r && v(this, T, Gt).call(this, r, i);
+      const r = h(this, ct).get(o) ?? h(this, _e).get(o);
+      r && v(this, O, es).call(this, r, i);
     }
-    v(this, T, Ye).call(this);
+    v(this, O, tt).call(this);
   }
   /** Run `fn` and coalesce every input change it makes into a single reinit/update. */
   batch(t) {
-    t(), v(this, T, Ye).call(this);
+    t(), v(this, O, tt).call(this);
   }
   /**
    * Apply any pending input writes **synchronously, now** — running the
@@ -554,7 +554,7 @@ const we = class we extends bi {
    * `await whenSettled()` between the two.
    */
   flush() {
-    v(this, T, Ye).call(this);
+    v(this, O, tt).call(this);
   }
   /**
    * Resolves once the element is **settled** — i.e. every staged input change
@@ -572,12 +572,12 @@ const we = class we extends bi {
    * flush — not before the change is actually applied.
    */
   whenSettled() {
-    return !p(this, ke) && !p(this, me) ? Promise.resolve() : new Promise((t) => p(this, Ce).push(t));
+    return !h(this, Ce) && !h(this, pe) ? Promise.resolve() : new Promise((t) => h(this, Se).push(t));
   }
   // ── subclass surface ─────────────────────────────────────────────────────
   /** The current validated config. */
   get config() {
-    return p(this, ue);
+    return h(this, me);
   }
   /**
    * Instance-scoped loggers, one per category of the bundle this component
@@ -590,13 +590,13 @@ const we = class we extends bi {
    * loggers inside a component.
    */
   get log() {
-    if (p(this, Re))
-      return p(this, Re);
-    const t = ui(this.localName);
+    if (h(this, He))
+      return h(this, He);
+    const t = _i(this.localName);
     if (!t)
-      return wi;
-    const o = p(this, At) ?? I(this, At, `${this.localName}#${this.id || ++vi}`);
-    return I(this, Re, t.forInstance(o, () => p(this, oe)));
+      return Mi;
+    const o = h(this, Ht) ?? I(this, Ht, `${this.localName}#${this.id || ++Oi}`);
+    return I(this, He, t.forInstance(o, () => h(this, ie)));
   }
   /**
    * Turn on verbose logging for THIS element only (default `debug`), independent
@@ -604,15 +604,15 @@ const we = class we extends bi {
    * picks one instance. Pairs with {@link disableLogging}.
    */
   enableLogging(t = "debug") {
-    I(this, oe, t);
+    I(this, ie, t);
   }
   /** Clear this element's logging override (falls back to the type-level level). */
   disableLogging() {
-    I(this, oe, void 0);
+    I(this, ie, void 0);
   }
   /** Whether this element has an active logging override (not unset/`silent`). */
   get isLoggingEnabled() {
-    return p(this, oe) != null && p(this, oe) !== "silent" && p(this, oe) !== 5;
+    return h(this, ie) != null && h(this, ie) !== "silent" && h(this, ie) !== 5;
   }
   /**
    * Full rebuild: called when a batch changes any `on: 'reinit'` input, and on
@@ -727,12 +727,12 @@ const we = class we extends bi {
    * instead (e.g. `this.internals?.setFormValue(value)`).
    */
   get internals() {
-    if (p(this, Ve))
-      return p(this, Ve);
+    if (h(this, Be))
+      return h(this, Be);
     if (typeof this.attachInternals != "function")
       return null;
     try {
-      return I(this, Ve, this.attachInternals());
+      return I(this, Be, this.attachInternals());
     } catch {
       return null;
     }
@@ -762,8 +762,8 @@ const we = class we extends bi {
    * `emit` does not call it separately.
    */
   emit(t, o, i) {
-    const r = p(this, rt).get(t);
-    return mi(this, t, o, {
+    const r = h(this, dt).get(t);
+    return ki(this, t, o, {
       bubbles: (i == null ? void 0 : i.bubbles) ?? (r == null ? void 0 : r.bubbles),
       composed: (i == null ? void 0 : i.composed) ?? (r == null ? void 0 : r.composed),
       cancelable: (i == null ? void 0 : i.cancelable) ?? (r == null ? void 0 : r.cancelable)
@@ -789,7 +789,7 @@ const we = class we extends bi {
    * lives here once.
    */
   async runHook(t, o, i) {
-    const r = p(this, ue)[t];
+    const r = h(this, me)[t];
     if (typeof r != "function")
       return i.whenUnset;
     try {
@@ -801,8 +801,8 @@ const we = class we extends bi {
     }
   }
 };
-ue = new WeakMap(), it = new WeakMap(), xe = new WeakMap(), rt = new WeakMap(), _e = new WeakMap(), nt = new WeakMap(), Et = new WeakMap(), ke = new WeakMap(), me = new WeakMap(), Ce = new WeakMap(), Se = new WeakMap(), Ae = new WeakMap(), ze = new WeakMap(), Ne = new WeakMap(), De = new WeakMap(), $e = new WeakMap(), Ve = new WeakMap(), At = new WeakMap(), oe = new WeakMap(), Re = new WeakMap(), T = new WeakSet(), // ── internals ─────────────────────────────────────────────────────────────
-Zs = function(t) {
+me = new WeakMap(), ct = new WeakMap(), _e = new WeakMap(), dt = new WeakMap(), ke = new WeakMap(), ht = new WeakMap(), Bt = new WeakMap(), Ce = new WeakMap(), pe = new WeakMap(), Se = new WeakMap(), Te = new WeakMap(), Ne = new WeakMap(), $e = new WeakMap(), Ve = new WeakMap(), De = new WeakMap(), Re = new WeakMap(), Be = new WeakMap(), Ht = new WeakMap(), ie = new WeakMap(), He = new WeakMap(), O = new WeakSet(), // ── internals ─────────────────────────────────────────────────────────────
+lo = function(t) {
   var o;
   for (const i of t) {
     let r = i.default;
@@ -810,48 +810,48 @@ Zs = function(t) {
       try {
         r = i.converter.fromAttribute(null, this, i.attribute ?? i.configKey);
       } catch (n) {
-        v(this, T, J).call(this, `converter for "${i.configKey}" threw computing its default; using \`default\``, n), r = i.default;
+        v(this, O, Z).call(this, `converter for "${i.configKey}" threw computing its default; using \`default\``, n), r = i.default;
       }
-    p(this, ue)[i.configKey] = r, i.field && (this[i.field] = r);
+    h(this, me)[i.configKey] = r, i.field && (this[i.field] = r);
   }
-}, eo = function(t) {
+}, co = function(t) {
   return { configKey: t.configKey, field: t.field, value: t.default, on: t.on ?? "update" };
 }, /** Sanity-check the input + event tables once per class; warn (never throw) on mistakes. */
-to = function(t, o) {
+ho = function(t, o) {
   var l;
   const i = this.constructor;
-  if (xs.has(i))
+  if (Ms.has(i))
     return;
-  xs.add(i);
+  Ms.add(i);
   const r = /* @__PURE__ */ new Set(), n = /* @__PURE__ */ new Set();
   for (const c of t)
-    r.has(c.configKey) && v(this, T, J).call(this, `invalid input table: duplicate configKey "${c.configKey}"`), r.add(c.configKey), c.attribute && (n.has(c.attribute) && v(this, T, J).call(this, `invalid input table: duplicate attribute "${c.attribute}"`), n.add(c.attribute)), c.reflect && !c.attribute && v(this, T, J).call(this, `invalid input table: "${c.configKey}" has reflect:true but no attribute to reflect to`), c.reflect && !((l = c.converter) != null && l.toAttribute) && v(this, T, J).call(this, `invalid input table: "${c.configKey}" has reflect:true but its converter has no toAttribute`);
+    r.has(c.configKey) && v(this, O, Z).call(this, `invalid input table: duplicate configKey "${c.configKey}"`), r.add(c.configKey), c.attribute && (n.has(c.attribute) && v(this, O, Z).call(this, `invalid input table: duplicate attribute "${c.attribute}"`), n.add(c.attribute)), c.reflect && !c.attribute && v(this, O, Z).call(this, `invalid input table: "${c.configKey}" has reflect:true but no attribute to reflect to`), c.reflect && !((l = c.converter) != null && l.toAttribute) && v(this, O, Z).call(this, `invalid input table: "${c.configKey}" has reflect:true but its converter has no toAttribute`);
   const a = /* @__PURE__ */ new Set();
   for (const c of o)
-    a.has(c.name) && v(this, T, J).call(this, `invalid event table: duplicate event "${c.name}"`), a.add(c.name), /^[a-z][a-z0-9-]*$/.test(c.name) || v(this, T, J).call(this, `invalid event table: event "${c.name}" should be lowercase kebab-case (e.g. "date-select")`), c.property && r.has(c.property) && v(this, T, J).call(this, `invalid event table: event "${c.name}" property "${c.property}" collides with an input configKey`);
+    a.has(c.name) && v(this, O, Z).call(this, `invalid event table: duplicate event "${c.name}"`), a.add(c.name), /^[a-z][a-z0-9-]*$/.test(c.name) || v(this, O, Z).call(this, `invalid event table: event "${c.name}" should be lowercase kebab-case (e.g. "date-select")`), c.property && r.has(c.property) && v(this, O, Z).call(this, `invalid event table: event "${c.name}" property "${c.property}" collides with an input configKey`);
 }, /**
  * Always-on console warning for input validation failures. Deliberately uses
  * `console.warn` directly — NOT the (future) categorized logger — so rejected
  * inputs surface even when logging is disabled.
  */
-J = function(t, ...o) {
+Z = function(t, ...o) {
   console.warn(`[BlissElement] <${this.localName ?? "unknown"}> ${t}`, ...o);
-}, so = function(t) {
+}, uo = function(t) {
   for (const o of t) {
     const i = o.configKey, r = Object.prototype.hasOwnProperty.call(this, i), n = r ? this[i] : void 0;
     r && delete this[i], Object.defineProperty(this, i, {
       configurable: !0,
       enumerable: !0,
-      get: () => p(this, ue)[i],
-      set: (a) => v(this, T, Gt).call(this, o, a)
-    }), r && ((p(this, Ae) ?? I(this, Ae, /* @__PURE__ */ new Set())).add(i), this[i] = n);
+      get: () => h(this, me)[i],
+      set: (a) => v(this, O, es).call(this, o, a)
+    }), r && ((h(this, Ne) ?? I(this, Ne, /* @__PURE__ */ new Set())).add(i), this[i] = n);
   }
 }, /**
  * Install a managed `on<Name>` handler property per event. Assigning it
  * (de)registers a real listener for the event, so the property behaves like
  * `addEventListener(name, …)` and its handler receives the `CustomEvent`.
  */
-oo = function(t) {
+mo = function(t) {
   for (const o of t) {
     const i = o.property;
     if (!i)
@@ -860,63 +860,63 @@ oo = function(t) {
     n && delete this[i], Object.defineProperty(this, i, {
       configurable: !0,
       enumerable: !0,
-      get: () => p(this, _e).get(r) ?? null,
+      get: () => h(this, ke).get(r) ?? null,
       set: (l) => {
-        const c = p(this, _e).get(r);
+        const c = h(this, ke).get(r);
         if (c && this.removeEventListener(r, c), typeof l == "function") {
           const d = l;
-          p(this, _e).set(r, d), this.addEventListener(r, d);
+          h(this, ke).set(r, d), this.addEventListener(r, d);
         } else
-          p(this, _e).delete(r);
+          h(this, ke).delete(r);
       }
     }), n && (this[i] = a);
   }
-}, Gt = function(t, o) {
+}, es = function(t, o) {
   var r;
-  const i = Ro(t, o);
+  const i = Xo(t, o);
   if (!i) {
-    v(this, T, J).call(this, `rejected invalid value for property "${t.configKey}"; keeping previous value`, o);
+    v(this, O, Z).call(this, `rejected invalid value for property "${t.configKey}"; keeping previous value`, o);
     return;
   }
-  if (v(this, T, qt).call(this, i), t.reflect && t.attribute && ((r = t.converter) != null && r.toAttribute)) {
+  if (v(this, O, ts).call(this, i), t.reflect && t.attribute && ((r = t.converter) != null && r.toAttribute)) {
     const n = t.converter.toAttribute(i.value);
-    I(this, ze, !0);
+    I(this, $e, !0);
     try {
       n === null ? this.removeAttribute(t.attribute) : this.setAttribute(t.attribute, n);
     } finally {
-      I(this, ze, !1);
+      I(this, $e, !1);
     }
   }
-}, qt = function(t) {
-  p(this, ue)[t.configKey] = t.value, t.field && (this[t.field] = t.value), t.on !== "none" && (t.on === "reinit" && I(this, me, !0), (p(this, ke) ?? I(this, ke, {}))[t.configKey] = t.value, p(this, nt).schedule(p(this, Et)));
+}, ts = function(t) {
+  h(this, me)[t.configKey] = t.value, t.field && (this[t.field] = t.value), t.on !== "none" && (t.on === "reinit" && I(this, pe, !0), (h(this, Ce) ?? I(this, Ce, {}))[t.configKey] = t.value, h(this, ht).schedule(h(this, Bt)));
 }, /** Cancel any queued microtask and flush pending changes synchronously now. */
-Ye = function() {
-  p(this, nt).cancel(), v(this, T, Xt).call(this);
-}, Xt = function() {
+tt = function() {
+  h(this, ht).cancel(), v(this, O, ss).call(this);
+}, ss = function() {
   if (!this.isConnected)
     return;
-  const t = p(this, me), o = p(this, ke);
-  I(this, me, !1), I(this, ke, null), t ? this.reinit() : o && Object.keys(o).length > 0 && this.update(o), v(this, T, io).call(this);
+  const t = h(this, pe), o = h(this, Ce);
+  I(this, pe, !1), I(this, Ce, null), t ? this.reinit() : o && Object.keys(o).length > 0 && this.update(o), v(this, O, po).call(this);
 }, /** Resolve everyone awaiting {@link whenSettled} for the flush that just ran. */
-io = function() {
-  if (p(this, Ce).length === 0)
+po = function() {
+  if (h(this, Se).length === 0)
     return;
-  const t = p(this, Ce);
-  I(this, Ce, []);
+  const t = h(this, Se);
+  I(this, Se, []);
   for (const o of t)
     o();
 }, /** The opt-in input table. Subclasses set this to enable attribute/property reactivity. */
-m(we, "inputs"), /**
+m(xe, "inputs"), /**
  * The opt-in event table (SPEC §12.5). Each entry (a bare name, or an
  * {@link EventDef} for overrides) declares an outward notification that
  * {@link emit} can fire and installs a managed `on<Name>` handler property.
  */
-m(we, "events");
-let Ut = we;
-function _s(s, e, t) {
+m(xe, "events");
+let Qt = xe;
+function Ls(s, e, t) {
   typeof customElements > "u" || customElements.get(s) || customElements.define(s, e, t);
 }
-function xi(s) {
+function Li(s) {
   return {
     enableLogging: (e) => s.enableLogging(e),
     disableLogging: () => s.disableLogging(),
@@ -925,45 +925,45 @@ function xi(s) {
     getCategories: () => [...s.LOGGING_CATEGORIES]
   };
 }
-function _i(s, e, t) {
+function Ei(s, e, t) {
   const { config: o, logging: i, shouldAutoDefine: r = !0 } = t;
-  i && hi(s, i);
+  i && xi(s, i);
   const n = {
     version: () => o.version,
     config: o,
-    ...i ? { logging: xi(i) } : {},
-    register: () => _s(s, e),
-    getInstances: () => di(s)
+    ...i ? { logging: Li(i) } : {},
+    register: () => Ls(s, e),
+    getInstances: () => yi(s)
   };
-  return typeof window < "u" && ((window.components ?? (window.components = {}))[s] = n), r && _s(s, e), n;
+  return typeof window < "u" && ((window.components ?? (window.components = {}))[s] = n), r && Ls(s, e), n;
 }
-const ks = /* @__PURE__ */ new Map(), Cs = /* @__PURE__ */ new WeakMap();
-let dt;
-function ki(s) {
+const Es = /* @__PURE__ */ new Map(), As = /* @__PURE__ */ new WeakMap();
+let gt;
+function Ai(s) {
   if (typeof CSSStyleSheet > "u" || !("adoptedStyleSheets" in s))
     return !1;
-  if (dt === void 0)
+  if (gt === void 0)
     try {
-      new CSSStyleSheet().replaceSync(""), dt = !0;
+      new CSSStyleSheet().replaceSync(""), gt = !0;
     } catch {
-      dt = !1;
+      gt = !1;
     }
-  return dt;
+  return gt;
 }
-function Ci(s, ...e) {
+function zi(s, ...e) {
   if (typeof document > "u")
     return;
-  let t = Cs.get(s);
-  t || Cs.set(s, t = /* @__PURE__ */ new Set());
+  let t = As.get(s);
+  t || As.set(s, t = /* @__PURE__ */ new Set());
   const o = e.filter((r) => r && !t.has(r));
   if (o.length === 0)
     return;
   for (const r of o)
     t.add(r);
-  if (ki(s)) {
+  if (Ai(s)) {
     const r = o.map((n) => {
-      let a = ks.get(n);
-      return a || (a = new CSSStyleSheet(), a.replaceSync(n), ks.set(n, a)), a;
+      let a = Es.get(n);
+      return a || (a = new CSSStyleSheet(), a.replaceSync(n), Es.set(n, a)), a;
     });
     s.adoptedStyleSheets = [...s.adoptedStyleSheets, ...r];
     return;
@@ -974,7 +974,7 @@ function Ci(s, ...e) {
     n.textContent = r, i.appendChild(n);
   }
 }
-function Si(s, e = {}) {
+function Ni(s, e = {}) {
   const t = e.position ?? "last", o = s.head ?? s;
   let i = null;
   const r = () => typeof document > "u" ? null : (i || (i = document.createElement("style"), e.className && (i.className = e.className)), i.parentNode !== o && (t === "first" && o.firstChild ? o.insertBefore(i, o.firstChild) : o.appendChild(i)), i), n = () => {
@@ -995,65 +995,65 @@ function Si(s, e = {}) {
     }
   };
 }
-function ro(s) {
+function fo(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-function Ti(s, e) {
-  const t = /* @__PURE__ */ new Set(), o = new RegExp(`var\\(\\s*(${ro(e)}[a-z0-9-]+)`, "gi");
+function $i(s, e) {
+  const t = /* @__PURE__ */ new Set(), o = new RegExp(`var\\(\\s*(${fo(e)}[a-z0-9-]+)`, "gi");
   let i;
   for (; i = o.exec(s); )
     i[1] && t.add(i[1]);
   return t;
 }
-function Oi(s, e) {
-  const t = /* @__PURE__ */ new Set(), o = new RegExp(`(${ro(e)}[a-z0-9-]+)\\s*:`, "gi");
+function Vi(s, e) {
+  const t = /* @__PURE__ */ new Set(), o = new RegExp(`(${fo(e)}[a-z0-9-]+)\\s*:`, "gi");
   let i;
   for (; i = o.exec(s); )
     i[1] && t.add(i[1]);
   return [...t];
 }
-function Ii(s, e, t = {}) {
+function Di(s, e, t = {}) {
   const o = t.minScore ?? 3, i = t.limit ?? 3, r = new Set(s.split("-").filter(Boolean));
   return [...e].map((n) => ({ k: n, score: n.split("-").filter((a) => r.has(a)).length })).filter((n) => n.score >= o).sort((n, a) => a.score - n.score).slice(0, i).map((n) => n.k);
 }
-function Pi(s, e) {
+function Ri(s, e) {
   if (e.consumed.size === 0)
     return [];
   const t = [];
-  for (const o of Oi(s, e.prefix))
-    e.consumed.has(o) || t.push({ name: o, suggestions: Ii(o, e.consumed, { minScore: e.minScore }) });
+  for (const o of Vi(s, e.prefix))
+    e.consumed.has(o) || t.push({ name: o, suggestions: Di(o, e.consumed, { minScore: e.minScore }) });
   return t;
 }
-const Mi = {
+const Bi = {
   mobile: "fullscreen",
   tablet: "floating",
   desktop: "floating"
 };
-function Li(s, e, t = {}) {
+function Hi(s, e, t = {}) {
   if (s !== "auto")
     return s;
-  const o = ei(e);
-  return t[o] ?? Mi[o];
+  const o = di(e);
+  return t[o] ?? Bi[o];
 }
-function Ht(s) {
+function Xe(s) {
   return {
     presentation: s,
     isFullscreen: s === "fullscreen",
     isModal: s === "modal"
   };
 }
-let Ue = 0, ht = null;
-function Ei() {
+let Je = 0, bt = null;
+function Fi() {
   if (typeof document > "u")
     return () => {
     };
-  Ue === 0 && (ht = document.body.style.overflow, document.body.style.overflow = "hidden"), Ue++;
+  Je === 0 && (bt = document.body.style.overflow, document.body.style.overflow = "hidden"), Je++;
   let s = !1;
   return () => {
-    s || (s = !0, Ue = Math.max(0, Ue - 1), Ue === 0 && ht !== null && (document.body.style.overflow = ht, ht = null));
+    s || (s = !0, Je = Math.max(0, Je - 1), Je === 0 && bt !== null && (document.body.style.overflow = bt, bt = null));
   };
 }
-function Ai(s) {
+function Ki(s) {
   const e = typeof window < "u" ? window.visualViewport : null;
   if (!e)
     return () => {
@@ -1068,40 +1068,76 @@ function Ai(s) {
     e.removeEventListener("resize", i), e.removeEventListener("scroll", i), s.style.height = "", s.style.top = "";
   };
 }
-const j = {
+const bs = "km-overlay-activated", Wi = Symbol("km-overlay-all-groups"), At = /* @__PURE__ */ new Set(), Ye = /* @__PURE__ */ new Map();
+let zt = !1;
+function vs() {
+  return typeof document < "u";
+}
+function ji(s, e) {
+  return e === Wi || s === e;
+}
+function go(s) {
+  const e = s.detail, t = e == null ? void 0 : e.source, o = e == null ? void 0 : e.group;
+  for (const i of Array.from(At))
+    i.id !== t && ji(i.group, o) && i.dismiss();
+}
+function Gi() {
+  zt || !vs() || (document.addEventListener(bs, go), zt = !0);
+}
+function Ui() {
+  zt && At.size === 0 && vs() && (document.removeEventListener(bs, go), zt = !1);
+}
+function qi(s, e) {
+  vs() && document.dispatchEvent(new CustomEvent(bs, { detail: { source: s, group: e } }));
+}
+function Xi(s, e) {
+  const t = { id: {}, group: e, dismiss: s };
+  return At.add(t), Gi(), {
+    activate() {
+      Ye.set(t.group, t), qi(t.id, t.group);
+    },
+    deactivate() {
+      Ye.get(t.group) === t && Ye.delete(t.group);
+    },
+    dispose() {
+      At.delete(t), Ye.get(t.group) === t && Ye.delete(t.group), Ui();
+    }
+  };
+}
+const G = {
   TRACE: 0,
   DEBUG: 1,
   INFO: 2,
   WARN: 3,
   ERROR: 4,
   SILENT: 5
-}, Ss = ["trace", "debug", "info", "warn", "error"], Ot = () => {
+}, zs = ["trace", "debug", "info", "warn", "error"], Nt = () => {
 };
-let zi = "km-log";
-function Ts(s) {
+let Ji = "km-log";
+function Ns(s) {
   const t = console[s];
-  return typeof t == "function" ? t.bind(console) : Ot;
+  return typeof t == "function" ? t.bind(console) : Nt;
 }
-function Ni(s) {
+function Yi(s) {
   if (s === "debug" && (s = "log"), typeof console > "u")
-    return Ot;
+    return Nt;
   const e = console;
-  return e[s] !== void 0 ? Ts(s) : e.log !== void 0 ? Ts("log") : Ot;
+  return e[s] !== void 0 ? Ns(s) : e.log !== void 0 ? Ns("log") : Nt;
 }
-const Di = (s) => Ni(s);
-function Ge(s) {
+const Zi = (s) => Yi(s);
+function Ze(s) {
   let e = s;
-  const t = j;
-  if (typeof e == "string" && t[e.toUpperCase()] !== void 0 && (e = t[e.toUpperCase()]), typeof e == "number" && e >= 0 && e <= j.SILENT)
+  const t = G;
+  if (typeof e == "string" && t[e.toUpperCase()] !== void 0 && (e = t[e.toUpperCase()]), typeof e == "number" && e >= 0 && e <= G.SILENT)
     return e;
   throw new TypeError(`setLevel() called with an invalid level: ${String(s)}`);
 }
-let he;
-const It = {};
-class no {
+let ue;
+const $t = {};
+class bo {
   constructor(e, t) {
     m(this, "name");
-    m(this, "levels", j);
+    m(this, "levels", G);
     m(this, "methodFactory");
     // Installed by replaceLoggingMethods(); definite-assignment via `!`.
     m(this, "trace");
@@ -1116,18 +1152,18 @@ class no {
     m(this, "defaultLevel", null);
     /** Optional user-set level; overrides default. */
     m(this, "userLevel", null);
-    this.name = e, this.methodFactory = t, this.inheritedLevel = Ge(he ? he.getLevel() : "WARN");
+    this.name = e, this.methodFactory = t, this.inheritedLevel = Ze(ue ? ue.getLevel() : "WARN");
     const o = this.getPersistedLevel();
-    o != null && (this.userLevel = Ge(o)), this.replaceLoggingMethods();
+    o != null && (this.userLevel = Ze(o)), this.replaceLoggingMethods();
   }
   storageKey() {
-    return typeof this.name == "string" ? `${zi}:${this.name}` : void 0;
+    return typeof this.name == "string" ? `${Ji}:${this.name}` : void 0;
   }
   persist(e) {
     const t = this.storageKey();
     if (typeof window > "u" || !t)
       return;
-    const o = (Ss[e] ?? "silent").toUpperCase();
+    const o = (zs[e] ?? "silent").toUpperCase();
     try {
       window.localStorage[t] = o;
     } catch {
@@ -1142,7 +1178,7 @@ class no {
       t = window.localStorage[e];
     } catch {
     }
-    if (!(t === void 0 || j[t] === void 0))
+    if (!(t === void 0 || G[t] === void 0))
       return t;
   }
   clearPersisted() {
@@ -1155,42 +1191,42 @@ class no {
   }
   replaceLoggingMethods() {
     const e = this.getLevel();
-    Ss.forEach((t, o) => {
-      this[t] = o < e ? Ot : this.methodFactory(t, e, this.name);
+    zs.forEach((t, o) => {
+      this[t] = o < e ? Nt : this.methodFactory(t, e, this.name);
     }), this.log = this.debug;
   }
   getLevel() {
     return this.userLevel != null ? this.userLevel : this.defaultLevel != null ? this.defaultLevel : this.inheritedLevel;
   }
   setLevel(e, t) {
-    this.userLevel = Ge(e), t !== !1 && this.persist(this.userLevel), this.replaceLoggingMethods();
+    this.userLevel = Ze(e), t !== !1 && this.persist(this.userLevel), this.replaceLoggingMethods();
   }
   setDefaultLevel(e) {
-    this.defaultLevel = Ge(e), this.getPersistedLevel() || this.setLevel(e, !1);
+    this.defaultLevel = Ze(e), this.getPersistedLevel() || this.setLevel(e, !1);
   }
   resetLevel() {
     this.userLevel = null, this.clearPersisted(), this.replaceLoggingMethods();
   }
   enableAll(e) {
-    this.setLevel(j.TRACE, e);
+    this.setLevel(G.TRACE, e);
   }
   disableAll(e) {
-    this.setLevel(j.SILENT, e);
+    this.setLevel(G.SILENT, e);
   }
   rebuild() {
-    if (he && he !== this && (this.inheritedLevel = Ge(he.getLevel())), this.replaceLoggingMethods(), he === this)
-      for (const e in It)
-        It[e].rebuild();
+    if (ue && ue !== this && (this.inheritedLevel = Ze(ue.getLevel())), this.replaceLoggingMethods(), ue === this)
+      for (const e in $t)
+        $t[e].rebuild();
   }
 }
-he = new no(void 0, Di);
-function $i(s) {
+ue = new bo(void 0, Zi);
+function Qi(s) {
   if (typeof s != "string" || s === "")
     throw new TypeError("You must supply a non-empty name when creating a logger.");
-  let e = It[s];
-  return e || (e = It[s] = new no(s, he.methodFactory)), e;
+  let e = $t[s];
+  return e || (e = $t[s] = new bo(s, ue.methodFactory)), e;
 }
-const Vi = ["INIT", "DATA", "UI"], Ri = "debug", Os = [
+const er = ["INIT", "DATA", "UI"], tr = "debug", $s = [
   "#4c8bf5",
   // blue
   "#2ea043",
@@ -1207,43 +1243,43 @@ const Vi = ["INIT", "DATA", "UI"], Ri = "debug", Os = [
   // teal
   "#8a6d3b"
   // brown
-], Is = /* @__PURE__ */ new WeakSet();
-function Bi(s, e, t) {
-  if (Is.has(s))
+], Vs = /* @__PURE__ */ new WeakSet();
+function sr(s, e, t) {
+  if (Vs.has(s))
     return;
-  Is.add(s);
+  Vs.add(s);
   const o = s.methodFactory, i = `color:${t};font-weight:bold`;
   s.methodFactory = (r, n, a) => {
     const l = o(r, n, a);
     return (...c) => l(`%c[${e}]`, i, ...c);
   }, s.setLevel(s.getLevel(), !1);
 }
-function Hi(s) {
-  return typeof s == "number" ? s : j[s.toUpperCase()] ?? j.SILENT;
+function or(s) {
+  return typeof s == "number" ? s : G[s.toUpperCase()] ?? G.SILENT;
 }
-const Fi = [
-  ["trace", j.TRACE, "debug"],
-  ["debug", j.DEBUG, "debug"],
-  ["info", j.INFO, "info"],
-  ["warn", j.WARN, "warn"],
-  ["error", j.ERROR, "error"]
+const ir = [
+  ["trace", G.TRACE, "debug"],
+  ["debug", G.DEBUG, "debug"],
+  ["info", G.INFO, "info"],
+  ["warn", G.WARN, "warn"],
+  ["error", G.ERROR, "error"]
 ];
-function Ki(s, e, t) {
+function rr(s, e, t) {
   const o = `color:${s.color};font-weight:bold`, i = "color:#888", r = {};
-  for (const [n, a, l] of Fi)
+  for (const [n, a, l] of ir)
     r[n] = (...c) => {
-      const d = t(), h = Math.min(s.logger.getLevel(), d == null ? j.SILENT : Hi(d));
-      if (a < h)
+      const d = t(), u = Math.min(s.logger.getLevel(), d == null ? G.SILENT : or(d));
+      if (a < u)
         return;
       (console[l] ?? console.log).bind(console)(`%c[${s.label}]%c ${e}`, o, i, ...c);
     };
   return r;
 }
-function Wi(s, e = Vi) {
+function nr(s, e = er) {
   const t = {}, o = {};
   e.forEach((r, n) => {
-    const a = `${s}:${r}`, l = Os[n % Os.length], c = $i(a);
-    Bi(c, a, l), t[r] = c, o[r] = { label: a, color: l, logger: c };
+    const a = `${s}:${r}`, l = $s[n % $s.length], c = Qi(a);
+    sr(c, a, l), t[r] = c, o[r] = { label: a, color: l, logger: c };
   });
   const i = (r) => {
     for (const n of e)
@@ -1252,7 +1288,7 @@ function Wi(s, e = Vi) {
   return {
     loggers: t,
     LOGGING_CATEGORIES: e,
-    enableLogging(r = Ri) {
+    enableLogging(r = tr) {
       i(r);
     },
     disableLogging() {
@@ -1268,81 +1304,81 @@ function Wi(s, e = Vi) {
     forInstance(r, n) {
       const a = {};
       for (const l of e)
-        a[l] = Ki(o[l], r, n);
+        a[l] = rr(o[l], r, n);
       return a;
     }
   };
 }
-const ge = Math.min, re = Math.max, Pt = Math.round, ut = Math.floor, ne = (s) => ({
+const be = Math.min, ne = Math.max, Vt = Math.round, vt = Math.floor, ae = (s) => ({
   x: s,
   y: s
-}), ji = {
+}), ar = {
   left: "right",
   right: "left",
   bottom: "top",
   top: "bottom"
 };
-function ao(s, e, t) {
-  return re(s, ge(e, t));
+function vo(s, e, t) {
+  return ne(s, be(e, t));
 }
-function Fe(s, e) {
+function je(s, e) {
   return typeof s == "function" ? s(e) : s;
 }
-function Ie(s) {
+function Pe(s) {
   return s.split("-")[0];
 }
-function Ke(s) {
+function Ge(s) {
   return s.split("-")[1];
 }
-function lo(s) {
+function wo(s) {
   return s === "x" ? "y" : "x";
 }
-function ds(s) {
+function ws(s) {
   return s === "y" ? "height" : "width";
 }
-function ie(s) {
+function re(s) {
   const e = s[0];
   return e === "t" || e === "b" ? "y" : "x";
 }
-function hs(s) {
-  return lo(ie(s));
+function ys(s) {
+  return wo(re(s));
 }
-function Ui(s, e, t) {
+function lr(s, e, t) {
   t === void 0 && (t = !1);
-  const o = Ke(s), i = hs(s), r = ds(i);
+  const o = Ge(s), i = ys(s), r = ws(i);
   let n = i === "x" ? o === (t ? "end" : "start") ? "right" : "left" : o === "start" ? "bottom" : "top";
-  return e.reference[r] > e.floating[r] && (n = Mt(n)), [n, Mt(n)];
+  return e.reference[r] > e.floating[r] && (n = Dt(n)), [n, Dt(n)];
 }
-function Gi(s) {
-  const e = Mt(s);
-  return [Yt(s), e, Yt(e)];
+function cr(s) {
+  const e = Dt(s);
+  return [os(s), e, os(e)];
 }
-function Yt(s) {
+function os(s) {
   return s.includes("start") ? s.replace("start", "end") : s.replace("end", "start");
 }
-const Ps = ["left", "right"], Ms = ["right", "left"], qi = ["top", "bottom"], Xi = ["bottom", "top"];
-function Yi(s, e, t) {
+const Ds = ["left", "right"], Rs = ["right", "left"], dr = ["top", "bottom"], hr = ["bottom", "top"];
+function ur(s, e, t) {
   switch (s) {
     case "top":
     case "bottom":
-      return t ? e ? Ms : Ps : e ? Ps : Ms;
+      return t ? e ? Rs : Ds : e ? Ds : Rs;
     case "left":
     case "right":
-      return e ? qi : Xi;
+      return e ? dr : hr;
     default:
       return [];
   }
 }
-function Ji(s, e, t, o) {
-  const i = Ke(s);
-  let r = Yi(Ie(s), t === "start", o);
-  return i && (r = r.map((n) => n + "-" + i), e && (r = r.concat(r.map(Yt)))), r;
+function mr(s, e, t, o) {
+  const i = Ge(s);
+  let r = ur(Pe(s), t === "start", o);
+  return i && (r = r.map((n) => n + "-" + i), e && (r = r.concat(r.map(os)))), r;
 }
-function Mt(s) {
-  const e = Ie(s);
-  return ji[e] + s.slice(e.length);
+function Dt(s) {
+  const e = Pe(s);
+  return ar[e] + s.slice(e.length);
 }
-function Qi(s) {
+function pr(s) {
   var e, t, o, i;
   return {
     top: (e = s.top) != null ? e : 0,
@@ -1351,15 +1387,15 @@ function Qi(s) {
     left: (i = s.left) != null ? i : 0
   };
 }
-function co(s) {
-  return typeof s != "number" ? Qi(s) : {
+function yo(s) {
+  return typeof s != "number" ? pr(s) : {
     top: s,
     right: s,
     bottom: s,
     left: s
   };
 }
-function Lt(s) {
+function Rt(s) {
   const {
     x: e,
     y: t,
@@ -1377,48 +1413,48 @@ function Lt(s) {
     y: t
   };
 }
-function Ls(s, e, t) {
+function Bs(s, e, t) {
   let {
     reference: o,
     floating: i
   } = s;
-  const r = ie(e), n = hs(e), a = ds(n), l = Ie(e), c = r === "y", d = o.x + o.width / 2 - i.width / 2, h = o.y + o.height / 2 - i.height / 2, f = o[a] / 2 - i[a] / 2;
-  let u;
+  const r = re(e), n = ys(e), a = ws(n), l = Pe(e), c = r === "y", d = o.x + o.width / 2 - i.width / 2, u = o.y + o.height / 2 - i.height / 2, f = o[a] / 2 - i[a] / 2;
+  let p;
   switch (l) {
     case "top":
-      u = {
+      p = {
         x: d,
         y: o.y - i.height
       };
       break;
     case "bottom":
-      u = {
+      p = {
         x: d,
         y: o.y + o.height
       };
       break;
     case "right":
-      u = {
+      p = {
         x: o.x + o.width,
-        y: h
+        y: u
       };
       break;
     case "left":
-      u = {
+      p = {
         x: o.x - i.width,
-        y: h
+        y: u
       };
       break;
     default:
-      u = {
+      p = {
         x: o.x,
         y: o.y
       };
   }
-  const g = Ke(e);
-  return g && (u[n] += f * (g === "end" ? 1 : -1) * (t && c ? -1 : 1)), u;
+  const g = Ge(e);
+  return g && (p[n] += f * (g === "end" ? 1 : -1) * (t && c ? -1 : 1)), p;
 }
-async function Zi(s, e) {
+async function fr(s, e) {
   var t;
   e === void 0 && (e = {});
   const {
@@ -1431,36 +1467,36 @@ async function Zi(s, e) {
   } = s, {
     boundary: c = "clippingAncestors",
     rootBoundary: d = "viewport",
-    elementContext: h = "floating",
+    elementContext: u = "floating",
     altBoundary: f = !1,
-    padding: u = 0
-  } = Fe(e, s), g = co(u), w = a[f ? h === "floating" ? "reference" : "floating" : h], b = Lt(await r.getClippingRect({
-    element: (t = await (r.isElement == null ? void 0 : r.isElement(w))) == null || t ? w : w.contextElement || await (r.getDocumentElement == null ? void 0 : r.getDocumentElement(a.floating)),
+    padding: p = 0
+  } = je(e, s), g = yo(p), y = a[f ? u === "floating" ? "reference" : "floating" : u], b = Rt(await r.getClippingRect({
+    element: (t = await (r.isElement == null ? void 0 : r.isElement(y))) == null || t ? y : y.contextElement || await (r.getDocumentElement == null ? void 0 : r.getDocumentElement(a.floating)),
     boundary: c,
     rootBoundary: d,
     strategy: l
-  })), _ = h === "floating" ? {
+  })), _ = u === "floating" ? {
     x: o,
     y: i,
     width: n.floating.width,
     height: n.floating.height
-  } : n.reference, k = await (r.getOffsetParent == null ? void 0 : r.getOffsetParent(a.floating)), M = await (r.isElement == null ? void 0 : r.isElement(k)) && await (r.getScale == null ? void 0 : r.getScale(k)) || {
+  } : n.reference, k = await (r.getOffsetParent == null ? void 0 : r.getOffsetParent(a.floating)), P = await (r.isElement == null ? void 0 : r.isElement(k)) && await (r.getScale == null ? void 0 : r.getScale(k)) || {
     x: 1,
     y: 1
-  }, E = Lt(r.convertOffsetParentRelativeRectToViewportRelativeRect ? await r.convertOffsetParentRelativeRectToViewportRelativeRect({
+  }, N = Rt(r.convertOffsetParentRelativeRectToViewportRelativeRect ? await r.convertOffsetParentRelativeRectToViewportRelativeRect({
     elements: a,
     rect: _,
     offsetParent: k,
     strategy: l
   }) : _);
   return {
-    top: (b.top - E.top + g.top) / M.y,
-    bottom: (E.bottom - b.bottom + g.bottom) / M.y,
-    left: (b.left - E.left + g.left) / M.x,
-    right: (E.right - b.right + g.right) / M.x
+    top: (b.top - N.top + g.top) / P.y,
+    bottom: (N.bottom - b.bottom + g.bottom) / P.y,
+    left: (b.left - N.left + g.left) / P.x,
+    right: (N.right - b.right + g.right) / P.x
   };
 }
-const er = 50, tr = async (s, e, t) => {
+const gr = 50, br = async (s, e, t) => {
   const {
     placement: o = "bottom",
     strategy: i = "absolute",
@@ -1468,7 +1504,7 @@ const er = 50, tr = async (s, e, t) => {
     platform: n
   } = t, a = n.detectOverflow ? n : {
     ...n,
-    detectOverflow: Zi
+    detectOverflow: fr
   }, l = await (n.isRTL == null ? void 0 : n.isRTL(e));
   let c = await n.getElementRects({
     reference: s,
@@ -1476,24 +1512,24 @@ const er = 50, tr = async (s, e, t) => {
     strategy: i
   }), {
     x: d,
-    y: h
-  } = Ls(c, o, l), f = o, u = 0;
+    y: u
+  } = Bs(c, o, l), f = o, p = 0;
   const g = {};
-  for (let y = 0; y < r.length; y++) {
-    const w = r[y];
-    if (!w)
+  for (let w = 0; w < r.length; w++) {
+    const y = r[w];
+    if (!y)
       continue;
     const {
       name: b,
       fn: _
-    } = w, {
+    } = y, {
       x: k,
-      y: M,
-      data: E,
-      reset: $
+      y: P,
+      data: N,
+      reset: D
     } = await _({
       x: d,
-      y: h,
+      y: u,
       initialPlacement: o,
       placement: f,
       strategy: i,
@@ -1505,26 +1541,26 @@ const er = 50, tr = async (s, e, t) => {
         floating: e
       }
     });
-    d = k ?? d, h = M ?? h, g[b] = {
+    d = k ?? d, u = P ?? u, g[b] = {
       ...g[b],
-      ...E
-    }, $ && u < er && (u++, typeof $ == "object" && ($.placement && (f = $.placement), $.rects && (c = $.rects === !0 ? await n.getElementRects({
+      ...N
+    }, D && p < gr && (p++, typeof D == "object" && (D.placement && (f = D.placement), D.rects && (c = D.rects === !0 ? await n.getElementRects({
       reference: s,
       floating: e,
       strategy: i
-    }) : $.rects), {
+    }) : D.rects), {
       x: d,
-      y: h
-    } = Ls(c, f, l)), y = -1);
+      y: u
+    } = Bs(c, f, l)), w = -1);
   }
   return {
     x: d,
-    y: h,
+    y: u,
     placement: f,
     strategy: i,
     middlewareData: g
   };
-}, sr = (s) => ({
+}, vr = (s) => ({
   name: "arrow",
   options: s,
   async fn(e) {
@@ -1539,29 +1575,29 @@ const er = 50, tr = async (s, e, t) => {
     } = e, {
       element: c,
       padding: d = 0
-    } = Fe(s, e) || {};
+    } = je(s, e) || {};
     if (c == null)
       return {};
-    const h = co(d), f = {
+    const u = yo(d), f = {
       x: t,
       y: o
-    }, u = hs(i), g = ds(u), y = await n.getDimensions(c), w = u === "y", b = w ? "top" : "left", _ = w ? "bottom" : "right", k = w ? "clientHeight" : "clientWidth", M = r.reference[g] + r.reference[u] - f[u] - r.floating[g], E = f[u] - r.reference[u], $ = await (n.getOffsetParent == null ? void 0 : n.getOffsetParent(c));
-    let H = $ ? $[k] : 0;
-    (!H || !await (n.isElement == null ? void 0 : n.isElement($))) && (H = a.floating[k] || r.floating[g]);
-    const G = M / 2 - E / 2, N = H / 2 - y[g] / 2 - 1, C = ge(h[b], N), O = ge(h[_], N), P = H - y[g] - O, V = H / 2 - y[g] / 2 + G, S = ao(C, V, P), B = !l.arrow && Ke(i) != null && V !== S && r.reference[g] / 2 - (V < C ? C : O) - y[g] / 2 < 0, te = B ? V < C ? V - C : V - P : 0;
+    }, p = ys(i), g = ws(p), w = await n.getDimensions(c), y = p === "y", b = y ? "top" : "left", _ = y ? "bottom" : "right", k = y ? "clientHeight" : "clientWidth", P = r.reference[g] + r.reference[p] - f[p] - r.floating[g], N = f[p] - r.reference[p], D = await (n.getOffsetParent == null ? void 0 : n.getOffsetParent(c));
+    let j = D ? D[k] : 0;
+    (!j || !await (n.isElement == null ? void 0 : n.isElement(D))) && (j = a.floating[k] || r.floating[g]);
+    const q = P / 2 - N / 2, V = j / 2 - w[g] / 2 - 1, S = be(u[b], V), M = be(u[_], V), A = j - w[g] - M, B = j / 2 - w[g] / 2 + q, T = vo(S, B, A), F = !l.arrow && Ge(i) != null && B !== T && r.reference[g] / 2 - (B < S ? S : M) - w[g] / 2 < 0, se = F ? B < S ? B - S : B - A : 0;
     return {
-      [u]: f[u] + te,
+      [p]: f[p] + se,
       data: {
-        [u]: S,
-        centerOffset: V - S - te,
-        ...B && {
-          alignmentOffset: te
+        [p]: T,
+        centerOffset: B - T - se,
+        ...F && {
+          alignmentOffset: se
         }
       },
-      reset: B
+      reset: F
     };
   }
-}), or = function(s) {
+}), wr = function(s) {
   return s === void 0 && (s = {}), {
     name: "flip",
     options: s,
@@ -1576,101 +1612,101 @@ const er = 50, tr = async (s, e, t) => {
         elements: c
       } = e, {
         mainAxis: d = !0,
-        crossAxis: h = !0,
+        crossAxis: u = !0,
         fallbackPlacements: f,
-        fallbackStrategy: u = "bestFit",
+        fallbackStrategy: p = "bestFit",
         fallbackAxisSideDirection: g = "none",
-        flipAlignment: y = !0,
-        ...w
-      } = Fe(s, e);
+        flipAlignment: w = !0,
+        ...y
+      } = je(s, e);
       if ((t = r.arrow) != null && t.alignmentOffset)
         return {};
-      const b = Ie(i), _ = ie(a), k = Ie(a) === a, M = await (l.isRTL == null ? void 0 : l.isRTL(c.floating)), E = f || (k || !y ? [Mt(a)] : Gi(a)), $ = g !== "none";
-      !f && $ && E.push(...Ji(a, y, g, M));
-      const H = [a, ...E], G = await l.detectOverflow(e, w), N = [];
-      let C = ((o = r.flip) == null ? void 0 : o.overflows) || [];
-      if (d && N.push(G[b]), h) {
-        const S = Ui(i, n, M);
-        N.push(G[S[0]], G[S[1]]);
+      const b = Pe(i), _ = re(a), k = Pe(a) === a, P = await (l.isRTL == null ? void 0 : l.isRTL(c.floating)), N = f || (k || !w ? [Dt(a)] : cr(a)), D = g !== "none";
+      !f && D && N.push(...mr(a, w, g, P));
+      const j = [a, ...N], q = await l.detectOverflow(e, y), V = [];
+      let S = ((o = r.flip) == null ? void 0 : o.overflows) || [];
+      if (d && V.push(q[b]), u) {
+        const T = lr(i, n, P);
+        V.push(q[T[0]], q[T[1]]);
       }
-      if (C = [...C, {
+      if (S = [...S, {
         placement: i,
-        overflows: N
-      }], !N.every((S) => S <= 0)) {
-        var O, P;
-        const S = (((O = r.flip) == null ? void 0 : O.index) || 0) + 1, B = H[S];
-        if (B && (!(h === "alignment" ? _ !== ie(B) : !1) || // We leave the current main axis only if every placement on that axis
+        overflows: V
+      }], !V.every((T) => T <= 0)) {
+        var M, A;
+        const T = (((M = r.flip) == null ? void 0 : M.index) || 0) + 1, F = j[T];
+        if (F && (!(u === "alignment" ? _ !== re(F) : !1) || // We leave the current main axis only if every placement on that axis
         // overflows the main axis.
-        C.every((X) => ie(X.placement) === _ ? X.overflows[0] > 0 : !0)))
+        S.every((J) => re(J.placement) === _ ? J.overflows[0] > 0 : !0)))
           return {
             data: {
-              index: S,
-              overflows: C
+              index: T,
+              overflows: S
             },
             reset: {
-              placement: B
+              placement: F
             }
           };
-        let te = (P = C.filter((ve) => ve.overflows[0] <= 0).sort((ve, X) => ve.overflows[1] - X.overflows[1])[0]) == null ? void 0 : P.placement;
-        if (!te)
-          switch (u) {
+        let se = (A = S.filter((we) => we.overflows[0] <= 0).sort((we, J) => we.overflows[1] - J.overflows[1])[0]) == null ? void 0 : A.placement;
+        if (!se)
+          switch (p) {
             case "bestFit": {
-              var V;
-              const ve = (V = C.filter((X) => {
-                if ($) {
-                  const ce = ie(X.placement);
-                  return ce === _ || // Create a bias to the `y` side axis due to horizontal
+              var B;
+              const we = (B = S.filter((J) => {
+                if (D) {
+                  const de = re(J.placement);
+                  return de === _ || // Create a bias to the `y` side axis due to horizontal
                   // reading directions favoring greater width.
-                  ce === "y";
+                  de === "y";
                 }
                 return !0;
-              }).map((X) => [X.placement, X.overflows.filter((ce) => ce > 0).reduce((ce, Mo) => ce + Mo, 0)]).sort((X, ce) => X[1] - ce[1])[0]) == null ? void 0 : V[0];
-              ve && (te = ve);
+              }).map((J) => [J.placement, J.overflows.filter((de) => de > 0).reduce((de, Bo) => de + Bo, 0)]).sort((J, de) => J[1] - de[1])[0]) == null ? void 0 : B[0];
+              we && (se = we);
               break;
             }
             case "initialPlacement":
-              te = a;
+              se = a;
               break;
           }
-        if (i !== te)
+        if (i !== se)
           return {
             reset: {
-              placement: te
+              placement: se
             }
           };
       }
       return {};
     }
   };
-}, ir = /* @__PURE__ */ new Set(["left", "top"]);
-async function rr(s, e) {
+}, yr = /* @__PURE__ */ new Set(["left", "top"]);
+async function xr(s, e) {
   const {
     placement: t,
     platform: o,
     elements: i
-  } = s, r = await (o.isRTL == null ? void 0 : o.isRTL(i.floating)), n = Ie(t), a = Ke(t), l = ie(t) === "y", c = ir.has(n) ? -1 : 1, d = r && l ? -1 : 1, h = Fe(e, s);
+  } = s, r = await (o.isRTL == null ? void 0 : o.isRTL(i.floating)), n = Pe(t), a = Ge(t), l = re(t) === "y", c = yr.has(n) ? -1 : 1, d = r && l ? -1 : 1, u = je(e, s);
   let {
     mainAxis: f,
-    crossAxis: u,
+    crossAxis: p,
     alignmentAxis: g
-  } = typeof h == "number" ? {
-    mainAxis: h,
+  } = typeof u == "number" ? {
+    mainAxis: u,
     crossAxis: 0,
     alignmentAxis: null
   } : {
-    mainAxis: h.mainAxis || 0,
-    crossAxis: h.crossAxis || 0,
-    alignmentAxis: h.alignmentAxis
+    mainAxis: u.mainAxis || 0,
+    crossAxis: u.crossAxis || 0,
+    alignmentAxis: u.alignmentAxis
   };
-  return a && typeof g == "number" && (u = a === "end" ? g * -1 : g), l ? {
-    x: u * d,
+  return a && typeof g == "number" && (p = a === "end" ? g * -1 : g), l ? {
+    x: p * d,
     y: f * c
   } : {
     x: f * c,
-    y: u * d
+    y: p * d
   };
 }
-const nr = function(s) {
+const _r = function(s) {
   return s === void 0 && (s = 0), {
     name: "offset",
     options: s,
@@ -1681,7 +1717,7 @@ const nr = function(s) {
         y: r,
         placement: n,
         middlewareData: a
-      } = e, l = await rr(e, s);
+      } = e, l = await xr(e, s);
       return n === ((t = a.offset) == null ? void 0 : t.placement) && (o = a.arrow) != null && o.alignmentOffset ? {} : {
         x: i + l.x,
         y: r + l.y,
@@ -1692,7 +1728,7 @@ const nr = function(s) {
       };
     }
   };
-}, ar = function(s) {
+}, kr = function(s) {
   return s === void 0 && (s = {}), {
     name: "shift",
     options: s,
@@ -1709,26 +1745,26 @@ const nr = function(s) {
           fn: (_) => {
             let {
               x: k,
-              y: M
+              y: P
             } = _;
             return {
               x: k,
-              y: M
+              y: P
             };
           }
         },
         ...c
-      } = Fe(s, e), d = {
+      } = je(s, e), d = {
         x: t,
         y: o
-      }, h = await r.detectOverflow(e, c), f = ie(i), u = lo(f);
-      let g = d[u], y = d[f];
-      const w = (_, k) => ao(k + h[_ === "y" ? "top" : "left"], k, k - h[_ === "y" ? "bottom" : "right"]);
-      n && (g = w(u, g)), a && (y = w(f, y));
+      }, u = await r.detectOverflow(e, c), f = re(i), p = wo(f);
+      let g = d[p], w = d[f];
+      const y = (_, k) => vo(k + u[_ === "y" ? "top" : "left"], k, k - u[_ === "y" ? "bottom" : "right"]);
+      n && (g = y(p, g)), a && (w = y(f, w));
       const b = l.fn({
         ...e,
-        [u]: g,
-        [f]: y
+        [p]: g,
+        [f]: w
       });
       return {
         ...b,
@@ -1736,14 +1772,14 @@ const nr = function(s) {
           x: b.x - t,
           y: b.y - o,
           enabled: {
-            [u]: n,
+            [p]: n,
             [f]: a
           }
         }
       };
     }
   };
-}, lr = function(s) {
+}, Cr = function(s) {
   return s === void 0 && (s = {}), {
     name: "size",
     options: s,
@@ -1757,21 +1793,21 @@ const nr = function(s) {
         apply: n = () => {
         },
         ...a
-      } = Fe(s, e), l = await i.detectOverflow(e, a), c = Ie(t), d = Ke(t), h = ie(t) === "y", {
+      } = je(s, e), l = await i.detectOverflow(e, a), c = Pe(t), d = Ge(t), u = re(t) === "y", {
         width: f,
-        height: u
+        height: p
       } = o.floating;
-      let g, y;
-      c === "top" || c === "bottom" ? (g = c, y = d === (await (i.isRTL == null ? void 0 : i.isRTL(r.floating)) ? "start" : "end") ? "left" : "right") : (y = c, g = d === "end" ? "top" : "bottom");
-      const w = u - l.top - l.bottom, b = f - l.left - l.right, _ = ge(u - l[g], w), k = ge(f - l[y], b), M = e.middlewareData.shift, E = !M;
-      let $ = _, H = k;
-      M != null && M.enabled.x && (H = b), M != null && M.enabled.y && ($ = w), E && !d && (h ? H = f - 2 * re(l.left, l.right) : $ = u - 2 * re(l.top, l.bottom)), await n({
+      let g, w;
+      c === "top" || c === "bottom" ? (g = c, w = d === (await (i.isRTL == null ? void 0 : i.isRTL(r.floating)) ? "start" : "end") ? "left" : "right") : (w = c, g = d === "end" ? "top" : "bottom");
+      const y = p - l.top - l.bottom, b = f - l.left - l.right, _ = be(p - l[g], y), k = be(f - l[w], b), P = e.middlewareData.shift, N = !P;
+      let D = _, j = k;
+      P != null && P.enabled.x && (j = b), P != null && P.enabled.y && (D = y), N && !d && (u ? j = f - 2 * ne(l.left, l.right) : D = p - 2 * ne(l.top, l.bottom)), await n({
         ...e,
-        availableWidth: H,
-        availableHeight: $
+        availableWidth: j,
+        availableHeight: D
       });
-      const G = await i.getDimensions(r.floating);
-      return f !== G.width || u !== G.height ? {
+      const q = await i.getDimensions(r.floating);
+      return f !== q.width || p !== q.height ? {
         reset: {
           rects: !0
         }
@@ -1779,45 +1815,45 @@ const nr = function(s) {
     }
   };
 };
-function zt() {
+function Ft() {
   return typeof window < "u";
 }
-function We(s) {
-  return ho(s) ? (s.nodeName || "").toLowerCase() : "#document";
+function Ue(s) {
+  return xo(s) ? (s.nodeName || "").toLowerCase() : "#document";
 }
 function U(s) {
   var e;
   return (s == null || (e = s.ownerDocument) == null ? void 0 : e.defaultView) || window;
 }
-function ae(s) {
+function le(s) {
   var e;
-  return (e = (ho(s) ? s.ownerDocument : s.document) || window.document) == null ? void 0 : e.documentElement;
+  return (e = (xo(s) ? s.ownerDocument : s.document) || window.document) == null ? void 0 : e.documentElement;
 }
-function ho(s) {
-  return zt() ? s instanceof Node || s instanceof U(s).Node : !1;
+function xo(s) {
+  return Ft() ? s instanceof Node || s instanceof U(s).Node : !1;
 }
-function Z(s) {
-  return zt() ? s instanceof Element || s instanceof U(s).Element : !1;
+function ee(s) {
+  return Ft() ? s instanceof Element || s instanceof U(s).Element : !1;
 }
-function be(s) {
-  return zt() ? s instanceof HTMLElement || s instanceof U(s).HTMLElement : !1;
+function ve(s) {
+  return Ft() ? s instanceof HTMLElement || s instanceof U(s).HTMLElement : !1;
 }
-function Es(s) {
-  return !zt() || typeof ShadowRoot > "u" ? !1 : s instanceof ShadowRoot || s instanceof U(s).ShadowRoot;
+function Hs(s) {
+  return !Ft() || typeof ShadowRoot > "u" ? !1 : s instanceof ShadowRoot || s instanceof U(s).ShadowRoot;
 }
-function Nt(s) {
+function Kt(s) {
   const {
     overflow: e,
     overflowX: t,
     overflowY: o,
     display: i
-  } = ee(s);
+  } = te(s);
   return /auto|scroll|overlay|hidden|clip/.test(e + o + t) && i !== "inline" && i !== "contents";
 }
-function cr(s) {
-  return /^(table|td|th)$/.test(We(s));
+function Sr(s) {
+  return /^(table|td|th)$/.test(Ue(s));
 }
-function Dt(s) {
+function Wt(s) {
   try {
     if (s.matches(":popover-open"))
       return !0;
@@ -1829,34 +1865,34 @@ function Dt(s) {
     return !1;
   }
 }
-const dr = /transform|translate|scale|rotate|perspective|filter/, hr = /paint|layout|strict|content/, ye = (s) => !!s && s !== "none";
-let Ft;
-function us(s) {
-  const e = Z(s) ? ee(s) : s;
-  return ye(e.transform) || ye(e.translate) || ye(e.scale) || ye(e.rotate) || ye(e.perspective) || !ms() && (ye(e.backdropFilter) || ye(e.filter)) || dr.test(e.willChange || "") || hr.test(e.contain || "");
+const Tr = /transform|translate|scale|rotate|perspective|filter/, Ir = /paint|layout|strict|content/, ye = (s) => !!s && s !== "none";
+let Xt;
+function xs(s) {
+  const e = ee(s) ? te(s) : s;
+  return ye(e.transform) || ye(e.translate) || ye(e.scale) || ye(e.rotate) || ye(e.perspective) || !_s() && (ye(e.backdropFilter) || ye(e.filter)) || Tr.test(e.willChange || "") || Ir.test(e.contain || "");
 }
-function ur(s) {
-  let e = Pe(s);
-  for (; be(e) && !st(e); ) {
-    if (us(e))
+function Or(s) {
+  let e = Me(s);
+  for (; ve(e) && !at(e); ) {
+    if (xs(e))
       return e;
-    if (Dt(e))
+    if (Wt(e))
       return null;
-    e = Pe(e);
+    e = Me(e);
   }
   return null;
 }
-function ms() {
-  return Ft == null && (Ft = typeof CSS < "u" && CSS.supports && CSS.supports("-webkit-backdrop-filter", "none")), Ft;
+function _s() {
+  return Xt == null && (Xt = typeof CSS < "u" && CSS.supports && CSS.supports("-webkit-backdrop-filter", "none")), Xt;
 }
-function st(s) {
-  return /^(html|body|#document)$/.test(We(s));
+function at(s) {
+  return /^(html|body|#document)$/.test(Ue(s));
 }
-function ee(s) {
+function te(s) {
   return U(s).getComputedStyle(s);
 }
-function $t(s) {
-  return Z(s) ? {
+function jt(s) {
+  return ee(s) ? {
     scrollLeft: s.scrollLeft,
     scrollTop: s.scrollTop
   } : {
@@ -1864,127 +1900,127 @@ function $t(s) {
     scrollTop: s.scrollY
   };
 }
-function Pe(s) {
-  if (We(s) === "html")
+function Me(s) {
+  if (Ue(s) === "html")
     return s;
   const e = (
     // Step into the shadow DOM of the parent of a slotted node.
     s.assignedSlot || // DOM Element detected.
     s.parentNode || // ShadowRoot detected.
-    Es(s) && s.host || // Fallback.
-    ae(s)
+    Hs(s) && s.host || // Fallback.
+    le(s)
   );
-  return Es(e) ? e.host : e;
+  return Hs(e) ? e.host : e;
 }
-function uo(s) {
-  const e = Pe(s);
-  return st(e) ? (s.ownerDocument || s).body : be(e) && Nt(e) ? e : uo(e);
+function _o(s) {
+  const e = Me(s);
+  return at(e) ? (s.ownerDocument || s).body : ve(e) && Kt(e) ? e : _o(e);
 }
-function ot(s, e, t) {
+function lt(s, e, t) {
   var o;
   e === void 0 && (e = []), t === void 0 && (t = !0);
-  const i = uo(s), r = i === ((o = s.ownerDocument) == null ? void 0 : o.body), n = U(i);
+  const i = _o(s), r = i === ((o = s.ownerDocument) == null ? void 0 : o.body), n = U(i);
   if (r) {
-    const a = Jt(n);
-    return e.concat(n, n.visualViewport || [], Nt(i) ? i : [], a && t ? ot(a) : []);
+    const a = is(n);
+    return e.concat(n, n.visualViewport || [], Kt(i) ? i : [], a && t ? lt(a) : []);
   } else
-    return e.concat(i, ot(i, [], t));
+    return e.concat(i, lt(i, [], t));
 }
-function Jt(s) {
+function is(s) {
   return s.parent && Object.getPrototypeOf(s.parent) ? s.frameElement : null;
 }
-function mo(s) {
-  const e = ee(s);
+function ko(s) {
+  const e = te(s);
   let t = parseFloat(e.width) || 0, o = parseFloat(e.height) || 0;
-  const i = be(s), r = i ? s.offsetWidth : t, n = i ? s.offsetHeight : o, a = Pt(t) !== r || Pt(o) !== n;
+  const i = ve(s), r = i ? s.offsetWidth : t, n = i ? s.offsetHeight : o, a = Vt(t) !== r || Vt(o) !== n;
   return a && (t = r, o = n), {
     width: t,
     height: o,
     $: a
   };
 }
-function ps(s) {
-  return Z(s) ? s : s.contextElement;
+function ks(s) {
+  return ee(s) ? s : s.contextElement;
 }
-function Ee(s) {
-  const e = ps(s);
-  if (!be(e))
-    return ne(1);
+function ze(s) {
+  const e = ks(s);
+  if (!ve(e))
+    return ae(1);
   const t = e.getBoundingClientRect(), {
     width: o,
     height: i,
     $: r
-  } = mo(e);
-  let n = (r ? Pt(t.width) : t.width) / o, a = (r ? Pt(t.height) : t.height) / i;
+  } = ko(e);
+  let n = (r ? Vt(t.width) : t.width) / o, a = (r ? Vt(t.height) : t.height) / i;
   return (!n || !Number.isFinite(n)) && (n = 1), (!a || !Number.isFinite(a)) && (a = 1), {
     x: n,
     y: a
   };
 }
-const mr = /* @__PURE__ */ ne(0);
-function po(s) {
+const Pr = /* @__PURE__ */ ae(0);
+function Co(s) {
   const e = U(s);
-  return !ms() || !e.visualViewport ? mr : {
+  return !_s() || !e.visualViewport ? Pr : {
     x: e.visualViewport.offsetLeft,
     y: e.visualViewport.offsetTop
   };
 }
-function pr(s, e, t) {
+function Mr(s, e, t) {
   return e === void 0 && (e = !1), !!t && e && t === U(s);
 }
-function Me(s, e, t, o) {
+function Le(s, e, t, o) {
   e === void 0 && (e = !1), t === void 0 && (t = !1);
-  const i = s.getBoundingClientRect(), r = ps(s);
-  let n = ne(1);
-  e && (o ? Z(o) && (n = Ee(o)) : n = Ee(s));
-  const a = pr(r, t, o) ? po(r) : ne(0);
-  let l = (i.left + a.x) / n.x, c = (i.top + a.y) / n.y, d = i.width / n.x, h = i.height / n.y;
+  const i = s.getBoundingClientRect(), r = ks(s);
+  let n = ae(1);
+  e && (o ? ee(o) && (n = ze(o)) : n = ze(s));
+  const a = Mr(r, t, o) ? Co(r) : ae(0);
+  let l = (i.left + a.x) / n.x, c = (i.top + a.y) / n.y, d = i.width / n.x, u = i.height / n.y;
   if (r && o) {
-    const f = U(r), u = Z(o) ? U(o) : o;
-    let g = f, y = Jt(g);
-    for (; y && u !== g; ) {
-      const w = Ee(y), b = y.getBoundingClientRect(), _ = ee(y), k = b.left + (y.clientLeft + parseFloat(_.paddingLeft)) * w.x, M = b.top + (y.clientTop + parseFloat(_.paddingTop)) * w.y;
-      l *= w.x, c *= w.y, d *= w.x, h *= w.y, l += k, c += M, g = U(y), y = Jt(g);
+    const f = U(r), p = ee(o) ? U(o) : o;
+    let g = f, w = is(g);
+    for (; w && p !== g; ) {
+      const y = ze(w), b = w.getBoundingClientRect(), _ = te(w), k = b.left + (w.clientLeft + parseFloat(_.paddingLeft)) * y.x, P = b.top + (w.clientTop + parseFloat(_.paddingTop)) * y.y;
+      l *= y.x, c *= y.y, d *= y.x, u *= y.y, l += k, c += P, g = U(w), w = is(g);
     }
   }
-  return Lt({
+  return Rt({
     width: d,
-    height: h,
+    height: u,
     x: l,
     y: c
   });
 }
-function Vt(s, e) {
-  const t = $t(s).scrollLeft;
-  return e ? e.left + t : Me(ae(s)).left + t;
+function Gt(s, e) {
+  const t = jt(s).scrollLeft;
+  return e ? e.left + t : Le(le(s)).left + t;
 }
-function fo(s, e) {
-  const t = s.getBoundingClientRect(), o = t.left + e.scrollLeft - Vt(s, t), i = t.top + e.scrollTop;
+function So(s, e) {
+  const t = s.getBoundingClientRect(), o = t.left + e.scrollLeft - Gt(s, t), i = t.top + e.scrollTop;
   return {
     x: o,
     y: i
   };
 }
-function fr(s) {
+function Lr(s) {
   let {
     elements: e,
     rect: t,
     offsetParent: o,
     strategy: i
   } = s;
-  const r = i === "fixed", n = ae(o), a = e ? Dt(e.floating) : !1;
+  const r = i === "fixed", n = le(o), a = e ? Wt(e.floating) : !1;
   if (o === n || a && r)
     return t;
   let l = {
     scrollLeft: 0,
     scrollTop: 0
-  }, c = ne(1);
-  const d = ne(0), h = be(o);
-  if ((h || !r) && ((We(o) !== "body" || Nt(n)) && (l = $t(o)), h)) {
-    const u = Me(o);
-    c = Ee(o), d.x = u.x + o.clientLeft, d.y = u.y + o.clientTop;
+  }, c = ae(1);
+  const d = ae(0), u = ve(o);
+  if ((u || !r) && ((Ue(o) !== "body" || Kt(n)) && (l = jt(o)), u)) {
+    const p = Le(o);
+    c = ze(o), d.x = p.x + o.clientLeft, d.y = p.y + o.clientTop;
   }
-  const f = n && !h && !r ? fo(n, l) : ne(0);
+  const f = n && !u && !r ? So(n, l) : ae(0);
   return {
     width: t.width * c.x,
     height: t.height * c.y,
@@ -1992,32 +2028,32 @@ function fr(s) {
     y: t.y * c.y - l.scrollTop * c.y + d.y + f.y
   };
 }
-function gr(s) {
+function Er(s) {
   return s.getClientRects ? Array.from(s.getClientRects()) : [];
 }
-function br(s) {
-  const e = $t(s), t = s.ownerDocument.body, o = re(s.scrollWidth, s.clientWidth, t.scrollWidth, t.clientWidth), i = re(s.scrollHeight, s.clientHeight, t.scrollHeight, t.clientHeight);
-  let r = -e.scrollLeft + Vt(s);
+function Ar(s) {
+  const e = jt(s), t = s.ownerDocument.body, o = ne(s.scrollWidth, s.clientWidth, t.scrollWidth, t.clientWidth), i = ne(s.scrollHeight, s.clientHeight, t.scrollHeight, t.clientHeight);
+  let r = -e.scrollLeft + Gt(s);
   const n = -e.scrollTop;
-  return ee(t).direction === "rtl" && (r += re(s.clientWidth, t.clientWidth) - o), {
+  return te(t).direction === "rtl" && (r += ne(s.clientWidth, t.clientWidth) - o), {
     width: o,
     height: i,
     x: r,
     y: n
   };
 }
-const vr = 25;
-function yr(s, e, t) {
+const zr = 25;
+function Nr(s, e, t) {
   t === void 0 && (t = "viewport");
-  const o = t === "layoutViewport", i = U(s), r = ae(s), n = i.visualViewport;
+  const o = t === "layoutViewport", i = U(s), r = le(s), n = i.visualViewport;
   let a = r.clientWidth, l = r.clientHeight, c = 0, d = 0;
   if (n) {
-    const f = !ms() || e === "fixed";
+    const f = !_s() || e === "fixed";
     o ? f || (c = -n.offsetLeft, d = -n.offsetTop) : (a = n.width, l = n.height, f && (c = n.offsetLeft, d = n.offsetTop));
   }
-  if (Vt(r) <= 0) {
-    const f = r.ownerDocument, u = f.body, g = getComputedStyle(u), y = f.compatMode === "CSS1Compat" && parseFloat(g.marginLeft) + parseFloat(g.marginRight) || 0, w = Math.abs(r.clientWidth - u.clientWidth - y), b = getComputedStyle(r).scrollbarGutter === "stable both-edges" ? w / 2 : w;
-    b <= vr && (a -= b);
+  if (Gt(r) <= 0) {
+    const f = r.ownerDocument, p = f.body, g = getComputedStyle(p), w = f.compatMode === "CSS1Compat" && parseFloat(g.marginLeft) + parseFloat(g.marginRight) || 0, y = Math.abs(r.clientWidth - p.clientWidth - w), b = getComputedStyle(r).scrollbarGutter === "stable both-edges" ? y / 2 : y;
+    b <= zr && (a -= b);
   }
   return {
     width: a,
@@ -2026,8 +2062,8 @@ function yr(s, e, t) {
     y: d
   };
 }
-function wr(s, e) {
-  const t = Me(s, !0, e === "fixed"), o = t.top + s.clientTop, i = t.left + s.clientLeft, r = Ee(s), n = s.clientWidth * r.x, a = s.clientHeight * r.y, l = i * r.x, c = o * r.y;
+function $r(s, e) {
+  const t = Le(s, !0, e === "fixed"), o = t.top + s.clientTop, i = t.left + s.clientLeft, r = ze(s), n = s.clientWidth * r.x, a = s.clientHeight * r.y, l = i * r.x, c = o * r.y;
   return {
     width: n,
     height: a,
@@ -2035,16 +2071,16 @@ function wr(s, e) {
     y: c
   };
 }
-function As(s, e, t) {
+function Fs(s, e, t) {
   let o;
   if (e === "viewport" || e === "layoutViewport")
-    o = yr(s, t, e);
+    o = Nr(s, t, e);
   else if (e === "document")
-    o = br(ae(s));
-  else if (Z(e))
-    o = wr(e, t);
+    o = Ar(le(s));
+  else if (ee(e))
+    o = $r(e, t);
   else {
-    const i = po(s);
+    const i = Co(s);
     o = {
       x: e.x - i.x,
       y: e.y - i.y,
@@ -2052,104 +2088,104 @@ function As(s, e, t) {
       height: e.height
     };
   }
-  return Lt(o);
+  return Rt(o);
 }
-function xr(s, e) {
+function Vr(s, e) {
   const t = e.get(s);
   if (t)
     return t;
-  let o = ot(s, [], !1).filter((a) => Z(a) && We(a) !== "body"), i = null;
-  const r = ee(s).position === "fixed";
-  let n = r ? Pe(s) : s;
-  for (; Z(n) && !st(n); ) {
-    const a = ee(n), l = us(n), c = i ? i.position : r ? "fixed" : "";
-    !l && (c === "fixed" || c === "absolute" && a.position === "static") ? o = o.filter((h) => h !== n) : i = a, n = Pe(n);
+  let o = lt(s, [], !1).filter((a) => ee(a) && Ue(a) !== "body"), i = null;
+  const r = te(s).position === "fixed";
+  let n = r ? Me(s) : s;
+  for (; ee(n) && !at(n); ) {
+    const a = te(n), l = xs(n), c = i ? i.position : r ? "fixed" : "";
+    !l && (c === "fixed" || c === "absolute" && a.position === "static") ? o = o.filter((u) => u !== n) : i = a, n = Me(n);
   }
   return e.set(s, o), o;
 }
-function _r(s) {
+function Dr(s) {
   let {
     element: e,
     boundary: t,
     rootBoundary: o,
     strategy: i
   } = s;
-  const n = [...t === "clippingAncestors" ? Dt(e) ? [] : xr(e, this._c) : [].concat(t), o], a = As(e, n[0], i);
-  let l = a.top, c = a.right, d = a.bottom, h = a.left;
+  const n = [...t === "clippingAncestors" ? Wt(e) ? [] : Vr(e, this._c) : [].concat(t), o], a = Fs(e, n[0], i);
+  let l = a.top, c = a.right, d = a.bottom, u = a.left;
   for (let f = 1; f < n.length; f++) {
-    const u = As(e, n[f], i);
-    l = re(u.top, l), c = ge(u.right, c), d = ge(u.bottom, d), h = re(u.left, h);
+    const p = Fs(e, n[f], i);
+    l = ne(p.top, l), c = be(p.right, c), d = be(p.bottom, d), u = ne(p.left, u);
   }
   return {
-    width: c - h,
+    width: c - u,
     height: d - l,
-    x: h,
+    x: u,
     y: l
   };
 }
-function kr(s) {
+function Rr(s) {
   const {
     width: e,
     height: t
-  } = mo(s);
+  } = ko(s);
   return {
     width: e,
     height: t
   };
 }
-function Cr(s, e, t) {
-  const o = be(e), i = ae(e), r = t === "fixed", n = Me(s, !0, r, e);
+function Br(s, e, t) {
+  const o = ve(e), i = le(e), r = t === "fixed", n = Le(s, !0, r, e);
   let a = {
     scrollLeft: 0,
     scrollTop: 0
   };
-  const l = ne(0);
-  if ((o || !r) && ((We(e) !== "body" || Nt(i)) && (a = $t(e)), o)) {
-    const f = Me(e, !0, r, e);
+  const l = ae(0);
+  if ((o || !r) && ((Ue(e) !== "body" || Kt(i)) && (a = jt(e)), o)) {
+    const f = Le(e, !0, r, e);
     l.x = f.x + e.clientLeft, l.y = f.y + e.clientTop;
   }
-  !o && i && (l.x = Vt(i));
-  const c = i && !o && !r ? fo(i, a) : ne(0), d = n.left + a.scrollLeft - l.x - c.x, h = n.top + a.scrollTop - l.y - c.y;
+  !o && i && (l.x = Gt(i));
+  const c = i && !o && !r ? So(i, a) : ae(0), d = n.left + a.scrollLeft - l.x - c.x, u = n.top + a.scrollTop - l.y - c.y;
   return {
     x: d,
-    y: h,
+    y: u,
     width: n.width,
     height: n.height
   };
 }
-function Kt(s) {
-  return ee(s).position === "static";
+function Jt(s) {
+  return te(s).position === "static";
 }
-function zs(s, e) {
-  if (!be(s) || ee(s).position === "fixed")
+function Ks(s, e) {
+  if (!ve(s) || te(s).position === "fixed")
     return null;
   if (e)
     return e(s);
   let t = s.offsetParent;
-  return ae(s) === t && (t = t.ownerDocument.body), t;
+  return le(s) === t && (t = t.ownerDocument.body), t;
 }
-function go(s, e) {
+function To(s, e) {
   const t = U(s);
-  if (Dt(s))
+  if (Wt(s))
     return t;
-  if (!be(s)) {
-    let i = Pe(s);
-    for (; i && !st(i); ) {
-      if (Z(i) && !Kt(i))
+  if (!ve(s)) {
+    let i = Me(s);
+    for (; i && !at(i); ) {
+      if (ee(i) && !Jt(i))
         return i;
-      i = Pe(i);
+      i = Me(i);
     }
     return t;
   }
-  let o = zs(s, e);
-  for (; o && cr(o) && Kt(o); )
-    o = zs(o, e);
-  return o && st(o) && Kt(o) && !us(o) ? t : o || ur(s) || t;
+  let o = Ks(s, e);
+  for (; o && Sr(o) && Jt(o); )
+    o = Ks(o, e);
+  return o && at(o) && Jt(o) && !xs(o) ? t : o || Or(s) || t;
 }
-const Sr = async function(s) {
-  const e = this.getOffsetParent || go, t = this.getDimensions, o = await t(s.floating);
+const Hr = async function(s) {
+  const e = this.getOffsetParent || To, t = this.getDimensions, o = await t(s.floating);
   return {
-    reference: Cr(s.reference, await e(s.floating), s.strategy),
+    reference: Br(s.reference, await e(s.floating), s.strategy),
     floating: {
       x: 0,
       y: 0,
@@ -2158,67 +2194,67 @@ const Sr = async function(s) {
     }
   };
 };
-function Tr(s) {
-  return ee(s).direction === "rtl";
+function Fr(s) {
+  return te(s).direction === "rtl";
 }
-const bo = {
-  convertOffsetParentRelativeRectToViewportRelativeRect: fr,
-  getDocumentElement: ae,
-  getClippingRect: _r,
-  getOffsetParent: go,
-  getElementRects: Sr,
-  getClientRects: gr,
-  getDimensions: kr,
-  getScale: Ee,
-  isElement: Z,
-  isRTL: Tr
+const Io = {
+  convertOffsetParentRelativeRectToViewportRelativeRect: Lr,
+  getDocumentElement: le,
+  getClippingRect: Dr,
+  getOffsetParent: To,
+  getElementRects: Hr,
+  getClientRects: Er,
+  getDimensions: Rr,
+  getScale: ze,
+  isElement: ee,
+  isRTL: Fr
 };
-function vo(s, e) {
+function Oo(s, e) {
   return s.x === e.x && s.y === e.y && s.width === e.width && s.height === e.height;
 }
-function Or(s, e, t) {
+function Kr(s, e, t) {
   let o = null, i;
-  const r = ae(s);
+  const r = le(s);
   function n() {
     var d;
     clearTimeout(i), (d = o) == null || d.disconnect(), o = null;
   }
-  function a(d, h) {
-    d === void 0 && (d = !1), h === void 0 && (h = 1), n();
+  function a(d, u) {
+    d === void 0 && (d = !1), u === void 0 && (u = 1), n();
     const f = s.getBoundingClientRect(), {
-      left: u,
+      left: p,
       top: g,
-      width: y,
-      height: w
+      width: w,
+      height: y
     } = f;
-    if (d || e(), !y || !w)
+    if (d || e(), !w || !y)
       return;
-    const b = ut(g), _ = ut(r.clientWidth - (u + y)), k = ut(r.clientHeight - (g + w)), M = ut(u), $ = {
-      rootMargin: -b + "px " + -_ + "px " + -k + "px " + -M + "px",
-      threshold: re(0, ge(1, h)) || 1
+    const b = vt(g), _ = vt(r.clientWidth - (p + w)), k = vt(r.clientHeight - (g + y)), P = vt(p), D = {
+      rootMargin: -b + "px " + -_ + "px " + -k + "px " + -P + "px",
+      threshold: ne(0, be(1, u)) || 1
     };
-    let H = !0;
-    function G(N) {
-      const C = N[0].intersectionRatio;
-      if (!vo(f, s.getBoundingClientRect()))
+    let j = !0;
+    function q(V) {
+      const S = V[0].intersectionRatio;
+      if (!Oo(f, s.getBoundingClientRect()))
         return a();
-      if (C !== h) {
-        if (!H)
+      if (S !== u) {
+        if (!j)
           return a();
-        C ? a(!1, C) : i = setTimeout(() => {
+        S ? a(!1, S) : i = setTimeout(() => {
           a(!1, 1e-7);
         }, 1e3);
       }
-      H = !1;
+      j = !1;
     }
     try {
-      o = new IntersectionObserver(G, {
-        ...$,
+      o = new IntersectionObserver(q, {
+        ...D,
         // Handle <iframe>s
         root: r.ownerDocument
       });
     } catch {
-      o = new IntersectionObserver(G, $);
+      o = new IntersectionObserver(q, D);
     }
     o.observe(s);
   }
@@ -2227,7 +2263,7 @@ function Or(s, e, t) {
     l.removeEventListener("resize", c), n();
   };
 }
-function Ir(s, e, t, o) {
+function Wr(s, e, t, o) {
   o === void 0 && (o = {});
   const {
     ancestorScroll: i = !0,
@@ -2235,63 +2271,63 @@ function Ir(s, e, t, o) {
     elementResize: n = typeof ResizeObserver == "function",
     layoutShift: a = typeof IntersectionObserver == "function",
     animationFrame: l = !1
-  } = o, c = ps(s), d = i || r ? [...c ? ot(c) : [], ...e ? ot(e) : []] : [];
+  } = o, c = ks(s), d = i || r ? [...c ? lt(c) : [], ...e ? lt(e) : []] : [];
   d.forEach((b) => {
     i && b.addEventListener("scroll", t), r && b.addEventListener("resize", t);
   });
-  const h = c && a ? Or(c, t, r) : null;
-  let f = -1, u = null;
-  n && (u = new ResizeObserver((b) => {
+  const u = c && a ? Kr(c, t, r) : null;
+  let f = -1, p = null;
+  n && (p = new ResizeObserver((b) => {
     let [_] = b;
-    _ && _.target === c && u && e && (u.unobserve(e), cancelAnimationFrame(f), f = requestAnimationFrame(() => {
+    _ && _.target === c && p && e && (p.unobserve(e), cancelAnimationFrame(f), f = requestAnimationFrame(() => {
       var k;
-      (k = u) == null || k.observe(e);
+      (k = p) == null || k.observe(e);
     })), t();
-  }), c && !l && u.observe(c), e && u.observe(e));
-  let g, y = l ? Me(s) : null;
-  l && w();
-  function w() {
-    const b = Me(s);
-    y && !vo(y, b) && t(), y = b, g = requestAnimationFrame(w);
+  }), c && !l && p.observe(c), e && p.observe(e));
+  let g, w = l ? Le(s) : null;
+  l && y();
+  function y() {
+    const b = Le(s);
+    w && !Oo(w, b) && t(), w = b, g = requestAnimationFrame(y);
   }
   return t(), () => {
     var b;
     d.forEach((_) => {
       i && _.removeEventListener("scroll", t), r && _.removeEventListener("resize", t);
-    }), h == null || h(), (b = u) == null || b.disconnect(), u = null, l && cancelAnimationFrame(g);
+    }), u == null || u(), (b = p) == null || b.disconnect(), p = null, l && cancelAnimationFrame(g);
   };
 }
-const Pr = nr, Mr = ar, Lr = or, Wt = lr, Er = sr, Ar = (s, e, t) => {
+const jr = _r, Gr = kr, Ur = wr, Yt = Cr, qr = vr, Xr = (s, e, t) => {
   const o = /* @__PURE__ */ new Map(), i = t ?? {}, r = {
-    ...bo,
+    ...Io,
     ...i.platform,
     _c: o
   };
-  return tr(s, e, {
+  return br(s, e, {
     ...i,
     platform: r
   });
 };
-function Qt(s) {
+function rs(s) {
   const e = s.parentNode ?? null;
   return e instanceof ShadowRoot ? e.host : e;
 }
-function zr(s) {
+function Jr(s) {
   if (s.transform !== "none" || s.perspective !== "none" || s.filter !== "none")
     return !0;
   const e = s.backdropFilter;
   return !!(e && e !== "none" || s.willChange && /\b(transform|filter|perspective)\b/.test(s.willChange));
 }
-function Zt(s) {
-  let e = Qt(s);
+function ns(s) {
+  let e = rs(s);
   for (; e && !(e === document.body || e === document.documentElement); ) {
-    if (e instanceof Element && zr(getComputedStyle(e)))
+    if (e instanceof Element && Jr(getComputedStyle(e)))
       return e;
-    e = Qt(e);
+    e = rs(e);
   }
   return window;
 }
-function Nr(s, e, t) {
+function Yr(s, e, t) {
   let o = s;
   for (; o && !(o === document.body || o === document.documentElement); ) {
     if (o instanceof Element) {
@@ -2299,11 +2335,11 @@ function Nr(s, e, t) {
       if (Math.abs(i.x - e) < 2 && Math.abs(i.y - t) < 2)
         return o;
     }
-    o = Qt(o);
+    o = rs(o);
   }
   return null;
 }
-function yo(s) {
+function Po(s) {
   const e = getComputedStyle(s), t = [];
   e.transform !== "none" && t.push(`transform: ${e.transform}`), e.perspective !== "none" && t.push(`perspective: ${e.perspective}`), e.filter !== "none" && t.push(`filter: ${e.filter}`);
   const o = e.backdropFilter;
@@ -2311,11 +2347,11 @@ function yo(s) {
   const i = e.containerType;
   return i && i !== "normal" && t.push(`container-type: ${i}`), t.join("; ");
 }
-function Dr(s) {
+function Zr(s) {
   const e = s.id ? `#${s.id}` : "", t = typeof s.className == "string" && s.className ? "." + s.className.split(/\s+/).filter(Boolean).slice(0, 2).join(".") : "";
   return `<${s.tagName.toLowerCase()}${e}${t}>`;
 }
-function $r(s) {
+function Qr(s) {
   const e = s.tolerance ?? 1.5;
   let t = 0, o = 0;
   if (s.offsetParent instanceof Element) {
@@ -2325,46 +2361,46 @@ function $r(s) {
   const i = s.panel.getBoundingClientRect(), r = i.x - (t + s.expectedX), n = i.y - (o + s.expectedY);
   if (Math.abs(r) < e && Math.abs(n) < e)
     return null;
-  const a = Nr(s.reference, r, n);
+  const a = Yr(s.reference, r, n);
   return {
     driftX: r,
     driftY: n,
     culprit: a,
-    culpritDescription: a ? Dr(a) : "an ancestor element (could not auto-identify)",
-    culpritCss: a ? yo(a) : ""
+    culpritDescription: a ? Zr(a) : "an ancestor element (could not auto-identify)",
+    culpritCss: a ? Po(a) : ""
   };
 }
-function Vr(s, e) {
+function en(s, e) {
   var i;
   const t = (i = s.closest) == null ? void 0 : i.call(s, "[data-theme]"), o = t == null ? void 0 : t.getAttribute("data-theme");
   o != null && e.setAttribute("data-theme", o);
 }
-const Rr = { top: "bottom", right: "left", bottom: "top", left: "right" };
-function Br(s, e, t) {
+const tn = { top: "bottom", right: "left", bottom: "top", left: "right" };
+function sn(s, e, t) {
   if (!t)
     return;
-  const o = e.split("-")[0], i = Rr[o];
+  const o = e.split("-")[0], i = tn[o];
   s.style.left = t.x != null ? `${t.x}px` : "", s.style.top = t.y != null ? `${t.y}px` : "", s.style.right = "", s.style.bottom = "", s.style[i] = `-${s.offsetWidth / 2}px`;
 }
-function Ns(s, e) {
-  const t = [Pr(s.offset ?? 4)];
+function Ws(s, e) {
+  const t = [jr(s.offset ?? 4)];
   if (s.matchWidth) {
     const i = s.matchWidth;
-    t.push(Wt({
+    t.push(Yt({
       apply({ rects: r, elements: n }) {
         const a = `${r.reference.width}px`;
         i === "exact" ? n.floating.style.width = a : n.floating.style.minWidth = a;
       }
     }));
   }
-  e && t.push(Lr({
+  e && t.push(Ur({
     ...s.lockPlacement === !0 ? { fallbackStrategy: "initialPlacement" } : {},
     ...s.flipPadding != null ? { padding: s.flipPadding } : {}
   }));
   const o = s.shift ?? 8;
-  if (o !== !1 && t.push(Mr({ padding: o })), s.maxHeight) {
+  if (o !== !1 && t.push(Gr({ padding: o })), s.maxHeight) {
     const i = typeof s.maxHeight == "object" ? s.maxHeight.padding : void 0;
-    t.push(Wt({
+    t.push(Yt({
       padding: i,
       apply({ availableHeight: r, elements: n }) {
         n.floating.style.maxHeight = `${Math.max(0, r)}px`;
@@ -2373,90 +2409,90 @@ function Ns(s, e) {
   }
   if (s.maxWidth) {
     const i = typeof s.maxWidth == "object" ? s.maxWidth.padding : void 0;
-    t.push(Wt({
+    t.push(Yt({
       padding: i,
       apply({ availableWidth: r, elements: n }) {
         n.floating.style.maxWidth = `${Math.max(0, r)}px`;
       }
     }));
   }
-  return s.arrow && t.push(Er({ element: s.arrow.element, padding: s.arrow.padding })), t;
+  return s.arrow && t.push(qr({ element: s.arrow.element, padding: s.arrow.padding })), t;
 }
-function Qe(s, e, t = {}) {
+function ot(s, e, t = {}) {
   const o = t.strategy ?? "fixed";
-  t.inheritThemeFrom && Vr(t.inheritThemeFrom, s), s.style.position = o, s.style.left = "0", s.style.top = "0";
-  let i = t.placement ?? "bottom-start", r = t.flip ?? !0, n = Ns(t, r);
+  t.inheritThemeFrom && en(t.inheritThemeFrom, s), s.style.position = o, s.style.left = "0", s.style.top = "0";
+  let i = t.placement ?? "bottom-start", r = t.flip ?? !0, n = Ws(t, r);
   const a = t.lockPlacement === "freeze";
   let l = !1;
-  const c = !!t.fixedContainingBlock && !t.platform, d = t.platform ?? (c ? { ...bo, getOffsetParent: () => Zt(s) } : void 0), h = () => {
-    var u;
-    (u = t.beforeCompute) == null || u.call(t), Ar(e, s, {
+  const c = !!t.fixedContainingBlock && !t.platform, d = t.platform ?? (c ? { ...Io, getOffsetParent: () => ns(s) } : void 0), u = () => {
+    var p;
+    (p = t.beforeCompute) == null || p.call(t), Xr(e, s, {
       placement: i,
       strategy: o,
       middleware: n,
       ...d ? { platform: d } : {}
-    }).then(({ x: g, y, placement: w, middlewareData: b }) => {
+    }).then(({ x: g, y: w, placement: y, middlewareData: b }) => {
       var _, k;
-      if (s.style.left = `${g}px`, s.style.top = `${y}px`, t.arrow && Br(t.arrow.element, w, b.arrow), a && !l && (l = !0, i = w, r = !1, n = Ns(t, !1)), (_ = t.onPlaced) == null || _.call(t, w), (k = t.onComputed) == null || k.call(t, { x: g, y, placement: w }), t.onDrift && e instanceof Element) {
-        const M = c ? Zt(s) : window, E = $r({ panel: s, reference: e, expectedX: g, expectedY: y, offsetParent: M });
-        E && t.onDrift(E);
+      if (s.style.left = `${g}px`, s.style.top = `${w}px`, t.arrow && sn(t.arrow.element, y, b.arrow), a && !l && (l = !0, i = y, r = !1, n = Ws(t, !1)), (_ = t.onPlaced) == null || _.call(t, y), (k = t.onComputed) == null || k.call(t, { x: g, y: w, placement: y }), t.onDrift && e instanceof Element) {
+        const P = c ? ns(s) : window, N = Qr({ panel: s, reference: e, expectedX: g, expectedY: w, offsetParent: P });
+        N && t.onDrift(N);
       }
     });
   };
   let f;
-  return t.autoUpdate ?? !0 ? f = Ir(e, s, h, t.autoUpdateOptions) : h(), {
-    update: h,
+  return t.autoUpdate ?? !0 ? f = Wr(e, s, u, t.autoUpdateOptions) : u(), {
+    update: u,
     destroy() {
       f == null || f(), f = void 0;
     }
   };
 }
-function Hr(s) {
+function on(s) {
   return typeof s == "number" ? { show: s, hide: s } : { show: (s == null ? void 0 : s.show) ?? 0, hide: (s == null ? void 0 : s.hide) ?? 0 };
 }
-function Fr(s) {
-  const e = s.container ?? document.body, t = s.placement ?? "top", o = s.visibleClass ?? "is-visible", i = Hr(s.delay), r = document.createElement("div");
+function rn(s) {
+  const e = s.container ?? document.body, t = s.placement ?? "top", o = s.visibleClass ?? "is-visible", i = on(s.delay), r = document.createElement("div");
   r.setAttribute("role", "tooltip"), s.cssClass && (r.className = s.cssClass), typeof s.content == "string" ? r.textContent = s.content : r.append(s.content);
   let n, a = !1, l, c, d;
-  const h = {
+  const u = {
     getBoundingClientRect: () => d ?? s.trigger.getBoundingClientRect(),
     contextElement: s.trigger
   }, f = (_) => {
     d = new DOMRect(_.clientX, _.clientY, 0, 0), n == null || n.update();
-  }, u = () => {
+  }, p = () => {
     l && clearTimeout(l), c && clearTimeout(c), l = c = void 0;
   }, g = () => {
     var k;
-    if (u(), a)
+    if (p(), a)
       return;
     (k = s.onBeforeShow) == null || k.call(s), a = !0, e.append(r);
-    const _ = s.followCursor ? h : s.trigger;
-    n = Qe(r, _, {
+    const _ = s.followCursor ? u : s.trigger;
+    n = ot(r, _, {
       placement: t,
       strategy: s.strategy,
       offset: s.offset ?? 8,
       inheritThemeFrom: s.inheritThemeFrom ?? s.trigger
     }), s.followCursor && s.trigger.addEventListener("mousemove", f), r.classList.add(o);
-  }, y = () => {
-    u(), a && (a = !1, r.classList.remove(o), s.followCursor && s.trigger.removeEventListener("mousemove", f), n == null || n.destroy(), n = void 0, r.remove());
   }, w = () => {
-    u(), i.show > 0 ? l = setTimeout(g, i.show) : g();
+    p(), a && (a = !1, r.classList.remove(o), s.followCursor && s.trigger.removeEventListener("mousemove", f), n == null || n.destroy(), n = void 0, r.remove());
+  }, y = () => {
+    p(), i.show > 0 ? l = setTimeout(g, i.show) : g();
   }, b = () => {
-    u(), i.hide > 0 ? c = setTimeout(y, i.hide) : y();
+    p(), i.hide > 0 ? c = setTimeout(w, i.hide) : w();
   };
-  return s.trigger.addEventListener("mouseenter", w), s.trigger.addEventListener("mouseleave", b), s.trigger.addEventListener("focusin", w), s.trigger.addEventListener("focusout", b), {
+  return s.trigger.addEventListener("mouseenter", y), s.trigger.addEventListener("mouseleave", b), s.trigger.addEventListener("focusin", y), s.trigger.addEventListener("focusout", b), {
     element: r,
     get isVisible() {
       return a;
     },
     show: g,
-    hide: y,
+    hide: w,
     destroy() {
-      s.trigger.removeEventListener("mouseenter", w), s.trigger.removeEventListener("mouseleave", b), s.trigger.removeEventListener("focusin", w), s.trigger.removeEventListener("focusout", b), y();
+      s.trigger.removeEventListener("mouseenter", y), s.trigger.removeEventListener("mouseleave", b), s.trigger.removeEventListener("focusin", y), s.trigger.removeEventListener("focusout", b), w();
     }
   };
 }
-function Kr(s) {
+function nn(s) {
   const e = s.container ?? document.body;
   let t, o = !1;
   const i = s.inheritThemeFrom ?? (s.reference instanceof HTMLElement ? s.reference : void 0);
@@ -2465,7 +2501,7 @@ function Kr(s) {
       return o;
     },
     open() {
-      o || (o = !0, e.append(s.panel), t = Qe(s.panel, s.reference, {
+      o || (o = !0, e.append(s.panel), t = ot(s.panel, s.reference, {
         placement: s.placement ?? "bottom-start",
         strategy: s.strategy,
         offset: s.offset,
@@ -2491,21 +2527,21 @@ function Kr(s) {
     }
   };
 }
-const wo = ["INIT", "DATA", "UI", "INTERACTION"], le = Wi("MULTISELECT", wo), mt = le.loggers.INIT, F = le.loggers.DATA, Y = le.loggers.UI, W = le.loggers.INTERACTION, dn = wo.map((s) => `MULTISELECT:${s}`);
-function hn() {
-  le.enableLogging();
+const Mo = ["INIT", "DATA", "UI", "INTERACTION"], ce = nr("MULTISELECT", Mo), wt = ce.loggers.INIT, W = ce.loggers.DATA, Y = ce.loggers.UI, R = ce.loggers.INTERACTION, Tn = Mo.map((s) => `MULTISELECT:${s}`);
+function In() {
+  ce.enableLogging();
 }
-function un() {
-  le.disableLogging();
+function On() {
+  ce.disableLogging();
 }
-function mn(s) {
-  le.setLogLevel(s);
+function Pn(s) {
+  ce.setLogLevel(s);
 }
-function pn(s, e) {
+function Mn(s, e) {
   const t = s.includes(":") ? s.split(":").pop() : s;
-  le.setCategoryLevel(t, e);
+  ce.setCategoryLevel(t, e);
 }
-class Ds {
+class js {
   constructor(e) {
     m(this, "container");
     m(this, "wrapper");
@@ -2584,11 +2620,21 @@ class Ds {
    * Scroll to make item at index visible (like scrollIntoView with block: 'nearest')
    * Only scrolls if item is outside visible area, and scrolls minimally
    */
-  scrollToIndex(e) {
+  scrollToIndex(e, t = "start") {
     if (e < 0 || e >= this.items.length)
       return;
-    const t = e * this.itemHeight, o = t + this.itemHeight, i = this.container.scrollTop, r = i + this.viewportHeight;
-    t < i ? this.container.scrollTop = t : o > r && (this.container.scrollTop = o - this.viewportHeight);
+    this.updateViewportHeight();
+    const o = e * this.itemHeight, i = o + this.itemHeight, r = Math.max(0, this.items.length * this.itemHeight - this.viewportHeight);
+    let n;
+    if (t === "center")
+      n = o - (this.viewportHeight - this.itemHeight) / 2;
+    else if (t === "nearest") {
+      const a = this.container.scrollTop, l = a + this.viewportHeight;
+      if (o >= a && i <= l) return;
+      n = o < a ? o : i - this.viewportHeight;
+    } else
+      n = o;
+    n = Math.max(0, Math.min(n, r)), this.container.scrollTop = n, this.scrollTop = n, this.render();
   }
   /**
    * Get currently visible range
@@ -2627,7 +2673,7 @@ class Ds {
     this.container.removeEventListener("scroll", this.scrollHandler), this.resizeObserver && this.resizeObserver.disconnect(), this.container.innerHTML = "";
   }
 }
-function $s(s) {
+function Gs(s) {
   return {
     treeId: "",
     id: -1,
@@ -2642,28 +2688,28 @@ function $s(s) {
     ...s
   };
 }
-const Je = (s) => !s || typeof s == "string" && s.trim() === "";
-function Wr(s, e = ".") {
+const st = (s) => !s || typeof s == "string" && s.trim() === "";
+function an(s, e = ".") {
   if (!s || typeof s != "string") return null;
   const t = s.lastIndexOf(e);
   return t === -1 ? "" : s.substring(0, t);
 }
-function Vs(s, e, t = ".") {
-  return Je(e) ? s : s.startsWith(e + t) ? s.substring(e.length + t.length) : s;
+function Us(s, e, t = ".") {
+  return st(e) ? s : s.startsWith(e + t) ? s.substring(e.length + t.length) : s;
 }
-function Rs(s, e = 0, t = 1, o = ".") {
+function qs(s, e = 0, t = 1, o = ".") {
   return s.split(o).slice(e, e + t).join(o);
 }
-function jr(s, e) {
+function ln(s, e) {
   return s.split(e).length;
 }
-function de(s, e) {
+function he(s, e) {
   return s[e];
 }
-function Ur(s = {}) {
-  const e = s.idMember, t = s.pathMember, o = s.getPathCallback, i = s.parentPathMember, r = s.levelMember, n = s.hasChildrenMember, a = s.isSelectableMember, l = s.getIsSelectableCallback, c = s.treeId || "multiselect-tree", d = s.orderMember, h = s.getDisplayValueCallback, f = Je(i), u = Je(r), g = Je(n), y = Je(a), w = "x", b = s.treePathSeparator || ".", _ = $s();
-  let k = 0, M = null;
-  const E = (N) => o ? o(N) : t ? de(N, t) : void 0, $ = {
+function cn(s = {}) {
+  const e = s.idMember, t = s.pathMember, o = s.getPathCallback, i = s.parentPathMember, r = s.levelMember, n = s.hasChildrenMember, a = s.isSelectableMember, l = s.getIsSelectableCallback, c = s.treeId || "multiselect-tree", d = s.orderMember, u = s.getDisplayValueCallback, f = st(i), p = st(r), g = st(n), w = st(a), y = "x", b = s.treePathSeparator || ".", _ = Gs();
+  let k = 0, P = null;
+  const N = (V) => o ? o(V) : t ? he(V, t) : void 0, D = {
     treePathSeparator: b,
     root: _,
     get tree() {
@@ -2674,102 +2720,102 @@ function Ur(s = {}) {
      * its subtree). Computed once per `insertArray` and cached.
      */
     get flatNodes() {
-      if (M) return M;
-      const N = [], C = s.isSorted ?? !1, O = s.sortCallback;
-      function P(V) {
-        let S = Object.values(V.children);
-        C && O && S.length > 0 && (S = O(S));
-        for (const B of S)
-          N.push(B), B.hasChildren && P(B);
+      if (P) return P;
+      const V = [], S = s.isSorted ?? !1, M = s.sortCallback;
+      function A(B) {
+        let T = Object.values(B.children);
+        S && M && T.length > 0 && (T = M(T));
+        for (const F of T)
+          V.push(F), F.hasChildren && A(F);
       }
-      return P(_), M = N, N;
+      return A(_), P = V, V;
     },
-    insertArray(N) {
-      N = N || [], _.children = {}, k = 0, M = null;
-      const C = [];
-      let O = N.map((P, V) => {
-        const S = $s();
-        S.treeId = c, S.id = e ? de(P, e) : void 0;
-        const B = E(P);
-        return B == null || B === "" || typeof B != "string" ? (C.push(`index ${V}`), null) : (S.path = B, (S.id === void 0 || S.id === -1) && (S.id = B), f ? S.parentPath = Wr(S.path, b) : S.parentPath = de(P, i), S.pathSegment = Rs(
-          Vs(S.path, S.parentPath ?? "", b),
+    insertArray(V) {
+      V = V || [], _.children = {}, k = 0, P = null;
+      const S = [];
+      let M = V.map((A, B) => {
+        const T = Gs();
+        T.treeId = c, T.id = e ? he(A, e) : void 0;
+        const F = N(A);
+        return F == null || F === "" || typeof F != "string" ? (S.push(`index ${B}`), null) : (T.path = F, (T.id === void 0 || T.id === -1) && (T.id = F), f ? T.parentPath = an(T.path, b) : T.parentPath = he(A, i), T.pathSegment = qs(
+          Us(T.path, T.parentPath ?? "", b),
           0,
           1,
           b
-        ), u ? S.level = jr(S.path, b) : S.level = de(P, r), g || (S.hasChildren = de(P, n)), S.data = P, S);
-      }).filter((P) => P !== null);
-      s.isSorted || (s.sortCallback ? O = s.sortCallback(O) : O = G(O));
-      for (const P of O)
-        H(P.parentPath ?? "", P);
-      if (l || !y)
-        for (const P of O)
+        ), p ? T.level = ln(T.path, b) : T.level = he(A, r), g || (T.hasChildren = he(A, n)), T.data = A, T);
+      }).filter((A) => A !== null);
+      s.isSorted || (s.sortCallback ? M = s.sortCallback(M) : M = q(M));
+      for (const A of M)
+        j(A.parentPath ?? "", A);
+      if (l || !w)
+        for (const A of M)
           if (l)
-            P.isSelectable = l(P) !== !1;
+            A.isSelectable = l(A) !== !1;
           else {
-            const V = de(P.data, a);
-            P.isSelectable = V == null ? !0 : !!V;
+            const B = he(A.data, a);
+            A.isSelectable = B == null ? !0 : !!B;
           }
-      C.length > 0 && console.warn(
-        `[ltree ${c}] ${C.length} option(s) had an invalid path and were skipped (pathMember="${t}"). Offending: ${C.slice(0, 5).join(", ")}` + (C.length > 5 ? ", …" : "")
+      S.length > 0 && console.warn(
+        `[ltree ${c}] ${S.length} option(s) had an invalid path and were skipped (pathMember="${t}"). Offending: ${S.slice(0, 5).join(", ")}` + (S.length > 5 ? ", …" : "")
       );
     },
-    getNodeByPath(N, C) {
-      let O = C || _;
-      if (N) {
-        const P = N.split(b);
-        for (let V = 0; V < P.length; V++) {
-          const S = w + P[V];
-          if (!O.children.hasOwnProperty(S))
+    getNodeByPath(V, S) {
+      let M = S || _;
+      if (V) {
+        const A = V.split(b);
+        for (let B = 0; B < A.length; B++) {
+          const T = y + A[B];
+          if (!M.children.hasOwnProperty(T))
             return null;
-          O = O.children[S];
+          M = M.children[T];
         }
       }
-      return O;
+      return M;
     }
   };
-  function H(N, C) {
-    const O = $.getNodeByPath(N);
-    if (!O)
-      return `Node: ${C.path} - Could not find parent node: ${N}`;
-    u && (C.level = (O.level || 0) + 1);
-    const P = w + Rs(Vs(C.path, N, b), 0, 1, b);
-    return O.children.hasOwnProperty(P) || (O.children[P] = C, g && !O.hasChildren && (O.hasChildren = !0), k = Math.max(k, C.level || 0)), null;
+  function j(V, S) {
+    const M = D.getNodeByPath(V);
+    if (!M)
+      return `Node: ${S.path} - Could not find parent node: ${V}`;
+    p && (S.level = (M.level || 0) + 1);
+    const A = y + qs(Us(S.path, V, b), 0, 1, b);
+    return M.children.hasOwnProperty(A) || (M.children[A] = S, g && !M.hasChildren && (M.hasChildren = !0), k = Math.max(k, S.level || 0)), null;
   }
-  function G(N) {
-    return N.sort((C, O) => {
-      const P = C.level || 0, V = O.level || 0;
-      if (P !== V) return P - V;
-      if (C.parentPath !== O.parentPath)
-        return C.parentPath ? O.parentPath ? C.parentPath.localeCompare(O.parentPath) : 1 : -1;
-      if (d && C.data && O.data) {
-        const S = de(C.data, d) ?? 0, B = de(O.data, d) ?? 0;
-        if (S !== B) return S - B;
+  function q(V) {
+    return V.sort((S, M) => {
+      const A = S.level || 0, B = M.level || 0;
+      if (A !== B) return A - B;
+      if (S.parentPath !== M.parentPath)
+        return S.parentPath ? M.parentPath ? S.parentPath.localeCompare(M.parentPath) : 1 : -1;
+      if (d && S.data && M.data) {
+        const T = he(S.data, d) ?? 0, F = he(M.data, d) ?? 0;
+        if (T !== F) return T - F;
       }
-      return h ? h(C).localeCompare(h(O)) : C.path.localeCompare(O.path);
+      return u ? u(S).localeCompare(u(M)) : S.path.localeCompare(M.path);
     });
   }
-  return $;
+  return D;
 }
-function Bs(s, e) {
+function Xs(s, e) {
   const t = /* @__PURE__ */ new Map(), o = /* @__PURE__ */ new Map(), i = /* @__PURE__ */ new Set(), r = (l) => String(e(l.data)), n = (l) => {
     t.set(r(l), l);
     const c = [];
-    for (const h of Object.values(l.children))
-      c.push(...n(h));
+    for (const u of Object.values(l.children))
+      c.push(...n(u));
     let d;
     return c.length > 0 ? d = c : l.isSelectable !== !1 ? (d = [r(l)], i.add(l.path)) : d = [], o.set(l.path, d), d;
   }, a = s.tree;
   for (const l of a) n(l);
   return { nodeByValue: t, atomsUnder: o, atomPaths: i, roots: a };
 }
-function fs(s, e, t) {
+function Cs(s, e, t) {
   const o = s.atomsUnder.get(e.path);
   if (!o || o.length === 0) return "unchecked";
   let i = 0;
   for (const r of o) t.has(r) && i++;
   return i === 0 ? "unchecked" : i === o.length ? "checked" : "indeterminate";
 }
-function qe(s, e) {
+function Qe(s, e) {
   const t = /* @__PURE__ */ new Set();
   for (const o of e) {
     const i = s.nodeByValue.get(String(o));
@@ -2778,44 +2824,48 @@ function qe(s, e) {
   }
   return t;
 }
-function Gr(s, e, t) {
-  const o = s.atomsUnder.get(e.path) ?? [], i = new Set(t), r = fs(s, e, t), n = [], a = [];
+function dn(s, e, t) {
+  const o = s.atomsUnder.get(e.path) ?? [], i = new Set(t), r = Cs(s, e, t), n = [], a = [];
   if (r === "checked")
     for (const l of o) i.delete(l) && a.push(l);
   else
     for (const l of o) i.has(l) || (i.add(l), n.push(l));
   return { checkedAtoms: i, addedAtoms: n, removedAtoms: a };
 }
-function jt(s, e, t, o) {
+function Zt(s, e, t, o) {
   const i = (a) => String(o(a.data)), r = [], n = (a) => {
-    const l = fs(s, a, e);
+    const l = Cs(s, a, e);
     if (l === "unchecked") return;
     const c = a.isSelectable !== !1, d = Object.values(a.children);
     if (t === "leaves") {
       s.atomPaths.has(a.path) && l === "checked" && r.push(i(a));
-      for (const h of d) n(h);
+      for (const u of d) n(u);
       return;
     }
     if (t === "all") {
       l === "checked" && c && r.push(i(a));
-      for (const h of d) n(h);
+      for (const u of d) n(u);
       return;
     }
     if (l === "checked" && c) {
       r.push(i(a));
       return;
     }
-    for (const h of d) n(h);
+    for (const u of d) n(u);
   };
   for (const a of s.roots) n(a);
   return r;
 }
-class qr {
+var $;
+class hn {
   constructor(e, t = {}) {
     m(this, "element");
     m(this, "instanceId");
     m(this, "options");
-    m(this, "isOpen", !1);
+    // Backing field for the open state. Read/written internally via `this.#isOpen`
+    // so the public `isOpen` accessor (get/set) can drive open()/close() without
+    // recursing. See the imperative API at the bottom of the class.
+    L(this, $, !1);
     m(this, "selectedValues", /* @__PURE__ */ new Set());
     m(this, "selectedOptions", /* @__PURE__ */ new Map());
     m(this, "allOptions", []);
@@ -2836,6 +2886,10 @@ class qr {
     m(this, "keyboardController", null);
     m(this, "matchingIndices", /* @__PURE__ */ new Set());
     m(this, "searchTerm", "");
+    /** Keyboard focus sits on the empty-state "add new" prompt (arrow-navigated). */
+    m(this, "addNewFocused", !1);
+    /** An async addNewCallback is in flight — the prompt shows a spinner + pending text. */
+    m(this, "addNewPending", !1);
     m(this, "isLoading", !1);
     m(this, "searchDebounceTimer");
     m(this, "searchAbortController");
@@ -2845,11 +2899,16 @@ class qr {
     m(this, "isRTL", !1);
     m(this, "effectiveBadgesPosition", "bottom");
     m(this, "justClosedViaClick", !1);
-    // Set for one tick when the dropdown is opened by a pointer gesture. A fullscreen
-    // overlay (position:fixed, inset:0) appears over the pointer between mousedown and
-    // the follow-up click, so that click can target a common ancestor above the
-    // portaled panel and be misread as an outside-click. This guard swallows exactly
-    // that one click. See attachEvents() (mousedown) and handleClickOutside().
+    // Set for one tick when the dropdown is opened by a pointer gesture, or when a
+    // consumer drives the already-open panel from their own click handler (a repeat
+    // open()/toggle(), or a scrollTo* command). A fullscreen overlay (position:fixed,
+    // inset:0) appears over the pointer between mousedown and the follow-up click, so
+    // that click can target a common ancestor above the portaled panel and be misread
+    // as an outside-click; and an EXTERNAL control clicked to re-drive the open panel
+    // sends its click bubbling to our document-level outside-click listener, which
+    // would otherwise close the very panel the command just re-scrolled. This guard
+    // swallows exactly that one click. See armClickGuard(), attachEvents() (mousedown)
+    // and handleClickOutside().
     m(this, "justOpenedViaClick", !1);
     m(this, "positioningDriftWarned", !1);
     // Fullscreen counterpart of positioningDriftWarned: warn once per instance when an
@@ -2928,15 +2987,26 @@ class qr {
     m(this, "selectedPopoverContainer", null);
     // DOM elements
     m(this, "input");
+    // The field shell (border/background) wrapping the input + trailing decorations.
+    // Floating panels anchor to this (not the narrower flex <input>) so they align to
+    // and match the full field width.
+    m(this, "inputWrapper");
     m(this, "dropdown");
     m(this, "dropdownInner");
     m(this, "badgesContainer");
     m(this, "counter");
+    // Inline ✕ inside the input that wipes the whole selection (opt-in via isClearShown).
+    // Always in the DOM; updateClearButton() toggles its display by selection/enabled state.
+    m(this, "clearButton");
     m(this, "hint");
     m(this, "selectedPopover");
     // Document-level event handlers (stored for cleanup)
     m(this, "documentKeydownHandler", null);
     m(this, "documentClickHandler", null);
+    // Cross-component "one overlay open at a time" coordination (core). activate() on
+    // open() dismisses every OTHER participating overlay (multiselects, datepickers, …);
+    // our onDismiss closes this dropdown when another opens. Torn down in destroy().
+    m(this, "overlayCoord", null);
     this.element = e, this.instanceId = `MS-${Math.random().toString(36).slice(2, 11)}`, this.options = {
       // String options
       searchHint: e.dataset.searchHint || "",
@@ -2950,6 +3020,8 @@ class qr {
       badgesThresholdMode: e.dataset.badgesThresholdMode || "count",
       maxHeight: e.dataset.maxHeight || "20rem",
       emptyMessage: e.dataset.emptyMessage || "No results found",
+      addNewText: e.dataset.addNewText || void 0,
+      addNewPendingText: e.dataset.addNewPendingText || void 0,
       loadingMessage: e.dataset.loadingMessage || "Loading...",
       searchInputMode: e.dataset.searchInputMode || "normal",
       searchMode: e.dataset.searchMode || "filter",
@@ -3060,6 +3132,43 @@ class qr {
       fallback: () => this.getItemDisplayValue(e)
     });
   }
+  /** Sort key for `selectedOrder === 'member'` (member/callback pattern). */
+  getItemSortKey(e) {
+    return this.extractField(e, {
+      tupleSkip: !0,
+      member: this.options.selectedOrderMember,
+      callback: this.options.getSelectedOrderCallback,
+      fallback: ""
+    });
+  }
+  /**
+   * Selected options in the order they should be DISPLAYED (badges / partial "+N more" / popover).
+   * Never mutates state — always returns a fresh array. Display concern only: getValue()/form
+   * output/getSelected() keep as-selected (insertion) order. See `selectedOrder`.
+   */
+  getOrderedSelectedOptions() {
+    const e = Array.from(this.selectedOptions.values()), t = this.options.selectedOrder ?? "as-selected";
+    if (t === "as-selected" || e.length < 2) return e;
+    const o = e.slice();
+    switch (t) {
+      case "label-asc":
+        o.sort((i, r) => this.getItemBadgeDisplayValue(i).localeCompare(this.getItemBadgeDisplayValue(r)));
+        break;
+      case "label-desc":
+        o.sort((i, r) => this.getItemBadgeDisplayValue(r).localeCompare(this.getItemBadgeDisplayValue(i)));
+        break;
+      case "member":
+        o.sort((i, r) => {
+          const n = this.getItemSortKey(i), a = this.getItemSortKey(r);
+          return typeof n == "number" && typeof a == "number" ? n - a : String(n).localeCompare(String(a));
+        });
+        break;
+      case "custom":
+        this.options.selectedOrderCompareCallback && o.sort(this.options.selectedOrderCompareCallback);
+        break;
+    }
+    return o;
+  }
   getItemIcon(e) {
     return this.extractField(e, {
       tupleSkip: !0,
@@ -3116,7 +3225,7 @@ class qr {
     return i ? i.isSelectable !== !1 : !0;
   }
   init() {
-    this.parseOptions(), this.buildHTML(), this.attachEvents(), this.parseInitialSelection(), mt.debug(`Initialized [${this.instanceId}] with options:`, {
+    this.parseOptions(), this.buildHTML(), this.attachEvents(), this.parseInitialSelection(), wt.debug(`Initialized [${this.instanceId}] with options:`, {
       placeholder: this.options.searchPlaceholder,
       totalOptions: this.allOptions.length,
       isCloseOnSelect: this.options.isCloseOnSelect,
@@ -3129,7 +3238,7 @@ class qr {
       try {
         this.allOptions = JSON.parse(e);
       } catch (t) {
-        F.error(`[${this.instanceId}] Failed to parse data-options:`, t), this.allOptions = [];
+        W.error(`[${this.instanceId}] Failed to parse data-options:`, t), this.allOptions = [];
       }
     else this.options.options && (this.allOptions = this.options.options);
     this.filteredOptions = [...this.allOptions], this.isTreeMode() && this.buildTree();
@@ -3143,7 +3252,7 @@ class qr {
   }
   /** (Re)build the ltree from `allOptions` and derive the visible flat list. */
   buildTree() {
-    this.tree = Ur({
+    this.tree = cn({
       idMember: this.options.valueMember,
       pathMember: this.options.pathMember,
       getPathCallback: this.options.getPathCallback,
@@ -3155,22 +3264,24 @@ class qr {
       treePathSeparator: this.options.treePathSeparator,
       treeId: this.instanceId,
       getDisplayValueCallback: (e) => this.getItemDisplayValue(e.data)
-    }), this.tree.insertArray(this.allOptions), this.cascadeIndex = this.isCascadeMode() ? Bs(this.tree, (e) => String(this.getItemValue(e))) : null, this.rebuildTreeVisible();
+    }), this.tree.insertArray(this.allOptions), this.cascadeIndex = this.isCascadeMode() ? Xs(this.tree, (e) => String(this.getItemValue(e))) : null, this.rebuildTreeVisible();
   }
   /**
    * Whether cascade checkbox mode is active: a multi-select tree with
-   * `checkbox-mode="cascade"`. Checking a node then toggles its whole subtree
-   * and branches show a tristate box.
+   * `checkbox-mode` NOT set to `independent`. Checking a node then toggles its
+   * whole subtree and branches show a tristate box. Cascade is the DEFAULT
+   * (unset → cascade); opt out per-instance with `checkbox-mode="independent"`.
+   * Only ever active in tree + multiple — no subtree to cascade otherwise.
    */
   isCascadeMode() {
-    return this.isTreeMode() && this.options.isMultipleEnabled !== !1 && this.options.checkboxMode === "cascade";
+    return this.isTreeMode() && this.options.isMultipleEnabled !== !1 && this.options.checkboxMode !== "independent";
   }
   cascadePolicy() {
     return this.options.cascadeSelectPolicy ?? "rolled-up";
   }
   /** Refresh the derived checked-atom set from the emitted `selectedValues`. */
   refreshCascadeAtoms() {
-    this.isCascadeMode() && this.cascadeIndex && (this.cascadeCheckedAtoms = qe(this.cascadeIndex, this.selectedValues));
+    this.isCascadeMode() && this.cascadeIndex && (this.cascadeCheckedAtoms = Qe(this.cascadeIndex, this.selectedValues));
   }
   /**
    * Toggle a tree node in cascade mode: flip its whole subtree, re-project the
@@ -3178,7 +3289,7 @@ class qr {
    * so badges / form / change events reflect the policy (rolled-up branches, etc.).
    */
   toggleTreeCascade(e) {
-    const t = this.cascadeIndex, o = qe(t, this.selectedValues), { checkedAtoms: i } = Gr(t, e, o);
+    const t = this.cascadeIndex, o = Qe(t, this.selectedValues), { checkedAtoms: i } = dn(t, e, o);
     this.commitCascadeAtoms(i);
   }
   /**
@@ -3189,7 +3300,7 @@ class qr {
    */
   commitCascadeAtoms(e) {
     var l;
-    const t = this.cascadeIndex, o = jt(
+    const t = this.cascadeIndex, o = Zt(
       t,
       e,
       this.cascadePolicy(),
@@ -3199,8 +3310,8 @@ class qr {
       i.has(c) || n.push(d);
     const a = /* @__PURE__ */ new Map();
     for (const c of o) {
-      const h = ((l = t.nodeByValue.get(c)) == null ? void 0 : l.data) ?? this.selectedOptions.get(c);
-      h !== void 0 && (a.set(c, h), this.selectedValues.has(c) || r.push(h));
+      const u = ((l = t.nodeByValue.get(c)) == null ? void 0 : l.data) ?? this.selectedOptions.get(c);
+      u !== void 0 && (a.set(c, u), this.selectedValues.has(c) || r.push(u));
     }
     this.selectedValues = i, this.selectedOptions = a, this.cascadeCheckedAtoms = e, this.commit({ added: r, removed: n });
   }
@@ -3214,7 +3325,7 @@ class qr {
    */
   counterSelection() {
     if (this.isCascadeMode() && this.cascadeIndex) {
-      const e = jt(
+      const e = Zt(
         this.cascadeIndex,
         this.cascadeCheckedAtoms,
         "rolled-up",
@@ -3324,7 +3435,7 @@ class qr {
    */
   detectRTL() {
     const e = this.element.getRootNode(), t = e instanceof ShadowRoot ? e.host : this.element, o = t.getAttribute("dir") === "rtl", i = t.closest('[dir="rtl"]') !== null;
-    this.isRTL = o || i, mt.debug(`[${this.instanceId}] RTL Debug:`, {
+    this.isRTL = o || i, wt.debug(`[${this.instanceId}] RTL Debug:`, {
       isShadowRoot: e instanceof ShadowRoot,
       elementDir: t.getAttribute("dir"),
       hasElementDir: o,
@@ -3350,11 +3461,17 @@ class qr {
   }
   buildHTML() {
     const e = this.options.container || document.body;
-    this.detectRTL(), this.element.classList.add("ms"), this.isRTL && (this.element.classList.add("ms--rtl"), mt.debug(`[${this.instanceId}] Added ms--rtl class to element`)), (!this.options.isCheckboxesShown || !this.options.isMultipleEnabled) && this.element.classList.add("ms--no-checkboxes"), this.options.isSelectedPopoverEnabled || this.element.classList.add("ms--no-selected-popover");
+    this.detectRTL(), this.element.classList.add("ms"), this.isRTL && (this.element.classList.add("ms--rtl"), wt.debug(`[${this.instanceId}] Added ms--rtl class to element`)), (!this.options.isCheckboxesShown || !this.options.isMultipleEnabled) && this.element.classList.add("ms--no-checkboxes"), this.options.isSelectedPopoverEnabled || this.element.classList.add("ms--no-selected-popover");
     const t = document.createElement("div");
-    t.className = "ms__input-wrapper", this.input = document.createElement("input"), this.input.type = "text", this.input.className = "ms__input", this.input.placeholder = this.getPlaceholderText(), this.input.autocomplete = "off", this.options.searchInputMode === "readonly" ? this.input.readOnly = !0 : this.options.searchInputMode === "hidden" && (this.input.style.display = "none");
+    t.className = "ms__input-wrapper", this.inputWrapper = t, this.input = document.createElement("input"), this.input.type = "text", this.input.className = "ms__input", this.input.placeholder = this.getPlaceholderText(), this.input.autocomplete = "off", this.options.searchInputMode === "readonly" ? this.input.readOnly = !0 : this.options.searchInputMode === "hidden" && (this.input.style.visibility = "hidden");
     const o = document.createElement("span");
-    o.className = "ms__toggle", o.innerHTML = "▼", this.counter = document.createElement("span"), this.counter.className = "ms__counter", this.counter.style.display = "none", t.appendChild(this.input), t.appendChild(this.counter), t.appendChild(o), this.badgesContainer = document.createElement("div"), this.badgesContainer.className = "ms__badges";
+    o.className = "ms__toggle", o.addEventListener("mousedown", (n) => {
+      n.preventDefault(), n.stopPropagation(), h(this, $) ? (this.justClosedViaClick = !0, this.close(), setTimeout(() => {
+        this.justClosedViaClick = !1;
+      }, 0)) : (this.open(), this.presentationMode !== "fullscreen" && this.input.focus());
+    }), this.counter = document.createElement("span"), this.counter.className = "ms__counter", this.counter.style.display = "none", this.clearButton = document.createElement("button"), this.clearButton.type = "button", this.clearButton.className = "ms__input-clear", this.clearButton.tabIndex = -1, this.clearButton.setAttribute("aria-label", "Clear selection"), this.clearButton.style.display = "none", this.clearButton.addEventListener("mousedown", (n) => n.preventDefault()), this.clearButton.addEventListener("click", (n) => {
+      n.stopPropagation(), this.clearClick();
+    }), t.appendChild(this.input), t.appendChild(this.counter), t.appendChild(this.clearButton), t.appendChild(o), this.badgesContainer = document.createElement("div"), this.badgesContainer.className = "ms__badges";
     const i = document.createElement("div");
     i.className = "ms__wrapper", (this.effectiveBadgesPosition === "left" || this.effectiveBadgesPosition === "right") && i.classList.add("ms__wrapper--inline"), i.appendChild(t), i.appendChild(this.badgesContainer), this.element.appendChild(i);
     const r = this.isRTL ? "rtl" : null;
@@ -3377,6 +3494,81 @@ class qr {
       return t && t.trim() !== "";
     });
   }
+  /**
+   * Whether the flat-group cascade checkbox is active: a multi-select, grouped,
+   * non-tree list with `group-select-mode="cascade"`. When on, each group header
+   * gets a tristate checkbox that toggles all of that group's visible members.
+   * Tree mode has its own `checkbox-mode` cascade, so this stays flat-only.
+   */
+  isGroupCascadeActive() {
+    return !this.isTreeMode() && this.options.isMultipleEnabled !== !1 && !!this.options.isGroupsAllowed && this.options.groupSelectMode === "cascade" && this.hasGroups();
+  }
+  /**
+   * Tristate check-state of a group from its members: `checked` if every
+   * non-disabled member is selected, `unchecked` if none are, else
+   * `indeterminate`. Disabled members are excluded from the denominator so a
+   * group with a stuck-disabled member can still read fully checked. An empty
+   * (or all-disabled) group reads `unchecked`.
+   */
+  groupCheckState(e) {
+    return this.groupSelectionInfo(e).checkState;
+  }
+  /**
+   * Selection roll-up for a flat group's (visible) members: which are selected, how many, and
+   * the tristate check-state. `selectedCount` counts every selected member (including a
+   * disabled-but-selected one) — it's the "N behind the group title". `checkState` excludes
+   * disabled members from its denominator (mirrors the select-all), so a group with a stuck
+   * disabled member can still read fully `checked`. Shared by the header count, the tristate
+   * checkbox, and the `renderGroupLabelContentCallback` context.
+   */
+  groupSelectionInfo(e) {
+    let t = 0, o = 0;
+    const i = [];
+    for (const n of e) {
+      const a = this.getItemDisabled(n), l = this.selectedValues.has(String(this.getItemValue(n)));
+      a || t++, l && (i.push(n), a || o++);
+    }
+    const r = t === 0 || o === 0 ? "unchecked" : o === t ? "checked" : "indeterminate";
+    return {
+      members: e,
+      selectedMembers: i,
+      selectedCount: i.length,
+      memberCount: e.length,
+      selectableCount: t,
+      checkState: r
+    };
+  }
+  /**
+   * Formats the small count chip shared by the in-input counter and the per-group header count.
+   * Default `[selected]` (matches the historical in-input `[N]`); a `getCountLabelCallback` can
+   * switch both to e.g. `selected/total`.
+   */
+  formatCountLabel(e, t) {
+    return this.options.getCountLabelCallback ? this.options.getCountLabelCallback(e, t) : `[${e}]`;
+  }
+  /** Trailing count chip for a group header — any grouped list (rendered only when >0 selected). */
+  groupCountHtml(e, t) {
+    if (e <= 0) return "";
+    const o = this.formatCountLabel(e, t);
+    return `<span class="ms__group-count" aria-label="${e} selected">${this.escapeHtml(o)}</span>`;
+  }
+  /**
+   * Shared markup for a `.ms__checkbox` input — the single source of truth for option rows, tree
+   * nodes, and group headers. Indeterminate is a pure CSS state (the box is `appearance: none`, so
+   * no native `input.indeterminate` is needed — virtual-scroll-safe) plus `aria-checked="mixed"`.
+   */
+  checkboxHtml(e = {}) {
+    const t = e.indeterminate ? "ms__checkbox ms__checkbox--indeterminate" : "ms__checkbox", o = [
+      e.checked ? "checked" : "",
+      e.indeterminate ? 'aria-checked="mixed"' : "",
+      e.disabled ? "disabled" : ""
+    ].filter(Boolean).join(" ");
+    return `<input type="checkbox" class="${t}"${o ? " " + o : ""}>`;
+  }
+  /** Group-header tristate checkbox (maps the group's roll-up state onto `checkboxHtml`). */
+  groupCheckboxHtml(e) {
+    return this.checkboxHtml({ checked: e === "checked", indeterminate: e === "indeterminate" });
+  }
   renderDropdown(e) {
     var a;
     if (this.destroyAllActionButtonTooltips(), this.hideLabelReveal(), this.refreshCascadeAtoms(), this.shouldUseVirtualScroll()) {
@@ -3396,26 +3588,41 @@ class qr {
     } else
       t += '<div class="ms__options">';
     if (this.filteredOptions.length === 0)
-      t += `<div class="ms__empty">${this.options.emptyMessage}</div>`;
+      t += this.renderEmptyStateHTML();
     else if (this.isTreeMode())
       this.treeNodes.forEach((l, c) => {
         t += this.renderTreeNode(l, c);
       });
     else if (this.options.isGroupsAllowed) {
       const l = this.groupOptions(this.filteredOptions), c = /* @__PURE__ */ new Map();
-      this.filteredOptions.forEach((d, h) => c.set(d, h)), Object.keys(l).forEach((d) => {
-        if (t += '<div class="ms__group">', d !== "__ungrouped__")
+      this.filteredOptions.forEach((u, f) => c.set(u, f));
+      const d = this.isGroupCascadeActive();
+      Object.keys(l).forEach((u) => {
+        if (t += '<div class="ms__group">', u !== "__ungrouped__") {
+          const f = ` data-group="${this.escapeHtml(u)}"`, p = d ? ' data-group-select="cascade"' : "", g = this.groupSelectionInfo(l[u]), w = d ? this.groupCheckboxHtml(g.checkState) : "", y = d ? "ms__group-label ms__group-label--selectable" : "ms__group-label";
           if (this.options.renderGroupLabelContentCallback) {
-            const h = this.options.renderGroupLabelContentCallback(d);
-            if (h instanceof HTMLElement) {
-              const f = document.createElement("div");
-              f.className = "ms__group-label", f.appendChild(h), t += f.outerHTML;
+            const b = {
+              ...Xe(this.presentationMode),
+              groupName: u,
+              ...g
+            }, _ = this.options.renderGroupLabelContentCallback(u, b);
+            if (_ instanceof HTMLElement) {
+              const k = document.createElement("div");
+              if (k.className = y, k.dataset.group = u, d) {
+                k.dataset.groupSelect = "cascade";
+                const P = document.createElement("template");
+                P.innerHTML = w, P.content.firstChild && k.appendChild(P.content.firstChild);
+              }
+              k.appendChild(_), t += k.outerHTML;
             } else
-              t += `<div class="ms__group-label">${h}</div>`;
-          } else
-            t += `<div class="ms__group-label">${d}</div>`;
-        l[d].forEach((h) => {
-          t += this.renderOption(h, c.get(h) ?? -1);
+              t += `<div class="${y}"${f}${p}>${w}${_}</div>`;
+          } else {
+            const b = this.groupCountHtml(g.selectedCount, g.memberCount), _ = b ? `${y} ms__group-label--has-count` : y;
+            t += `<div class="${_}"${f}${p}>${w}${this.escapeHtml(u)}${b}</div>`;
+          }
+        }
+        l[u].forEach((f) => {
+          t += this.renderOption(f, c.get(f) ?? -1);
         }), t += "</div>";
       });
     } else
@@ -3475,12 +3682,12 @@ class qr {
       r || (o += i), o += '<div class="ms__options ms__options--virtual" style="overflow-y: auto; position: relative;"></div>', r && (o += i), this.dropdownInner.innerHTML = o, this.optionsContainer = this.dropdownInner.querySelector(".ms__options");
     }
     if (this.applyVirtualOptionsSizing(this.optionsContainer), this.filteredOptions.length === 0) {
-      this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.optionsContainer.innerHTML = `<div class="ms__empty">${this.options.emptyMessage}</div>`;
+      this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.optionsContainer.innerHTML = this.renderEmptyStateHTML();
       return;
     }
     const e = this.scaledOptionHeight(), t = this.options.virtualScrollBuffer ?? 10;
     requestAnimationFrame(() => {
-      this.optionsContainer && (this.virtualScroll ? (this.virtualScroll.setItemHeight(e), this.virtualScroll.setItems(this.filteredOptions)) : this.virtualScroll = new Ds({
+      this.optionsContainer && (this.virtualScroll ? (this.virtualScroll.setItemHeight(e), this.virtualScroll.setItems(this.filteredOptions)) : this.virtualScroll = new js({
         container: this.optionsContainer,
         itemHeight: e,
         items: this.filteredOptions,
@@ -3510,41 +3717,41 @@ class qr {
     const e = this.options.actionButtons;
     if (!this.options.isMultipleEnabled || !e || e.length === 0) return "";
     const t = this.options.actionsPosition === "bottom" ? "bottom" : "top", o = this.options.actionsAlign ?? "stretch", i = ` ms__actions--${t}`, r = this.options.isActionsSticky ? " ms__actions--sticky" : "", n = this.options.actionsLayout === "wrap" ? " ms__actions--wrap" : "", a = ` ms__actions--align-${o}`, l = /* @__PURE__ */ new Map();
-    if (e.forEach((d, h) => {
+    if (e.forEach((d, u) => {
       if (!(d.getIsVisibleCallback ? d.getIsVisibleCallback(this) : d.isVisible ?? !0)) return;
-      let u;
-      d.getIsDisabledCallback ? u = d.getIsDisabledCallback(this) : d.isDisabled !== void 0 ? u = d.isDisabled : u = this.getBuiltInActionDisabled(d.action);
-      const g = u ? " disabled" : "", y = d.getTextCallback ? d.getTextCallback(this) : d.text;
-      let w = "";
+      let p;
+      d.getIsDisabledCallback ? p = d.getIsDisabledCallback(this) : d.isDisabled !== void 0 ? p = d.isDisabled : p = this.getBuiltInActionDisabled(d.action);
+      const g = p ? " disabled" : "", w = d.getTextCallback ? d.getTextCallback(this) : d.text;
+      let y = "";
       if (d.getClassCallback) {
         const k = this.classSuffix(d.getClassCallback(this));
-        k && (w = ` ${k}`);
-      } else d.cssClass && (w = ` ${d.cssClass}`);
-      const b = Math.max(1, Math.floor(d.row ?? 1)), _ = `<button type="button"${g} class="ms__action-btn${w}" data-action="${d.action}" data-button-index="${h}">${y}</button>`;
+        k && (y = ` ${k}`);
+      } else d.cssClass && (y = ` ${d.cssClass}`);
+      const b = Math.max(1, Math.floor(d.row ?? 1)), _ = `<button type="button"${g} class="ms__action-btn${y}" data-action="${d.action}" data-button-index="${u}">${w}</button>`;
       l.has(b) || l.set(b, []), l.get(b).push(_);
     }), l.size === 0) return "";
-    const c = Array.from(l.keys()).sort((d, h) => d - h).map((d) => `<div class="ms__actions-row" data-row="${d}">${l.get(d).join("")}</div>`).join("");
+    const c = Array.from(l.keys()).sort((d, u) => d - u).map((d) => `<div class="ms__actions-row" data-row="${d}">${l.get(d).join("")}</div>`).join("");
     return `<div class="ms__actions${i}${r}${n}${a}">${c}</div>`;
   }
   renderOption(e, t) {
-    const o = this.getItemValue(e), i = this.getItemDisplayValue(e), r = this.getItemIcon(e), n = this.getItemSubtitle(e), a = this.getItemDisabled(e), l = this.selectedValues.has(String(o)), c = t === this.focusedIndex, d = this.matchingIndices.has(t), h = ["ms__option"];
-    l && h.push("ms__option--selected"), c && h.push("ms__option--focused"), d && h.push("ms__option--matched"), a && h.push("ms__option--disabled");
+    const o = this.getItemValue(e), i = this.getItemDisplayValue(e), r = this.getItemIcon(e), n = this.getItemSubtitle(e), a = this.getItemDisabled(e), l = this.selectedValues.has(String(o)), c = t === this.focusedIndex, d = this.matchingIndices.has(t), u = ["ms__option"];
+    l && u.push("ms__option--selected"), c && u.push("ms__option--focused"), d && u.push("ms__option--matched"), a && u.push("ms__option--disabled");
     const f = this.options.checkboxAlign && this.options.checkboxAlign !== "center" ? ` data-checkbox-align="${this.options.checkboxAlign}"` : "";
-    let u = `<div class="${h.join(" ")}" data-value="${o}" data-index="${t}"${f}>`;
-    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && (u += `<input type="checkbox" class="ms__checkbox" ${l ? "checked" : ""} ${a ? "disabled" : ""}>`), u += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
+    let p = `<div class="${u.join(" ")}" data-value="${o}" data-index="${t}"${f}>`;
+    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && (p += this.checkboxHtml({ checked: l, disabled: a })), p += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
       const g = {
         index: t,
         isSelected: l,
         isFocused: c,
         isMatched: d,
         isDisabled: a,
-        ...Ht(this.presentationMode),
+        ...Xe(this.presentationMode),
         isTreeNode: !1
       };
-      u += this.toHtml(this.options.renderOptionContentCallback(e, g));
+      p += this.toHtml(this.options.renderOptionContentCallback(e, g));
     } else
-      r && (u += `<span class="ms__option-icon">${r}</span>`), u += '<div class="ms__option-text">', u += `<div class="ms__option-title">${this.highlightMatch(i, this.searchTerm)}</div>`, n && (u += `<div class="ms__option-subtitle">${n}</div>`), u += "</div>";
-    return u += this.renderOptionInfoButton(), u += "</div>", u += "</div>", u;
+      r && (p += `<span class="ms__option-icon">${r}</span>`), p += '<div class="ms__option-text">', p += `<div class="ms__option-title">${this.highlightMatch(i, this.searchTerm)}</div>`, n && (p += `<div class="ms__option-subtitle">${n}</div>`), p += "</div>";
+    return p += this.renderOptionInfoButton(), p += "</div>", p += "</div>", p;
   }
   /**
    * Trailing info affordance for an option row, emitted only for the fullscreen
@@ -3565,34 +3772,67 @@ class qr {
    * chevron/toggle — every node is just a normal, selectable option.
    */
   renderTreeNode(e, t) {
-    const o = e.data, i = this.getItemValue(o), r = this.getItemDisplayValue(o), n = this.getItemIcon(o), a = this.getItemSubtitle(o), l = this.getItemDisabled(o), c = this.isCascadeMode() && this.cascadeIndex, d = c ? fs(this.cascadeIndex, e, this.cascadeCheckedAtoms) : null, h = c ? d === "checked" : this.selectedValues.has(String(i)), f = d === "indeterminate", u = t === this.focusedIndex, g = this.matchingIndices.has(t), y = e.isSelectable !== !1, w = e.level ?? 1, b = Math.max(0, w - 1), _ = ["ms__option", "ms__option--tree"];
-    _.push(e.hasChildren ? "ms__option--tree-branch" : "ms__option--tree-leaf"), h && _.push("ms__option--selected"), f && _.push("ms__option--indeterminate"), u && _.push("ms__option--focused"), g && _.push("ms__option--matched"), l && _.push("ms__option--disabled"), y || _.push("ms__option--tree-unselectable");
-    const k = this.options.checkboxAlign && this.options.checkboxAlign !== "center" ? ` data-checkbox-align="${this.options.checkboxAlign}"` : "", M = y ? "" : ' data-selectable="false"';
-    let E = `<div class="${_.join(" ")}" data-value="${i}" data-index="${t}" data-path="${e.path}" data-level="${w}" style="--ms-tree-depth: ${b};"${k}${M}>`;
-    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && y && (E += `<input type="checkbox" class="${f ? "ms__checkbox ms__checkbox--indeterminate" : "ms__checkbox"}" ${h ? "checked" : ""}${f ? ' aria-checked="mixed"' : ""} ${l ? "disabled" : ""}>`), E += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
-      const $ = {
+    const o = e.data, i = this.getItemValue(o), r = this.getItemDisplayValue(o), n = this.getItemIcon(o), a = this.getItemSubtitle(o), l = this.getItemDisabled(o), c = this.isCascadeMode() && this.cascadeIndex, d = c ? Cs(this.cascadeIndex, e, this.cascadeCheckedAtoms) : null, u = c ? d === "checked" : this.selectedValues.has(String(i)), f = d === "indeterminate", p = t === this.focusedIndex, g = this.matchingIndices.has(t), w = e.isSelectable !== !1, y = e.level ?? 1, b = Math.max(0, y - 1), _ = ["ms__option", "ms__option--tree"];
+    _.push(e.hasChildren ? "ms__option--tree-branch" : "ms__option--tree-leaf"), u && _.push("ms__option--selected"), f && _.push("ms__option--indeterminate"), p && _.push("ms__option--focused"), g && _.push("ms__option--matched"), l && _.push("ms__option--disabled"), w || _.push("ms__option--tree-unselectable");
+    const k = this.options.checkboxAlign && this.options.checkboxAlign !== "center" ? ` data-checkbox-align="${this.options.checkboxAlign}"` : "", P = w ? "" : ' data-selectable="false"';
+    let N = `<div class="${_.join(" ")}" data-value="${i}" data-index="${t}" data-path="${e.path}" data-level="${y}" style="--ms-tree-depth: ${b};"${k}${P}>`;
+    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && w && (N += this.checkboxHtml({ checked: u, indeterminate: f, disabled: l })), N += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
+      const D = {
         index: t,
-        isSelected: h,
-        isFocused: u,
+        isSelected: u,
+        isFocused: p,
         isMatched: g,
         isDisabled: l,
-        ...Ht(this.presentationMode),
+        ...Xe(this.presentationMode),
         // Tree metadata — lets the callback branch on depth / branch-vs-leaf /
         // tristate without re-deriving any of it from the raw data item.
         isTreeNode: !0,
         isBranch: e.hasChildren,
         isLeaf: !e.hasChildren,
         childCount: Object.keys(e.children).length,
-        level: w,
+        level: y,
         depth: b,
         path: e.path,
-        isSelectable: y,
+        isSelectable: w,
         isIndeterminate: f
       };
-      E += this.toHtml(this.options.renderOptionContentCallback(o, $));
+      N += this.toHtml(this.options.renderOptionContentCallback(o, D));
     } else
-      n && (E += `<span class="ms__option-icon">${n}</span>`), E += '<div class="ms__option-text">', E += `<div class="ms__option-title">${this.highlightMatch(r, this.searchTerm)}</div>`, a && (E += `<div class="ms__option-subtitle">${a}</div>`), E += "</div>";
-    return E += this.renderOptionInfoButton(), E += "</div>", E += "</div>", E;
+      n && (N += `<span class="ms__option-icon">${n}</span>`), N += '<div class="ms__option-text">', N += `<div class="ms__option-title">${this.highlightMatch(r, this.searchTerm)}</div>`, a && (N += `<div class="ms__option-subtitle">${a}</div>`), N += "</div>";
+    return N += this.renderOptionInfoButton(), N += "</div>", N += "</div>", N;
+  }
+  /**
+   * Empty-dropdown content. When "add new" is enabled (isAddNewAllowed) AND the user has typed
+   * a non-empty search term, show a clickable "add new" prompt instead of the plain emptyMessage —
+   * choosing it (click via handleDropdownClick, or Enter via the keydown handler) runs handleAddNew.
+   * Otherwise fall back to the emptyMessage.
+   */
+  renderEmptyStateHTML() {
+    if (this.isAddNewPromptShown()) {
+      const e = (this.searchTerm || "").trim();
+      return this.addNewPending ? `<div class="ms__add-new ms__add-new--loading" aria-busy="true"><span class="ms__add-new-spinner" aria-hidden="true"></span><span class="ms__add-new-text">${this.getAddNewPendingText(e)}</span></div>` : `<div class="ms__add-new${this.addNewFocused ? " ms__add-new--focused" : ""}" role="button" data-action="add-new"><span class="ms__add-new-icon" aria-hidden="true"></span><span class="ms__add-new-text">${this.getAddNewText(e)}</span></div>`;
+    }
+    return `<div class="ms__empty">${this.options.emptyMessage}</div>`;
+  }
+  /** True when the empty dropdown is currently showing the clickable "add new" prompt. */
+  isAddNewPromptShown() {
+    return !!this.options.isAddNewAllowed && this.filteredOptions.length === 0 && !!(this.searchTerm || "").trim();
+  }
+  /**
+   * Resolve the "add new" prompt label for the typed text. Priority: getAddNewTextCallback
+   * (returns plain text — fully escaped here) → addNewText template (trusted config string;
+   * only the `{value}` substitution is escaped) → the default `Add "{value}"`.
+   */
+  getAddNewText(e) {
+    return this.options.getAddNewTextCallback ? this.escapeHtml(this.options.getAddNewTextCallback(e)) : (this.options.addNewText ?? 'Add "{value}"').replace(/\{value\}/g, this.escapeHtml(e));
+  }
+  /** Pending-prompt label shown (with a spinner) while an async addNewCallback runs. */
+  getAddNewPendingText(e) {
+    return (this.options.addNewPendingText ?? 'Adding "{value}"…').replace(/\{value\}/g, this.escapeHtml(e));
+  }
+  /** Minimal HTML entity escape for untrusted text spliced into an innerHTML string. */
+  escapeHtml(e) {
+    return String(e).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
   highlightMatch(e, t) {
     if (!t) return e;
@@ -3634,16 +3874,19 @@ class qr {
     this.input && (this.input.placeholder = e), this.fullscreenSearchInput && (this.fullscreenSearchInput.placeholder = e);
   }
   renderBadges() {
-    this.destroyAllBadgeTooltips();
-    const e = Array.from(this.selectedOptions.values()), t = this.selectedValues.size;
+    this.updateClearButton(), this.destroyAllBadgeTooltips();
+    const e = this.getOrderedSelectedOptions(), t = this.selectedValues.size;
     if (!this.options.isMultipleEnabled) {
       this.badgesContainer.innerHTML = "", this.counter.style.display = "none";
       let r;
-      e[0] && (this.options.renderSelectedContentCallback ? r = this.options.renderSelectedContentCallback(e[0]) : r = this.getItemDisplayValue(e[0])), !this.isOpen && t > 0 && e.length > 0 ? this.input.value = r : this.isOpen || (this.input.value = "");
+      e[0] && (this.options.renderSelectedContentCallback ? r = this.options.renderSelectedContentCallback(
+        e[0],
+        Xe(this.presentationMode)
+      ) : r = this.getItemDisplayValue(e[0])), !h(this, $) && t > 0 && e.length > 0 ? this.input.value = r : h(this, $) || (this.input.value = "");
       return;
     }
     let o = this.options.badgesDisplayMode;
-    if (this.options.badgesThreshold !== null && t > this.options.badgesThreshold && o !== "none" && (o = this.options.badgesThresholdMode || "count"), !this.isOpen)
+    if (this.options.badgesThreshold !== null && t > this.options.badgesThreshold && o !== "none" && (o = this.options.badgesThresholdMode || "count"), !h(this, $))
       if (t > 0 && o === "count") {
         const r = this.options.getCounterCallback ? this.options.getCounterCallback(t) : `${t} selected`;
         this.input.placeholder = r;
@@ -3651,7 +3894,7 @@ class qr {
         this.input.placeholder = this.getPlaceholderText();
     if (this.options.isCounterShown && t > 0) {
       const r = this.counterSelection(), n = r.length;
-      this.counter.textContent = `[${n}]`, this.counter.title = this.buildCounterTooltip(r), this.counter.style.display = n > 0 ? "" : "none";
+      this.counter.textContent = this.formatCountLabel(n, this.allOptions.length), this.counter.title = this.buildCounterTooltip(r), this.counter.style.display = n > 0 ? "" : "none";
     } else
       this.counter.title = "", this.counter.style.display = "none";
     if (o === "none") {
@@ -3700,19 +3943,17 @@ class qr {
   }
   attachEvents() {
     this.input.addEventListener("mousedown", (e) => {
-      e.stopPropagation(), this.isOpen ? (this.justClosedViaClick = !0, this.close(), setTimeout(() => {
+      e.stopPropagation(), h(this, $) ? (this.justClosedViaClick = !0, this.close(), setTimeout(() => {
         this.justClosedViaClick = !1;
-      }, 0)) : (this.presentationMode === "fullscreen" && e.preventDefault(), this.justOpenedViaClick = !0, this.open(), setTimeout(() => {
-        this.justOpenedViaClick = !1;
-      }, 0));
+      }, 0)) : (this.presentationMode === "fullscreen" && e.preventDefault(), this.open());
     }), this.input.addEventListener("focus", () => {
-      !this.isOpen && !this.justClosedViaClick && this.open();
+      !h(this, $) && !this.justClosedViaClick && this.open();
     }), this.input.addEventListener("input", (e) => {
       const t = e.target.value;
-      this.options.isSearchEnabled && !this.isOpen && this.open(), this.handleSearch(t);
+      this.options.isSearchEnabled && !h(this, $) && this.open(), this.handleSearch(t);
     }), this.input.addEventListener("keydown", (e) => this.handleKeydown(e)), this.documentClickHandler = (e) => this.handleClickOutside(e), setTimeout(() => {
       document.addEventListener("click", this.documentClickHandler);
-    }, 0), this.documentKeydownHandler = (e) => {
+    }, 0), this.overlayCoord = Xi(() => this.close(), this.options.overlayGroup || void 0), this.documentKeydownHandler = (e) => {
       e.key === "Escape" && this.showSelectedPopover && (e.preventDefault(), this.hideSelectedPopover());
     }, document.addEventListener("keydown", this.documentKeydownHandler), this.dropdown.addEventListener("mousedown", (e) => {
       if (this.presentationMode !== "fullscreen") return;
@@ -3734,20 +3975,20 @@ class qr {
     }), this.selectedPopover.addEventListener("click", (e) => this.handleSelectedPopoverClick(e));
   }
   async handleSearch(e) {
-    if (this.searchTerm = e, !this.options.isSearchEnabled)
+    if (this.searchTerm = e, this.addNewFocused = !1, !this.options.isSearchEnabled)
       return;
     let t = e;
     if (this.options.beforeSearchCallback) {
       const o = this.options.beforeSearchCallback(e);
       if (o === null) {
-        F.debug(`[${this.instanceId}] beforeSearchCallback blocked search for term:`, e), this.abortInFlightSearch(), this.matchingIndices.clear(), this.isTreeMode() ? (this.searchTerm = "", this.rebuildTreeVisible()) : this.filteredOptions = [...this.allOptions], this.renderDropdown();
+        W.debug(`[${this.instanceId}] beforeSearchCallback blocked search for term:`, e), this.abortInFlightSearch(), this.matchingIndices.clear(), this.isTreeMode() ? (this.searchTerm = "", this.rebuildTreeVisible()) : this.filteredOptions = [...this.allOptions], this.renderDropdown();
         return;
       }
-      t = o, t !== e && F.debug(`[${this.instanceId}] beforeSearchCallback transformed: "${e}" -> "${t}"`);
+      t = o, t !== e && W.debug(`[${this.instanceId}] beforeSearchCallback transformed: "${e}" -> "${t}"`);
     }
     if (this.options.searchCallback) {
       if (t.length < this.options.minSearchLength) {
-        this.abortInFlightSearch(), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? (this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions], F.debug(`[${this.instanceId}] Search term below minimum, showing ${this.allOptions.length} initial options`)) : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown();
+        this.abortInFlightSearch(), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? (this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions], W.debug(`[${this.instanceId}] Search term below minimum, showing ${this.allOptions.length} initial options`)) : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown();
         return;
       }
       this.searchDebounceTimer && (clearTimeout(this.searchDebounceTimer), this.searchDebounceTimer = void 0);
@@ -3770,13 +4011,13 @@ class qr {
       else {
         const o = this.options.searchMode || "filter", i = t.toLowerCase();
         if (o === "filter")
-          this.filteredOptions = this.allOptions.filter((r) => this.getItemSearchValue(r).toLowerCase().includes(i)), this.matchingIndices.clear(), this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1, F.debug(`[${this.instanceId}] Filter mode: ${this.filteredOptions.length} matches for "${t}"`);
+          this.filteredOptions = this.allOptions.filter((r) => this.getItemSearchValue(r).toLowerCase().includes(i)), this.matchingIndices.clear(), this.focusedIndex = this.filteredOptions.length > 0 ? 0 : -1, W.debug(`[${this.instanceId}] Filter mode: ${this.filteredOptions.length} matches for "${t}"`);
         else {
           this.filteredOptions = [...this.allOptions], this.matchingIndices.clear();
           let r = -1;
           this.allOptions.forEach((n, a) => {
             this.getItemSearchValue(n).toLowerCase().includes(i) && (this.matchingIndices.add(a), r === -1 && (r = a));
-          }), r >= 0 ? (this.focusedIndex = r, F.debug(`[${this.instanceId}] Navigate mode: ${this.matchingIndices.size} matches, jumped to index ${r}`)) : F.debug(`[${this.instanceId}] Navigate mode: No matches found, keeping previous focus`);
+          }), r >= 0 ? (this.focusedIndex = r, W.debug(`[${this.instanceId}] Navigate mode: ${this.matchingIndices.size} matches, jumped to index ${r}`)) : W.debug(`[${this.instanceId}] Navigate mode: No matches found, keeping previous focus`);
         }
       }
       this.renderDropdown(), this.options.searchMode === "navigate" && this.focusedIndex >= 0 && this.scrollToFocused(), this.updateFullscreenNav();
@@ -3800,15 +4041,15 @@ class qr {
   async performAsyncSearch(e, t) {
     this.abortInFlightSearch();
     const o = new AbortController();
-    this.searchAbortController = o, this.isLoading = !0, this.renderDropdown(), F.debug(`[${this.instanceId}] Loading data for search term:`, t);
+    this.searchAbortController = o, this.isLoading = !0, this.renderDropdown(), W.debug(`[${this.instanceId}] Loading data for search term:`, t);
     try {
       const i = await this.options.searchCallback(t, o.signal);
       if (o.signal.aborted || this.searchTerm !== e) return;
       const r = i || [];
-      this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(r) : this.filteredOptions = [...r], this.isLoading = !1, this.matchingIndices.clear(), this.focusedIndex = this.options.isSearchEnabled && this.filteredOptions.length > 0 ? 0 : -1, this.renderDropdown(), F.debug(`[${this.instanceId}] Loaded ${r.length} results`);
+      this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(r) : this.filteredOptions = [...r], this.isLoading = !1, this.matchingIndices.clear(), this.focusedIndex = this.options.isSearchEnabled && this.filteredOptions.length > 0 ? 0 : -1, this.renderDropdown(), W.debug(`[${this.instanceId}] Loaded ${r.length} results`);
     } catch (i) {
       if (o.signal.aborted) return;
-      F.error(`[${this.instanceId}] Error loading data:`, i), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions] : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown();
+      W.error(`[${this.instanceId}] Error loading data:`, i), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions] : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown();
     } finally {
       this.searchAbortController === o && (this.searchAbortController = void 0);
     }
@@ -3818,7 +4059,7 @@ class qr {
     if (!(this.options.keydownCallback && this.options.keydownCallback({
       event: e,
       key: e.key,
-      isOpen: this.isOpen,
+      isOpen: h(this, $),
       presentation: this.presentationMode,
       searchTerm: this.searchTerm,
       focusedIndex: this.focusedIndex,
@@ -3827,7 +4068,7 @@ class qr {
       selectedValues: [...this.selectedValues],
       controller: this.getKeyboardController()
     }) === !0)) {
-      if (!this.isOpen) {
+      if (!h(this, $)) {
         (e.key === "Enter" || e.key === "ArrowDown") && (e.preventDefault(), this.open());
         return;
       }
@@ -3840,13 +4081,13 @@ class qr {
       }
       switch (e.key) {
         case "ArrowDown":
-          e.preventDefault(), e.ctrlKey || e.metaKey ? this.focusNextMatch() : this.focusNext();
+          e.preventDefault(), this.isAddNewPromptShown() ? this.focusAddNewPrompt() : e.ctrlKey || e.metaKey ? this.focusNextMatch() : this.focusNext();
           break;
         case "ArrowUp":
-          e.preventDefault(), e.ctrlKey || e.metaKey ? this.focusPreviousMatch() : this.focusPrevious();
+          e.preventDefault(), this.isAddNewPromptShown() ? this.focusAddNewPrompt() : e.ctrlKey || e.metaKey ? this.focusPreviousMatch() : this.focusPrevious();
           break;
         case "Enter":
-          e.preventDefault(), this.focusedIndex >= 0 ? this.toggleOption(this.filteredOptions[this.focusedIndex]) : this.options.isAddNewAllowed && this.options.addNewCallback && this.input.value.trim() && this.handleAddNew(this.input.value.trim()), this.presentationMode === "fullscreen" && ((t = this.fullscreenSearchInput) == null || t.blur());
+          e.preventDefault(), this.focusedIndex >= 0 ? this.toggleOption(this.filteredOptions[this.focusedIndex]) : this.options.isAddNewAllowed && this.filteredOptions.length === 0 && (this.searchTerm || "").trim() && this.handleAddNew((this.searchTerm || "").trim()), this.presentationMode === "fullscreen" && ((t = this.fullscreenSearchInput) == null || t.blur());
           break;
         case "Escape":
           e.preventDefault(), this.showSelectedPopover ? this.hideSelectedPopover() : this.input.value ? this.clearSearch() : this.close();
@@ -3879,8 +4120,8 @@ class qr {
     }
   }
   handleDropdownClick(e) {
-    var r, n;
-    W.debug(`[${this.instanceId}] Dropdown clicked`, { target: e.target.className }), e.stopPropagation();
+    var n, a, l;
+    R.debug(`[${this.instanceId}] Dropdown clicked`, { target: e.target.className }), e.stopPropagation();
     const t = e.target.closest(".ms__option-info");
     if (t) {
       e.preventDefault(), this.toggleLabelReveal(t);
@@ -3890,53 +4131,57 @@ class qr {
     const o = e.target.closest("[data-action]");
     if (o) {
       e.preventDefault();
-      const a = o.dataset.action;
-      if (W.debug(`[${this.instanceId}] Action button clicked:`, a), a === "select-all")
+      const c = o.dataset.action;
+      if (R.debug(`[${this.instanceId}] Action button clicked:`, c), c === "select-all")
         this.selectAll();
-      else if (a === "clear-all")
+      else if (c === "clear-all")
         this.clearAll();
-      else if (a === "custom") {
-        const l = parseInt(o.dataset.buttonIndex || "-1"), c = (r = this.options.actionButtons) == null ? void 0 : r[l];
-        c != null && c.onClick && c.onClick(this);
+      else if (c === "add-new") {
+        const d = (this.searchTerm || "").trim();
+        d && this.handleAddNew(d);
+      } else if (c === "custom") {
+        const d = parseInt(o.dataset.buttonIndex || "-1"), u = (n = this.options.actionButtons) == null ? void 0 : n[d];
+        u != null && u.onClick && u.onClick(this);
       }
       return;
     }
-    const i = e.target.closest(".ms__option");
-    if (i && !i.classList.contains("ms__option--disabled")) {
+    const i = e.target.closest('.ms__group-label[data-group-select="cascade"]');
+    if (i && i.dataset.group) {
+      e.preventDefault(), R.debug(`[${this.instanceId}] Group header cascade toggle:`, i.dataset.group), this.toggleGroup(i.dataset.group), h(this, $) && this.presentationMode !== "fullscreen" ? this.input.focus() : this.presentationMode === "fullscreen" && ((a = this.fullscreenSearchInput) == null || a.blur());
+      return;
+    }
+    const r = e.target.closest(".ms__option");
+    if (r && !r.classList.contains("ms__option--disabled")) {
       e.preventDefault();
-      const a = i.dataset.value, l = this.filteredOptions.findIndex((c) => String(this.getItemValue(c)) === a);
-      W.debug(`[${this.instanceId}] Option clicked:`, {
-        value: a,
-        optionIndex: l,
+      const c = r.dataset.value, d = this.filteredOptions.findIndex((u) => String(this.getItemValue(u)) === c);
+      R.debug(`[${this.instanceId}] Option clicked:`, {
+        value: c,
+        optionIndex: d,
         closeOnSelect: this.options.isCloseOnSelect,
         placeholder: this.options.searchPlaceholder
-      }), l >= 0 && (this.focusedIndex = l, this.toggleOption(this.filteredOptions[l]), this.isOpen && this.presentationMode !== "fullscreen" ? this.input.focus() : this.presentationMode === "fullscreen" && ((n = this.fullscreenSearchInput) == null || n.blur()));
+      }), d >= 0 && (this.focusedIndex = d, this.toggleOption(this.filteredOptions[d]), h(this, $) && this.presentationMode !== "fullscreen" ? this.input.focus() : this.presentationMode === "fullscreen" && ((l = this.fullscreenSearchInput) == null || l.blur()));
     }
   }
   handleBadgeClick(e) {
-    var n;
+    var r;
     if (e.target.closest('[data-action="clear-count"]')) {
-      e.preventDefault(), e.stopPropagation(), W.debug(`[${this.instanceId}] Clear count button clicked`), this.clearAll();
+      e.preventDefault(), e.stopPropagation(), R.debug(`[${this.instanceId}] Clear count button clicked`), this.clearAll();
+      return;
+    }
+    const o = e.target.closest('.ms__badge-remove, [data-action="remove"]');
+    if (o) {
+      if (e.preventDefault(), e.stopPropagation(), o.dataset.action === "remove-hidden") {
+        R.debug(`[${this.instanceId}] Remove hidden items button clicked`);
+        const l = this.options.badgesMaxVisible || 3;
+        this.getOrderedSelectedOptions().slice(l).forEach((u) => this.interactiveDeselect(u));
+        return;
+      }
+      const n = o.dataset.value ?? ((r = o.closest("[data-value]")) == null ? void 0 : r.dataset.value) ?? "", a = this.selectedOptions.get(n);
+      a && this.interactiveDeselect(a);
       return;
     }
     if (e.target.closest('[data-action="show-selected"]')) {
       e.preventDefault(), e.stopPropagation(), this.toggleSelectedPopover();
-      return;
-    }
-    const i = e.target.closest('.ms__badge-remove, [data-action="remove"]');
-    if (i) {
-      if (e.preventDefault(), e.stopPropagation(), i.dataset.action === "remove-hidden") {
-        W.debug(`[${this.instanceId}] Remove hidden items button clicked`);
-        const c = this.options.badgesMaxVisible || 3;
-        Array.from(this.selectedOptions.values()).slice(c).forEach((f) => this.interactiveDeselect(f));
-        return;
-      }
-      const a = i.dataset.value ?? ((n = i.closest("[data-value]")) == null ? void 0 : n.dataset.value) ?? "", l = this.selectedOptions.get(a);
-      l && this.interactiveDeselect(l);
-      return;
-    }
-    if (e.target.closest(".ms__badge--more") && !e.target.closest(".ms__badge-remove")) {
-      e.preventDefault(), e.stopPropagation(), W.debug(`[${this.instanceId}] '+X more' badge clicked, showing popover`), this.toggleSelectedPopover();
       return;
     }
   }
@@ -3949,11 +4194,11 @@ class qr {
       Y.debug(`[${this.instanceId}] Closing selected popover due to click outside`), this.hideSelectedPopover();
       return;
     }
-    if (!this.isOpen || this.justOpenedViaClick) return;
+    if (!h(this, $) || this.justOpenedViaClick) return;
     const o = t.some(
       (r) => r instanceof Node && (this.element.contains(r) || this.dropdown.contains(r) || this.hint && this.hint.contains(r))
     );
-    W.debug(`[${this.instanceId}] handleClickOutside`, {
+    R.debug(`[${this.instanceId}] handleClickOutside`, {
       target: e.target.className,
       targetTag: e.target.tagName,
       clickedInside: o,
@@ -3962,7 +4207,7 @@ class qr {
       elementContains: t.some((r) => r instanceof Node && this.element.contains(r)),
       dropdownContains: t.some((r) => r instanceof Node && this.dropdown.contains(r)),
       isConnected: this.dropdown.isConnected
-    }), o || (W.warn(`[${this.instanceId}] Closing dropdown due to click outside`), this.close());
+    }), o || (R.warn(`[${this.instanceId}] Closing dropdown due to click outside`), this.close());
   }
   /**
    * Move focus by computing a new index from (current, total).
@@ -4008,15 +4253,19 @@ class qr {
   focusPageDown() {
     this.focusBy((e, t) => Math.min(t - 1, e + 10), 1);
   }
+  /** Move keyboard focus onto the empty-state "add new" prompt (the only actionable row). */
+  focusAddNewPrompt() {
+    this.addNewFocused || (this.addNewFocused = !0, this.renderDropdown());
+  }
   focusNextMatch() {
     if (this.matchingIndices.size === 0) return;
     const e = Array.from(this.matchingIndices).sort((i, r) => i - r), t = e.findIndex((i) => i === this.focusedIndex), o = (t + 1) % e.length;
-    this.focusBy(() => e[o]), W.debug(`[${this.instanceId}] Jumped to next match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
+    this.focusBy(() => e[o]), R.debug(`[${this.instanceId}] Jumped to next match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
   }
   focusPreviousMatch() {
     if (this.matchingIndices.size === 0) return;
     const e = Array.from(this.matchingIndices).sort((i, r) => i - r), t = e.findIndex((i) => i === this.focusedIndex), o = t <= 0 ? e.length - 1 : t - 1;
-    this.focusBy(() => e[o]), W.debug(`[${this.instanceId}] Jumped to previous match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
+    this.focusBy(() => e[o]), R.debug(`[${this.instanceId}] Jumped to previous match: index ${this.focusedIndex} (${t + 1} of ${e.length})`);
   }
   /** Lazily build (and cache) the imperative facade passed to `keydownCallback`. Bound to the
    *  same private actions the built-in key handling uses, so consumer shortcuts behave identically. */
@@ -4058,35 +4307,127 @@ class qr {
   }
   /** Clear the search box (both the main input and the fullscreen search) and reset the visible
    *  list. Shared by Escape and the keyboard controller. */
+  /**
+   * Clear the search box and restore the full option list (resets the visible/matched sets and
+   * drops keyboard focus). Public building block: pair it with `scrollToValue()` to reveal then
+   * scroll to an option the current search had filtered out — `el.clearSearch(); el.scrollToValue(v)`.
+   * Does not touch the selection (use `clearAll()` for that).
+   */
   clearSearch() {
     this.input.value = "", this.fullscreenSearchInput && (this.fullscreenSearchInput.value = ""), this.searchTerm = "", this.resetVisibleToAll(), this.matchingIndices.clear(), this.focusedIndex = -1, this.renderDropdown(), this.updateFullscreenNav(), this.updateFullscreenSearchClear();
   }
+  /**
+   * Programmatically set the search text and filter — exactly as if the user typed it, so
+   * `beforeSearchCallback`, `minSearchLength` and async `searchCallback` all apply the same way.
+   * Reflects into the search box (and the fullscreen sheet's field). Does NOT open the dropdown —
+   * call `open()` if you want it visible. Passing `''` clears (equivalent to `clearSearch()`).
+   */
+  search(e) {
+    const t = e ?? "";
+    this.input.value = t, this.fullscreenSearchInput && (this.fullscreenSearchInput.value = t), this.handleSearch(t), this.updateFullscreenSearchClear();
+  }
   scrollToFocused() {
     if (this.virtualScroll && this.focusedIndex >= 0) {
-      this.virtualScroll.scrollToIndex(this.focusedIndex);
+      this.virtualScroll.scrollToIndex(this.focusedIndex, "nearest");
       return;
     }
     const e = this.dropdown.querySelector(".ms__option--focused");
-    e && (this.presentationMode === "fullscreen" ? e.scrollIntoView({ block: "center", behavior: "auto" }) : e.scrollIntoView({ block: "nearest", behavior: "smooth" }));
+    e && this.applyScrollIntoView(e);
+  }
+  /**
+   * scrollIntoView with the fullscreen-safe default. In the fullscreen sheet the soft keyboard
+   * covers the lower viewport, so `block:'nearest'` can bottom-align a match BEHIND the keyboard;
+   * centre it instead and scroll INSTANTLY (a smooth animation kicked off per-keystroke is torn
+   * down by the next re-render and never settles — the "list jumps every letter" bug). Floating
+   * scrolls the nearest edge smoothly. The caller may override `block`.
+   */
+  applyScrollIntoView(e, t) {
+    this.presentationMode === "fullscreen" ? e.scrollIntoView({ block: (t == null ? void 0 : t.block) ?? "center", behavior: "auto" }) : e.scrollIntoView({ block: (t == null ? void 0 : t.block) ?? "nearest", behavior: "smooth" });
+  }
+  /**
+   * Scroll the open dropdown so the option at `index` (into the current `filteredOptions`) is
+   * visible. Works in floating, fullscreen (mobile), virtual-scroll and tree modes. Returns
+   * false if the dropdown is closed or the index is out of range. The scroll is deferred a frame
+   * when the list isn't rendered yet (e.g. right after `open()` in virtual mode / the fullscreen
+   * sheet build), so `el.open(); el.scrollToIndex(i)` works.
+   */
+  scrollToIndex(e, t) {
+    const o = (t == null ? void 0 : t.block) ?? "start";
+    return h(this, $) ? e < 0 || e >= this.filteredOptions.length ? (R.debug(`[${this.instanceId}] scrollToIndex(${e}) → false (out of range, ${this.filteredOptions.length} options)`), !1) : (R.debug(`[${this.instanceId}] scrollToIndex(${e}, block=${o}) — virtual=${!!this.virtualScroll}, mode=${this.presentationMode}`), this.armClickGuard(), this.scrollToRenderedIndex(e, { block: o }), !0) : (R.debug(`[${this.instanceId}] scrollToIndex(${e}) → false (closed)`), !1);
+  }
+  /**
+   * Scroll to the option whose value matches `value` (resolved within the current
+   * `filteredOptions`). Returns false if it isn't in the currently visible list — e.g. filtered
+   * out by a search, or (tree) under a collapsed ancestor. Call `clearSearch()` (or expand the
+   * branch) first to reveal it, then scroll.
+   */
+  scrollToValue(e, t) {
+    const o = this.filteredOptions.findIndex((i) => String(this.getItemValue(i)) === String(e));
+    return R.debug(`[${this.instanceId}] scrollToValue(${String(e)}) → index ${o} of ${this.filteredOptions.length}`), o < 0 ? !1 : this.scrollToIndex(o, t);
+  }
+  /**
+   * Scroll to a group. In standard rendering the group's header (`.ms__group-label`) is brought
+   * into view; in virtual-scroll mode (which renders no headers) it scrolls to the group's FIRST
+   * option instead. Returns false in tree mode (groups don't apply) or if the group has no
+   * options in the current filtered list.
+   */
+  scrollToGroup(e, t) {
+    const o = (t == null ? void 0 : t.block) ?? "start";
+    if (!h(this, $) || this.isTreeMode())
+      return R.debug(`[${this.instanceId}] scrollToGroup(${e}) → false (${this.isTreeMode() ? "tree mode" : "closed"})`), !1;
+    if (this.armClickGuard(), !this.virtualScroll) {
+      const r = this.dropdown.querySelector(
+        `.ms__group-label[data-group="${CSS.escape(e)}"]`
+      );
+      if (r)
+        return R.debug(`[${this.instanceId}] scrollToGroup(${e}) — header found, scrolling label into view (block=${o})`), this.applyScrollIntoView(r, { block: o }), !0;
+    }
+    const i = this.filteredOptions.findIndex((r) => (this.getItemGroup(r) || "") === e);
+    return R.debug(`[${this.instanceId}] scrollToGroup(${e}) — no header (virtual=${!!this.virtualScroll}), first member index ${i}`), i < 0 ? !1 : this.scrollToIndex(i, { block: o });
+  }
+  /**
+   * Shared scroll worker for the public scrollTo* methods. Virtual mode uses the fixed-height
+   * math (works even if the row isn't currently rendered); otherwise scrolls the
+   * `.ms__option[data-index]` element into view. Defers one frame if the list isn't ready yet
+   * (post-open virtual init / fullscreen sheet build), then retries once.
+   */
+  scrollToRenderedIndex(e, t, o = !1) {
+    if (!h(this, $) || e < 0 || e >= this.filteredOptions.length) return;
+    if (this.virtualScroll) {
+      const r = (t == null ? void 0 : t.block) === "center" ? "center" : (t == null ? void 0 : t.block) === "nearest" ? "nearest" : "start";
+      this.virtualScroll.scrollToIndex(e, r), R.debug(`[${this.instanceId}] scrollToRenderedIndex(${e}) via virtual (block=${r})`);
+      return;
+    }
+    const i = this.dropdown.querySelector(`.ms__option[data-index="${e}"]`);
+    if (i) {
+      this.applyScrollIntoView(i, t), R.debug(`[${this.instanceId}] scrollToRenderedIndex(${e}) via DOM scrollIntoView`);
+      return;
+    }
+    o || (R.debug(`[${this.instanceId}] scrollToRenderedIndex(${e}) not rendered yet — deferring one frame`), requestAnimationFrame(() => this.scrollToRenderedIndex(e, t, !0)));
   }
   toggleOption(e) {
     if (this.getItemDisabled(e)) {
-      W.debug(`[${this.instanceId}] toggleOption ignored — option is disabled`);
+      R.debug(`[${this.instanceId}] toggleOption ignored — option is disabled`);
       return;
     }
     if (!this.isOptionSelectable(e)) {
-      W.debug(`[${this.instanceId}] toggleOption ignored — node is not selectable`);
+      R.debug(`[${this.instanceId}] toggleOption ignored — node is not selectable`);
       return;
     }
     const t = this.getItemValue(e), o = String(t);
-    if (W.debug(`[${this.instanceId}] toggleOption called`, { value: t, multiple: this.options.isMultipleEnabled }), this.isCascadeMode() && this.cascadeIndex) {
+    if (R.debug(`[${this.instanceId}] toggleOption called`, { value: t, multiple: this.options.isMultipleEnabled }), this.isCascadeMode() && this.cascadeIndex) {
       const n = this.cascadeIndex.nodeByValue.get(o);
       if (n) {
         this.toggleTreeCascade(n), this.options.isCloseOnSelect && this.close();
         return;
       }
     }
-    (this.selectedValues.has(o) ? this.interactiveDeselect(e) : this.interactiveSelect(e)) && (this.options.isMultipleEnabled ? this.options.isCloseOnSelect && this.close() : this.close());
+    const i = this.selectedValues.has(o);
+    if (i && !this.options.isMultipleEnabled) {
+      this.close();
+      return;
+    }
+    (i ? this.interactiveDeselect(e) : this.interactiveSelect(e)) && (this.options.isMultipleEnabled ? this.options.isCloseOnSelect && this.close() : this.close());
   }
   /**
    * The single funnel for an interactive (user-initiated) selection. Consults
@@ -4098,7 +4439,7 @@ class qr {
   interactiveSelect(e) {
     var o, i;
     const t = (i = (o = this.options).beforeSelectCallback) == null ? void 0 : i.call(o, e, this.getSelected());
-    return t === !1 || typeof t == "string" ? (typeof t == "string" && this.showMessage(t, { variant: "warning" }), W.debug(`[${this.instanceId}] Selection blocked by beforeSelectCallback`), !1) : (this.options.isMultipleEnabled || (this.selectedValues.clear(), this.selectedOptions.clear()), this.selectOption(e), !0);
+    return t === !1 || typeof t == "string" ? (typeof t == "string" && this.showMessage(t, { variant: "warning" }), R.debug(`[${this.instanceId}] Selection blocked by beforeSelectCallback`), !1) : (this.options.isMultipleEnabled || (this.selectedValues.clear(), this.selectedOptions.clear()), this.selectOption(e), !0);
   }
   /**
    * The single funnel for an interactive (user-initiated) deselection. Every
@@ -4111,17 +4452,37 @@ class qr {
   interactiveDeselect(e) {
     var o, i;
     const t = (i = (o = this.options).beforeDeselectCallback) == null ? void 0 : i.call(o, e, this.getSelected());
-    return t === !1 || typeof t == "string" ? (typeof t == "string" && this.showMessage(t, { variant: "warning" }), W.debug(`[${this.instanceId}] Deselection blocked by beforeDeselectCallback`), !1) : (this.deselectOption(e), !0);
+    return t === !1 || typeof t == "string" ? (typeof t == "string" && this.showMessage(t, { variant: "warning" }), R.debug(`[${this.instanceId}] Deselection blocked by beforeDeselectCallback`), !1) : (this.deselectOption(e), !0);
   }
+  /**
+   * Commit the "add new" affordance for the typed text. Two modes:
+   *  - `addNewCallback` set → create the option, append it, select it, clear the search.
+   *  - no callback → the consumer owns creation; we only notify (via the `add` event) so they
+   *    can open a modal / POST / add the option imperatively.
+   * The `add` event fires in BOTH modes (with `option` present only when one was created).
+   */
   async handleAddNew(e) {
-    if (this.options.addNewCallback)
-      try {
-        F.debug(`[${this.instanceId}] Adding new option:`, e);
-        const t = await this.options.addNewCallback(e);
-        this.allOptions.push(t), this.filteredOptions.push(t), this.selectOption(t), this.input.value = "", this.renderDropdown(), this.renderBadges(), this.options.isCloseOnSelect && this.close();
-      } catch (t) {
-        F.error(`[${this.instanceId}] Error adding new option:`, t);
+    var t, o;
+    try {
+      let i;
+      if (this.options.addNewCallback) {
+        W.debug(`[${this.instanceId}] Adding new option:`, e), this.addNewFocused = !1, this.addNewPending = !0, this.renderDropdown();
+        let r;
+        try {
+          r = await this.options.addNewCallback(e);
+        } finally {
+          this.addNewPending = !1;
+        }
+        if (r == null) {
+          W.debug(`[${this.instanceId}] addNewCallback canceled creation for:`, e), this.renderDropdown();
+          return;
+        }
+        i = r, this.allOptions.push(i), this.searchTerm = "", this.input.value = "", this.fullscreenSearchInput && (this.fullscreenSearchInput.value = ""), this.matchingIndices.clear(), this.focusedIndex = -1, this.addNewFocused = !1, this.resetVisibleToAll(), this.selectOption(i), this.updateFullscreenSearchClear();
       }
+      (o = (t = this.options).onAddNew) == null || o.call(t, { value: e, option: i }), i && this.options.isCloseOnSelect && this.close();
+    } catch (i) {
+      this.addNewPending = !1, W.error(`[${this.instanceId}] Error adding new option:`, i), this.renderDropdown();
+    }
   }
   selectOption(e) {
     const t = this.getItemValue(e), o = String(t);
@@ -4132,7 +4493,7 @@ class qr {
     if (this.isCascadeMode() && this.cascadeIndex) {
       const i = this.cascadeIndex.nodeByValue.get(o);
       if (i) {
-        const r = this.cascadeIndex.atomsUnder.get(i.path) ?? [], n = new Set(qe(this.cascadeIndex, this.selectedValues));
+        const r = this.cascadeIndex.atomsUnder.get(i.path) ?? [], n = new Set(Qe(this.cascadeIndex, this.selectedValues));
         for (const a of r) n.delete(a);
         this.commitCascadeAtoms(n);
         return;
@@ -4142,7 +4503,7 @@ class qr {
   }
   selectAll() {
     if (this.isCascadeMode() && this.cascadeIndex) {
-      const t = this.cascadeIndex, o = new Set(qe(t, this.selectedValues));
+      const t = this.cascadeIndex, o = new Set(Qe(t, this.selectedValues));
       for (const i of this.treeNodes)
         t.atomPaths.has(i.path) && (this.getItemDisabled(i.data) || o.add(String(this.getItemValue(i.data))));
       this.commitCascadeAtoms(o);
@@ -4160,6 +4521,55 @@ class qr {
     this.selectedValues.clear(), this.selectedOptions.clear(), this.commit({ removed: e });
   }
   /**
+   * Flat-group cascade toggle: check or uncheck every (visible) member of a group
+   * in one shot. If the group is fully checked → deselect all its members; else →
+   * select all its non-disabled members. Operates on the currently-filtered
+   * members (same scope as Select-All) and, like Select-All / Clear-All,
+   * batch-mutates then fires a single `commit` — so one render and one `change`
+   * event, and it deliberately bypasses the per-item beforeSelect/beforeDeselect
+   * veto. The group name itself is never added to the selection.
+   */
+  toggleGroup(e) {
+    const t = this.groupOptions(this.filteredOptions)[e];
+    if (!(!t || t.length === 0))
+      if (this.groupCheckState(t) === "checked") {
+        const o = [];
+        for (const i of t) {
+          const r = String(this.getItemValue(i));
+          this.selectedValues.delete(r) && (this.selectedOptions.delete(r), o.push(i));
+        }
+        this.commit({ removed: o });
+      } else {
+        const o = [];
+        for (const i of t) {
+          if (this.getItemDisabled(i)) continue;
+          const r = String(this.getItemValue(i));
+          this.selectedValues.has(r) || (this.selectedValues.add(r), this.selectedOptions.set(r, i), o.push(i));
+        }
+        this.commit({ added: o });
+      }
+  }
+  /**
+   * Inline clear (✕) handler: wipe the whole selection and any search text, then
+   * restore focus to the input. clearAll() → commit() → renderBadges() already
+   * refreshes this button's visibility (it hides once nothing is selected).
+   */
+  clearClick() {
+    R.debug(`[${this.instanceId}] input clear (✕) clicked`), this.clearAll(), (this.searchTerm || this.input.value) && this.clearSearch(), this.showSelectedPopover && this.hideSelectedPopover(), this.justClosedViaClick = !0, this.input.focus(), setTimeout(() => {
+      this.justClosedViaClick = !1;
+    }, 0);
+  }
+  /**
+   * Show the inline clear (✕) only when it is opted in (isClearShown), something is
+   * selected, and the control is enabled. Called from renderBadges() so it tracks
+   * every selection change. Uses inline display like the counter / fullscreen clear.
+   */
+  updateClearButton() {
+    if (!this.clearButton) return;
+    const e = !this.element.classList.contains("ms--disabled"), t = !!this.options.isClearShown && this.selectedValues.size > 0 && e;
+    this.clearButton.style.display = t ? "" : "none";
+  }
+  /**
    * Re-render and fire callbacks after a selection state change.
    * `added` / `removed` drive per-item select/deselect callbacks.
    * `onChange` fires once if anything actually changed.
@@ -4169,11 +4579,42 @@ class qr {
     const t = e.added ?? [], o = e.removed ?? [];
     this.options.onSelect && t.forEach((i) => this.options.onSelect(i)), this.options.onDeselect && o.forEach((i) => this.options.onDeselect(i)), (t.length > 0 || o.length > 0) && this.options.onChange && this.options.onChange(this.getSelected());
   }
-  open() {
-    Y.debug(`[${this.instanceId}] open() called`, { isOpen: this.isOpen }), !this.isOpen && (this.hideMessage(), this.isOpen = !0, this.element.classList.add("ms--open"), this.dropdown.classList.add("ms__dropdown--visible"), Y.info(`[${this.instanceId}] Dropdown opened`), this.input.placeholder = this.getPlaceholderText(), !this.options.isMultipleEnabled && this.options.isSearchEnabled && (this.input.value = this.searchTerm), this.options.searchCallback && this.options.isKeepOptionsOnSearch && !this.searchTerm && (this.filteredOptions = [...this.allOptions], Y.debug(`[${this.instanceId}] Showing ${this.allOptions.length} initial options on open`)), this.presentationMode === "fullscreen" && this.enterFullscreen(), this.renderDropdown(), this.presentationMode !== "fullscreen" && this.positionDropdown(), this.dropdown.addEventListener("scroll", this.onDropdownScroll, !0), this.hint && this.presentationMode === "floating" && (this.hint.classList.add("ms__hint--visible"), this.positionHint()));
+  /**
+   * Shield the trailing document `click` for one tick. A consumer that drives the
+   * dropdown from their OWN button's click handler (`el.open()` / `el.toggle()`, or a
+   * scrollTo* command re-driving the already-open panel) would otherwise have that
+   * same click bubble to our document-level outside-click listener and immediately
+   * close it. Centralizing it here means every entry point — open(), the internal
+   * pointer path, and the public scrollTo* API — is covered. Cleared next tick, so a
+   * genuine later outside-click still closes as normal. Harmless for non-click
+   * callers (typing, programmatic-on-load, server-driven): no trailing click arrives
+   * before it clears.
+   */
+  armClickGuard() {
+    this.justOpenedViaClick = !0, setTimeout(() => {
+      this.justOpenedViaClick = !1;
+    }, 0);
   }
+  /** Open the dropdown (no-op if already open, or if there is nothing to show). */
+  open() {
+    var e;
+    Y.debug(`[${this.instanceId}] open() called`, { isOpen: h(this, $) }), this.armClickGuard(), !h(this, $) && (this.hideMessage(), I(this, $, !0), this.element.classList.add("ms--open"), this.dropdown.classList.add("ms__dropdown--visible"), Y.info(`[${this.instanceId}] Dropdown opened`), this.input.placeholder = this.getPlaceholderText(), !this.options.isMultipleEnabled && this.options.isSearchEnabled && (this.input.value = this.searchTerm), this.options.searchCallback && this.options.isKeepOptionsOnSearch && !this.searchTerm && (this.filteredOptions = [...this.allOptions], Y.debug(`[${this.instanceId}] Showing ${this.allOptions.length} initial options on open`)), this.presentationMode === "fullscreen" && this.enterFullscreen(), this.renderDropdown(), this.presentationMode !== "fullscreen" && this.positionDropdown(), this.dropdown.addEventListener("scroll", this.onDropdownScroll, !0), this.hint && this.presentationMode === "floating" && (this.hint.classList.add("ms__hint--visible"), this.positionHint()), (e = this.overlayCoord) == null || e.activate());
+  }
+  /** Close the dropdown (no-op if already closed). */
   close() {
-    Y.debug(`[${this.instanceId}] close() called`, { isOpen: this.isOpen }), this.isOpen && (this.isOpen = !1, this.element.classList.remove("ms--open"), this.dropdown.classList.remove("ms__dropdown--visible"), this.hint && this.hint.classList.remove("ms__hint--visible"), this.options.shouldKeepSearchOnClose || (this.searchTerm = "", (this.options.isMultipleEnabled || this.options.isSearchEnabled) && (this.input.value = ""), this.resetVisibleToAll()), this.focusedIndex = -1, this.dropdown.removeEventListener("scroll", this.onDropdownScroll, !0), this.destroyAllOptionTooltips(), this.hideLabelReveal(), this.hideMessage(), this.renderBadges(), this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.exitFullscreen(), this.dropdownPlacement = null, Y.debug(`[${this.instanceId}] Dropdown closed`));
+    var e;
+    Y.debug(`[${this.instanceId}] close() called`, { isOpen: h(this, $) }), h(this, $) && (I(this, $, !1), this.element.classList.remove("ms--open"), this.dropdown.classList.remove("ms__dropdown--visible"), this.hint && this.hint.classList.remove("ms__hint--visible"), this.options.shouldKeepSearchOnClose || (this.searchTerm = "", (this.options.isMultipleEnabled || this.options.isSearchEnabled) && (this.input.value = ""), this.resetVisibleToAll()), this.focusedIndex = -1, this.dropdown.removeEventListener("scroll", this.onDropdownScroll, !0), this.destroyAllOptionTooltips(), this.hideLabelReveal(), this.hideMessage(), this.renderBadges(), this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.exitFullscreen(), this.dropdownPlacement = null, (e = this.overlayCoord) == null || e.deactivate(), Y.debug(`[${this.instanceId}] Dropdown closed`));
+  }
+  /** Toggle the dropdown open/closed. */
+  toggle() {
+    h(this, $) ? this.close() : this.open();
+  }
+  /** Whether the dropdown is currently open. Assigning opens/closes it. */
+  get isOpen() {
+    return h(this, $);
+  }
+  set isOpen(e) {
+    e ? this.open() : this.close();
   }
   /**
    * Anchor a floating panel (dropdown or selected-items popover) below/above the input with
@@ -4184,7 +4625,7 @@ class qr {
    */
   anchorFloatingPanel(e, t) {
     var r;
-    const o = ((r = t.isLocked) == null ? void 0 : r.call(t)) ?? !0, i = Qe(e, this.input, {
+    const o = ((r = t.isLocked) == null ? void 0 : r.call(t)) ?? !0, i = ot(e, this.inputWrapper, {
       strategy: "fixed",
       placement: "bottom-start",
       offset: 4,
@@ -4210,7 +4651,7 @@ class qr {
       maxWidth: { padding: 8 },
       onDrift: (n) => this.warnDrift(n),
       beforeCompute: () => {
-        (this.options.hostElement ?? this.element).style.setProperty("--ms-input-current-width", `${this.input.offsetWidth}px`), this.options.dropdownMinWidth && (e.style.minWidth = this.options.dropdownMinWidth);
+        (this.options.hostElement ?? this.element).style.setProperty("--ms-input-current-width", `${this.inputWrapper.offsetWidth}px`), this.options.dropdownMinWidth && (e.style.minWidth = this.options.dropdownMinWidth);
       },
       onPlaced: (n) => {
         var a;
@@ -4254,10 +4695,10 @@ class qr {
    */
   warnFullscreenContainingBlock() {
     if (this.fullscreenContainingBlockWarned || typeof window > "u") return;
-    const e = Zt(this.dropdown);
+    const e = ns(this.dropdown);
     if (e === window) return;
     this.fullscreenContainingBlockWarned = !0;
-    const t = e, o = t.id ? `#${t.id}` : "", i = t.classList.length ? `.${Array.from(t.classList).join(".")}` : "", r = `<${t.tagName.toLowerCase()}${o}${i}>`, n = yo(t);
+    const t = e, o = t.id ? `#${t.id}` : "", i = t.classList.length ? `.${Array.from(t.classList).join(".")}` : "", r = `<${t.tagName.toLowerCase()}${o}${i}>`, n = Po(t);
     console.warn(
       `[@keenmate/web-multiselect] Fullscreen overlay is anchored to an ancestor ${r}` + (n ? ` (has ${n})` : "") + ` instead of the viewport, so it may not cover the screen (offset, clipped, or mis-sized).
 An ancestor of <web-multiselect> establishes a fixed-positioning containing block (transform / perspective / filter / backdrop-filter / will-change). Fix on your side: move the component out of that ancestor's subtree, OR remove/replace that property. If neither is acceptable, please file an issue at https://github.com/keenmate/web-multiselect/issues with the ancestor's computed CSS.`
@@ -4272,7 +4713,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
       isLocked: () => !!this.options.isPlacementLocked,
       applyMaxWidth: !0,
       afterPosition: () => {
-        this.hint && this.isOpen && this.positionHint();
+        this.hint && h(this, $) && this.positionHint();
       }
     }));
   }
@@ -4286,7 +4727,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
    * resize can swap presentation without a reopen.
    */
   setPresentation(e) {
-    e !== this.presentationMode && (this.presentationMode = e, this.isOpen ? e === "fullscreen" ? (this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.hint && this.hint.classList.remove("ms__hint--visible"), this.dropdownPlacement = null, this.enterFullscreen(), this.renderDropdown()) : (this.exitFullscreen(), this.renderDropdown(), this.positionDropdown(), this.hint && (this.hint.classList.add("ms__hint--visible"), this.positionHint())) : this.showSelectedPopover && (e === "fullscreen" ? (this.selectedPopoverCleanup && (this.selectedPopoverCleanup(), this.selectedPopoverCleanup = null), this.selectedPopoverPlacement = null, this.clearFloatingInlineGeometry(this.selectedPopover), this.selectedPopover.classList.add("ms__selected-popover--fullscreen"), this.lockBodyScroll()) : (this.selectedPopover.classList.remove("ms__selected-popover--fullscreen"), this.unlockBodyScroll(), this.positionSelectedPopover())));
+    e !== this.presentationMode && (this.presentationMode = e, h(this, $) ? e === "fullscreen" ? (this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.hint && this.hint.classList.remove("ms__hint--visible"), this.dropdownPlacement = null, this.enterFullscreen(), this.renderDropdown()) : (this.exitFullscreen(), this.renderDropdown(), this.positionDropdown(), this.hint && (this.hint.classList.add("ms__hint--visible"), this.positionHint())) : this.showSelectedPopover && (e === "fullscreen" ? (this.selectedPopoverCleanup && (this.selectedPopoverCleanup(), this.selectedPopoverCleanup = null), this.selectedPopoverPlacement = null, this.clearFloatingInlineGeometry(this.selectedPopover), this.selectedPopover.classList.add("ms__selected-popover--fullscreen"), this.lockBodyScroll()) : (this.selectedPopover.classList.remove("ms__selected-popover--fullscreen"), this.unlockBodyScroll(), this.positionSelectedPopover())));
   }
   /**
    * Lock page scroll behind a fullscreen overlay via the core ref-counted helper.
@@ -4295,7 +4736,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
    * and a redundant call is a no-op rather than acquiring a second.
    */
   lockBodyScroll() {
-    this.bodyScrollUnlock || (this.bodyScrollUnlock = Ei());
+    this.bodyScrollUnlock || (this.bodyScrollUnlock = Fi());
   }
   /** Restore page scroll (no-op if it wasn't locked). */
   unlockBodyScroll() {
@@ -4334,7 +4775,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
    * we just hold the returned cleanup. No-op where `visualViewport` is unavailable.
    */
   observeKeyboardInset() {
-    this.keyboardInsetCleanup = Ai(this.dropdown);
+    this.keyboardInsetCleanup = Ki(this.dropdown);
   }
   /** Detach keyboard-inset tracking and restore the panel's CSS-driven geometry. */
   unobserveKeyboardInset() {
@@ -4414,7 +4855,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
   /** Back gesture/button fired: our pushed entry is already gone, so just close the
    *  sheet — WITHOUT popping history again (popOverlayHistory becomes a no-op). */
   handleOverlayPopstate() {
-    this.overlayHistoryActive && (this.overlayHistoryActive = !1, window.removeEventListener("popstate", this.onOverlayPopstate), this.isOpen ? this.close() : this.showSelectedPopover && this.hideSelectedPopover());
+    this.overlayHistoryActive && (this.overlayHistoryActive = !1, window.removeEventListener("popstate", this.onOverlayPopstate), h(this, $) ? this.close() : this.showSelectedPopover && this.hideSelectedPopover());
   }
   /** Programmatic close: remove the listener and pop the entry we pushed (so the
    *  history stack returns to its pre-open state). No-op if a Back gesture already
@@ -4540,7 +4981,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
     this.hintCleanup && this.hintCleanup();
     let e = "top-start";
     this.dropdownPlacement && (this.dropdownPlacement.startsWith("bottom") ? e = this.dropdownPlacement.replace("bottom", "top") : this.dropdownPlacement.startsWith("top") && (e = this.dropdownPlacement.replace("top", "bottom")));
-    const t = Qe(this.hint, this.input, {
+    const t = ot(this.hint, this.inputWrapper, {
       strategy: "fixed",
       placement: e,
       offset: 4,
@@ -4557,7 +4998,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
           this.selectedValues.add(String(o));
         }), this.reconcileSelectedOptions(), this.renderBadges();
       } catch (t) {
-        F.error(`[${this.instanceId}] Failed to parse initial values:`, t);
+        W.error(`[${this.instanceId}] Failed to parse initial values:`, t);
       }
   }
   /**
@@ -4583,7 +5024,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
       Y.debug(`[${this.instanceId}] showPopover() suppressed (isSelectedPopoverEnabled=false)`);
       return;
     }
-    this.isOpen && this.close(), this.hideMessage(), this.showSelectedPopover = !0, this.renderSelectedPopover(), this.selectedPopover.classList.add("ms__selected-popover--visible");
+    h(this, $) && this.close(), this.hideMessage(), this.showSelectedPopover = !0, this.renderSelectedPopover(), this.selectedPopover.classList.add("ms__selected-popover--visible");
     const e = this.options.virtualScrollThreshold ?? 100;
     this.selectedValues.size >= e && this.selectedPopover.classList.add("ms__selected-popover--virtual"), this.presentationMode === "fullscreen" ? (this.selectedPopover.classList.add("ms__selected-popover--fullscreen"), this.lockBodyScroll(), this.clampDocumentOverflowX(), this.pushOverlayHistory()) : this.positionSelectedPopover();
   }
@@ -4594,7 +5035,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
       t.startsWith("popover-") && ((e = this.tooltips.get(t)) == null || e.destroy(), this.tooltips.delete(t));
   }
   renderSelectedPopover() {
-    const e = Array.from(this.selectedOptions.values()), t = this.selectedValues.size, o = this.options.virtualScrollThreshold ?? 100;
+    const e = this.getOrderedSelectedOptions(), t = this.selectedValues.size, o = this.options.virtualScrollThreshold ?? 100;
     if (t >= o) {
       this.renderSelectedPopoverVirtual(e, t);
       return;
@@ -4626,7 +5067,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
     if (!this.selectedPopoverContainer) return;
     const o = this.scaledBadgeHeight(), i = Math.round(4 * this.fullscreenScale()), r = o + i, n = this.options.virtualScrollBuffer ?? 10;
     requestAnimationFrame(() => {
-      this.selectedPopoverContainer && (this.selectedPopoverVirtualScroll ? this.selectedPopoverVirtualScroll.setItems(e) : this.selectedPopoverVirtualScroll = new Ds({
+      this.selectedPopoverContainer && (this.selectedPopoverVirtualScroll ? this.selectedPopoverVirtualScroll.setItems(e) : this.selectedPopoverVirtualScroll = new js({
         container: this.selectedPopoverContainer,
         itemHeight: r,
         items: e,
@@ -4668,23 +5109,23 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
   renderBadgeHTML(e, t) {
     const o = this.getItemValue(e), i = {
       ...t,
-      ...Ht(this.presentationMode)
+      ...Xe(this.presentationMode)
     };
     if (!t.isInPopover && this.options.renderBadgeCallback) {
       const d = this.toHtml(this.options.renderBadgeCallback(e, i));
       if (d.trim() !== "") {
-        const h = this.options.getBadgeClassCallback;
+        const u = this.options.getBadgeClassCallback;
         let f = "ms__badge ms__badge--custom";
-        if (h) {
-          const u = this.classSuffix(h(e));
-          u && (f += " " + u);
+        if (u) {
+          const p = this.classSuffix(u(e));
+          p && (f += " " + p);
         }
         return `<div class="${f}" data-value="${o}">${d}</div>`;
       }
     }
     let r;
     const n = t.isInPopover ? this.options.renderSelectedItemContentCallback : void 0;
-    n ? r = this.toHtml(n(e)) : this.options.renderBadgeContentCallback ? r = this.toHtml(this.options.renderBadgeContentCallback(e, i)) : r = this.getItemBadgeDisplayValue(e);
+    n ? r = this.toHtml(n(e, i)) : this.options.renderBadgeContentCallback ? r = this.toHtml(this.options.renderBadgeContentCallback(e, i)) : r = this.getItemBadgeDisplayValue(e);
     const a = t.isInPopover ? this.options.getSelectedItemClassCallback || this.options.getBadgeClassCallback : this.options.getBadgeClassCallback;
     let l = "ms__badge";
     if (a) {
@@ -4778,9 +5219,9 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
     if (t !== o) return !1;
     Object.assign(this.options, e);
     const i = "pathMember" in e || "getPathCallback" in e || "parentPathMember" in e || "levelMember" in e || "hasChildrenMember" in e || "treePathSeparator" in e || "isTreeEnabled" in e || "isSelectableMember" in e || "getIsSelectableCallback" in e;
-    if ("options" in e && e.options !== void 0 ? (this.allOptions = e.options, this.reconcileSelectedOptions(), this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]) : i && (this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]), ("checkboxMode" in e || "cascadeSelectPolicy" in e) && !i && !("options" in e) && this.isTreeMode() && (this.cascadeIndex = this.isCascadeMode() ? Bs(this.tree, (a) => String(this.getItemValue(a))) : null, this.isCascadeMode() && this.cascadeIndex)) {
-      this.cascadeCheckedAtoms = qe(this.cascadeIndex, this.selectedValues);
-      const a = jt(
+    if ("options" in e && e.options !== void 0 ? (this.allOptions = e.options, this.reconcileSelectedOptions(), this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]) : i && (this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]), ("checkboxMode" in e || "cascadeSelectPolicy" in e) && !i && !("options" in e) && this.isTreeMode() && (this.cascadeIndex = this.isCascadeMode() ? Xs(this.tree, (a) => String(this.getItemValue(a))) : null, this.isCascadeMode() && this.cascadeIndex)) {
+      this.cascadeCheckedAtoms = Qe(this.cascadeIndex, this.selectedValues);
+      const a = Zt(
         this.cascadeIndex,
         this.cascadeCheckedAtoms,
         this.cascadePolicy(),
@@ -4806,10 +5247,14 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
         this.effectiveBadgesPosition === "left" || this.effectiveBadgesPosition === "right"
       );
     }
-    return this.isOpen || (this.input.placeholder = this.getPlaceholderText()), "searchInputMode" in e && (this.input.readOnly = this.options.searchInputMode === "readonly", this.input.style.display = this.options.searchInputMode === "hidden" ? "none" : ""), "searchHint" in e && this.hint && (this.hint.textContent = this.options.searchHint || ""), this.renderDropdown(), this.renderBadges(), this.updateHiddenInput(), !0;
+    return h(this, $) || (this.input.placeholder = this.getPlaceholderText()), "searchInputMode" in e && (this.input.readOnly = this.options.searchInputMode === "readonly", this.input.style.visibility = this.options.searchInputMode === "hidden" ? "hidden" : ""), "searchHint" in e && this.hint && (this.hint.textContent = this.options.searchHint || ""), this.renderDropdown(), this.renderBadges(), this.updateHiddenInput(), !0;
   }
   get selectedItem() {
     return this.selectedOptions.size === 0 ? null : Array.from(this.selectedOptions.values())[0];
+  }
+  /** The current search box text (empty string when nothing is typed). Read-only; clear it with `clearSearch()`. */
+  get searchText() {
+    return this.searchTerm;
   }
   get selectedValue() {
     if (!this.options.valueMember && !this.options.getValueCallback)
@@ -4835,7 +5280,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
   spawnTooltip(e) {
     var r;
     (r = this.tooltips.get(e.id)) == null || r.destroy();
-    const t = this.element.getRootNode(), o = t instanceof ShadowRoot ? t : null, i = Fr({
+    const t = this.element.getRootNode(), o = t instanceof ShadowRoot ? t : null, i = rn({
       trigger: e.trigger,
       container: this.options.container ?? o ?? document.body,
       content: e.content,
@@ -4875,17 +5320,17 @@ ${o}` : t;
       if (!a) return;
       const l = a.dataset.value, c = this.selectedOptions.get(l);
       if (!c) return;
-      const d = `${i}${l}`, h = `${i}${l}-remove`, f = n.querySelector(".ms__badge-text");
+      const d = `${i}${l}`, u = `${i}${l}-remove`, f = n.querySelector(".ms__badge-text");
       f && this.spawnTooltip({
         id: d,
         trigger: f,
         content: this.buildBadgeTooltipContent(c)
       });
-      const u = this.getItemBadgeDisplayValue(c);
+      const p = this.getItemBadgeDisplayValue(c);
       this.spawnTooltip({
-        id: h,
+        id: u,
         trigger: a,
-        content: this.buildRemoveButtonTooltipText(u, c),
+        content: this.buildRemoveButtonTooltipText(p, c),
         // Keep parent badge tooltip from overlapping the remove-button tooltip.
         onBeforeShow: () => {
           var g;
@@ -4982,7 +5427,7 @@ ${o}` : t;
     const n = document.createElement("div");
     n.className = "ms__option-tooltip ms__option-tooltip--fullscreen", typeof r == "string" ? n.textContent = r : n.appendChild(r);
     const a = this.element.getRootNode(), l = a instanceof ShadowRoot ? a : null, c = this.options.container ?? l ?? document.body;
-    this.labelRevealTrigger = e, this.labelRevealPanel = n, this.labelRevealPopover = Kr({
+    this.labelRevealTrigger = e, this.labelRevealPanel = n, this.labelRevealPopover = nn({
       reference: e,
       panel: n,
       container: c,
@@ -5014,10 +5459,10 @@ ${o}` : t;
     const o = (t == null ? void 0 : t.variant) ?? "info", i = (t == null ? void 0 : t.duration) ?? 3e3, r = o === "error" || o === "warning", n = document.createElement("div");
     n.className = `ms__message ms__message--${o}`, n.setAttribute("role", r ? "alert" : "status"), n.setAttribute("aria-live", r ? "assertive" : "polite"), typeof e == "string" ? n.textContent = e : n.appendChild(e), n.addEventListener("click", () => this.hideMessage());
     const a = this.element.getRootNode(), l = a instanceof ShadowRoot ? a : null;
-    if ((this.options.container ?? l ?? document.body).appendChild(n), this.messageEl = n, this.presentationMode === "fullscreen" && (this.isOpen || this.showSelectedPopover))
+    if ((this.options.container ?? l ?? document.body).appendChild(n), this.messageEl = n, this.presentationMode === "fullscreen" && (h(this, $) || this.showSelectedPopover))
       n.classList.add("ms__message--fullscreen");
     else {
-      const h = Qe(n, this.input, {
+      const u = ot(n, this.inputWrapper, {
         strategy: "fixed",
         placement: (t == null ? void 0 : t.placement) ?? "bottom",
         offset: 8,
@@ -5027,7 +5472,7 @@ ${o}` : t;
         // autoUpdate oscillate between sides every frame.
         lockPlacement: "freeze"
       });
-      this.messageCleanup = () => h.destroy();
+      this.messageCleanup = () => u.destroy();
     }
     requestAnimationFrame(() => n.classList.add("ms__message--visible")), i > 0 && (this.messageTimer = setTimeout(() => this.hideMessage(), i));
   }
@@ -5059,7 +5504,7 @@ ${o}` : t;
       var c, d;
       const o = t, i = o.dataset.action;
       if (!i) return;
-      const r = parseInt(o.dataset.buttonIndex || "-1"), n = r >= 0 ? (c = this.options.actionButtons) == null ? void 0 : c[r] : (d = this.options.actionButtons) == null ? void 0 : d.find((h) => h.action === i);
+      const r = parseInt(o.dataset.buttonIndex || "-1"), n = r >= 0 ? (c = this.options.actionButtons) == null ? void 0 : c[r] : (d = this.options.actionButtons) == null ? void 0 : d.find((u) => u.action === i);
       if (!n) return;
       const a = n.getTooltipCallback ? n.getTooltipCallback(this) : n.tooltip;
       if (!a) return;
@@ -5090,10 +5535,12 @@ ${o}` : t;
   // PUBLIC API
   // ========================================================================
   destroy() {
-    this.destroyAllTooltips(), this.hideLabelReveal(), this.hideMessage(), this.searchDebounceTimer && (clearTimeout(this.searchDebounceTimer), this.searchDebounceTimer = void 0), this.abortInFlightSearch(), this.dropdownCleanup && this.dropdownCleanup(), this.hintCleanup && this.hintCleanup(), this.selectedPopoverCleanup && this.selectedPopoverCleanup(), this.overlayHistoryActive && (this.overlayHistoryActive = !1, typeof window < "u" && window.removeEventListener("popstate", this.onOverlayPopstate)), this.exitFullscreen(), this.documentClickHandler && (document.removeEventListener("click", this.documentClickHandler), this.documentClickHandler = null), this.documentKeydownHandler && (document.removeEventListener("keydown", this.documentKeydownHandler), this.documentKeydownHandler = null), this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.dropdown && this.dropdown.remove(), this.hint && this.hint.remove(), this.selectedPopover && this.selectedPopover.remove(), this.element.innerHTML = "", this.element.classList.remove("ms", "ms--open", "ms--no-checkboxes"), mt.info(`[${this.instanceId}] Component destroyed`);
+    var e;
+    this.destroyAllTooltips(), this.hideLabelReveal(), this.hideMessage(), this.searchDebounceTimer && (clearTimeout(this.searchDebounceTimer), this.searchDebounceTimer = void 0), this.abortInFlightSearch(), this.dropdownCleanup && this.dropdownCleanup(), this.hintCleanup && this.hintCleanup(), this.selectedPopoverCleanup && this.selectedPopoverCleanup(), this.overlayHistoryActive && (this.overlayHistoryActive = !1, typeof window < "u" && window.removeEventListener("popstate", this.onOverlayPopstate)), this.exitFullscreen(), this.documentClickHandler && (document.removeEventListener("click", this.documentClickHandler), this.documentClickHandler = null), this.documentKeydownHandler && (document.removeEventListener("keydown", this.documentKeydownHandler), this.documentKeydownHandler = null), (e = this.overlayCoord) == null || e.dispose(), this.overlayCoord = null, this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.dropdown && this.dropdown.remove(), this.hint && this.hint.remove(), this.selectedPopover && this.selectedPopover.remove(), this.element.innerHTML = "", this.element.classList.remove("ms", "ms--open", "ms--no-checkboxes"), wt.info(`[${this.instanceId}] Component destroyed`);
   }
 }
-function Xr() {
+$ = new WeakMap();
+function un() {
   return {
     fromAttribute(s) {
       if (s === null || s.trim() === "") return [];
@@ -5114,29 +5561,29 @@ function Xr() {
     }
   };
 }
-const Yr = ["json", "csv", "plain"], Hs = ",", Fs = `
+const mn = ["json", "csv", "plain"], Js = ",", Ys = `
 `;
-function Jr(s, e, t = {}) {
+function pn(s, e, t = {}) {
   if (s == null || s.trim() === "") return { options: [] };
-  const o = Ks(t.splitter ?? Hs) || Hs, i = Ks(t.rowSplitter ?? Fs) || Fs;
+  const o = Zs(t.splitter ?? Js) || Js, i = Zs(t.rowSplitter ?? Ys) || Ys;
   switch (e) {
     case "csv":
-      return en(s, o, i);
+      return bn(s, o, i);
     case "plain":
-      return Zr(s, o, i);
+      return gn(s, o, i);
     case "json":
     default:
-      return Qr(s);
+      return fn(s);
   }
 }
-function Ks(s) {
+function Zs(s) {
   return s.replace(
     /\\[ntr\\]/g,
     (e) => e === "\\n" ? `
 ` : e === "\\t" ? "	" : e === "\\r" ? "\r" : "\\"
   );
 }
-function Qr(s) {
+function fn(s) {
   let e;
   try {
     e = JSON.parse(s);
@@ -5145,11 +5592,11 @@ function Qr(s) {
   }
   return Array.isArray(e) ? { options: e } : { options: [], error: "data-options JSON must be an array" };
 }
-function Zr(s, e, t) {
+function gn(s, e, t) {
   return { options: s.split(t).flatMap((i) => i.split(e)).map((i) => i.trim()).filter((i) => i.length > 0).map((i) => [i, i]) };
 }
-function en(s, e, t) {
-  const o = tn(s, e, t).filter((n) => !(n.length === 1 && n[0].trim() === ""));
+function bn(s, e, t) {
+  const o = vn(s, e, t).filter((n) => !(n.length === 1 && n[0].trim() === ""));
   if (o.length < 2)
     return { options: [], error: "data-options CSV needs a header row and at least one data row" };
   const i = o[0].map((n) => n.trim());
@@ -5160,7 +5607,7 @@ function en(s, e, t) {
     }), a;
   }) };
 }
-function tn(s, e, t) {
+function vn(s, e, t) {
   const o = [];
   let i = [], r = "", n = !1;
   for (let a = 0; a < s.length; ) {
@@ -5173,7 +5620,7 @@ function tn(s, e, t) {
   }
   return i.push(r), o.push(i), o;
 }
-const xo = `@layer variables,component,overrides;@layer variables{:host{display:block;--ms-rem: 10px;font-family:var(--ms-font-family, var(--base-font-family, inherit));--ms-accent-color: var(--base-accent-color, #3b82f6);--ms-accent-color-hover: var(--base-accent-color-hover, #2563eb);--ms-accent-color-active: var(--base-accent-color-active, #1d4ed8);--ms-accent-color-light: var(--base-accent-color-light, light-dark(#eff6ff, #1e3a5f));--ms-accent-color-light-hover: var(--base-accent-color-light-hover, light-dark(#e0f2fe, #264a73));--ms-text-color-1: var(--base-text-color-1, light-dark(#111827, #f5f5f5));--ms-text-color-2: var(--base-text-color-2, light-dark(#353b47, #d4d4d4));--ms-text-color-3: var(--base-text-color-3, light-dark(#6b7280, #a3a3a3));--ms-text-color-4: var(--base-text-color-4, light-dark(#a0a3a9, #737373));--ms-text-color-on-accent: var(--base-text-color-on-accent, #ffffff);--ms-text-primary: var(--ms-text-color-1);--ms-text-secondary: var(--ms-text-color-3);--ms-primary-bg: var(--base-hover-bg, color-mix(in srgb, var(--ms-text-color-1) 8%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-primary-bg-hover: var(--base-active-bg, color-mix(in srgb, var(--ms-text-color-1) 14%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-border-color: var(--base-border-color, light-dark(#cbd5e1, #52525b));--ms-border: var(--base-border, 1px solid var(--ms-border-color));--ms-input-bg: var(--base-input-bg, light-dark(#ffffff, #1a1a1a));--ms-input-color: var(--base-input-color, var(--ms-text-color-1));--ms-input-border: var(--base-input-border, 1px solid var(--ms-border-color));--ms-input-border-hover: var(--base-input-border-hover, 1px solid var(--ms-accent-color));--ms-input-border-focus: var(--base-input-border-focus, 1px solid var(--ms-accent-color));--ms-input-placeholder-color: var(--base-input-placeholder-color, var(--ms-text-color-4));--ms-input-bg-disabled: var(--base-input-bg-disabled, rgba(107, 114, 128, .05));--ms-toggle-icon-color: var(--ms-text-color-3);--ms-toggle-icon-color-open: var(--ms-text-color-3);--ms-counter-badge-bg: var(--ms-accent-color);--ms-counter-badge-bg-hover: var(--ms-accent-color-hover);--ms-counter-badge-color: var(--ms-text-color-on-accent);--ms-hint-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-hint-color: var(--ms-text-color-4);--ms-hint-border-color: var(--ms-border-color);--ms-dropdown-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-dropdown-text-color: var(--ms-text-color-1);--ms-dropdown-border-color: var(--ms-border-color);--ms-dropdown-box-shadow-semantic: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-actions-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-actions-border-color: var(--ms-border-color);--ms-action-button-bg: transparent;--ms-action-button-bg-hover: var(--ms-primary-bg);--ms-action-button-border-color: var(--ms-border-color);--ms-action-button-border-color-hover: var(--ms-accent-color);--ms-action-button-color: var(--ms-text-color-1);--ms-group-border-color: var(--ms-border-color);--ms-option-text-color: var(--ms-text-color-1);--ms-option-bg: transparent;--ms-option-bg-hover: var(--ms-primary-bg);--ms-option-color-hover: inherit;--ms-option-bg-focused: var(--ms-primary-bg);--ms-option-color-focused: inherit;--ms-option-outline-color-focused: var(--ms-accent-color);--ms-option-bg-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-option-bg-matched: color-mix(in srgb, var(--ms-accent-color) 8%, transparent);--ms-option-color-matched: inherit;--ms-option-border-matched-color: color-mix(in srgb, var(--ms-accent-color) 40%, transparent);--ms-option-title-color: var(--ms-text-color-1);--ms-option-subtitle-color: var(--ms-text-color-3);--ms-option-mark-bg: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-option-mark-color: inherit;--ms-loading-color: var(--ms-text-color-3);--ms-badge-bg: var(--ms-accent-color-light);--ms-badge-bg-hover: var(--base-hover-bg, var(--ms-accent-color-light-hover));--ms-badge-bg-active: var(--ms-accent-color-light-hover);--ms-badge-text-bg-hover: var(--base-hover-bg, var(--ms-accent-color-light-hover));--ms-badge-text-color-hover: var(--ms-badge-text-color);--ms-badge-counter-border-color: var(--ms-border-color);--ms-badge-counter-text-bg: var(--ms-primary-bg-hover);--ms-badge-counter-text-color: var(--ms-text-color-1);--ms-badge-counter-remove-bg: var(--ms-text-color-3);--ms-badge-counter-remove-bg-hover: var(--ms-text-color-1);--ms-badge-counter-remove-color: var(--ms-text-color-on-accent);--ms-counter-wrapper-border-color: var(--ms-border-color);--ms-count-clear-bg-hover: var(--ms-accent-color);--ms-tooltip-bg: var(--base-tooltip-bg, var(--base-inverse-bg, light-dark(#333333, #f5f5f5)));--ms-tooltip-text-color: var(--base-tooltip-text-color, light-dark(#ffffff, #1a1a1a));--ms-selected-popover-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-selected-popover-border-color: var(--ms-border-color);--ms-selected-popover-header-border-color: var(--ms-border-color);--ms-selected-popover-close-bg-hover: var(--ms-accent-color);--ms-input-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-input-padding-right: calc(4 * var(--ms-rem));--ms-input-padding-h: calc(1.2 * var(--ms-rem));--ms-input-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-border-width: 1px;--ms-input-border-radius: var(--ms-border-radius-md);--ms-input-text: var(--ms-text-color-1);--ms-input-bg-disabled: rgba(107, 114, 128, .05);--ms-toggle-right: calc(1.2 * var(--ms-rem));--ms-toggle-color: var(--ms-text-color-3);--ms-transform-center-y: translateY(-50%);--ms-transform-rotate-180: 180deg;--ms-counter-offset: calc(3.2 * var(--ms-rem));--ms-counter-padding: calc(.2 * var(--ms-rem)) calc(.4 * var(--ms-rem));--ms-counter-bg: var(--ms-accent-color);--ms-counter-color: var(--ms-text-color-on-accent);--ms-counter-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-counter-font-weight: var(--base-font-weight-semibold, 600);--ms-counter-border-radius: var(--ms-border-radius-sm);--ms-counter-bg-hover: var(--ms-accent-color-hover);--ms-transform-scale-hover: 1.1;--ms-hint-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-hint-border: 1px solid var(--ms-hint-border-color);--ms-hint-border-radius: var(--ms-border-radius-lg);--ms-hint-box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--ms-hint-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-dropdown-border: var(--base-dropdown-border, 1px solid var(--ms-dropdown-border-color));--ms-dropdown-border-radius: var(--ms-border-radius-lg);--ms-dropdown-inner-border-radius: max(0px, calc(var(--ms-dropdown-border-radius) - 1px));--ms-dropdown-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-input-current-width: auto;--ms-dropdown-width: var(--ms-input-current-width);--ms-options-max-height: calc(32 * var(--ms-rem));--ms-option-color: var(--ms-text-color-1);--ms-z-index-dropdown: 9999;--ms-z-index-sticky: 1;--ms-z-index-fullscreen: 10001;--ms-z-index-fullscreen-tooltip: 10002;--ms-fullscreen-rem: 12px;--ms-fullscreen-bg: var(--ms-dropdown-bg);--ms-fullscreen-text-color: var(--ms-dropdown-text-color);--ms-fullscreen-header-bg: var(--ms-dropdown-bg);--ms-fullscreen-header-border: 1px solid var(--ms-dropdown-border-color);--ms-fullscreen-header-gap: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-v: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-h: calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding: var(--ms-fullscreen-header-padding-v) var(--ms-fullscreen-header-padding-h);--ms-fullscreen-header-min-height: calc(5.6 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-size: calc(1.7 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-weight: var(--base-font-weight-semibold, 600);--ms-fullscreen-search-border: var(--ms-input-border);--ms-fullscreen-search-border-radius: var(--ms-input-border-radius);--ms-fullscreen-search-padding: calc(.8 * var(--ms-fullscreen-rem)) calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-search-font-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-icon-size: calc(1.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-inset: calc(.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-gutter: calc(3.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-search-clear-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-mode-toggle-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-icon-size: calc(1.5 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-gap: var(--ms-fullscreen-header-gap);--ms-fullscreen-mode-toggle-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-mode-toggle-bg: transparent;--ms-fullscreen-mode-toggle-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-size: calc(3.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-color: var(--ms-dropdown-text-color);--ms-fullscreen-close-bg: transparent;--ms-fullscreen-close-border: none;--ms-fullscreen-close-border-radius: 50%;--ms-fullscreen-close-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-edge-nudge: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-icon-size: calc(1.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-color: var(--ms-accent-color);--ms-fullscreen-info-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-gap: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-padding-top: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-font-size: calc(1.3 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-nav-btn-size: calc(3.2 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-color: var(--ms-dropdown-text-color);--ms-fullscreen-nav-btn-bg: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-btn-bg-hover: color-mix(in srgb, var(--ms-accent-color) 22%, transparent);--ms-icon-chevron: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M5 15l7-7 7 7' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/></svg>");--ms-icon-info: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/><circle cx='12' cy='7.5' r='1.3' fill='black'/><path d='M12 11v6' stroke='black' stroke-width='2' stroke-linecap='round' fill='none'/></svg>");--ms-fullscreen-tree-base-indent: calc(.7 * var(--ms-fullscreen-rem));--ms-fullscreen-tree-indent: calc(1.2 * var(--ms-fullscreen-rem));--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem));--ms-actions-border-bottom: 1px solid var(--ms-actions-border-color);--ms-action-btn-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-action-btn-border: var(--ms-border);--ms-action-btn-border-radius: var(--ms-border-radius-sm);--ms-action-btn-bg: transparent;--ms-action-btn-color: inherit;--ms-action-btn-bg-hover: var(--ms-primary-bg);--ms-action-btn-border-color-hover: var(--ms-accent-color);--ms-transform-scale-active: .98;--ms-options-padding: 0;--ms-group-border-top: 1px solid var(--ms-group-border-color);--ms-group-margin-top: calc(.4 * var(--ms-rem));--ms-group-padding-top: calc(.4 * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-font-weight: var(--base-font-weight-semibold, 600);--ms-group-label-color: var(--ms-text-color-3);--ms-group-label-transform: uppercase;--ms-group-label-letter-spacing: .05em;--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-padding-h: calc(1.2 * var(--ms-rem));--ms-option-min-height: auto;--ms-option-outline-focused: 2px solid var(--ms-option-outline-color-focused);--ms-option-focus-outline-offset: -2px;--ms-option-border-matched: 3px solid var(--ms-option-border-matched-color);--ms-option-bg-focused-hover: var(--ms-primary-bg);--ms-option-bg-matched-hover: color-mix(in srgb, var(--ms-accent-color) 12%, transparent);--ms-option-bg-selected-focused: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-bg-selected-matched: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-disabled-bg: var(--base-disabled-bg, transparent);--ms-option-bg-disabled-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-disabled-opacity: .5;--ms-option-content-gap: calc(.8 * var(--ms-rem));--ms-option-icon-size: calc(2 * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-mark-font-weight: var(--base-font-weight-semibold, 600);--ms-option-title-white-space: normal;--ms-option-title-overflow: visible;--ms-option-title-text-overflow: clip;--ms-option-subtitle-margin-top: calc(.4 * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-subtitle-line-height: var(--base-line-height-tight, 1.25);--ms-checkbox-margin-top: 0;--ms-checkbox-margin-right: 0;--ms-checkbox-margin-bottom: 0;--ms-checkbox-margin-left: 0;--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-checkbox-scale: 1;--ms-checkbox-align: center;--ms-checkbox-bg: var(--ms-input-bg);--ms-checkbox-border-width: 1px;--ms-checkbox-border-color: var(--base-checkbox-border-color, #8f8f8f);--ms-checkbox-border: var(--ms-checkbox-border-width) solid var(--ms-checkbox-border-color);--ms-checkbox-border-radius: calc(.3 * var(--ms-rem));--ms-checkbox-checkmark-thickness: 2.5px;--ms-checkbox-checked-bg: var(--ms-accent-color);--ms-checkbox-checked-border: var(--ms-checkbox-border-width) solid var(--ms-accent-color);--ms-checkbox-checkmark-color: var(--ms-text-color-on-accent);--ms-checkbox-hover-border-color: var(--ms-accent-color);--ms-checkbox-disabled-bg: var(--ms-primary-bg);--ms-checkbox-disabled-border: var(--ms-checkbox-border-width) solid var(--ms-border-color);--ms-checkbox-checked-bg-hover: var(--ms-accent-color-hover);--ms-checkbox-checked-border-color-hover: var(--ms-accent-color-hover);--ms-state-min-height: calc(8 * var(--ms-rem));--ms-empty-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-empty-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-empty-color: var(--ms-text-color-3);--ms-loader-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-loader-gap: calc(.8 * var(--ms-rem));--ms-loading-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-loading-text-color: var(--ms-text-color-3);--ms-badges-gap: calc(.8 * var(--ms-rem));--ms-badges-margin-bottom: calc(.8 * var(--ms-rem));--ms-badges-margin-top: calc(.8 * var(--ms-rem));--ms-badges-margin-left: calc(.4 * var(--ms-rem));--ms-badges-margin-right: calc(.4 * var(--ms-rem));--ms-inline-align: center;--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(2.7 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-font-weight: var(--base-font-weight-semibold, 600);--ms-badge-border-radius: var(--ms-border-radius-sm);--ms-order-first: -1;--ms-badge-text-padding: 0 calc(.8 * var(--ms-rem));--ms-badge-text-bg: var(--ms-accent-color-light);--ms-badge-text-color: var(--ms-accent-color);--ms-badge-text-border: none;--ms-badge-remove-width: calc(2.7 * var(--ms-rem));--ms-badge-remove-bg: var(--ms-accent-color);--ms-badge-remove-color: var(--ms-text-color-on-accent);--ms-badge-remove-border: none;--ms-badge-remove-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-remove-bg-hover: var(--ms-accent-color-hover);--ms-badge-remove-box-shadow-focus: 0 0 0 2px color-mix(in srgb, var(--ms-accent-color) 50%, transparent);--ms-badge-remove-icon-size: calc(1 * var(--ms-rem));--ms-icon-remove: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 6 18'/><path d='m6 6 12 12'/></svg>");--ms-icon-search-clear: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m13.5 8.5-5 5'/><path d='m8.5 8.5 5 5'/><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");--ms-icon-search: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");--ms-icon-filter: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'/></svg>");--ms-badge-counter-bg: transparent;--ms-badge-counter-border: 1px solid var(--ms-badge-counter-border-color);--ms-badge-counter-border-radius: var(--ms-border-radius-sm);--ms-more-badge-bg: var(--ms-accent-color-light);--ms-more-badge-hover-bg: var(--ms-badge-bg-hover);--ms-more-badge-active-bg: var(--ms-accent-color-light-hover);--ms-count-display-margin-bottom: calc(.8 * var(--ms-rem));--ms-count-display-margin-top: calc(.8 * var(--ms-rem));--ms-count-display-margin-left: calc(.8 * var(--ms-rem));--ms-count-display-margin-right: calc(.8 * var(--ms-rem));--ms-counter-wrapper-bg: transparent;--ms-counter-wrapper-border: var(--ms-border);--ms-counter-wrapper-border-radius: var(--ms-border-radius-sm);--ms-counter-wrapper-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-counter-wrapper-gap: calc(.4 * var(--ms-rem));--ms-counter-wrapper-bg-hover: var(--ms-primary-bg);--ms-counter-wrapper-border-color-hover: var(--ms-accent-color);--ms-count-text-bg: transparent;--ms-count-text-border: none;--ms-count-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-count-text-color: var(--ms-text-color-1);--ms-count-clear-size: calc(1.6 * var(--ms-rem));--ms-count-clear-bg: transparent;--ms-count-clear-color: var(--ms-text-color-3);--ms-count-clear-font-size: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-count-clear-border-radius: var(--ms-border-radius-sm);--ms-count-clear-bg-hover: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-count-clear-color-hover: var(--ms-accent-color);--ms-count-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-clear: var(--ms-icon-remove);--ms-tooltip-color: var(--ms-tooltip-text-color);--ms-tooltip-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tooltip-border-radius: var(--ms-border-radius-lg);--ms-tooltip-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-tooltip-max-width: calc(32 * var(--ms-rem));--ms-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, .15);--ms-tooltip-z-index: 10000;--ms-option-tooltip-bg: var(--ms-tooltip-bg);--ms-option-tooltip-text-color: var(--ms-tooltip-text-color);--ms-option-tooltip-padding: var(--ms-tooltip-padding);--ms-option-tooltip-border-radius: var(--ms-tooltip-border-radius);--ms-option-tooltip-font-size: var(--ms-tooltip-font-size);--ms-option-tooltip-max-width: var(--ms-tooltip-max-width);--ms-option-tooltip-shadow: var(--ms-tooltip-shadow);--ms-option-tooltip-z-index: var(--ms-tooltip-z-index);--ms-message-bg: var(--ms-message-info-bg);--ms-message-color: var(--ms-message-info-color);--ms-message-border: 1px solid transparent;--ms-message-border-radius: var(--ms-border-radius-lg);--ms-message-padding: calc(1 * var(--ms-rem)) calc(1.4 * var(--ms-rem));--ms-message-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-message-font-weight: var(--base-font-weight-medium, 500);--ms-message-max-width: calc(40 * var(--ms-rem));--ms-message-shadow: 0 4px 16px rgb(0 0 0 / .18);--ms-message-fullscreen-offset: calc(2.4 * var(--ms-fullscreen-rem));--ms-message-z-index: var(--ms-z-index-fullscreen-tooltip);--ms-message-info-bg: var(--ms-tooltip-bg);--ms-message-info-color: var(--ms-tooltip-text-color);--ms-message-warning-bg: var(--base-warning-bg, #f59e0b);--ms-message-warning-color: var(--base-warning-color, #1a1a1a);--ms-message-error-bg: var(--base-danger-bg, #ef4444);--ms-message-error-color: var(--base-danger-color, #ffffff);--ms-message-success-bg: var(--base-success-bg, #10b981);--ms-message-success-color: var(--base-success-color, #ffffff);--ms-z-index-popover: 10000;--ms-selected-popover-width: calc(32 * var(--ms-rem));--ms-selected-popover-max-height: calc(32 * var(--ms-rem));--ms-selected-popover-border: 1px solid var(--ms-selected-popover-border-color);--ms-selected-popover-border-radius: var(--ms-border-radius-lg);--ms-selected-popover-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-selected-popover-header-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-selected-popover-header-bg: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-selected-popover-header-border-bottom: 1px solid var(--ms-selected-popover-header-border-color);--ms-selected-popover-header-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-selected-popover-header-font-weight: var(--base-font-weight-semibold, 600);--ms-selected-popover-header-color: var(--ms-text-color-1);--ms-popover-close-size: calc(2.4 * var(--ms-rem));--ms-selected-popover-close-bg: transparent;--ms-selected-popover-close-color: var(--ms-text-color-3);--ms-selected-popover-close-font-size: calc(var(--base-font-size-xl, 2) * var(--ms-rem));--ms-selected-popover-close-border-radius: var(--ms-border-radius-sm);--ms-selected-popover-close-bg-hover: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-selected-popover-close-color-hover: var(--ms-accent-color);--ms-selected-popover-close-icon-size: calc(1.4 * var(--ms-rem));--ms-selected-popover-body-gap: calc(.4 * var(--ms-rem));--ms-selected-popover-body-padding: calc(.8 * var(--ms-rem));--ms-selected-popover-body-max-height: calc(28.8 * var(--ms-rem));--ms-font-size-2xs: calc(var(--base-font-size-2xs, 1) * var(--ms-rem));--ms-font-size-xs: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-font-size-sm: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-font-size-base: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-font-size-lg: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-font-weight-normal: var(--base-font-weight-normal, 400);--ms-font-weight-medium: var(--base-font-weight-medium, 500);--ms-font-weight-semibold: var(--base-font-weight-semibold, 600);--ms-line-height-none: 1;--ms-line-height-tight: var(--base-line-height-tight, 1.25);--ms-line-height-normal: var(--base-line-height-normal, 1.5);--ms-line-height-relaxed: var(--base-line-height-relaxed, 1.75);--ms-border-radius-sm: calc(var(--base-border-radius-sm, .4) * var(--ms-rem));--ms-border-radius-md: calc(var(--base-border-radius-md, .6) * var(--ms-rem));--ms-border-radius-lg: calc(var(--base-border-radius-lg, .8) * var(--ms-rem));--ms-border-radius: var(--ms-border-radius-md);--ms-spacing-xs: calc(.4 * var(--ms-rem));--ms-spacing-sm: calc(.8 * var(--ms-rem));--ms-spacing-md: calc(1.2 * var(--ms-rem));--ms-spacing-lg: calc(1.6 * var(--ms-rem));--ms-transition-fast: .15s;--ms-transition-normal: .2s;--ms-easing-snappy: cubic-bezier(.4, 0, .2, 1);--ms-placeholder-opacity: .6;--ms-disabled-input-opacity: .6;--ms-scrollbar-width: 8px;--ms-scrollbar-track-bg: transparent;--ms-scrollbar-thumb-bg: var(--ms-border-color);--ms-scrollbar-thumb-bg-hover: var(--ms-text-color-3);--ms-scrollbar-thumb-border-radius: 4px;--ms-debug-bg: var(--base-elevated-bg, light-dark(#f9fafb, #2b2b2b));--ms-debug-border-color: var(--ms-border-color);--ms-debug-text-color: var(--ms-text-color-1);--ms-debug-border-radius: var(--ms-border-radius-md);--ms-debug-summary-color: var(--ms-accent-color);--ms-debug-summary-bg-hover: var(--ms-primary-bg);--ms-debug-summary-outline-color: var(--ms-accent-color);--ms-debug-summary-border-radius: var(--ms-border-radius-sm);--ms-debug-stats-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-debug-stats-border-radius: var(--ms-border-radius-sm);--ms-debug-bullet-color: var(--ms-accent-color)}}@layer component{web-multiselect:not(:defined){display:block;min-height:calc(3.5 * var(--ms-rem));color:transparent!important;background:transparent}:host{-webkit-tap-highlight-color:transparent}.ms__wrapper{display:flex;flex-direction:column;align-items:stretch}.ms__wrapper--inline{flex-direction:row;align-items:var(--ms-inline-align, center)}.ms{position:relative;width:100%}}@layer component{.ms__input-wrapper{position:relative;display:flex;align-items:center}.ms__input{box-sizing:border-box;width:100%;font-family:inherit;height:var(--ms-input-height);padding:var(--ms-input-padding);padding-inline-end:var(--ms-input-padding-right);font-size:var(--ms-input-font-size);border:var(--ms-input-border);border-radius:var(--ms-input-border-radius);background:var(--ms-input-bg);color:var(--ms-input-color);cursor:pointer;transition:border var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input:hover:not(:focus):not(:disabled){border:var(--ms-input-border-hover)}.ms__input:focus{outline:none;border:var(--ms-input-border-focus)}.ms__input::placeholder{color:var(--ms-input-placeholder-color);opacity:0;transition:opacity var(--ms-transition-fast) var(--ms-easing-snappy)}:host([data-ready]) .ms__input::placeholder{opacity:var(--ms-placeholder-opacity)}.ms__toggle{position:absolute;inset-inline-end:var(--ms-toggle-right);top:50%;transform:var(--ms-transform-center-y);pointer-events:none;color:var(--ms-toggle-icon-color);transition:transform var(--ms-transition-fast) var(--ms-easing-snappy)}.ms--open .ms__toggle{transform:var(--ms-transform-center-y) rotate(var(--ms-transform-rotate-180));color:var(--ms-toggle-icon-color-open)}.ms__counter{position:absolute;inset-inline-end:var(--ms-counter-offset);top:50%;transform:var(--ms-transform-center-y);padding:var(--ms-counter-padding);background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-size:var(--ms-counter-font-size);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter:hover{background:var(--ms-counter-badge-bg-hover);transform:var(--ms-transform-center-y) scale(var(--ms-transform-scale-hover))}.ms__actions{display:flex;flex-direction:column;gap:var(--ms-actions-gap);padding:var(--ms-actions-padding)}.ms__actions--top{border-bottom:var(--ms-actions-border-bottom)}.ms__actions--bottom{flex-direction:column-reverse;border-top:var(--ms-actions-border-bottom)}.ms__actions-row{display:flex;flex-wrap:nowrap;gap:var(--ms-actions-gap)}.ms__actions--wrap .ms__actions-row{flex-wrap:wrap}.ms__actions--sticky{position:sticky;z-index:var(--ms-z-index-sticky);background:var(--ms-actions-bg)}.ms__actions--sticky.ms__actions--top{top:0}.ms__actions--sticky.ms__actions--bottom{bottom:0}.ms__actions--align-stretch .ms__action-btn{flex:1}.ms__actions--align-left .ms__actions-row{justify-content:flex-start}.ms__actions--align-right .ms__actions-row{justify-content:flex-end}.ms__actions--align-center .ms__actions-row{justify-content:center}.ms__actions--align-space-between .ms__actions-row{justify-content:space-between}.ms__action-btn{font-family:inherit;padding:var(--ms-action-btn-padding);font-size:var(--ms-action-btn-font-size);border:var(--ms-action-btn-border);border-radius:var(--ms-action-btn-border-radius);background:var(--ms-action-button-bg);color:var(--ms-action-button-color);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}@media (hover: hover){.ms__action-btn:hover{background:var(--ms-action-button-bg-hover);border-color:var(--ms-action-button-border-color-hover)}}.ms__action-btn:active{transform:scale(var(--ms-transform-scale-active))}.ms__action-btn:disabled,.ms__action-btn[disabled]{opacity:var(--ms-disabled-opacity);cursor:not-allowed;pointer-events:none}}@layer component{.ms__hint{display:none;position:fixed;z-index:var(--ms-z-index-popover);padding:var(--ms-hint-padding);background:var(--ms-hint-bg);border:var(--ms-hint-border);border-radius:var(--ms-hint-border-radius);box-shadow:var(--ms-hint-box-shadow);font-size:var(--ms-hint-font-size);color:var(--ms-hint-color);line-height:var(--ms-line-height-relaxed);max-width:100%}.ms__hint--visible{display:block}.ms__dropdown{display:none;position:fixed;font-family:inherit;z-index:var(--ms-z-index-dropdown);background:var(--ms-dropdown-bg);border:var(--ms-dropdown-border);border-radius:var(--ms-dropdown-border-radius);box-shadow:var(--ms-dropdown-box-shadow);width:var(--ms-dropdown-width);max-height:var(--ms-options-max-height);overflow:hidden;color:var(--ms-dropdown-text-color)}.ms__dropdown--visible{display:flex;flex-direction:column}.ms__dropdown--fullscreen,.ms__selected-popover--fullscreen{--ms-rem: var(--ms-fullscreen-rem);--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tree-base-indent: var(--ms-fullscreen-tree-base-indent);--ms-tree-indent: var(--ms-fullscreen-tree-indent)}.ms__selected-popover--fullscreen{--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(4.2 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-badge-text-padding: 0 calc(1.2 * var(--ms-rem));--ms-badge-remove-width: calc(3.6 * var(--ms-rem));--ms-badge-remove-icon-size: calc(1.2 * var(--ms-rem));--ms-badge-remove-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-padding: calc(.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{position:fixed;top:0;inset-inline-start:0;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;--ms-dropdown-inner-border-radius: 0;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__dropdown--fullscreen .ms__dropdown-inner{display:flex;flex-direction:column;flex:1;min-height:0;max-height:none;overflow:hidden}.ms__dropdown--fullscreen .ms__options{flex:1 1 0;min-height:0;height:auto;max-height:none;overflow-y:auto;padding-bottom:var(--ms-option-gap)}.ms__dropdown--fullscreen .ms__actions{flex:0 0 auto}.ms__fullscreen-header,.ms__selected-popover--fullscreen .ms__selected-popover-header{flex:0 0 auto;display:flex;align-items:center;flex-wrap:wrap;gap:var(--ms-fullscreen-header-gap);min-height:var(--ms-fullscreen-header-min-height);padding:var(--ms-fullscreen-header-padding);background:var(--ms-fullscreen-header-bg);border-bottom:var(--ms-fullscreen-header-border)}.ms__fullscreen-header{align-content:flex-start}.ms__fullscreen-header>.ms__fullscreen-search-wrapper{min-height:var(--ms-fullscreen-header-min-height)}.ms__fullscreen-nav{flex:0 0 100%;display:flex;align-items:center;justify-content:space-between;gap:var(--ms-fullscreen-nav-gap);padding-top:var(--ms-fullscreen-nav-padding-top)}.ms__fullscreen-nav-count{font-size:var(--ms-fullscreen-nav-count-font-size);color:var(--ms-fullscreen-nav-count-color)}.ms__fullscreen-nav-controls{display:flex;align-items:center;gap:var(--ms-fullscreen-nav-gap)}.ms__fullscreen-nav-btn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-nav-btn-size);height:var(--ms-fullscreen-nav-btn-size);padding:0;color:var(--ms-fullscreen-nav-btn-color);background:var(--ms-fullscreen-nav-btn-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-nav-btn:hover:not(:disabled){background:var(--ms-fullscreen-nav-btn-bg-hover)}.ms__fullscreen-nav-btn:disabled{opacity:.4;cursor:default}.ms__fullscreen-nav-btn:before{content:"";display:block;width:var(--ms-fullscreen-nav-btn-icon-size);height:var(--ms-fullscreen-nav-btn-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-chevron) center / contain no-repeat;mask:var(--ms-icon-chevron) center / contain no-repeat}.ms__fullscreen-nav-btn--next:before{transform:scaleY(-1)}.ms__fullscreen-header>.ms__fullscreen-search-wrapper,.ms__selected-popover--fullscreen .ms__selected-popover-header>span{flex:1 1 0;min-width:0}.ms__fullscreen-search-wrapper{position:relative;display:flex;align-items:center}.ms__selected-popover--fullscreen .ms__selected-popover-header{font-size:var(--ms-fullscreen-title-font-size);font-weight:var(--ms-fullscreen-title-font-weight);color:var(--ms-fullscreen-text-color)}.ms__fullscreen-search{flex:1 1 auto;min-width:0;font-family:inherit;font-size:var(--ms-fullscreen-search-font-size);color:inherit;background:transparent;border:var(--ms-fullscreen-search-border);border-radius:var(--ms-fullscreen-search-border-radius);padding:var(--ms-fullscreen-search-padding);padding-inline-end:var(--ms-fullscreen-search-clear-gutter)}.ms__fullscreen-search:focus{outline:none;border:var(--ms-input-border-focus)}.ms__fullscreen-search-clear{position:absolute;inset-inline-end:var(--ms-fullscreen-search-clear-inset);top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-search-clear-size);height:var(--ms-fullscreen-search-clear-size);padding:0;color:var(--ms-fullscreen-search-clear-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-search-clear:hover{background:var(--ms-fullscreen-search-clear-bg-hover)}.ms__fullscreen-search-clear:before{content:"";display:block;width:var(--ms-fullscreen-search-clear-icon-size);height:var(--ms-fullscreen-search-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-search-clear) center / contain no-repeat;mask:var(--ms-icon-search-clear) center / contain no-repeat}.ms__fullscreen-mode-toggle{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-mode-toggle-size);height:var(--ms-fullscreen-mode-toggle-size);margin-inline-end:var(--ms-fullscreen-mode-toggle-gap);margin-inline-start:calc((var(--ms-fullscreen-close-size) - var(--ms-fullscreen-mode-toggle-size)) / 2 - var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-mode-toggle-color);background:var(--ms-fullscreen-mode-toggle-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-mode-toggle:hover{background:var(--ms-fullscreen-mode-toggle-bg-hover)}.ms__fullscreen-mode-toggle:before{content:"";display:block;width:var(--ms-fullscreen-mode-toggle-icon-size);height:var(--ms-fullscreen-mode-toggle-icon-size);background-color:currentColor;-webkit-mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat;mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat}.ms__fullscreen-mode-toggle[data-mode=navigate]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-search)}.ms__fullscreen-mode-toggle[data-mode=filter]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-filter)}.ms__fullscreen-close,.ms__selected-popover--fullscreen .ms__selected-popover-close{flex:0 0 auto;position:relative;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-close-size);height:var(--ms-fullscreen-close-size);margin-inline-end:calc(-1 * var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-close-color);background:var(--ms-fullscreen-close-bg);border:var(--ms-fullscreen-close-border);border-radius:var(--ms-fullscreen-close-border-radius);cursor:pointer}.ms__fullscreen-close:after,.ms__selected-popover--fullscreen .ms__selected-popover-close:after{content:"";position:absolute;inset-block-start:calc(-1 * var(--ms-fullscreen-close-size));inset-block-end:calc(-1 * var(--ms-fullscreen-header-padding-v));inset-inline-end:calc(-1 * var(--ms-fullscreen-header-padding-h));inset-inline-start:calc(-1 * var(--ms-fullscreen-header-gap))}.ms__fullscreen-close:hover,.ms__selected-popover--fullscreen .ms__selected-popover-close:hover{background:var(--ms-fullscreen-close-bg-hover);color:var(--ms-fullscreen-close-color)}.ms__fullscreen-close:before,.ms__selected-popover--fullscreen .ms__selected-popover-close:before{content:"";display:block;width:var(--ms-fullscreen-close-icon-size);height:var(--ms-fullscreen-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__dropdown--fullscreen .ms__option-info{flex:0 0 auto;display:none;align-items:center;justify-content:center;width:var(--ms-fullscreen-info-size);height:var(--ms-fullscreen-info-size);margin-inline-start:var(--ms-option-gap);padding:0;color:var(--ms-fullscreen-info-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__dropdown--fullscreen .ms__option--truncated .ms__option-info{display:inline-flex}@media (hover: hover){.ms__dropdown--fullscreen .ms__option-info:hover{background:var(--ms-fullscreen-info-bg-hover)}}.ms__dropdown--fullscreen .ms__option-info:before{content:"";display:block;width:var(--ms-fullscreen-info-icon-size);height:var(--ms-fullscreen-info-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-info) center / contain no-repeat;mask:var(--ms-icon-info) center / contain no-repeat}.ms__dropdown-inner{flex:1;overflow-y:auto;border-radius:var(--ms-dropdown-inner-border-radius);overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__dropdown-inner::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__dropdown-inner::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__dropdown--virtual{max-height:none}.ms__dropdown--virtual .ms__dropdown-inner{overflow:hidden}.ms__badge-tooltip{position:fixed;z-index:var(--ms-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-tooltip-bg);color:var(--ms-tooltip-text-color);padding:var(--ms-tooltip-padding);border-radius:var(--ms-tooltip-border-radius);font-size:var(--ms-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-tooltip-shadow);pointer-events:none}.ms__badge-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip{position:fixed;z-index:var(--ms-option-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-option-tooltip-bg);color:var(--ms-option-tooltip-text-color);padding:var(--ms-option-tooltip-padding);border-radius:var(--ms-option-tooltip-border-radius);font-size:var(--ms-option-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-option-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-option-tooltip-shadow);pointer-events:none}.ms__option-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip--fullscreen{z-index:var(--ms-z-index-fullscreen-tooltip)}.ms__message{position:fixed;z-index:var(--ms-message-z-index);box-sizing:border-box;max-width:var(--ms-message-max-width);padding:var(--ms-message-padding);font-family:inherit;font-size:var(--ms-message-font-size);font-weight:var(--ms-message-font-weight);line-height:var(--ms-line-height-normal);color:var(--ms-message-color);background:var(--ms-message-bg);border:var(--ms-message-border);border-radius:var(--ms-message-border-radius);box-shadow:var(--ms-message-shadow);cursor:pointer;opacity:0;transition:opacity var(--ms-transition-normal) ease;-webkit-tap-highlight-color:transparent}.ms__message--visible{opacity:1}.ms__message--info{background:var(--ms-message-info-bg);color:var(--ms-message-info-color)}.ms__message--warning{background:var(--ms-message-warning-bg);color:var(--ms-message-warning-color)}.ms__message--error{background:var(--ms-message-error-bg);color:var(--ms-message-error-color)}.ms__message--success{background:var(--ms-message-success-bg);color:var(--ms-message-success-color)}.ms__message--fullscreen{left:50%;right:auto;bottom:calc(var(--ms-message-fullscreen-offset) + env(safe-area-inset-bottom));transform:translate(-50%);max-width:min(var(--ms-message-max-width),calc(100vw - 4 * var(--ms-fullscreen-rem)));padding:calc(1 * var(--ms-fullscreen-rem)) calc(1.4 * var(--ms-fullscreen-rem));font-size:calc(var(--base-font-size-sm, 1.4) * var(--ms-fullscreen-rem))}.ms__selected-popover{display:none;position:fixed;z-index:var(--ms-z-index-popover);background:var(--ms-selected-popover-bg);border:var(--ms-selected-popover-border);border-radius:var(--ms-selected-popover-border-radius);box-shadow:var(--ms-selected-popover-box-shadow);width:var(--ms-selected-popover-width);max-height:var(--ms-selected-popover-max-height);overflow:hidden}.ms__selected-popover--visible{display:flex;flex-direction:column}.ms__selected-popover--virtual{display:block;overflow:visible;max-height:none}.ms__selected-popover--fullscreen{position:fixed;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;overflow:hidden;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__selected-popover--fullscreen .ms__selected-popover-body{flex:1 1 0;min-height:0;max-height:none}.ms__selected-popover-header{display:flex;align-items:center;justify-content:space-between;padding:var(--ms-selected-popover-header-padding);background:var(--ms-selected-popover-header-bg);border-bottom:var(--ms-selected-popover-header-border-bottom);font-size:var(--ms-selected-popover-header-font-size);font-weight:var(--ms-selected-popover-header-font-weight);color:var(--ms-selected-popover-header-color)}.ms__selected-popover-close{display:flex;align-items:center;justify-content:center;width:var(--ms-popover-close-size);height:var(--ms-popover-close-size);padding:0;border:none;background:var(--ms-selected-popover-close-bg);color:var(--ms-selected-popover-close-color);font-size:var(--ms-selected-popover-close-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-selected-popover-close-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__selected-popover-close:hover{background:var(--ms-selected-popover-close-bg-hover);color:var(--ms-selected-popover-close-color-hover)}.ms__selected-popover-close:before{content:"";display:block;width:var(--ms-selected-popover-close-icon-size);height:var(--ms-selected-popover-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__selected-popover-body{display:flex;flex-direction:column;gap:var(--ms-selected-popover-body-gap);padding:var(--ms-selected-popover-body-padding);overflow-y:auto;max-height:var(--ms-selected-popover-body-max-height);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__selected-popover-body::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__selected-popover-body::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__selected-popover-body .ms__badge{width:100%;min-height:fit-content;line-height:var(--ms-line-height-relaxed);flex-shrink:0}.ms__selected-popover-body .ms__badge-text{flex:1;min-width:0;white-space:normal;word-wrap:break-word}.ms__selected-popover-body--virtual{display:block;max-height:none;padding:0}.ms__selected-popover-body--virtual .ms__badge{height:var(--ms-badge-height-virtual, 36px);min-height:var(--ms-badge-height-virtual, 36px);max-height:var(--ms-badge-height-virtual, 36px);margin-bottom:var(--ms-selected-popover-body-gap);overflow:hidden;box-sizing:border-box}.ms__selected-popover-body--virtual .ms__badge-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}@layer component{.ms--disabled .ms__input{opacity:var(--ms-disabled-input-opacity);cursor:not-allowed;background:var(--ms-input-bg-disabled)}.ms--disabled .ms__toggle{opacity:var(--ms-disabled-input-opacity)}.ms--no-checkboxes .ms__option{gap:0;padding-inline-start:var(--ms-option-padding-h)}.ms--no-checkboxes .ms__option-content{padding-inline-start:0}.ms--no-selected-popover .ms__counter,.ms--no-selected-popover .ms__badge[data-action=show-selected],.ms--no-selected-popover .ms__badge--counter,.ms--no-selected-popover .ms__badge--more{cursor:default}}@layer component;@layer component{.ms__badges{display:flex;flex-wrap:wrap;gap:var(--ms-badges-gap);padding:0}.ms__badges:empty{display:none}.ms__badges--bottom{margin-top:var(--ms-badges-margin-bottom)}.ms__badges--top{margin-bottom:var(--ms-badges-margin-top);order:var(--ms-order-first)}.ms__badges--left{order:var(--ms-order-first);margin-right:var(--ms-badges-margin-left);justify-content:flex-end}.ms__badges--right{margin-left:var(--ms-badges-margin-right);justify-content:flex-start}.ms__badge{display:inline-flex;align-items:center;height:var(--ms-badge-height);font-size:var(--ms-badge-font-size);font-weight:var(--ms-badge-font-weight);line-height:var(--ms-line-height-none);border-radius:var(--ms-badge-border-radius);overflow:hidden;max-width:100%}.ms__badge--custom{display:block;height:auto;max-width:none;overflow:visible;border-radius:0;font-size:inherit;font-weight:inherit}.ms__badge-text{display:flex;align-items:center;box-sizing:border-box;height:100%;padding:var(--ms-badge-text-padding);background:var(--ms-badge-text-bg);color:var(--ms-badge-text-color);border:var(--ms-badge-text-border);border-inline-end:none;border-start-start-radius:var(--ms-badge-border-radius);border-end-start-radius:var(--ms-badge-border-radius);border-start-end-radius:0;border-end-end-radius:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background-color var(--ms-transition-normal) ease,color var(--ms-transition-normal) ease}.ms__badge:hover .ms__badge-text{background:var(--ms-badge-text-bg-hover, var(--ms-badge-text-bg));color:var(--ms-badge-text-color-hover, var(--ms-badge-text-color))}.ms__badge-remove{display:flex;align-items:center;justify-content:center;box-sizing:border-box;font-family:inherit;width:var(--ms-badge-remove-width);height:100%;flex-shrink:0;background:var(--ms-badge-remove-bg);color:var(--ms-badge-remove-color);border:var(--ms-badge-remove-border);border-inline-start:none;border-start-end-radius:var(--ms-badge-border-radius);border-end-end-radius:var(--ms-badge-border-radius);border-start-start-radius:0;border-end-start-radius:0;cursor:pointer;transition:background-color var(--ms-transition-normal) ease;font-size:var(--ms-badge-remove-font-size)}.ms__badge-remove:hover{background:var(--ms-badge-remove-bg-hover)}.ms__badge-remove:focus{outline:none}.ms__badge-remove:focus-visible{outline:none;box-shadow:var(--ms-badge-remove-box-shadow-focus)}.ms__badge-remove:before{content:"";display:block;width:var(--ms-badge-remove-icon-size);height:var(--ms-badge-remove-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__badge--counter{cursor:pointer}.ms__badge--counter .ms__badge-text{background:var(--ms-badge-counter-text-bg);color:var(--ms-badge-counter-text-color);border:var(--ms-badge-counter-border);border-inline-end:none}.ms__badge--counter .ms__badge-remove{background:var(--ms-badge-counter-remove-bg);color:var(--ms-badge-counter-remove-color);border:var(--ms-badge-counter-border);border-inline-start:none}.ms__badge--counter .ms__badge-remove:hover{background:var(--ms-badge-counter-remove-bg-hover)}.ms__badge--more,.ms__badge[data-action=show-selected]{cursor:pointer}}@layer component{.ms__count-display{display:flex;align-items:center}.ms__count-display:empty{display:none}.ms__count-display--bottom{margin-top:var(--ms-count-display-margin-bottom)}.ms__count-display--top{margin-bottom:var(--ms-count-display-margin-top);order:var(--ms-order-first)}.ms__count-display--left{order:var(--ms-order-first);margin-right:var(--ms-count-display-margin-left);justify-content:flex-start}.ms__count-display--right{margin-left:var(--ms-count-display-margin-right);justify-content:flex-end}.ms__counter-wrapper{display:inline-flex;align-items:center;gap:var(--ms-counter-wrapper-gap);background:var(--ms-counter-wrapper-bg);border:var(--ms-counter-wrapper-border);border-radius:var(--ms-counter-wrapper-border-radius);padding:var(--ms-counter-wrapper-padding);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter-wrapper:hover{background:var(--ms-counter-wrapper-bg-hover);border-color:var(--ms-counter-wrapper-border-color-hover)}.ms__count-text{display:inline-flex;align-items:center;background:var(--ms-count-text-bg);border:var(--ms-count-text-border);padding:0;font-size:var(--ms-count-text-font-size);color:var(--ms-count-text-color);cursor:pointer;transition:color var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:var(--ms-count-clear-size);height:var(--ms-count-clear-size);padding:0;border:none;background:var(--ms-count-clear-bg);color:var(--ms-count-clear-color);font-size:var(--ms-count-clear-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-count-clear-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear:hover{background:var(--ms-count-clear-bg-hover);color:var(--ms-count-clear-color-hover)}.ms__count-clear:before{content:"";display:block;width:var(--ms-count-clear-icon-size);height:var(--ms-count-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}}@layer component{.ms__debug-info{margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-bg);border:1px solid var(--ms-debug-border-color);border-radius:var(--ms-debug-border-radius);font-size:calc(1.2 * var(--ms-rem));color:var(--ms-debug-text-color)}.ms__debug-info details summary{cursor:pointer;font-weight:600;color:var(--ms-debug-summary-color);-webkit-user-select:none;user-select:none;padding:calc(.4 * var(--ms-rem));border-radius:var(--ms-debug-summary-border-radius)}.ms__debug-info details summary:hover{background-color:var(--ms-debug-summary-bg-hover)}.ms__debug-info details summary:focus{outline:2px solid var(--ms-debug-summary-outline-color);outline-offset:2px}.ms__debug-info .ms__debug-stats{display:flex;flex-direction:column;gap:calc(.4 * var(--ms-rem));margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-stats-bg);border-radius:var(--ms-debug-stats-border-radius)}.ms__debug-info .ms__debug-stats span{display:flex;justify-content:space-between;padding:2px 4px;font-family:monospace;font-size:calc(1 * var(--ms-rem))}.ms__debug-info .ms__debug-stats span:before{content:"•";margin-inline-end:calc(.4 * var(--ms-rem));color:var(--ms-debug-bullet-color)}}@layer component{.ms__options{padding:var(--ms-options-padding);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__options::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__options::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__options--virtual .ms__option,.ms__options--fixed-height .ms__option{height:var(--ms-option-height, 50px);min-height:var(--ms-option-height, 50px);max-height:var(--ms-option-height, 50px);overflow:hidden;box-sizing:border-box}.ms__group+.ms__group{border-top:var(--ms-group-border-top);margin-top:var(--ms-group-margin-top);padding-top:var(--ms-group-padding-top)}.ms__group-label{padding:var(--ms-group-label-padding);font-size:var(--ms-group-label-font-size);font-weight:var(--ms-group-label-font-weight);color:var(--ms-group-label-color);text-transform:var(--ms-group-label-transform);letter-spacing:var(--ms-group-label-letter-spacing)}.ms__option{display:flex;align-items:var(--ms-checkbox-align, center);gap:var(--ms-option-gap);padding:var(--ms-option-padding);position:relative;min-height:var(--ms-option-min-height, auto);color:var(--ms-option-text-color);background:var(--ms-option-bg);cursor:pointer;user-select:none;-webkit-user-select:none}@media (hover: hover){.ms__option:hover{background:var(--ms-option-bg-hover);color:var(--ms-option-color-hover, inherit)}}.ms__option--focused{background:var(--ms-option-bg-focused);color:var(--ms-option-color-focused, inherit);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--matched{background:var(--ms-option-bg-matched);color:var(--ms-option-color-matched, inherit)}.ms__option--matched:before{content:"";position:absolute;inset-block:0;inset-inline-start:0;border-inline-start:var(--ms-option-border-matched);pointer-events:none}.ms__option--selected{background:var(--ms-option-bg-selected)}@media (hover: hover){.ms__option--selected:hover{background:var(--ms-option-bg-selected-hover, var(--ms-option-bg-selected))}}.ms__option--disabled{opacity:var(--ms-disabled-opacity);cursor:not-allowed;background:var(--ms-option-disabled-bg)}.ms__option--disabled:hover{background:var(--ms-option-disabled-bg)}@media (hover: hover){.ms__option--focused:hover{background:var(--ms-option-bg-focused-hover);color:var(--ms-option-color-focused-hover, var(--ms-option-color-focused, var(--ms-option-text-color)))}}.ms__option--matched:hover{background:var(--ms-option-bg-matched-hover);color:var(--ms-option-color-matched-hover, var(--ms-option-color-matched, var(--ms-option-text-color)))}.ms__option--selected.ms__option--focused{background:var(--ms-option-bg-selected-focused);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--selected.ms__option--matched{background:var(--ms-option-bg-selected-matched)}.ms__option--disabled.ms__option--selected{background:var(--ms-option-bg-disabled-selected)}.ms__option--disabled.ms__option--focused{outline:none}.ms__option[data-checkbox-align=top]{--ms-checkbox-align: flex-start;--ms-checkbox-margin-top: calc(.2 * var(--ms-rem))}.ms__option[data-checkbox-align=bottom]{--ms-checkbox-align: flex-end}.ms__checkbox{appearance:none;-webkit-appearance:none;-moz-appearance:none;flex-shrink:0;position:relative;margin-top:var(--ms-checkbox-margin-top);margin-inline-end:var(--ms-checkbox-margin-right);margin-bottom:var(--ms-checkbox-margin-bottom);margin-inline-start:var(--ms-checkbox-margin-left);width:var(--ms-checkbox-size);height:var(--ms-checkbox-size);transform:scale(var(--ms-checkbox-scale));transform-origin:top left;cursor:pointer;background:var(--ms-checkbox-bg);border:var(--ms-checkbox-border);border-radius:var(--ms-checkbox-border-radius);transition:background-color .15s ease,border-color .15s ease}.ms__checkbox:after{content:"";position:absolute;display:none;left:50%;top:40%;width:30%;height:55%;transform:translate(-50%,-50%) rotate(45deg);border:solid var(--ms-checkbox-checkmark-color);border-width:0 var(--ms-checkbox-checkmark-thickness, 2px) var(--ms-checkbox-checkmark-thickness, 2px) 0}.ms__checkbox:hover:not(:disabled){border-color:var(--ms-checkbox-hover-border-color)}.ms__checkbox:checked{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox:checked:after{display:block}.ms__checkbox--indeterminate{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox--indeterminate:after{display:block;top:50%;left:50%;width:55%;height:0;transform:translate(-50%,-50%);border:none;border-bottom:var(--ms-checkbox-checkmark-thickness, 2px) solid var(--ms-checkbox-checkmark-color)}.ms__checkbox--indeterminate:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:checked:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:focus-visible{outline:2px solid var(--ms-checkbox-checked-bg);outline-offset:2px}.ms__checkbox:disabled{cursor:not-allowed;background:var(--ms-checkbox-disabled-bg);border:var(--ms-checkbox-disabled-border);opacity:.6}.ms__checkbox:disabled:checked{background:var(--ms-checkbox-disabled-bg)}.ms__option--disabled .ms__checkbox{cursor:not-allowed}.ms__option-content{flex:1;display:flex;align-items:center;gap:var(--ms-option-content-gap);min-width:0}.ms__option-icon{flex-shrink:0;width:var(--ms-option-icon-size);height:var(--ms-option-icon-size);display:flex;align-items:center;justify-content:center;font-size:var(--ms-option-icon-font-size)}.ms__option-icon svg{width:100%;height:100%;fill:currentColor}.ms__option-text{flex:1;min-width:0}.ms__option-title{font-size:var(--ms-option-title-font-size);color:var(--ms-option-title-color);line-height:var(--ms-line-height-relaxed);white-space:var(--ms-option-title-white-space, normal);overflow:var(--ms-option-title-overflow, visible);text-overflow:var(--ms-option-title-text-overflow, clip)}@media (hover: hover){.ms__option:hover .ms__option-title{color:var(--ms-option-title-color-hover, var(--ms-option-title-color))}}.ms__option--selected .ms__option-title{color:var(--ms-option-title-color-selected, var(--ms-option-title-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-title{color:var(--ms-option-title-color-selected-hover, var(--ms-option-title-color-selected, var(--ms-option-title-color)))}}.ms__option-title mark{background:var(--ms-option-mark-bg);color:var(--ms-option-mark-color);font-weight:var(--ms-option-mark-font-weight)}.ms__option-subtitle{margin-top:var(--ms-option-subtitle-margin-top);font-size:var(--ms-option-subtitle-font-size);color:var(--ms-option-subtitle-color);line-height:var(--ms-option-subtitle-line-height)}@media (hover: hover){.ms__option:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-hover, var(--ms-option-subtitle-color))}}.ms__option--selected .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected-hover, var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color)))}}.ms__empty{display:flex;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-empty-padding);text-align:center;font-size:var(--ms-empty-font-size);color:var(--ms-empty-color)}.ms__loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-loader-padding);gap:var(--ms-loader-gap)}.ms__loading-text{font-size:var(--ms-loading-text-font-size);color:var(--ms-loading-color)}}@layer component{.ms--rtl .ms__badges{direction:rtl}.ms--rtl .ms__badges--right{margin-left:0;margin-right:var(--ms-badges-margin-right)}.ms--rtl .ms__badges--left{margin-right:0;margin-left:var(--ms-badges-margin-left)}.ms--rtl .ms__count-display{direction:rtl}.ms--rtl .ms__count-display--right{margin-left:0;margin-right:var(--ms-count-display-margin-right)}.ms--rtl .ms__count-display--left{margin-right:0;margin-left:var(--ms-count-display-margin-left)}}@layer component{.ms__option--tree{padding-inline-start:calc(var(--ms-tree-base-indent, .75rem) + var(--ms-tree-depth, 0) * var(--ms-tree-indent, 1.25rem))}.ms__option--tree-unselectable{cursor:default}.ms__option--tree-unselectable:hover{background:transparent}}@layer overrides{:host-context([data-theme="dark"]),:host-context([data-bs-theme="dark"]),:host-context(.dark){color-scheme:dark}:host-context([data-theme="light"]),:host-context([data-bs-theme="light"]),:host-context(.light){color-scheme:light}:host([data-theme="dark"]){color-scheme:dark}:host([data-theme="light"]){color-scheme:light}}`, Ws = [
+const Lo = `@layer variables,component,overrides;@layer variables{:host{display:block;--ms-rem: var(--base-rem, 10px);font-family:var(--ms-font-family, var(--base-font-family, inherit));--ms-accent-color: var(--base-accent-color, #3b82f6);--ms-accent-color-hover: var(--base-accent-color-hover, #2563eb);--ms-accent-color-active: var(--base-accent-color-active, #1d4ed8);--ms-accent-color-light: var(--base-accent-color-light, light-dark(#eff6ff, #1e3a5f));--ms-accent-color-light-hover: var(--base-accent-color-light-hover, light-dark(#e0f2fe, #264a73));--ms-text-color-1: var(--base-text-color-1, light-dark(#111827, #f5f5f5));--ms-text-color-2: var(--base-text-color-2, light-dark(#353b47, #d4d4d4));--ms-text-color-3: var(--base-text-color-3, light-dark(#6b7280, #a3a3a3));--ms-text-color-4: var(--base-text-color-4, light-dark(#a0a3a9, #737373));--ms-text-color-on-accent: var(--base-text-color-on-accent, #ffffff);--ms-text-primary: var(--ms-text-color-1);--ms-text-secondary: var(--ms-text-color-3);--ms-primary-bg: var(--base-hover-bg, color-mix(in srgb, var(--ms-text-color-1) 8%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-primary-bg-hover: var(--base-active-bg, color-mix(in srgb, var(--ms-text-color-1) 14%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-border-color: var(--base-border-color, light-dark(#cbd5e1, #52525b));--ms-border: var(--base-border, 1px solid var(--ms-border-color));--ms-input-bg: var(--base-input-bg, light-dark(#ffffff, #1a1a1a));--ms-input-color: var(--base-input-color, var(--ms-text-color-1));--ms-input-border: var(--base-input-border, 1px solid var(--ms-border-color));--ms-input-border-hover: var(--base-input-border-hover, 1px solid var(--ms-accent-color));--ms-input-border-focus: var(--base-input-border-focus, 1px solid var(--ms-accent-color));--ms-input-placeholder-color: var(--base-input-placeholder-color, var(--ms-text-color-4));--ms-toggle-icon-color: var(--ms-text-color-3);--ms-toggle-icon-color-open: var(--ms-text-color-3);--ms-toggle-icon-size: calc(1.6 * var(--ms-rem));--ms-toggle-rotate-closed: 90deg;--ms-toggle-rotate-open: -90deg;--ms-counter-badge-bg: var(--ms-accent-color);--ms-counter-badge-bg-hover: var(--ms-accent-color-hover);--ms-counter-badge-color: var(--ms-text-color-on-accent);--ms-hint-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-hint-color: var(--ms-text-color-4);--ms-hint-border-color: var(--ms-border-color);--ms-dropdown-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-dropdown-text-color: var(--ms-text-color-1);--ms-dropdown-border-color: var(--ms-border-color);--ms-dropdown-box-shadow-semantic: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-actions-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-actions-border-color: var(--ms-border-color);--ms-action-button-bg: transparent;--ms-action-button-bg-hover: var(--ms-primary-bg);--ms-action-button-border-color: var(--ms-border-color);--ms-action-button-border-color-hover: var(--ms-accent-color);--ms-action-button-color: var(--ms-text-color-1);--ms-group-border-color: var(--ms-border-color);--ms-option-text-color: var(--ms-text-color-1);--ms-option-bg: transparent;--ms-option-bg-hover: var(--ms-primary-bg);--ms-option-color-hover: inherit;--ms-option-bg-focused: var(--ms-primary-bg);--ms-option-color-focused: inherit;--ms-option-outline-color-focused: var(--ms-accent-color);--ms-option-bg-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-option-bg-matched: color-mix(in srgb, var(--ms-accent-color) 8%, transparent);--ms-option-color-matched: inherit;--ms-option-border-matched-color: color-mix(in srgb, var(--ms-accent-color) 40%, transparent);--ms-option-title-color: var(--ms-text-color-1);--ms-option-subtitle-color: var(--ms-text-color-3);--ms-option-mark-bg: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-option-mark-color: inherit;--ms-loading-color: var(--ms-text-color-3);--ms-badge-bg: var(--ms-accent-color-light);--ms-badge-bg-hover: color-mix(in srgb, var(--ms-badge-bg) 88%, var(--ms-badge-text-color) 12%);--ms-badge-bg-active: var(--ms-accent-color-light-hover);--ms-badge-text-bg-hover: color-mix(in srgb, var(--ms-badge-text-bg) 88%, var(--ms-badge-text-color) 12%);--ms-badge-text-color-hover: var(--ms-badge-text-color);--ms-badge-counter-border-color: var(--ms-border-color);--ms-badge-counter-text-bg: color-mix(in srgb, var(--ms-text-color-1) 10%, transparent);--ms-badge-counter-text-bg-hover: color-mix(in srgb, var(--ms-text-color-1) 16%, transparent);--ms-badge-counter-text-color: var(--ms-text-color-1);--ms-badge-counter-text-color-hover: var(--ms-text-color-1);--ms-badge-counter-remove-bg: color-mix(in srgb, var(--ms-text-color-1) 10%, transparent);--ms-badge-counter-remove-bg-hover: color-mix(in srgb, var(--ms-text-color-1) 16%, transparent);--ms-badge-counter-remove-color: var(--ms-text-color-3);--ms-badge-counter-remove-color-hover: var(--ms-text-color-1);--ms-counter-wrapper-border-color: var(--ms-border-color);--ms-tooltip-bg: var(--base-tooltip-bg, var(--base-inverse-bg, light-dark(#333333, #f5f5f5)));--ms-tooltip-text-color: var(--base-tooltip-text-color, light-dark(#ffffff, #1a1a1a));--ms-selected-popover-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-selected-popover-border-color: var(--ms-border-color);--ms-selected-popover-header-border-color: var(--ms-border-color);--ms-input-padding-h: calc(1.2 * var(--ms-rem));--ms-input-gap: calc(.6 * var(--ms-rem));--ms-input-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-border-width: 1px;--ms-input-border-radius: var(--ms-border-radius-md);--ms-input-text: var(--ms-text-color-1);--ms-input-bg-disabled: var(--base-input-bg-disabled, rgba(107, 114, 128, .05));--ms-toggle-color: var(--ms-text-color-3);--ms-transform-rotate-180: 180deg;--ms-input-clear-size: calc(2.4 * var(--ms-rem));--ms-input-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-input-clear-color: var(--base-input-clear-color, var(--ms-text-secondary));--ms-input-clear-bg-hover: var(--base-input-clear-bg-hover, var(--ms-option-bg-matched, transparent));--ms-input-clear-border-radius: var(--ms-border-radius);--ms-counter-padding: calc(.2 * var(--ms-rem)) calc(.4 * var(--ms-rem));--ms-counter-bg: var(--ms-accent-color);--ms-counter-color: var(--ms-text-color-on-accent);--ms-counter-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-counter-font-weight: var(--base-font-weight-semibold, 600);--ms-counter-border-radius: var(--ms-border-radius-sm);--ms-counter-bg-hover: var(--ms-accent-color-hover);--ms-transform-scale-hover: 1.1;--ms-hint-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-hint-border: 1px solid var(--ms-hint-border-color);--ms-hint-border-radius: var(--ms-border-radius-lg);--ms-hint-box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--ms-hint-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-dropdown-border: var(--base-dropdown-border, 1px solid var(--ms-dropdown-border-color));--ms-dropdown-border-radius: var(--ms-border-radius-lg);--ms-dropdown-inner-border-radius: max(0px, calc(var(--ms-dropdown-border-radius) - 1px));--ms-dropdown-box-shadow: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-input-current-width: auto;--ms-dropdown-width: var(--ms-input-current-width);--ms-options-max-height: calc(32 * var(--ms-rem));--ms-option-color: var(--ms-text-color-1);--ms-z-index-dropdown: 9999;--ms-z-index-sticky: 1;--ms-z-index-fullscreen: 10001;--ms-z-index-fullscreen-tooltip: 10002;--ms-fullscreen-rem: 12px;--ms-fullscreen-bg: var(--ms-dropdown-bg);--ms-fullscreen-text-color: var(--ms-dropdown-text-color);--ms-fullscreen-header-bg: var(--ms-dropdown-bg);--ms-fullscreen-header-border: 1px solid var(--ms-dropdown-border-color);--ms-fullscreen-header-gap: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-v: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-h: calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding: var(--ms-fullscreen-header-padding-v) var(--ms-fullscreen-header-padding-h);--ms-fullscreen-header-min-height: calc(5.6 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-size: calc(1.7 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-weight: var(--base-font-weight-semibold, 600);--ms-fullscreen-search-border: var(--ms-input-border);--ms-fullscreen-search-border-radius: var(--ms-input-border-radius);--ms-fullscreen-search-padding: calc(.8 * var(--ms-fullscreen-rem)) calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-search-font-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-icon-size: calc(1.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-inset: calc(.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-gutter: calc(3.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-search-clear-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-mode-toggle-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-icon-size: calc(1.5 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-gap: var(--ms-fullscreen-header-gap);--ms-fullscreen-mode-toggle-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-mode-toggle-bg: transparent;--ms-fullscreen-mode-toggle-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-size: calc(3.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-color: var(--ms-dropdown-text-color);--ms-fullscreen-close-bg: transparent;--ms-fullscreen-close-border: none;--ms-fullscreen-close-border-radius: 50%;--ms-fullscreen-close-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-edge-nudge: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-icon-size: calc(1.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-color: var(--ms-accent-color);--ms-fullscreen-info-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-gap: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-padding-top: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-font-size: calc(1.3 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-nav-btn-size: calc(3.2 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-color: var(--ms-dropdown-text-color);--ms-fullscreen-nav-btn-bg: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-btn-bg-hover: color-mix(in srgb, var(--ms-accent-color) 22%, transparent);--ms-fullscreen-nav-btn-icon: var(--ms-icon-chevron);--ms-icon-chevron: var(--base-icon-chevron, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 18 6-6-6-6'/></svg>"));--ms-icon-info: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/><circle cx='12' cy='7.5' r='1.3' fill='black'/><path d='M12 11v6' stroke='black' stroke-width='2' stroke-linecap='round' fill='none'/></svg>");--ms-fullscreen-tree-base-indent: calc(.7 * var(--ms-fullscreen-rem));--ms-fullscreen-tree-indent: calc(1.2 * var(--ms-fullscreen-rem));--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem));--ms-actions-border-bottom: 1px solid var(--ms-actions-border-color);--ms-action-btn-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-action-btn-border: var(--ms-border);--ms-action-btn-border-radius: var(--ms-border-radius-sm);--ms-action-btn-bg: transparent;--ms-action-btn-color: inherit;--ms-action-btn-bg-hover: var(--ms-primary-bg);--ms-action-btn-border-color-hover: var(--ms-accent-color);--ms-transform-scale-active: .98;--ms-options-padding: 0;--ms-group-border-top: 1px solid var(--ms-group-border-color);--ms-group-margin-top: calc(.4 * var(--ms-rem));--ms-group-padding-top: calc(.4 * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-font-weight: var(--base-font-weight-semibold, 600);--ms-group-label-color: var(--ms-text-color-3);--ms-group-label-transform: uppercase;--ms-group-label-letter-spacing: .05em;--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-padding-h: calc(1.2 * var(--ms-rem));--ms-option-min-height: auto;--ms-option-outline-focused: 2px solid var(--ms-option-outline-color-focused);--ms-option-focus-outline-offset: -2px;--ms-option-border-matched: 3px solid var(--ms-option-border-matched-color);--ms-option-bg-focused-hover: var(--ms-primary-bg);--ms-option-bg-matched-hover: color-mix(in srgb, var(--ms-accent-color) 12%, transparent);--ms-option-bg-selected-focused: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-bg-selected-matched: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-disabled-bg: var(--base-disabled-bg, transparent);--ms-option-bg-disabled-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-disabled-opacity: .5;--ms-option-content-gap: calc(.8 * var(--ms-rem));--ms-option-icon-size: calc(2 * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-mark-font-weight: var(--base-font-weight-semibold, 600);--ms-option-title-white-space: normal;--ms-option-title-overflow: visible;--ms-option-title-text-overflow: clip;--ms-option-subtitle-margin-top: calc(.4 * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-subtitle-line-height: var(--base-line-height-tight, 1.25);--ms-checkbox-margin-top: 0;--ms-checkbox-margin-right: 0;--ms-checkbox-margin-bottom: 0;--ms-checkbox-margin-left: 0;--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-checkbox-scale: 1;--ms-checkbox-align: center;--ms-checkbox-bg: var(--ms-input-bg);--ms-checkbox-border-width: 1px;--ms-checkbox-border-color: var(--base-checkbox-border-color, #8f8f8f);--ms-checkbox-border: var(--ms-checkbox-border-width) solid var(--ms-checkbox-border-color);--ms-checkbox-border-radius: calc(.3 * var(--ms-rem));--ms-checkbox-checkmark-thickness: 2.5px;--ms-checkbox-checked-bg: var(--ms-accent-color);--ms-checkbox-checked-border: var(--ms-checkbox-border-width) solid var(--ms-accent-color);--ms-checkbox-checkmark-color: var(--ms-text-color-on-accent);--ms-checkbox-hover-border-color: var(--ms-accent-color);--ms-checkbox-disabled-bg: var(--ms-primary-bg);--ms-checkbox-disabled-border: var(--ms-checkbox-border-width) solid var(--ms-border-color);--ms-checkbox-checked-bg-hover: var(--ms-accent-color-hover);--ms-checkbox-checked-border-color-hover: var(--ms-accent-color-hover);--ms-state-min-height: calc(8 * var(--ms-rem));--ms-empty-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-empty-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-empty-color: var(--ms-text-color-3);--ms-add-new-padding: var(--ms-option-padding);--ms-add-new-gap: var(--ms-option-gap);--ms-add-new-font-size: var(--ms-empty-font-size);--ms-add-new-color: var(--ms-accent-color);--ms-add-new-color-hover: var(--ms-accent-color);--ms-add-new-bg-hover: var(--ms-option-bg-hover);--ms-add-new-icon-size: calc(1.6 * var(--ms-rem));--ms-loader-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-loader-gap: calc(.8 * var(--ms-rem));--ms-loading-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-loading-text-color: var(--ms-text-color-3);--ms-badges-gap: calc(.8 * var(--ms-rem));--ms-badges-margin-bottom: calc(.8 * var(--ms-rem));--ms-badges-margin-top: calc(.8 * var(--ms-rem));--ms-badges-margin-left: calc(.4 * var(--ms-rem));--ms-badges-margin-right: calc(.4 * var(--ms-rem));--ms-inline-align: center;--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(2.7 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-font-weight: var(--base-font-weight-semibold, 600);--ms-badge-border-radius: var(--ms-border-radius-sm);--ms-order-first: -1;--ms-badge-text-padding: 0 calc(.8 * var(--ms-rem));--ms-badge-text-bg: var(--ms-accent-color-light);--ms-badge-text-color: var(--ms-accent-color);--ms-badge-text-border: none;--ms-badge-remove-width: calc(2.7 * var(--ms-rem));--ms-badge-remove-bg: var(--ms-accent-color);--ms-badge-remove-color: var(--ms-text-color-on-accent);--ms-badge-remove-border: none;--ms-badge-remove-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-remove-bg-hover: var(--ms-accent-color-hover);--ms-badge-remove-box-shadow-focus: 0 0 0 2px color-mix(in srgb, var(--ms-accent-color) 50%, transparent);--ms-badge-remove-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-remove: var(--base-icon-remove, var(--base-icon-close, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 6 18'/><path d='m6 6 12 12'/></svg>")));--ms-icon-search-clear: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m13.5 8.5-5 5'/><path d='m8.5 8.5 5 5'/><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");--ms-icon-search: var(--base-icon-search, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>"));--ms-icon-filter: var(--base-icon-filter, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'/></svg>"));--ms-icon-check: var(--base-icon-check, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>"));--ms-icon-indeterminate: var(--base-icon-indeterminate, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/></svg>"));--ms-icon-check-size: var(--base-icon-check-size, 68%);--ms-icon-add-new: var(--base-icon-plus, var(--base-icon-add, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/><path d='M12 5v14'/></svg>")));--ms-badge-counter-bg: transparent;--ms-badge-counter-border: 1px solid var(--ms-badge-counter-border-color);--ms-badge-counter-border-radius: var(--ms-border-radius-sm);--ms-more-badge-bg: var(--ms-accent-color-light);--ms-more-badge-hover-bg: var(--ms-badge-bg-hover);--ms-more-badge-active-bg: var(--ms-accent-color-light-hover);--ms-count-display-margin-bottom: calc(.8 * var(--ms-rem));--ms-count-display-margin-top: calc(.8 * var(--ms-rem));--ms-count-display-margin-left: calc(.8 * var(--ms-rem));--ms-count-display-margin-right: calc(.8 * var(--ms-rem));--ms-counter-wrapper-bg: transparent;--ms-counter-wrapper-border: var(--ms-border);--ms-counter-wrapper-border-radius: var(--ms-border-radius-sm);--ms-counter-wrapper-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-counter-wrapper-gap: calc(.4 * var(--ms-rem));--ms-counter-wrapper-bg-hover: var(--ms-primary-bg);--ms-counter-wrapper-border-color-hover: var(--ms-accent-color);--ms-count-text-bg: transparent;--ms-count-text-border: none;--ms-count-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-count-text-color: var(--ms-text-color-1);--ms-count-clear-size: calc(1.6 * var(--ms-rem));--ms-count-clear-bg: transparent;--ms-count-clear-color: var(--ms-text-color-3);--ms-count-clear-font-size: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-count-clear-border-radius: var(--ms-border-radius-sm);--ms-count-clear-bg-hover: var(--ms-accent-color);--ms-count-clear-color-hover: var(--ms-text-color-on-accent);--ms-count-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-clear: var(--base-icon-clear, var(--ms-icon-remove));--ms-tooltip-color: var(--ms-tooltip-text-color);--ms-tooltip-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tooltip-border-radius: var(--ms-border-radius-lg);--ms-tooltip-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-tooltip-max-width: calc(32 * var(--ms-rem));--ms-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, .15);--ms-tooltip-z-index: 10000;--ms-option-tooltip-bg: var(--ms-tooltip-bg);--ms-option-tooltip-text-color: var(--ms-tooltip-text-color);--ms-option-tooltip-padding: var(--ms-tooltip-padding);--ms-option-tooltip-border-radius: var(--ms-tooltip-border-radius);--ms-option-tooltip-font-size: var(--ms-tooltip-font-size);--ms-option-tooltip-max-width: var(--ms-tooltip-max-width);--ms-option-tooltip-shadow: var(--ms-tooltip-shadow);--ms-option-tooltip-z-index: var(--ms-tooltip-z-index);--ms-message-bg: var(--ms-message-info-bg);--ms-message-color: var(--ms-message-info-color);--ms-message-border: 1px solid transparent;--ms-message-border-radius: var(--ms-border-radius-lg);--ms-message-padding: calc(1 * var(--ms-rem)) calc(1.4 * var(--ms-rem));--ms-message-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-message-font-weight: var(--base-font-weight-medium, 500);--ms-message-max-width: calc(40 * var(--ms-rem));--ms-message-shadow: 0 4px 16px rgb(0 0 0 / .18);--ms-message-fullscreen-offset: calc(2.4 * var(--ms-fullscreen-rem));--ms-message-z-index: var(--ms-z-index-fullscreen-tooltip);--ms-message-info-bg: var(--ms-tooltip-bg);--ms-message-info-color: var(--ms-tooltip-text-color);--ms-message-warning-bg: var(--base-warning-bg, #f59e0b);--ms-message-warning-color: var(--base-warning-color, #1a1a1a);--ms-message-error-bg: var(--base-danger-bg, #ef4444);--ms-message-error-color: var(--base-danger-color, #ffffff);--ms-message-success-bg: var(--base-success-bg, #10b981);--ms-message-success-color: var(--base-success-color, #ffffff);--ms-z-index-popover: 10000;--ms-selected-popover-width: var(--ms-input-current-width);--ms-selected-popover-max-height: calc(32 * var(--ms-rem));--ms-selected-popover-border: 1px solid var(--ms-selected-popover-border-color);--ms-selected-popover-border-radius: var(--ms-border-radius-lg);--ms-selected-popover-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-selected-popover-header-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-selected-popover-header-bg: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-selected-popover-header-border-bottom: 1px solid var(--ms-selected-popover-header-border-color);--ms-selected-popover-header-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-selected-popover-header-font-weight: var(--base-font-weight-semibold, 600);--ms-selected-popover-header-color: var(--ms-text-color-1);--ms-popover-close-size: calc(2.4 * var(--ms-rem));--ms-selected-popover-close-bg: transparent;--ms-selected-popover-close-color: var(--ms-text-color-3);--ms-selected-popover-close-font-size: calc(var(--base-font-size-xl, 2) * var(--ms-rem));--ms-selected-popover-close-border-radius: var(--ms-border-radius-sm);--ms-selected-popover-close-bg-hover: var(--ms-accent-color);--ms-selected-popover-close-color-hover: var(--ms-text-color-on-accent);--ms-selected-popover-close-icon-size: calc(1.4 * var(--ms-rem));--ms-selected-popover-body-gap: calc(.4 * var(--ms-rem));--ms-selected-popover-body-padding: calc(.8 * var(--ms-rem));--ms-selected-popover-body-max-height: calc(28.8 * var(--ms-rem));--ms-font-size-2xs: calc(var(--base-font-size-2xs, 1) * var(--ms-rem));--ms-font-size-xs: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-font-size-sm: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-font-size-base: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-font-size-lg: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-font-weight-normal: var(--base-font-weight-normal, 400);--ms-font-weight-medium: var(--base-font-weight-medium, 500);--ms-font-weight-semibold: var(--base-font-weight-semibold, 600);--ms-line-height-none: 1;--ms-line-height-tight: var(--base-line-height-tight, 1.25);--ms-line-height-normal: var(--base-line-height-normal, 1.5);--ms-line-height-relaxed: var(--base-line-height-relaxed, 1.75);--ms-border-radius-sm: calc(var(--base-border-radius-sm, .4) * var(--ms-rem));--ms-border-radius-md: calc(var(--base-border-radius-md, .6) * var(--ms-rem));--ms-border-radius-lg: calc(var(--base-border-radius-lg, .8) * var(--ms-rem));--ms-border-radius: var(--ms-border-radius-md);--ms-spacing-xs: calc(.4 * var(--ms-rem));--ms-spacing-sm: calc(.8 * var(--ms-rem));--ms-spacing-md: calc(1.2 * var(--ms-rem));--ms-spacing-lg: calc(1.6 * var(--ms-rem));--ms-transition-fast: .15s;--ms-transition-normal: .2s;--ms-easing-snappy: var(--base-ease-standard, cubic-bezier(.4, 0, .2, 1));--ms-placeholder-opacity: .6;--ms-disabled-input-opacity: .6;--ms-scrollbar-width: 8px;--ms-scrollbar-track-bg: transparent;--ms-scrollbar-thumb-bg: var(--ms-border-color);--ms-scrollbar-thumb-bg-hover: var(--ms-text-color-3);--ms-scrollbar-thumb-border-radius: 4px;--ms-debug-bg: var(--base-elevated-bg, light-dark(#f9fafb, #2b2b2b));--ms-debug-border-color: var(--ms-border-color);--ms-debug-text-color: var(--ms-text-color-1);--ms-debug-border-radius: var(--ms-border-radius-md);--ms-debug-summary-color: var(--ms-accent-color);--ms-debug-summary-bg-hover: var(--ms-primary-bg);--ms-debug-summary-outline-color: var(--ms-accent-color);--ms-debug-summary-border-radius: var(--ms-border-radius-sm);--ms-debug-stats-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-debug-stats-border-radius: var(--ms-border-radius-sm);--ms-debug-bullet-color: var(--ms-accent-color)}}@layer component{web-multiselect:not(:defined){display:block;min-height:calc(3.5 * var(--ms-rem));color:transparent!important;background:transparent}:host([defer]:not([is-ready])){display:block;min-height:calc(3.5 * var(--ms-rem))}:host{-webkit-tap-highlight-color:transparent}.ms__wrapper{display:flex;flex-direction:column;align-items:stretch}.ms__wrapper--inline{flex-direction:row;align-items:var(--ms-inline-align, center)}.ms{position:relative;width:100%}}@layer component{.ms__input-wrapper{box-sizing:border-box;position:relative;display:flex;align-items:center;gap:var(--ms-input-gap);height:var(--ms-input-height);padding-inline:var(--ms-input-padding-h);background:var(--ms-input-bg);color:var(--ms-input-color);border:var(--ms-input-border);border-radius:var(--ms-input-border-radius);cursor:pointer;transition:border var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input-wrapper:hover:not(:focus-within){border:var(--ms-input-border-hover)}.ms__input-wrapper:focus-within{border:var(--ms-input-border-focus)}.ms__input{flex:1 1 auto;min-width:0;box-sizing:border-box;font-family:inherit;height:100%;padding:0;border:none;background:transparent;font-size:var(--ms-input-font-size);color:var(--ms-input-color);cursor:pointer;outline:none}.ms__input::placeholder{color:var(--ms-input-placeholder-color);opacity:0;transition:opacity var(--ms-transition-fast) var(--ms-easing-snappy)}:host([data-placeholder-ready]) .ms__input::placeholder{opacity:var(--ms-placeholder-opacity)}.ms__toggle{flex:0 0 auto;display:block;width:var(--ms-toggle-icon-size);height:var(--ms-toggle-icon-size);color:var(--ms-toggle-icon-color);cursor:pointer}.ms__toggle:before{content:"";display:block;width:100%;height:100%;background-color:currentColor;-webkit-mask:var(--ms-icon-chevron) center / contain no-repeat;mask:var(--ms-icon-chevron) center / contain no-repeat;transform:rotate(var(--ms-toggle-rotate-closed, 90deg));transition:transform var(--ms-transition-fast) var(--ms-easing-snappy)}.ms--open .ms__toggle{color:var(--ms-toggle-icon-color-open)}.ms--open .ms__toggle:before{transform:rotate(var(--ms-toggle-rotate-open, -90deg))}.ms__counter{flex:0 0 auto;padding:var(--ms-counter-padding);background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-size:var(--ms-counter-font-size);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter:hover{background:var(--ms-counter-badge-bg-hover);transform:scale(var(--ms-transform-scale-hover))}.ms__input-clear{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-input-clear-size);height:var(--ms-input-clear-size);padding:0;color:var(--ms-input-clear-color);background:transparent;border:none;border-radius:var(--ms-input-clear-border-radius);cursor:pointer;transition:background var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input-clear:hover{background:var(--ms-input-clear-bg-hover)}.ms__input-clear:before{content:"";display:block;width:var(--ms-input-clear-icon-size);height:var(--ms-input-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}.ms__actions{display:flex;flex-direction:column;gap:var(--ms-actions-gap);padding:var(--ms-actions-padding)}.ms__actions--top{border-bottom:var(--ms-actions-border-bottom)}.ms__actions--bottom{flex-direction:column-reverse;border-top:var(--ms-actions-border-bottom)}.ms__actions-row{display:flex;flex-wrap:nowrap;gap:var(--ms-actions-gap)}.ms__actions--wrap .ms__actions-row{flex-wrap:wrap}.ms__actions--sticky{position:sticky;z-index:var(--ms-z-index-sticky);background:var(--ms-actions-bg)}.ms__actions--sticky.ms__actions--top{top:0}.ms__actions--sticky.ms__actions--bottom{bottom:0}.ms__actions--align-stretch .ms__action-btn{flex:1}.ms__actions--align-left .ms__actions-row{justify-content:flex-start}.ms__actions--align-right .ms__actions-row{justify-content:flex-end}.ms__actions--align-center .ms__actions-row{justify-content:center}.ms__actions--align-space-between .ms__actions-row{justify-content:space-between}.ms__action-btn{font-family:inherit;padding:var(--ms-action-btn-padding);font-size:var(--ms-action-btn-font-size);border:var(--ms-action-btn-border);border-radius:var(--ms-action-btn-border-radius);background:var(--ms-action-button-bg);color:var(--ms-action-button-color);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}@media (hover: hover){.ms__action-btn:hover{background:var(--ms-action-button-bg-hover);border-color:var(--ms-action-button-border-color-hover)}}.ms__action-btn:active{transform:scale(var(--ms-transform-scale-active))}.ms__action-btn:disabled,.ms__action-btn[disabled]{opacity:var(--ms-disabled-opacity);cursor:not-allowed;pointer-events:none}}@layer component{.ms__hint{display:none;position:fixed;z-index:var(--ms-z-index-popover);padding:var(--ms-hint-padding);background:var(--ms-hint-bg);border:var(--ms-hint-border);border-radius:var(--ms-hint-border-radius);box-shadow:var(--ms-hint-box-shadow);font-size:var(--ms-hint-font-size);color:var(--ms-hint-color);line-height:var(--ms-line-height-relaxed);max-width:100%}.ms__hint--visible{display:block}.ms__dropdown{display:none;position:fixed;box-sizing:border-box;font-family:inherit;z-index:var(--ms-z-index-dropdown);background:var(--ms-dropdown-bg);border:var(--ms-dropdown-border);border-radius:var(--ms-dropdown-border-radius);box-shadow:var(--ms-dropdown-box-shadow);width:var(--ms-dropdown-width);max-height:var(--ms-options-max-height);overflow:hidden;color:var(--ms-dropdown-text-color)}.ms__dropdown--visible{display:flex;flex-direction:column}.ms__dropdown--fullscreen,.ms__selected-popover--fullscreen{--ms-rem: var(--ms-fullscreen-rem);--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tree-base-indent: var(--ms-fullscreen-tree-base-indent);--ms-tree-indent: var(--ms-fullscreen-tree-indent)}.ms__selected-popover--fullscreen{--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(4.2 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-badge-text-padding: 0 calc(1.2 * var(--ms-rem));--ms-badge-remove-width: calc(3.6 * var(--ms-rem));--ms-badge-remove-icon-size: calc(1.2 * var(--ms-rem));--ms-badge-remove-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-padding: calc(.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{position:fixed;top:0;inset-inline-start:0;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;--ms-dropdown-inner-border-radius: 0;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__dropdown--fullscreen .ms__dropdown-inner{display:flex;flex-direction:column;flex:1;min-height:0;max-height:none;overflow:hidden}.ms__dropdown--fullscreen .ms__options{flex:1 1 0;min-height:0;height:auto;max-height:none;overflow-y:auto;padding-bottom:var(--ms-option-gap)}.ms__dropdown--fullscreen .ms__actions{flex:0 0 auto}.ms__fullscreen-header,.ms__selected-popover--fullscreen .ms__selected-popover-header{flex:0 0 auto;display:flex;align-items:center;flex-wrap:wrap;gap:var(--ms-fullscreen-header-gap);min-height:var(--ms-fullscreen-header-min-height);padding:var(--ms-fullscreen-header-padding);background:var(--ms-fullscreen-header-bg);border-bottom:var(--ms-fullscreen-header-border)}.ms__fullscreen-header{align-content:flex-start}.ms__fullscreen-header>.ms__fullscreen-search-wrapper{min-height:var(--ms-fullscreen-header-min-height)}.ms__fullscreen-nav{flex:0 0 100%;display:flex;align-items:center;justify-content:space-between;gap:var(--ms-fullscreen-nav-gap);padding-top:var(--ms-fullscreen-nav-padding-top)}.ms__fullscreen-nav-count{font-size:var(--ms-fullscreen-nav-count-font-size);color:var(--ms-fullscreen-nav-count-color)}.ms__fullscreen-nav-controls{display:flex;align-items:center;gap:var(--ms-fullscreen-nav-gap)}.ms__fullscreen-nav-btn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-nav-btn-size);height:var(--ms-fullscreen-nav-btn-size);padding:0;color:var(--ms-fullscreen-nav-btn-color);background:var(--ms-fullscreen-nav-btn-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-nav-btn:hover:not(:disabled){background:var(--ms-fullscreen-nav-btn-bg-hover)}.ms__fullscreen-nav-btn:disabled{opacity:.4;cursor:default}.ms__fullscreen-nav-btn:before{content:"";display:block;width:var(--ms-fullscreen-nav-btn-icon-size);height:var(--ms-fullscreen-nav-btn-icon-size);background-color:currentColor;-webkit-mask:var(--ms-fullscreen-nav-btn-icon) center / contain no-repeat;mask:var(--ms-fullscreen-nav-btn-icon) center / contain no-repeat;transform:rotate(-90deg)}.ms__fullscreen-nav-btn--next:before{transform:rotate(90deg)}.ms__fullscreen-header>.ms__fullscreen-search-wrapper,.ms__selected-popover--fullscreen .ms__selected-popover-header>span{flex:1 1 0;min-width:0}.ms__fullscreen-search-wrapper{position:relative;display:flex;align-items:center}.ms__selected-popover--fullscreen .ms__selected-popover-header{font-size:var(--ms-fullscreen-title-font-size);font-weight:var(--ms-fullscreen-title-font-weight);color:var(--ms-fullscreen-text-color)}.ms__fullscreen-search{flex:1 1 auto;min-width:0;font-family:inherit;font-size:var(--ms-fullscreen-search-font-size);color:inherit;background:transparent;border:var(--ms-fullscreen-search-border);border-radius:var(--ms-fullscreen-search-border-radius);padding:var(--ms-fullscreen-search-padding);padding-inline-end:var(--ms-fullscreen-search-clear-gutter)}.ms__fullscreen-search:focus{outline:none;border:var(--ms-input-border-focus)}.ms__fullscreen-search-clear{position:absolute;inset-inline-end:var(--ms-fullscreen-search-clear-inset);top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-search-clear-size);height:var(--ms-fullscreen-search-clear-size);padding:0;color:var(--ms-fullscreen-search-clear-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-search-clear:hover{background:var(--ms-fullscreen-search-clear-bg-hover)}.ms__fullscreen-search-clear:before{content:"";display:block;width:var(--ms-fullscreen-search-clear-icon-size);height:var(--ms-fullscreen-search-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-search-clear) center / contain no-repeat;mask:var(--ms-icon-search-clear) center / contain no-repeat}.ms__fullscreen-mode-toggle{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-mode-toggle-size);height:var(--ms-fullscreen-mode-toggle-size);margin-inline-end:var(--ms-fullscreen-mode-toggle-gap);margin-inline-start:calc((var(--ms-fullscreen-close-size) - var(--ms-fullscreen-mode-toggle-size)) / 2 - var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-mode-toggle-color);background:var(--ms-fullscreen-mode-toggle-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-mode-toggle:hover{background:var(--ms-fullscreen-mode-toggle-bg-hover)}.ms__fullscreen-mode-toggle:before{content:"";display:block;width:var(--ms-fullscreen-mode-toggle-icon-size);height:var(--ms-fullscreen-mode-toggle-icon-size);background-color:currentColor;-webkit-mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat;mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat}.ms__fullscreen-mode-toggle[data-mode=navigate]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-search)}.ms__fullscreen-mode-toggle[data-mode=filter]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-filter)}.ms__fullscreen-close,.ms__selected-popover--fullscreen .ms__selected-popover-close{flex:0 0 auto;position:relative;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-close-size);height:var(--ms-fullscreen-close-size);margin-inline-end:calc(-1 * var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-close-color);background:var(--ms-fullscreen-close-bg);border:var(--ms-fullscreen-close-border);border-radius:var(--ms-fullscreen-close-border-radius);cursor:pointer}.ms__fullscreen-close:after,.ms__selected-popover--fullscreen .ms__selected-popover-close:after{content:"";position:absolute;inset-block-start:calc(-1 * var(--ms-fullscreen-close-size));inset-block-end:calc(-1 * var(--ms-fullscreen-header-padding-v));inset-inline-end:calc(-1 * var(--ms-fullscreen-header-padding-h));inset-inline-start:calc(-1 * var(--ms-fullscreen-header-gap))}.ms__fullscreen-close:hover,.ms__selected-popover--fullscreen .ms__selected-popover-close:hover{background:var(--ms-fullscreen-close-bg-hover);color:var(--ms-fullscreen-close-color)}.ms__fullscreen-close:before,.ms__selected-popover--fullscreen .ms__selected-popover-close:before{content:"";display:block;width:var(--ms-fullscreen-close-icon-size);height:var(--ms-fullscreen-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__dropdown--fullscreen .ms__option-info{flex:0 0 auto;display:none;align-items:center;justify-content:center;width:var(--ms-fullscreen-info-size);height:var(--ms-fullscreen-info-size);margin-inline-start:var(--ms-option-gap);padding:0;color:var(--ms-fullscreen-info-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__dropdown--fullscreen .ms__option--truncated .ms__option-info{display:inline-flex}@media (hover: hover){.ms__dropdown--fullscreen .ms__option-info:hover{background:var(--ms-fullscreen-info-bg-hover)}}.ms__dropdown--fullscreen .ms__option-info:before{content:"";display:block;width:var(--ms-fullscreen-info-icon-size);height:var(--ms-fullscreen-info-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-info) center / contain no-repeat;mask:var(--ms-icon-info) center / contain no-repeat}.ms__dropdown-inner{flex:1;overflow-y:auto;border-radius:var(--ms-dropdown-inner-border-radius);overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__dropdown-inner::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__dropdown-inner::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__dropdown--virtual{max-height:none}.ms__dropdown--virtual .ms__dropdown-inner{overflow:hidden}.ms__badge-tooltip{position:fixed;z-index:var(--ms-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-tooltip-bg);color:var(--ms-tooltip-text-color);padding:var(--ms-tooltip-padding);border-radius:var(--ms-tooltip-border-radius);font-size:var(--ms-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-tooltip-shadow);pointer-events:none}.ms__badge-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip{position:fixed;z-index:var(--ms-option-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-option-tooltip-bg);color:var(--ms-option-tooltip-text-color);padding:var(--ms-option-tooltip-padding);border-radius:var(--ms-option-tooltip-border-radius);font-size:var(--ms-option-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-option-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-option-tooltip-shadow);pointer-events:none}.ms__option-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip--fullscreen{z-index:var(--ms-z-index-fullscreen-tooltip)}.ms__message{position:fixed;z-index:var(--ms-message-z-index);box-sizing:border-box;max-width:var(--ms-message-max-width);padding:var(--ms-message-padding);font-family:inherit;font-size:var(--ms-message-font-size);font-weight:var(--ms-message-font-weight);line-height:var(--ms-line-height-normal);color:var(--ms-message-color);background:var(--ms-message-bg);border:var(--ms-message-border);border-radius:var(--ms-message-border-radius);box-shadow:var(--ms-message-shadow);cursor:pointer;opacity:0;transition:opacity var(--ms-transition-normal) ease;-webkit-tap-highlight-color:transparent}.ms__message--visible{opacity:1}.ms__message--info{background:var(--ms-message-info-bg);color:var(--ms-message-info-color)}.ms__message--warning{background:var(--ms-message-warning-bg);color:var(--ms-message-warning-color)}.ms__message--error{background:var(--ms-message-error-bg);color:var(--ms-message-error-color)}.ms__message--success{background:var(--ms-message-success-bg);color:var(--ms-message-success-color)}.ms__message--fullscreen{left:50%;right:auto;bottom:calc(var(--ms-message-fullscreen-offset) + env(safe-area-inset-bottom));transform:translate(-50%);max-width:min(var(--ms-message-max-width),calc(100vw - 4 * var(--ms-fullscreen-rem)));padding:calc(1 * var(--ms-fullscreen-rem)) calc(1.4 * var(--ms-fullscreen-rem));font-size:calc(var(--base-font-size-sm, 1.4) * var(--ms-fullscreen-rem))}.ms__selected-popover{display:none;position:fixed;box-sizing:border-box;z-index:var(--ms-z-index-popover);background:var(--ms-selected-popover-bg);border:var(--ms-selected-popover-border);border-radius:var(--ms-selected-popover-border-radius);box-shadow:var(--ms-selected-popover-box-shadow);width:var(--ms-selected-popover-width);max-height:var(--ms-selected-popover-max-height);overflow:hidden}.ms__selected-popover--visible{display:flex;flex-direction:column}.ms__selected-popover--virtual{display:block;overflow:visible;max-height:none}.ms__selected-popover--fullscreen{position:fixed;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;overflow:hidden;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__selected-popover--fullscreen .ms__selected-popover-body{flex:1 1 0;min-height:0;max-height:none}.ms__selected-popover-header{display:flex;align-items:center;justify-content:space-between;padding:var(--ms-selected-popover-header-padding);background:var(--ms-selected-popover-header-bg);border-bottom:var(--ms-selected-popover-header-border-bottom);font-size:var(--ms-selected-popover-header-font-size);font-weight:var(--ms-selected-popover-header-font-weight);color:var(--ms-selected-popover-header-color)}.ms__selected-popover-close{display:flex;align-items:center;justify-content:center;width:var(--ms-popover-close-size);height:var(--ms-popover-close-size);padding:0;border:none;background:var(--ms-selected-popover-close-bg);color:var(--ms-selected-popover-close-color);font-size:var(--ms-selected-popover-close-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-selected-popover-close-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__selected-popover-close:hover{background:var(--ms-selected-popover-close-bg-hover);color:var(--ms-selected-popover-close-color-hover)}.ms__selected-popover-close:before{content:"";display:block;width:var(--ms-selected-popover-close-icon-size);height:var(--ms-selected-popover-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__selected-popover-body{display:flex;flex-direction:column;gap:var(--ms-selected-popover-body-gap);padding:var(--ms-selected-popover-body-padding);overflow-y:auto;max-height:var(--ms-selected-popover-body-max-height);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__selected-popover-body::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__selected-popover-body::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__selected-popover-body .ms__badge{width:100%;min-height:fit-content;line-height:var(--ms-line-height-relaxed);flex-shrink:0}.ms__selected-popover-body .ms__badge-text{flex:1;min-width:0;white-space:normal;word-wrap:break-word}.ms__selected-popover-body--virtual{display:block;max-height:none;padding:0}.ms__selected-popover-body--virtual .ms__badge{height:var(--ms-badge-height-virtual, 36px);min-height:var(--ms-badge-height-virtual, 36px);max-height:var(--ms-badge-height-virtual, 36px);margin-bottom:var(--ms-selected-popover-body-gap);overflow:hidden;box-sizing:border-box}.ms__selected-popover-body--virtual .ms__badge-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}@layer component{.ms--disabled .ms__input-wrapper{opacity:var(--ms-disabled-input-opacity);background:var(--ms-input-bg-disabled);cursor:not-allowed}.ms--disabled .ms__input{cursor:not-allowed}.ms--no-checkboxes .ms__option{gap:0;padding-inline-start:var(--ms-option-padding-h)}.ms--no-checkboxes .ms__option-content{padding-inline-start:0}.ms--no-selected-popover .ms__counter,.ms--no-selected-popover .ms__badge[data-action=show-selected],.ms--no-selected-popover .ms__badge--counter,.ms--no-selected-popover .ms__badge--more{cursor:default}}@layer component{@keyframes ms-spin{to{transform:rotate(360deg)}}}@layer component{.ms__badges{display:flex;flex-wrap:wrap;gap:var(--ms-badges-gap);padding:0}.ms__badges:empty{display:none}.ms__badges--bottom{margin-top:var(--ms-badges-margin-bottom)}.ms__badges--top{margin-bottom:var(--ms-badges-margin-top);order:var(--ms-order-first)}.ms__badges--left{order:var(--ms-order-first);margin-right:var(--ms-badges-margin-left);justify-content:flex-end}.ms__badges--right{margin-left:var(--ms-badges-margin-right);justify-content:flex-start}.ms__badge{display:inline-flex;align-items:center;height:var(--ms-badge-height);font-size:var(--ms-badge-font-size);font-weight:var(--ms-badge-font-weight);line-height:var(--ms-line-height-none);border-radius:var(--ms-badge-border-radius);overflow:hidden;max-width:100%}.ms__badge--custom{display:block;height:auto;max-width:none;overflow:visible;border-radius:0;font-size:inherit;font-weight:inherit}.ms__badge-text{display:flex;align-items:center;box-sizing:border-box;height:100%;padding:var(--ms-badge-text-padding);background:var(--ms-badge-text-bg);color:var(--ms-badge-text-color);border:var(--ms-badge-text-border);border-inline-end:none;border-start-start-radius:var(--ms-badge-border-radius);border-end-start-radius:var(--ms-badge-border-radius);border-start-end-radius:0;border-end-end-radius:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background-color var(--ms-transition-normal) ease,color var(--ms-transition-normal) ease}.ms__badge:hover .ms__badge-text{background:var(--ms-badge-text-bg-hover, var(--ms-badge-text-bg));color:var(--ms-badge-text-color-hover, var(--ms-badge-text-color))}.ms__badge-remove{display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:0;font-family:inherit;width:var(--ms-badge-remove-width);height:100%;flex-shrink:0;background:var(--ms-badge-remove-bg);color:var(--ms-badge-remove-color);border:var(--ms-badge-remove-border);border-inline-start:none;border-start-end-radius:var(--ms-badge-border-radius);border-end-end-radius:var(--ms-badge-border-radius);border-start-start-radius:0;border-end-start-radius:0;cursor:pointer;transition:background-color var(--ms-transition-normal) ease;font-size:var(--ms-badge-remove-font-size)}.ms__badge-remove:hover{background:var(--ms-badge-remove-bg-hover)}.ms__badge-remove:focus{outline:none}.ms__badge-remove:focus-visible{outline:none;box-shadow:var(--ms-badge-remove-box-shadow-focus)}.ms__badge-remove:before{content:"";display:block;width:var(--ms-badge-remove-icon-size);height:var(--ms-badge-remove-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__badge--counter{cursor:pointer}.ms__badge--counter .ms__badge-text{background:var(--ms-badge-counter-text-bg);color:var(--ms-badge-counter-text-color);border:var(--ms-badge-counter-border);border-inline-end:none}.ms__badge--counter .ms__badge-remove{background:var(--ms-badge-counter-remove-bg);color:var(--ms-badge-counter-remove-color);border:var(--ms-badge-counter-border);border-inline-start:none}.ms__badge--counter .ms__badge-remove:hover{background:var(--ms-badge-counter-remove-bg-hover);color:var(--ms-badge-counter-remove-color-hover, var(--ms-badge-counter-remove-color))}.ms__badge--counter:hover .ms__badge-text{background:var(--ms-badge-counter-text-bg-hover, var(--ms-badge-counter-text-bg));color:var(--ms-badge-counter-text-color-hover, var(--ms-badge-counter-text-color))}.ms__badge--more,.ms__badge[data-action=show-selected]{cursor:pointer}}@layer component{.ms__count-display{display:flex;align-items:center}.ms__count-display:empty{display:none}.ms__count-display--bottom{margin-top:var(--ms-count-display-margin-bottom)}.ms__count-display--top{margin-bottom:var(--ms-count-display-margin-top);order:var(--ms-order-first)}.ms__count-display--left{order:var(--ms-order-first);margin-right:var(--ms-count-display-margin-left);justify-content:flex-start}.ms__count-display--right{margin-left:var(--ms-count-display-margin-right);justify-content:flex-end}.ms__counter-wrapper{display:inline-flex;align-items:center;gap:var(--ms-counter-wrapper-gap);background:var(--ms-counter-wrapper-bg);border:var(--ms-counter-wrapper-border);border-radius:var(--ms-counter-wrapper-border-radius);padding:var(--ms-counter-wrapper-padding);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter-wrapper:hover{background:var(--ms-counter-wrapper-bg-hover);border-color:var(--ms-counter-wrapper-border-color-hover)}.ms__count-text{display:inline-flex;align-items:center;background:var(--ms-count-text-bg);border:var(--ms-count-text-border);padding:0;font-size:var(--ms-count-text-font-size);color:var(--ms-count-text-color);cursor:pointer;transition:color var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:var(--ms-count-clear-size);height:var(--ms-count-clear-size);padding:0;border:none;background:var(--ms-count-clear-bg);color:var(--ms-count-clear-color);font-size:var(--ms-count-clear-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-count-clear-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear:hover{background:var(--ms-count-clear-bg-hover);color:var(--ms-count-clear-color-hover)}.ms__count-clear:before{content:"";display:block;width:var(--ms-count-clear-icon-size);height:var(--ms-count-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}}@layer component{.ms__debug-info{margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-bg);border:1px solid var(--ms-debug-border-color);border-radius:var(--ms-debug-border-radius);font-size:calc(1.2 * var(--ms-rem));color:var(--ms-debug-text-color)}.ms__debug-info details summary{cursor:pointer;font-weight:600;color:var(--ms-debug-summary-color);-webkit-user-select:none;user-select:none;padding:calc(.4 * var(--ms-rem));border-radius:var(--ms-debug-summary-border-radius)}.ms__debug-info details summary:hover{background-color:var(--ms-debug-summary-bg-hover)}.ms__debug-info details summary:focus{outline:2px solid var(--ms-debug-summary-outline-color);outline-offset:2px}.ms__debug-info .ms__debug-stats{display:flex;flex-direction:column;gap:calc(.4 * var(--ms-rem));margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-stats-bg);border-radius:var(--ms-debug-stats-border-radius)}.ms__debug-info .ms__debug-stats span{display:flex;justify-content:space-between;padding:2px 4px;font-family:monospace;font-size:calc(1 * var(--ms-rem))}.ms__debug-info .ms__debug-stats span:before{content:"•";margin-inline-end:calc(.4 * var(--ms-rem));color:var(--ms-debug-bullet-color)}}@layer component{.ms__options{padding:var(--ms-options-padding);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__options::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__options::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__options--virtual .ms__option,.ms__options--fixed-height .ms__option{height:var(--ms-option-height, 50px);min-height:var(--ms-option-height, 50px);max-height:var(--ms-option-height, 50px);overflow:hidden;box-sizing:border-box}.ms__group+.ms__group{border-top:var(--ms-group-border-top);margin-top:var(--ms-group-margin-top);padding-top:var(--ms-group-padding-top)}.ms__group-label{padding:var(--ms-group-label-padding);font-size:var(--ms-group-label-font-size);font-weight:var(--ms-group-label-font-weight);color:var(--ms-group-label-color);text-transform:var(--ms-group-label-transform);letter-spacing:var(--ms-group-label-letter-spacing)}.ms__group-label--selectable{display:flex;align-items:center;gap:var(--ms-option-gap);cursor:pointer;-webkit-user-select:none;user-select:none}@media (hover: hover){.ms__group-label--selectable:hover{background:var(--ms-option-bg-hover)}}.ms__group-label--has-count{display:flex;align-items:center;gap:var(--ms-option-gap)}.ms__group-count{margin-inline-start:auto;flex:0 0 auto;box-sizing:border-box;min-width:calc(2 * var(--ms-rem));padding-block:0;padding-inline:calc(.4 * var(--ms-rem));background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);text-align:center}.ms__option{display:flex;align-items:var(--ms-checkbox-align, center);gap:var(--ms-option-gap);padding:var(--ms-option-padding);position:relative;min-height:var(--ms-option-min-height, auto);color:var(--ms-option-text-color);background:var(--ms-option-bg);cursor:pointer;user-select:none;-webkit-user-select:none}@media (hover: hover){.ms__option:hover{background:var(--ms-option-bg-hover);color:var(--ms-option-color-hover, inherit)}}.ms__option--focused{background:var(--ms-option-bg-focused);color:var(--ms-option-color-focused, inherit);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--matched{background:var(--ms-option-bg-matched);color:var(--ms-option-color-matched, inherit)}.ms__option--matched:before{content:"";position:absolute;inset-block:0;inset-inline-start:0;border-inline-start:var(--ms-option-border-matched);pointer-events:none}.ms__option--selected{background:var(--ms-option-bg-selected)}@media (hover: hover){.ms__option--selected:hover{background:var(--ms-option-bg-selected-hover, var(--ms-option-bg-selected))}}.ms__option--disabled{opacity:var(--ms-disabled-opacity);cursor:not-allowed;background:var(--ms-option-disabled-bg)}.ms__option--disabled:hover{background:var(--ms-option-disabled-bg)}@media (hover: hover){.ms__option--focused:hover{background:var(--ms-option-bg-focused-hover);color:var(--ms-option-color-focused-hover, var(--ms-option-color-focused, var(--ms-option-text-color)))}}.ms__option--matched:hover{background:var(--ms-option-bg-matched-hover);color:var(--ms-option-color-matched-hover, var(--ms-option-color-matched, var(--ms-option-text-color)))}.ms__option--selected.ms__option--focused{background:var(--ms-option-bg-selected-focused);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--selected.ms__option--matched{background:var(--ms-option-bg-selected-matched)}.ms__option--disabled.ms__option--selected{background:var(--ms-option-bg-disabled-selected)}.ms__option--disabled.ms__option--focused{outline:none}.ms__option[data-checkbox-align=top]{--ms-checkbox-align: flex-start;--ms-checkbox-margin-top: calc(.2 * var(--ms-rem))}.ms__option[data-checkbox-align=bottom]{--ms-checkbox-align: flex-end}.ms__checkbox{appearance:none;-webkit-appearance:none;-moz-appearance:none;flex-shrink:0;position:relative;margin-top:var(--ms-checkbox-margin-top);margin-inline-end:var(--ms-checkbox-margin-right);margin-bottom:var(--ms-checkbox-margin-bottom);margin-inline-start:var(--ms-checkbox-margin-left);width:var(--ms-checkbox-size);height:var(--ms-checkbox-size);transform:scale(var(--ms-checkbox-scale));transform-origin:top left;cursor:pointer;background:var(--ms-checkbox-bg);border:var(--ms-checkbox-border);border-radius:var(--ms-checkbox-border-radius);transition:background-color .15s ease,border-color .15s ease}.ms__checkbox:after{content:"";position:absolute;display:none;top:0;right:0;bottom:0;left:0;background-color:var(--ms-checkbox-checkmark-color);-webkit-mask:var(--ms-icon-check) no-repeat center / var(--ms-icon-check-size);mask:var(--ms-icon-check) no-repeat center / var(--ms-icon-check-size)}.ms__checkbox:hover:not(:disabled){border-color:var(--ms-checkbox-hover-border-color)}.ms__checkbox:checked{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox:checked:after{display:block}.ms__checkbox--indeterminate{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox--indeterminate:after{display:block;-webkit-mask-image:var(--ms-icon-indeterminate);mask-image:var(--ms-icon-indeterminate)}.ms__checkbox--indeterminate:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:checked:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:focus-visible{outline:2px solid var(--ms-checkbox-checked-bg);outline-offset:2px}.ms__checkbox:disabled{cursor:not-allowed;background:var(--ms-checkbox-disabled-bg);border:var(--ms-checkbox-disabled-border);opacity:.6}.ms__checkbox:disabled:checked{background:var(--ms-checkbox-disabled-bg)}.ms__option--disabled .ms__checkbox{cursor:not-allowed}.ms__option-content{flex:1;display:flex;align-items:center;gap:var(--ms-option-content-gap);min-width:0}.ms__option-icon{flex-shrink:0;width:var(--ms-option-icon-size);height:var(--ms-option-icon-size);display:flex;align-items:center;justify-content:center;font-size:var(--ms-option-icon-font-size)}.ms__option-icon svg{width:100%;height:100%;fill:currentColor}.ms__option-text{flex:1;min-width:0}.ms__option-title{font-size:var(--ms-option-title-font-size);color:var(--ms-option-title-color);line-height:var(--ms-line-height-relaxed);white-space:var(--ms-option-title-white-space, normal);overflow:var(--ms-option-title-overflow, visible);text-overflow:var(--ms-option-title-text-overflow, clip)}@media (hover: hover){.ms__option:hover .ms__option-title{color:var(--ms-option-title-color-hover, var(--ms-option-title-color))}}.ms__option--selected .ms__option-title{color:var(--ms-option-title-color-selected, var(--ms-option-title-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-title{color:var(--ms-option-title-color-selected-hover, var(--ms-option-title-color-selected, var(--ms-option-title-color)))}}.ms__option-title mark{background:var(--ms-option-mark-bg);color:var(--ms-option-mark-color);font-weight:var(--ms-option-mark-font-weight)}.ms__option-subtitle{margin-top:var(--ms-option-subtitle-margin-top);font-size:var(--ms-option-subtitle-font-size);color:var(--ms-option-subtitle-color);line-height:var(--ms-option-subtitle-line-height)}@media (hover: hover){.ms__option:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-hover, var(--ms-option-subtitle-color))}}.ms__option--selected .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected-hover, var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color)))}}.ms__empty{display:flex;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-empty-padding);text-align:center;font-size:var(--ms-empty-font-size);color:var(--ms-empty-color)}.ms__add-new{display:flex;align-items:center;gap:var(--ms-add-new-gap);padding:var(--ms-add-new-padding);font-size:var(--ms-add-new-font-size);color:var(--ms-add-new-color);cursor:pointer;user-select:none;-webkit-user-select:none}@media (hover: hover){.ms__add-new:hover{background:var(--ms-add-new-bg-hover);color:var(--ms-add-new-color-hover)}}.ms__add-new--focused{background:var(--ms-add-new-bg-hover);color:var(--ms-add-new-color-hover)}.ms__add-new--loading{cursor:default}.ms__add-new-spinner{flex-shrink:0;width:var(--ms-add-new-icon-size);height:var(--ms-add-new-icon-size);border-radius:50%;border:2px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;animation:ms-spin .6s linear infinite}@media (prefers-reduced-motion: reduce){.ms__add-new-spinner{animation-duration:1.5s}}.ms__add-new-icon{flex-shrink:0;width:var(--ms-add-new-icon-size);height:var(--ms-add-new-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-add-new) center / contain no-repeat;mask:var(--ms-icon-add-new) center / contain no-repeat}.ms__add-new-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ms__loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-loader-padding);gap:var(--ms-loader-gap)}.ms__loading-text{font-size:var(--ms-loading-text-font-size);color:var(--ms-loading-color)}}@layer component{.ms--rtl .ms__badges{direction:rtl}.ms--rtl .ms__badges--right{margin-left:0;margin-right:var(--ms-badges-margin-right)}.ms--rtl .ms__badges--left{margin-right:0;margin-left:var(--ms-badges-margin-left)}.ms--rtl .ms__count-display{direction:rtl}.ms--rtl .ms__count-display--right{margin-left:0;margin-right:var(--ms-count-display-margin-right)}.ms--rtl .ms__count-display--left{margin-right:0;margin-left:var(--ms-count-display-margin-left)}}@layer component{.ms__option--tree{padding-inline-start:calc(var(--ms-tree-base-indent, .75rem) + var(--ms-tree-depth, 0) * var(--ms-tree-indent, 1.25rem))}.ms__option--tree-unselectable{cursor:default}.ms__option--tree-unselectable:hover{background:transparent}}@layer overrides{:host-context([data-theme="dark"]),:host-context([data-bs-theme="dark"]),:host-context(.dark){color-scheme:dark}:host-context([data-theme="light"]),:host-context([data-bs-theme="light"]),:host-context(.light){color-scheme:light}:host([data-theme="dark"]){color-scheme:dark}:host([data-theme="light"]){color-scheme:light}}`, Qs = [
   "top",
   "top-start",
   "top-end",
@@ -5186,46 +5633,48 @@ const xo = `@layer variables,component,overrides;@layer variables{:host{display:
   "right",
   "right-start",
   "right-end"
-], A = () => $o(), sn = [
+], E = () => Uo(), wn = [
   // ── Strings (cosmetic → update). Optional ones are nullable: absent → null ─
-  { configKey: "searchHint", attribute: "search-hint", converter: D({ isNullable: !0 }), on: "update", description: "Small hint text shown beneath the search input." },
-  { configKey: "searchPlaceholder", attribute: "search-placeholder", converter: D({ isNullable: !0 }), on: "update", description: 'Placeholder text for the search input. When unset it defaults to "Search..."; if `show-search-mode-toggle` is on, the default instead becomes mode-aware ("Search…" in navigate, "Filter…" in filter). An explicit value always wins and stays fixed.' },
-  { configKey: "selectPlaceholder", attribute: "select-placeholder", converter: D({ default: "Pick an option..." }), on: "update", description: "Placeholder shown on the control when nothing is selected." },
-  { configKey: "noDataPlaceholder", attribute: "no-data-placeholder", converter: D({ isNullable: !0 }), on: "update", description: "Text shown when there are no options at all." },
-  { configKey: "dropdownMinWidth", attribute: "dropdown-min-width", converter: D({ isNullable: !0 }), on: "update", description: "Minimum width of the dropdown panel (any CSS length)." },
-  { configKey: "dropdownMaxWidth", attribute: "dropdown-max-width", converter: D({ isNullable: !0 }), on: "update", description: "Maximum width of the dropdown panel (any CSS length)." },
-  { configKey: "maxHeight", attribute: "max-height", converter: D({ default: "20rem" }), on: "update", description: "Maximum height of the dropdown list before it scrolls." },
-  { configKey: "emptyMessage", attribute: "empty-message", converter: D({ default: "No results found" }), on: "update", description: "Message shown when a search yields no matches." },
-  { configKey: "loadingMessage", attribute: "loading-message", converter: D({ default: "Loading..." }), on: "update", description: "Message shown while options are loading." },
-  { configKey: "removeButtonTooltipText", attribute: "remove-button-tooltip-text", converter: D({ isNullable: !0 }), on: "update", description: "Tooltip text for a badge remove (×) button." },
-  { configKey: "formFieldId", attribute: "name", converter: D({ isNullable: !0 }), on: "reinit", description: "HTML form field name/id used for the hidden input(s)." },
+  { configKey: "searchHint", attribute: "search-hint", converter: z({ isNullable: !0 }), on: "update", description: "Small hint text shown beneath the search input." },
+  { configKey: "searchPlaceholder", attribute: "search-placeholder", converter: z({ isNullable: !0 }), on: "update", description: 'Placeholder text for the search input. When unset it defaults to "Search..."; if `show-search-mode-toggle` is on, the default instead becomes mode-aware ("Search…" in navigate, "Filter…" in filter). An explicit value always wins and stays fixed.' },
+  { configKey: "selectPlaceholder", attribute: "select-placeholder", converter: z({ default: "Pick an option..." }), on: "update", description: "Placeholder shown on the control when nothing is selected." },
+  { configKey: "noDataPlaceholder", attribute: "no-data-placeholder", converter: z({ isNullable: !0 }), on: "update", description: "Text shown when there are no options at all." },
+  { configKey: "dropdownMinWidth", attribute: "dropdown-min-width", converter: z({ isNullable: !0 }), on: "update", description: "Minimum width of the dropdown panel (any CSS length)." },
+  { configKey: "dropdownMaxWidth", attribute: "dropdown-max-width", converter: z({ isNullable: !0 }), on: "update", description: "Maximum width of the dropdown panel (any CSS length)." },
+  { configKey: "maxHeight", attribute: "max-height", converter: z({ default: "20rem" }), on: "update", description: "Maximum height of the dropdown list before it scrolls." },
+  { configKey: "emptyMessage", attribute: "empty-message", converter: z({ default: "No results found" }), on: "update", description: "Message shown when a search yields no matches." },
+  { configKey: "addNewText", attribute: "add-new-text", converter: z({ isNullable: !0 }), on: "update", description: 'Template for the clickable "add new" prompt shown (when `allow-add-new` is on) in place of the empty message once a search yields no matches. `{value}` is replaced with the typed text. Default: `Add "{value}"`. A `getAddNewTextCallback` wins.' },
+  { configKey: "addNewPendingText", attribute: "add-new-pending-text", converter: z({ isNullable: !0 }), on: "update", description: 'Template for the pending prompt (spinner + text) shown while an async `addNewCallback` runs. `{value}` is replaced with the typed text. Default: `Adding "{value}"…`.' },
+  { configKey: "loadingMessage", attribute: "loading-message", converter: z({ default: "Loading..." }), on: "update", description: "Message shown while options are loading." },
+  { configKey: "removeButtonTooltipText", attribute: "remove-button-tooltip-text", converter: z({ isNullable: !0 }), on: "update", description: "Tooltip text for a badge remove (×) button." },
+  { configKey: "formFieldId", attribute: "name", converter: z({ isNullable: !0 }), on: "reinit", description: "HTML form field name/id used for the hidden input(s)." },
   // ── CSS-var sugar (mirrored to a host style prop in reinit()/update()) ────
-  { configKey: "dropdownWidth", attribute: "dropdown-width", converter: D({ isNullable: !0 }), on: "update", description: "Fixed dropdown width; mirrored to the `--ms-dropdown-width` CSS variable." },
-  { configKey: "selectedPopoverWidth", attribute: "selected-popover-width", converter: D({ isNullable: !0 }), on: "update", description: "Selected-items popover width; mirrored to `--ms-selected-popover-width`." },
+  { configKey: "dropdownWidth", attribute: "dropdown-width", converter: z({ isNullable: !0 }), on: "update", description: "Fixed dropdown width; mirrored to the `--ms-dropdown-width` CSS variable." },
+  { configKey: "selectedPopoverWidth", attribute: "selected-popover-width", converter: z({ isNullable: !0 }), on: "update", description: "Selected-items popover width; mirrored to `--ms-selected-popover-width`." },
   // ── Member properties (structural → reinit; optional → nullable) ─────────
-  { configKey: "valueMember", attribute: "value-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name on an option object that holds its value." },
-  { configKey: "displayValueMember", attribute: "display-value-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option display label." },
-  { configKey: "searchValueMember", attribute: "search-value-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name searched against (falls back to the display value)." },
-  { configKey: "iconMember", attribute: "icon-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option icon." },
-  { configKey: "subtitleMember", attribute: "subtitle-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option subtitle." },
-  { configKey: "fullTitleMember", attribute: "full-title-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option full/long title." },
-  { configKey: "groupMember", attribute: "group-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name used to group options under headers." },
-  { configKey: "disabledMember", attribute: "disabled-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that marks an option disabled." },
+  { configKey: "valueMember", attribute: "value-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name on an option object that holds its value." },
+  { configKey: "displayValueMember", attribute: "display-value-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option display label." },
+  { configKey: "searchValueMember", attribute: "search-value-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name searched against (falls back to the display value)." },
+  { configKey: "iconMember", attribute: "icon-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option icon." },
+  { configKey: "subtitleMember", attribute: "subtitle-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option subtitle." },
+  { configKey: "fullTitleMember", attribute: "full-title-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option full/long title." },
+  { configKey: "groupMember", attribute: "group-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name used to group options under headers." },
+  { configKey: "disabledMember", attribute: "disabled-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that marks an option disabled." },
   // ── Tree of options (structural → reinit; optional → nullable) ───────────
-  { configKey: "pathMember", attribute: "path-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node materialized tree path." },
-  { configKey: "parentPathMember", attribute: "parent-path-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node parent path." },
-  { configKey: "levelMember", attribute: "level-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node depth level." },
-  { configKey: "hasChildrenMember", attribute: "has-children-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name flagging that a node has children." },
-  { configKey: "isSelectableMember", attribute: "is-selectable-member", converter: D({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name marking whether a node can be selected." },
-  { configKey: "treePathSeparator", attribute: "tree-path-separator", converter: D({ default: "." }), reflect: !0, on: "reinit", description: "Separator between segments in a materialized tree path." },
-  { configKey: "isTreeEnabled", converter: R("tristate"), on: "reinit", type: "boolean", description: "Force tree mode on/off. Property-only; when unset (null) tree mode auto-enables if a path source (path-member / getPathCallback) is present." },
+  { configKey: "pathMember", attribute: "path-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node materialized tree path." },
+  { configKey: "parentPathMember", attribute: "parent-path-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node parent path." },
+  { configKey: "levelMember", attribute: "level-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node depth level." },
+  { configKey: "hasChildrenMember", attribute: "has-children-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name flagging that a node has children." },
+  { configKey: "isSelectableMember", attribute: "is-selectable-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name marking whether a node can be selected." },
+  { configKey: "treePathSeparator", attribute: "tree-path-separator", converter: z({ default: "." }), reflect: !0, on: "reinit", description: "Separator between segments in a materialized tree path." },
+  { configKey: "isTreeEnabled", converter: H("tristate"), on: "reinit", type: "boolean", description: "Force tree mode on/off. Property-only; when unset (null) tree mode auto-enables if a path source (path-member / getPathCallback) is present." },
   {
     configKey: "checkboxMode",
     attribute: "checkbox-mode",
-    converter: K(["independent", "cascade"], { default: "independent" }),
+    converter: K(["independent", "cascade"], { default: "cascade" }),
     reflect: !0,
     on: "update",
-    description: "Tree checkbox interaction.\n- `independent` (default) — toggles only the clicked node.\n- `cascade` — checks a node whole subtree and shows a tristate (checked / indeterminate / unchecked) box on branches.\n\nTree + multiple only."
+    description: "Tree checkbox interaction.\n- `cascade` (default) — checks a node's whole subtree and shows a tristate (checked / indeterminate / unchecked) box on branches. This is what most tree-select UIs do, so it's the default.\n- `independent` — toggles only the clicked node, ignoring ancestors/descendants.\n\nTree + multiple only — has no effect on flat lists or single-select (there is no subtree to cascade into)."
   },
   {
     configKey: "cascadeSelectPolicy",
@@ -5235,19 +5684,37 @@ const xo = `@layer variables,component,overrides;@layer variables{:host{display:
     on: "update",
     description: "In `cascade` mode, which values a selection emits (badges / form / change):\n- `rolled-up` (default) — minimal cover: a fully-selected subtree collapses to its root; partially-selected branches emit their individually-checked descendants.\n- `leaves` — only the checked leaf-level nodes.\n- `all` — every fully-checked node (branches and leaves)."
   },
+  {
+    configKey: "groupSelectMode",
+    attribute: "group-select-mode",
+    converter: K(["none", "cascade"], { default: "none" }),
+    reflect: !0,
+    on: "update",
+    description: "Group-header selection in a FLAT (non-tree) grouped, multi-select list.\n- `none` (default) — group headers are inert labels.\n- `cascade` — each header shows a tristate checkbox that checks/unchecks all of that group's currently-visible members; a partially-selected group reads indeterminate. The group itself is never a selected value (getValue / badges / form carry member values only).\n\nFlat + multiple only — no effect in tree mode (use `checkbox-mode`) or single-select."
+  },
   // ── Enums ────────────────────────────────────────────────────────────────
-  { configKey: "badgesDisplayMode", attribute: "badges-display-mode", converter: K(["badges", "count", "compact", "partial", "none"], { default: "badges" }), on: "reinit", description: "How the current selection is shown in the control." },
-  { configKey: "badgesPosition", attribute: "badges-position", converter: K(["top", "bottom", "left", "right"], { default: "bottom" }), on: "reinit", description: "Where the badges/selection appear relative to the input." },
+  { configKey: "badgesDisplayMode", attribute: "badges-display-mode", converter: K(["badges", "count", "compact", "partial", "none"], { default: "badges" }), on: "update", description: "How the current selection is shown in the control." },
+  { configKey: "badgesPosition", attribute: "badges-position", converter: K(["top", "bottom", "left", "right"], { default: "bottom" }), on: "update", description: "Where the badges/selection appear relative to the input." },
   { configKey: "badgesThresholdMode", attribute: "badges-threshold-mode", converter: K(["count", "partial"], { default: "count" }), on: "update", description: 'How `badgesThreshold` is interpreted: collapse to a count badge, or keep partial badges + a "more" badge.' },
+  {
+    configKey: "selectedOrder",
+    attribute: "selected-order",
+    converter: K(["as-selected", "label-asc", "label-desc", "member", "custom"], { default: "as-selected" }),
+    reflect: !0,
+    on: "update",
+    description: 'Order of the CURRENTLY-SELECTED items where they are displayed — badges, partial mode (which items sit behind the "+N more" badge), and the selected-items popover. Display only: `getValue()`, the form output, and `getSelected()` keep as-selected (insertion) order, and the options dropdown is never reordered.\n- `as-selected` (default) — the order items were picked.\n- `label-asc` / `label-desc` — by the badge label, A→Z / Z→A (locale-aware).\n- `member` — by the `selected-order-member` property (or `getSelectedOrderCallback`); numeric keys sort numerically, everything else with a locale string compare.\n- `custom` — delegate to `selectedOrderCompareCallback`.'
+  },
+  { configKey: "selectedOrderMember", attribute: "selected-order-member", converter: z({ isNullable: !0 }), reflect: !0, on: "update", description: 'Property name used as the sort key when `selected-order="member"`. Sorts the SELECTED-items display only (not the dropdown). Overridden by `getSelectedOrderCallback`.' },
   { configKey: "searchInputMode", attribute: "search-input-mode", converter: K(["normal", "readonly", "hidden"], { default: "normal" }), on: "reinit", description: "Search field mode: editable, read-only, or hidden." },
   { configKey: "searchMode", attribute: "search-mode", converter: K(["filter", "navigate"], { default: "filter" }), on: "reinit", description: "Whether typing filters the list or navigates it." },
+  { configKey: "overlayGroup", attribute: "overlay-group", converter: z({ isNullable: !0 }), on: "reinit", description: 'Scope the "one overlay open at a time" coordination to a named group. Overlays (multiselects, datepickers, external popovers) sharing a group dismiss each other when one opens; different groups are independent. Unset = the default (ungrouped) group.' },
   { configKey: "actionsLayout", attribute: "actions-layout", converter: K(["nowrap", "wrap"], { default: "nowrap" }), on: "reinit", description: "Whether the action bar wraps or stays on one line." },
   { configKey: "actionsPosition", attribute: "actions-position", converter: K(["top", "bottom"], { default: "top" }), on: "reinit", description: "Whether the action bar sits above or below the list." },
   { configKey: "actionsAlign", attribute: "actions-align", converter: K(["stretch", "left", "right", "center", "space-between"], { default: "stretch" }), on: "update", description: "Horizontal alignment of the action buttons." },
   { configKey: "checkboxAlign", attribute: "checkbox-align", converter: K(["top", "center", "bottom"], { default: "center" }), on: "update", description: "Vertical alignment of an option checkbox." },
   { configKey: "valueFormat", attribute: "value-format", converter: K(["json", "csv", "array"], { default: "json" }), on: "reinit", description: "Serialization format the control emits its value in." },
-  { configKey: "badgeTooltipPlacement", attribute: "badge-tooltip-placement", converter: K(Ws, { default: "top" }), on: "update", description: "Preferred placement of a badge tooltip relative to its badge (floating-ui placement)." },
-  { configKey: "optionTooltipPlacement", attribute: "option-tooltip-placement", converter: K(Ws, { default: "top-start" }), on: "update", description: "Preferred placement of an option tooltip (floating-ui placement)." },
+  { configKey: "badgeTooltipPlacement", attribute: "badge-tooltip-placement", converter: K(Qs, { default: "top" }), on: "update", description: "Preferred placement of a badge tooltip relative to its badge (floating-ui placement)." },
+  { configKey: "optionTooltipPlacement", attribute: "option-tooltip-placement", converter: K(Qs, { default: "top-start" }), on: "update", description: "Preferred placement of an option tooltip (floating-ui placement)." },
   {
     configKey: "mobilePresentation",
     attribute: "mobile-presentation",
@@ -5259,102 +5726,117 @@ const xo = `@layer variables,component,overrides;@layer variables{:host{display:
   {
     configKey: "fullscreenAutofocus",
     attribute: "fullscreen-autofocus",
-    converter: R("default-false"),
+    converter: H("default-false"),
     on: "update",
     description: "In the phone fullscreen overlay, auto-focus the search field on open (pops the soft keyboard immediately). Default `false`: the sheet opens with the list visible and the keyboard closed, appearing only when the user taps the search. Set `true` to type-to-filter right away. No effect in the floating presentation."
   },
   // ── Numbers ──────────────────────────────────────────────────────────────
-  { configKey: "badgesThreshold", attribute: "badges-threshold", converter: q(), on: "update", description: "Threshold at which badges collapse to a count/compact view." },
-  { configKey: "badgesMaxVisible", attribute: "badges-max-visible", converter: q(), on: "update", description: "Maximum number of badges rendered before overflow." },
-  { configKey: "collapseBadgesBelow", attribute: "collapse-badges-below", converter: q(), on: "update", description: 'Container-responsive opt-in (off by default). When set to a px width, the control watches its OWN border box (not the window, via the core `resized` hook / a shared ResizeObserver) and collapses `badges-display-mode` to `count` ("N selected") while the box is narrower than this — so a picker in a narrow column/sidebar never overflows with pills, even on a wide monitor. Widening past the threshold restores the configured badges mode. Element-only: the override is applied to the live picker, never to your `badges-display-mode` config.' },
-  { configKey: "minSearchLength", attribute: "min-search-length", converter: q({ default: 0 }), on: "update", description: "Minimum characters before searching/filtering starts." },
-  { configKey: "searchDebounce", attribute: "search-debounce", converter: q({ default: 0 }), on: "update", description: "Debounce delay in ms applied to the search input." },
-  { configKey: "virtualScrollThreshold", attribute: "virtual-scroll-threshold", converter: q({ default: 100 }), on: "reinit", description: "Option count above which virtual scrolling turns on." },
-  { configKey: "optionHeight", attribute: "option-height", converter: q({ default: 50 }), on: "update", description: "Fixed row height in px used by virtual scrolling." },
-  { configKey: "badgeHeight", attribute: "badge-height", converter: q({ default: 36 }), on: "update", description: "Fixed badge height in px used for layout/virtualization." },
-  { configKey: "virtualScrollBuffer", attribute: "virtual-scroll-buffer", converter: q({ default: 10 }), on: "update", description: "Extra rows rendered above/below the viewport when virtualizing." },
-  { configKey: "badgeTooltipDelay", attribute: "badge-tooltip-delay", converter: q({ default: 100 }), on: "update", description: "Delay in ms before a badge tooltip appears." },
-  { configKey: "badgeTooltipOffset", attribute: "badge-tooltip-offset", converter: q({ default: 8 }), on: "update", description: "Gap in px between a badge and its tooltip." },
-  { configKey: "optionTooltipDelay", attribute: "option-tooltip-delay", converter: q(), on: "update", description: "Delay in ms before an option tooltip appears (falls back to badgeTooltipDelay)." },
-  { configKey: "optionTooltipOffset", attribute: "option-tooltip-offset", converter: q(), on: "update", description: "Gap in px between an option and its tooltip." },
+  { configKey: "badgesThreshold", attribute: "badges-threshold", converter: X(), on: "update", description: "Threshold at which badges collapse to a count/compact view." },
+  { configKey: "badgesMaxVisible", attribute: "badges-max-visible", converter: X(), on: "update", description: "Maximum number of badges rendered before overflow." },
+  { configKey: "collapseBadgesBelow", attribute: "collapse-badges-below", converter: X(), on: "update", description: 'Container-responsive opt-in (off by default). When set to a px width, the control watches its OWN border box (not the window, via the core `resized` hook / a shared ResizeObserver) and collapses `badges-display-mode` to `count` ("N selected") while the box is narrower than this — so a picker in a narrow column/sidebar never overflows with pills, even on a wide monitor. Widening past the threshold restores the configured badges mode. Element-only: the override is applied to the live picker, never to your `badges-display-mode` config.' },
+  { configKey: "minSearchLength", attribute: "min-search-length", converter: X({ default: 0 }), on: "update", description: "Minimum characters before searching/filtering starts." },
+  { configKey: "searchDebounce", attribute: "search-debounce", converter: X({ default: 0 }), on: "update", description: "Debounce delay in ms applied to the search input." },
+  { configKey: "virtualScrollThreshold", attribute: "virtual-scroll-threshold", converter: X({ default: 100 }), on: "reinit", description: "Option count above which virtual scrolling turns on." },
+  { configKey: "optionHeight", attribute: "option-height", converter: X({ default: 50 }), on: "update", description: "Fixed row height in px used by virtual scrolling." },
+  { configKey: "badgeHeight", attribute: "badge-height", converter: X({ default: 36 }), on: "update", description: "Fixed badge height in px used for layout/virtualization." },
+  { configKey: "virtualScrollBuffer", attribute: "virtual-scroll-buffer", converter: X({ default: 10 }), on: "update", description: "Extra rows rendered above/below the viewport when virtualizing." },
+  { configKey: "badgeTooltipDelay", attribute: "badge-tooltip-delay", converter: X({ default: 100 }), on: "update", description: "Delay in ms before a badge tooltip appears." },
+  { configKey: "badgeTooltipOffset", attribute: "badge-tooltip-offset", converter: X({ default: 8 }), on: "update", description: "Gap in px between a badge and its tooltip." },
+  { configKey: "optionTooltipDelay", attribute: "option-tooltip-delay", converter: X(), on: "update", description: "Delay in ms before an option tooltip appears (falls back to badgeTooltipDelay)." },
+  { configKey: "optionTooltipOffset", attribute: "option-tooltip-offset", converter: X(), on: "update", description: "Gap in px between an option and its tooltip." },
   // ── Booleans (default true) ──────────────────────────────────────────────
-  { configKey: "isMultipleEnabled", attribute: "multiple", converter: R("default-true"), on: "reinit", description: "Allow selecting multiple options. When off, selecting one replaces the previous." },
-  { configKey: "isGroupsAllowed", attribute: "allow-groups", converter: R("default-true"), on: "reinit", description: "Allow grouping options under group headers." },
-  { configKey: "isCheckboxesShown", attribute: "show-checkboxes", converter: R("default-true"), on: "reinit", description: "Show a checkbox on each option." },
-  { configKey: "isActionsSticky", attribute: "sticky-actions", converter: R("default-true"), on: "update", description: "Keep the action bar pinned while the list scrolls." },
-  { configKey: "isPlacementLocked", attribute: "lock-placement", converter: R("default-true"), on: "update", description: "Keep the dropdown initial placement instead of flipping when it fits." },
-  { configKey: "isSearchEnabled", attribute: "enable-search", converter: R("default-true"), on: "reinit", description: "Show the search input." },
-  { configKey: "isKeepOptionsOnSearch", attribute: "keep-options-on-search", converter: R("default-true"), on: "update", description: "Keep already-selected options visible while filtering." },
-  { configKey: "shouldKeepSearchOnClose", attribute: "should-keep-search-on-close", converter: R("default-true"), on: "update", description: "Preserve the search text after the dropdown closes." },
-  { configKey: "isSelectedPopoverEnabled", attribute: "enable-selected-popover", converter: R("default-true"), on: "update", description: 'Allow the selected-items popover to open (from the count/compact/"+X more" badge or the in-input counter). Turn off when you render your own selection UI, so those affordances become inert.' },
+  { configKey: "isMultipleEnabled", attribute: "multiple", converter: H("default-true"), on: "reinit", description: "Allow selecting multiple options. When off, selecting one replaces the previous." },
+  { configKey: "isGroupsAllowed", attribute: "allow-groups", converter: H("default-true"), on: "reinit", description: "Allow grouping options under group headers." },
+  { configKey: "isCheckboxesShown", attribute: "show-checkboxes", converter: H("default-true"), on: "reinit", description: "Show a checkbox on each option." },
+  { configKey: "isActionsSticky", attribute: "sticky-actions", converter: H("default-true"), on: "update", description: "Keep the action bar pinned while the list scrolls." },
+  { configKey: "isPlacementLocked", attribute: "lock-placement", converter: H("default-true"), on: "update", description: "Keep the dropdown initial placement instead of flipping when it fits." },
+  { configKey: "isSearchEnabled", attribute: "enable-search", converter: H("default-true"), on: "reinit", description: "Show the search input." },
+  { configKey: "isKeepOptionsOnSearch", attribute: "keep-options-on-search", converter: H("default-true"), on: "update", description: "Keep already-selected options visible while filtering." },
+  { configKey: "shouldKeepSearchOnClose", attribute: "should-keep-search-on-close", converter: H("default-true"), on: "update", description: "Preserve the search text after the dropdown closes." },
+  { configKey: "isSelectedPopoverEnabled", attribute: "enable-selected-popover", converter: H("default-true"), on: "update", description: 'Allow the selected-items popover to open (from the count/compact/"+X more" badge or the in-input counter). Turn off when you render your own selection UI, so those affordances become inert.' },
   // ── Booleans (default false) ─────────────────────────────────────────────
-  { configKey: "isCloseOnSelect", attribute: "close-on-select", converter: R("default-false"), on: "update", description: "Close the dropdown immediately after a selection." },
-  { configKey: "isAddNewAllowed", attribute: "allow-add-new", converter: R("default-false"), on: "reinit", description: "Allow adding a new option from the search text." },
-  { configKey: "isCounterShown", attribute: "show-counter", converter: R("default-false"), on: "update", description: "Show a selected-count indicator." },
-  { configKey: "isBadgeFullTitleShown", attribute: "show-badge-full-title", converter: R("default-false"), on: "update", description: "Show the full title on badges instead of the short label." },
-  { configKey: "isVirtualScrollEnabled", attribute: "enable-virtual-scroll", converter: R("default-false"), on: "reinit", description: "Force virtual scrolling on regardless of the threshold." },
-  { configKey: "isBadgeTooltipsEnabled", attribute: "enable-badge-tooltips", converter: R("default-false"), on: "update", description: "Enable tooltips on badges." },
-  { configKey: "isOptionTooltipsEnabled", attribute: "enable-option-tooltips", converter: R("default-false"), on: "update", description: "Enable tooltips on options." },
-  { configKey: "isOptionTooltipFollowCursor", attribute: "option-tooltip-follow-cursor", converter: R("default-false"), on: "update", description: "Make option tooltips follow the pointer." },
-  { configKey: "isSearchModeToggleShown", attribute: "show-search-mode-toggle", converter: R("default-false"), on: "update", description: "Show a clickable toggle in the phone fullscreen overlay search header that flips `search-mode` between `filter` and `navigate` live. Fullscreen-only; no effect in the floating presentation or when search is disabled." },
+  { configKey: "isCloseOnSelect", attribute: "close-on-select", converter: H("default-false"), on: "update", description: "Close the dropdown immediately after a selection." },
+  { configKey: "isAddNewAllowed", attribute: "allow-add-new", converter: H("default-false"), on: "reinit", description: "Allow adding a new option from the search text." },
+  { configKey: "isCounterShown", attribute: "show-counter", converter: H("default-false"), on: "update", description: "Show a selected-count indicator." },
+  { configKey: "isClearShown", attribute: "show-clear", converter: H("default-false"), on: "update", description: "Show an inline clear (✕) button inside the input that wipes the whole selection. Appears only while something is selected and the control is enabled; clicking it clears the selection and any search text, fires `change`, and refocuses." },
+  { configKey: "isBadgeFullTitleShown", attribute: "show-badge-full-title", converter: H("default-false"), on: "update", description: "Show the full title on badges instead of the short label." },
+  { configKey: "isVirtualScrollEnabled", attribute: "enable-virtual-scroll", converter: H("default-false"), on: "reinit", description: "Force virtual scrolling on regardless of the threshold." },
+  { configKey: "isBadgeTooltipsEnabled", attribute: "enable-badge-tooltips", converter: H("default-false"), on: "update", description: "Enable tooltips on badges." },
+  { configKey: "isOptionTooltipsEnabled", attribute: "enable-option-tooltips", converter: H("default-false"), on: "update", description: "Enable tooltips on options." },
+  { configKey: "isOptionTooltipFollowCursor", attribute: "option-tooltip-follow-cursor", converter: H("default-false"), on: "update", description: "Make option tooltips follow the pointer." },
+  { configKey: "isSearchModeToggleShown", attribute: "show-search-mode-toggle", converter: H("default-false"), on: "update", description: "Show a clickable toggle in the phone fullscreen overlay search header that flips `search-mode` between `filter` and `navigate` live. Fullscreen-only; no effect in the floating presentation or when search is disabled." },
   // ── Special attributes ───────────────────────────────────────────────────
-  { configKey: "initialValues", attribute: "initial-values", converter: Xr(), default: [], on: "reinit", type: "Array<string | number>", description: 'Values selected on first render. Accepts a JSON array (`["a","b"]`) or a bare CSV (`a,b,c`).' },
-  { configKey: "showDebugInfo", attribute: "show-debug-info", converter: R("default-false"), on: "update", description: "Render an in-component debug panel.", deprecated: "Use per-instance logging (el.enableLogging()) instead." },
+  { configKey: "initialValues", attribute: "initial-values", converter: un(), default: [], on: "reinit", type: "Array<string | number>", description: 'Values selected on first render. Accepts a JSON array (`["a","b"]`) or a bare CSV (`a,b,c`).' },
+  { configKey: "showDebugInfo", attribute: "show-debug-info", converter: H("default-false"), on: "update", description: "Render an in-component debug panel.", deprecated: "Use per-instance logging (el.enableLogging()) instead." },
+  // ── Render gate (element-only; NON_PICKER) ───────────────────────────────
+  {
+    configKey: "deferRender",
+    attribute: "defer",
+    converter: H("presence"),
+    on: "reinit",
+    description: "Hold the initial render. When the `defer` attribute is present on upgrade the component builds nothing (it only reserves space) — so options, callbacks (e.g. `customStylesCallback`) and event listeners can all be wired first, then released with `el.ready()` (or by removing the `defer` attribute, for server-driven frameworks). The release builds the picker ONCE with everything already in place, avoiding the upgrade-then-restyle flash. Absent (default): builds immediately on connect. Latched — once released the gate never re-closes."
+  },
   // ── Complex property (data) ──────────────────────────────────────────────
-  { configKey: "options", converter: Do(), on: "reinit", type: "ReadonlyArray<Record<string, unknown>>", description: "The array of option objects to render. The JS API — assign `el.options` directly. For HTML authoring use the `data-options` attribute (parsed per `data-options-format`) or declarative <option> children; both feed the same list and take precedence over this property in the order: <option> children > property > data-options." },
-  { configKey: "optionsSource", attribute: "data-options", converter: D({ isNullable: !0 }), on: "reinit", type: "string", description: "HTML-authoring source for the option list, parsed per `data-options-format`. Reactive: changing either attribute re-renders. Prefer the `options` property in JS; a set `options` property and declarative <option> children both win over this." },
-  { configKey: "optionsFormat", attribute: "data-options-format", converter: K(Yr, { default: "json" }), on: "reinit", type: "'json' | 'csv' | 'plain'", description: "How to parse the `data-options` attribute: `json` (a JSON array of objects or [value, label] tuples), `csv` (rows split on `data-options-row-splitter`, cells on `data-options-splitter`; the first row is a header — map columns via *-member), or `plain` (bare values split on both splitters -> [value, label] tuples, value === label). Default `json`." },
-  { configKey: "optionsSplitter", attribute: "data-options-splitter", converter: D({ default: "," }), on: "reinit", type: "string", description: 'Field/cell delimiter for the `csv` and `plain` `data-options` formats. Default `,`. Escapes `\\t` `\\n` `\\r` are honoured (e.g. `data-options-splitter="\\t"` for TSV). Ignored for `json`.' },
-  { configKey: "optionsRowSplitter", attribute: "data-options-row-splitter", converter: D({ default: `
+  { configKey: "options", converter: Go(), on: "reinit", type: "ReadonlyArray<Record<string, unknown>>", description: "The array of option objects to render. The JS API — assign `el.options` directly. For HTML authoring use the `data-options` attribute (parsed per `data-options-format`) or declarative <option> children; both feed the same list and take precedence over this property in the order: <option> children > property > data-options." },
+  { configKey: "optionsSource", attribute: "data-options", converter: z({ isNullable: !0 }), on: "reinit", type: "string", description: "HTML-authoring source for the option list, parsed per `data-options-format`. Reactive: changing either attribute re-renders. Prefer the `options` property in JS; a set `options` property and declarative <option> children both win over this." },
+  { configKey: "optionsFormat", attribute: "data-options-format", converter: K(mn, { default: "json" }), on: "reinit", type: "'json' | 'csv' | 'plain'", description: "How to parse the `data-options` attribute: `json` (a JSON array of objects or [value, label] tuples), `csv` (rows split on `data-options-row-splitter`, cells on `data-options-splitter`; the first row is a header — map columns via *-member), or `plain` (bare values split on both splitters -> [value, label] tuples, value === label). Default `json`." },
+  { configKey: "optionsSplitter", attribute: "data-options-splitter", converter: z({ default: "," }), on: "reinit", type: "string", description: 'Field/cell delimiter for the `csv` and `plain` `data-options` formats. Default `,`. Escapes `\\t` `\\n` `\\r` are honoured (e.g. `data-options-splitter="\\t"` for TSV). Ignored for `json`.' },
+  { configKey: "optionsRowSplitter", attribute: "data-options-row-splitter", converter: z({ default: `
 ` }), on: "reinit", type: "string", description: 'Row/record delimiter for the `csv` and `plain` `data-options` formats. Default newline. Escapes honoured (e.g. `data-options-row-splitter=";"` for single-line data). Ignored for `json`.' },
-  { configKey: "actionButtons", converter: No({ validate: (s) => Array.isArray(s) }), on: "reinit", type: "Array<Record<string, unknown>>", description: "Custom action buttons for the dropdown footer/header. Property-only; when unset the default Select-All / Clear buttons apply." },
+  { configKey: "actionButtons", converter: jo({ validate: (s) => Array.isArray(s) }), on: "reinit", type: "Array<Record<string, unknown>>", description: "Custom action buttons for the dropdown footer/header. Property-only; when unset the default Select-All / Clear buttons apply." },
   // ── Callbacks: data shape (structural → reinit) ──────────────────────────
-  { configKey: "getValueCallback", converter: A(), on: "reinit", type: "(item: unknown) => string | number", description: "Extract an option value (overrides valueMember)." },
-  { configKey: "getPathCallback", converter: A(), on: "reinit", type: "(item: unknown) => string", description: "Extract a node tree path (enables tree mode; overrides pathMember)." },
-  { configKey: "getGroupCallback", converter: A(), on: "reinit", type: "(item: unknown) => string", description: "Extract the group name from an option (overrides groupMember)." },
-  { configKey: "getDisabledCallback", converter: A(), on: "reinit", type: "(item: unknown) => boolean", description: "Whether an option is disabled (overrides disabledMember)." },
-  { configKey: "getIsSelectableCallback", converter: A(), on: "reinit", type: "(node: unknown) => boolean", description: "Whether a tree node can be selected (overrides is-selectable-member)." },
-  { configKey: "getSearchValueCallback", converter: A(), on: "reinit", type: "(item: unknown) => string", description: "Text an option is searched against (overrides searchValueMember)." },
-  { configKey: "searchCallback", converter: A(), on: "reinit", type: "(searchTerm: string, signal?: AbortSignal) => Promise<unknown[]>", description: "Custom / async search; return the filtered options." },
+  { configKey: "getValueCallback", converter: E(), on: "reinit", type: "(item: unknown) => string | number", description: "Extract an option value (overrides valueMember)." },
+  { configKey: "getPathCallback", converter: E(), on: "reinit", type: "(item: unknown) => string", description: "Extract a node tree path (enables tree mode; overrides pathMember)." },
+  { configKey: "getGroupCallback", converter: E(), on: "reinit", type: "(item: unknown) => string", description: "Extract the group name from an option (overrides groupMember)." },
+  { configKey: "getDisabledCallback", converter: E(), on: "reinit", type: "(item: unknown) => boolean", description: "Whether an option is disabled (overrides disabledMember)." },
+  { configKey: "getIsSelectableCallback", converter: E(), on: "reinit", type: "(node: unknown) => boolean", description: "Whether a tree node can be selected (overrides is-selectable-member)." },
+  { configKey: "getSearchValueCallback", converter: E(), on: "reinit", type: "(item: unknown) => string", description: "Text an option is searched against (overrides searchValueMember)." },
+  { configKey: "searchCallback", converter: E(), on: "reinit", type: "(searchTerm: string, signal?: AbortSignal) => Promise<unknown[]>", description: "Custom / async search; return the filtered options." },
   // ── Callbacks: display / render (cosmetic → update) ──────────────────────
-  { configKey: "getDisplayValueCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Compute the display label for an option (overrides displayValueMember)." },
-  { configKey: "getBadgeDisplayCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Compute the text shown on an option badge." },
-  { configKey: "getBadgeClassCallback", converter: A(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for an option badge." },
-  { configKey: "getIconCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Icon for an option (overrides iconMember)." },
-  { configKey: "getSubtitleCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Subtitle for an option (overrides subtitleMember)." },
-  { configKey: "getFullTitleCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Full title for an option (used by badges when show-badge-full-title is on)." },
-  { configKey: "getCounterCallback", converter: A(), on: "update", type: "(count: number, moreCount?: number) => string", description: "Render the selected-count label." },
-  { configKey: "getValueFormatCallback", converter: A(), on: "update", type: "(selectedValues: (string | number)[]) => string", description: "Serialize the selected values for form submission." },
-  { configKey: "getBadgeTooltipCallback", converter: A(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option badge." },
-  { configKey: "getOptionTooltipCallback", converter: A(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option row." },
-  { configKey: "getRemoveButtonTooltipCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Tooltip text for a badge remove button." },
-  { configKey: "getSelectedItemClassCallback", converter: A(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for a selected item." },
-  { configKey: "renderOptionContentCallback", converter: A(), on: "update", type: "(item: unknown, context: OptionContentRenderContext) => string | HTMLElement", description: "Custom render for an option row; may return HTML or an element." },
-  { configKey: "renderBadgeContentCallback", converter: A(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement", description: "Custom render for a badge content (fills the built-in pill); may return HTML or an element." },
-  { configKey: "renderBadgeCallback", converter: A(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement | null", description: 'Custom render for the WHOLE badge (main area), not just its content — return the entire pill/card. The component wraps it in `.ms__badge.ms__badge--custom` with `data-value` and delegates removal to any inner element with `data-action="remove"` (or `.ms__badge-remove`). Return null/empty to fall back to the default pill for that item.' },
-  { configKey: "renderGroupLabelContentCallback", converter: A(), on: "update", type: "(groupName: string) => string | HTMLElement", description: "Customize a group label; may return an HTML string or element." },
-  { configKey: "renderSelectedContentCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Custom render for the whole selected area." },
-  { configKey: "renderSelectedItemContentCallback", converter: A(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Custom render for one selected item." },
-  { configKey: "customStylesCallback", converter: A(), on: "update", type: "() => string", description: "Returns a CSS string injected into the component via a replaceable style slot (§12.8)." },
+  { configKey: "getDisplayValueCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Compute the display label for an option (overrides displayValueMember)." },
+  { configKey: "getBadgeDisplayCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Compute the text shown on an option badge." },
+  { configKey: "getBadgeClassCallback", converter: E(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for an option badge." },
+  { configKey: "getSelectedOrderCallback", converter: E(), on: "update", type: "(item: unknown) => string | number", description: 'Sort key for the selected-items display when `selected-order="member"` (overrides `selected-order-member`).' },
+  { configKey: "selectedOrderCompareCallback", converter: E(), on: "update", type: "(a: unknown, b: unknown) => number", description: 'Comparator for the selected-items display when `selected-order="custom"`.' },
+  { configKey: "getIconCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Icon for an option (overrides iconMember)." },
+  { configKey: "getSubtitleCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Subtitle for an option (overrides subtitleMember)." },
+  { configKey: "getFullTitleCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Full title for an option (used by badges when show-badge-full-title is on)." },
+  { configKey: "getCounterCallback", converter: E(), on: "update", type: "(count: number, moreCount?: number) => string", description: "Render the selected-count label." },
+  { configKey: "getCountLabelCallback", converter: E(), on: "update", type: "(selected: number, total: number) => string", description: "Format the small count chip shared by the in-input counter and each group header count (default `[selected]`; e.g. `(s,t)=>`${s}/${t}``). One callback drives both." },
+  { configKey: "getValueFormatCallback", converter: E(), on: "update", type: "(selectedValues: (string | number)[]) => string", description: "Serialize the selected values for form submission." },
+  { configKey: "getBadgeTooltipCallback", converter: E(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option badge." },
+  { configKey: "getOptionTooltipCallback", converter: E(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option row." },
+  { configKey: "getRemoveButtonTooltipCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Tooltip text for a badge remove button." },
+  { configKey: "getSelectedItemClassCallback", converter: E(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for a selected item." },
+  { configKey: "renderOptionContentCallback", converter: E(), on: "update", type: "(item: unknown, context: OptionContentRenderContext) => string | HTMLElement", description: "Custom render for an option row; may return HTML or an element." },
+  { configKey: "renderBadgeContentCallback", converter: E(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement", description: "Custom render for a badge content (fills the built-in pill); may return HTML or an element." },
+  { configKey: "renderBadgeCallback", converter: E(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement | null", description: 'Custom render for the WHOLE badge (main area), not just its content — return the entire pill/card. The component wraps it in `.ms__badge.ms__badge--custom` with `data-value` and delegates removal to any inner element with `data-action="remove"` (or `.ms__badge-remove`). Return null/empty to fall back to the default pill for that item.' },
+  { configKey: "renderGroupLabelContentCallback", converter: E(), on: "update", type: "(groupName: string, context: GroupLabelRenderContext) => string | HTMLElement", description: "Customize a group label; may return an HTML string or element. The second arg carries the group members + selection (e.g. `context.selectedCount`) so a custom header can show a per-group count." },
+  { configKey: "renderSelectedContentCallback", converter: E(), on: "update", type: "(item: unknown, context: SelectedContentRenderContext) => string", description: "Custom render for the single-select selected value (2nd arg carries the presentation context)." },
+  { configKey: "renderSelectedItemContentCallback", converter: E(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement", description: "Custom render for one selected item in the popover (2nd arg is a BadgeContentRenderContext; isInPopover=true)." },
+  { configKey: "customStylesCallback", converter: E(), on: "update", type: "() => string", description: "Returns a CSS string injected into the component via a replaceable style slot (§12.8)." },
   // ── Callbacks: before-hooks (behavior-shaping) ───────────────────────────
-  { configKey: "beforeSearchCallback", converter: A(), on: "update", type: "(searchTerm: string) => string | null", description: "Runs before a search; return a rewritten term or null to veto." },
-  { configKey: "beforeSelectCallback", converter: A(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before selecting; return false to veto, or a string to veto and show it as a message." },
-  { configKey: "beforeDeselectCallback", converter: A(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before deselecting; return false to veto, or a string to veto and show it as a message." },
-  { configKey: "addNewCallback", converter: A(), on: "update", type: "(value: string) => unknown | Promise<unknown>", description: "Create a new option from the typed text." },
-  { configKey: "keydownCallback", converter: A(), on: "update", type: "(context: MultiSelectKeydownContext) => boolean | void", description: "Intercept keydown before built-in handling; return true to suppress the default. Gets the event, current state, and an imperative controller." }
-], on = [
+  { configKey: "beforeSearchCallback", converter: E(), on: "update", type: "(searchTerm: string) => string | null", description: "Runs before a search; return a rewritten term or null to veto." },
+  { configKey: "beforeSelectCallback", converter: E(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before selecting; return false to veto, or a string to veto and show it as a message." },
+  { configKey: "beforeDeselectCallback", converter: E(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before deselecting; return false to veto, or a string to veto and show it as a message." },
+  { configKey: "addNewCallback", converter: E(), on: "update", type: "(value: string) => unknown | null | undefined | Promise<unknown | null | undefined>", description: "Create a new option from the typed text. May return a rich option object (renders via the same get*/render* callbacks as any option). Async + cancelable: return null/undefined to abort (no add, no `add` event). Omit entirely to handle creation yourself via the `add` event." },
+  { configKey: "getAddNewTextCallback", converter: E(), on: "update", type: "(value: string) => string", description: 'Dynamically compute the "add new" prompt label from the typed text (returns plain text). Takes precedence over `add-new-text`.' },
+  { configKey: "keydownCallback", converter: E(), on: "update", type: "(context: MultiSelectKeydownContext) => boolean | void", description: "Intercept keydown before built-in handling; return true to suppress the default. Gets the event, current state, and an imperative controller." }
+], yn = [
   { name: "select", description: "An option was selected. `detail.option` is the selected option; `detail.selectedOptions`/`detail.selectedValues` are the full selection." },
   { name: "deselect", description: "An option was removed from the selection. `detail.option` is that option." },
-  { name: "change", description: "The selection changed. `detail.selectedOptions`/`detail.selectedValues` are the full selection." }
-], js = /* @__PURE__ */ new Set(["dropdownWidth", "selectedPopoverWidth", "showDebugInfo", "initialValues", "optionsSource", "optionsFormat", "optionsSplitter", "optionsRowSplitter", "mobilePresentation", "collapseBadgesBelow"]), pt = {
+  { name: "change", description: "The selection changed. `detail.selectedOptions`/`detail.selectedValues` are the full selection." },
+  { name: "add", description: 'The user chose to create a new option from the typed text (via the "add new" prompt or Enter) — requires `allow-add-new`. `detail.value` is the typed text; `detail.option` is the created item when `addNewCallback` produced one.' },
+  { name: "ready", description: "The picker was built and painted for the first time (once per element lifetime). Fires right after the first build — synchronously during upgrade for a normal element, or when the render gate is released (`el.ready()` / removing `defer`) for a deferred one. No detail." }
+], eo = /* @__PURE__ */ new Set(["dropdownWidth", "selectedPopoverWidth", "showDebugInfo", "initialValues", "optionsSource", "optionsFormat", "optionsSplitter", "optionsRowSplitter", "mobilePresentation", "collapseBadgesBelow", "deferRender"]), yt = {
   dropdownWidth: "--ms-dropdown-width",
   selectedPopoverWidth: "--ms-selected-popover-width"
 };
-let rn = null;
-function nn() {
-  return rn ?? (rn = Ti(xo, "--ms-"));
+let xn = null;
+function _n() {
+  return xn ?? (xn = $i(Lo, "--ms-"));
 }
-const an = [
+const kn = [
   { key: "valueMember", member: "value", callbackKey: "getValueCallback" },
   { key: "displayValueMember", member: "label", callbackKey: "getDisplayValueCallback" },
   { key: "groupMember", member: "group", callbackKey: "getGroupCallback" },
@@ -5362,26 +5844,33 @@ const an = [
   { key: "subtitleMember", member: "subtitle", callbackKey: "getSubtitleCallback" },
   { key: "disabledMember", member: "disabled", callbackKey: "getDisabledCallback" }
 ];
-var Q, z, pe, at, lt, ct, Be, He, Te, x, vt, fe, yt, es, ts, ss, os, _o, ko, Co, wt, is, So, To, Oo, rs, Io, Po, ns, as;
-class Ze extends Ut {
+var Q, C, fe, ut, Fe, mt, pt, ft, Ke, We, Ie, x, as, Ct, ge, St, ls, cs, ds, Tt, Eo, Ao, zo, Ee, hs, No, $o, Vo, us, Do, Ro, ms, ps;
+class it extends Qt {
   constructor() {
     super();
     L(this, x);
     L(this, Q);
-    L(this, z);
-    L(this, pe);
-    L(this, at, null);
+    L(this, C);
+    L(this, fe);
+    // The `initial-values` JSON applied at the last build. Lets a rebuild (reinit)
+    // tell an explicit `initial-values` change (honour the new values) apart from a
+    // cosmetic/structural reinit (preserve the user's runtime selection). See #buildPicker.
+    L(this, ut);
+    // Render gate (`defer`): true once released via ready() / attribute removal /
+    // the first build. Latched — the gate never re-closes. See #renderHeld().
+    L(this, Fe, !1);
+    L(this, mt, null);
     // Dev-mode customStylesCallback lint: unknown --ms-* names already warned about.
-    L(this, lt, /* @__PURE__ */ new Set());
+    L(this, pt, /* @__PURE__ */ new Set());
     // Declarative <option>/<optgroup> state (parsed once from light DOM).
-    L(this, ct, !1);
-    L(this, Be, !1);
-    L(this, He);
-    L(this, Te);
+    L(this, ft, !1);
+    L(this, Ke, !1);
+    L(this, We);
+    L(this, Ie);
     // ── container-responsive badge collapse (core §12.9 `resized`) ─────────────
     /** Whether the live picker is currently forced to the collapsed count view. */
-    L(this, fe, !1);
-    I(this, Q, this.attachShadow({ mode: "open" })), Ci(p(this, Q), xo), typeof requestAnimationFrame == "function" ? requestAnimationFrame(() => this.setAttribute("data-ready", "")) : this.setAttribute("data-ready", "");
+    L(this, ge, !1);
+    I(this, Q, this.attachShadow({ mode: "open" })), zi(h(this, Q), Lo), typeof requestAnimationFrame == "function" ? requestAnimationFrame(() => this.setAttribute("data-placeholder-ready", "")) : this.setAttribute("data-placeholder-ready", "");
   }
   /**
    * Called by the browser when the surrounding <form> is reset. Clears the
@@ -5389,7 +5878,7 @@ class Ze extends Ut {
    */
   formResetCallback() {
     var t;
-    (t = p(this, z)) == null || t.clearAll();
+    (t = h(this, C)) == null || t.clearAll();
   }
   // ── core lifecycle hooks ──────────────────────────────────────────────────
   /** Runtime writing-direction switch (core observes `dir`): re-mirror the live
@@ -5398,28 +5887,28 @@ class Ze extends Ut {
    *  and the panels' explicit `dir`). The initial direction is read by the build. */
   directionChanged(t) {
     var o;
-    (o = p(this, z)) == null || o.refreshDirection();
+    (o = h(this, C)) == null || o.refreshDirection();
   }
   /** Structural change (or first connect): mirror CSS vars, then (re)build the picker. */
   reinit() {
-    v(this, x, To).call(this), this.isConnected && v(this, x, ss).call(this);
+    v(this, x, $o).call(this), this.isConnected && !v(this, x, as).call(this) && v(this, x, ds).call(this);
   }
   /** Cosmetic change: mirror CSS vars / custom styles / debug, patch the picker in place. */
   update(t) {
-    v(this, x, Oo).call(this, t), "customStylesCallback" in t && v(this, x, is).call(this), "showDebugInfo" in t && v(this, x, ns).call(this);
+    v(this, x, Vo).call(this, t), "customStylesCallback" in t && v(this, x, hs).call(this), "showDebugInfo" in t && v(this, x, ms).call(this);
     const o = {};
     for (const [i, r] of Object.entries(t))
-      js.has(i) || (o[i] = r === null ? void 0 : r);
-    p(this, z) && Object.keys(o).length > 0 && (p(this, z).updateOptions(o) || v(this, x, ss).call(this)), "mobilePresentation" in t && v(this, x, vt).call(this, St()), "collapseBadgesBelow" in t && v(this, x, yt).call(this, this.getBoundingClientRect().width);
+      eo.has(i) || (o[i] = r === null ? void 0 : r);
+    h(this, C) && Object.keys(o).length > 0 && (h(this, C).updateOptions(o) || v(this, x, ds).call(this)), "mobilePresentation" in t && v(this, x, Ct).call(this, Lt()), "collapseBadgesBelow" in t && v(this, x, St).call(this, this.getBoundingClientRect().width);
   }
   /** Activate: ensure the picker exists (a DOM move destroyed it in disconnect()). */
   connect() {
-    p(this, z) || v(this, x, os).call(this);
+    !h(this, C) && !v(this, x, as).call(this) && v(this, x, Tt).call(this);
   }
   /** Deactivate: tear the picker down (rebuilt on the next connect). */
   disconnect() {
     var t;
-    (t = p(this, z)) == null || t.destroy(), I(this, z, void 0);
+    (t = h(this, C)) == null || t.destroy(), I(this, C, void 0);
   }
   /**
    * Device/viewport/orientation changed (core §12.9). Overriding this opts the
@@ -5430,7 +5919,7 @@ class Ze extends Ut {
    * set before the dropdown can open.
    */
   environmentChanged(t) {
-    v(this, x, vt).call(this, t);
+    v(this, x, Ct).call(this, t);
   }
   /**
    * This element's own border box changed (core §12.9 `resized`). Overriding the
@@ -5441,7 +5930,7 @@ class Ze extends Ut {
    * below` is set; otherwise it's a cheap no-op.
    */
   resized({ width: t }) {
-    v(this, x, yt).call(this, t);
+    v(this, x, St).call(this, t);
   }
   // ── non-input public API ──────────────────────────────────────────────────
   /** Form field name (mirrors the `name` attribute → `formFieldId`). */
@@ -5453,21 +5942,21 @@ class Ze extends Ut {
   }
   get selectedValue() {
     var t;
-    return this.flush(), ((t = p(this, z)) == null ? void 0 : t.selectedValue) ?? null;
+    return this.flush(), ((t = h(this, C)) == null ? void 0 : t.selectedValue) ?? null;
   }
   get selectedItem() {
     var t;
-    return this.flush(), ((t = p(this, z)) == null ? void 0 : t.selectedItem) ?? null;
+    return this.flush(), ((t = h(this, C)) == null ? void 0 : t.selectedItem) ?? null;
   }
   getSelected() {
-    return this.flush(), p(this, z) ? p(this, z).getSelected() : [];
+    return this.flush(), h(this, C) ? h(this, C).getSelected() : [];
   }
   setSelected(t, o = {}) {
     var i;
-    this.flush(), (i = p(this, z)) == null || i.setSelected(t, o);
+    this.flush(), (i = h(this, C)) == null || i.setSelected(t, o);
   }
   getValue() {
-    return this.flush(), p(this, z) ? p(this, z).getValue() : null;
+    return this.flush(), h(this, C) ? h(this, C).getValue() : null;
   }
   /**
    * Surface a transient message ("toast") on top of the component — visible even in the
@@ -5478,116 +5967,218 @@ class Ze extends Ut {
    */
   showMessage(t, o) {
     var i;
-    this.flush(), (i = p(this, z)) == null || i.showMessage(t, o);
+    this.flush(), (i = h(this, C)) == null || i.showMessage(t, o);
   }
   /** Dismiss the transient message shown by {@link showMessage}, if any. */
   hideMessage() {
     var t;
-    (t = p(this, z)) == null || t.hideMessage();
+    (t = h(this, C)) == null || t.hideMessage();
+  }
+  // ── scroll-to API ───────────────────────────────────────────────────────────
+  /**
+   * Clear the search box and restore the full option list (does not touch the selection — use
+   * {@link clearAll} for that). Pair with {@link scrollToValue} to reveal then scroll to an option
+   * a search had filtered out: `el.clearSearch(); el.scrollToValue(v)`.
+   */
+  clearSearch() {
+    var t;
+    this.flush(), (t = h(this, C)) == null || t.clearSearch();
+  }
+  /** The current search box text (empty string when nothing is typed). Read via this getter, write with {@link search}. */
+  get searchText() {
+    var t;
+    return this.flush(), ((t = h(this, C)) == null ? void 0 : t.searchText) ?? "";
+  }
+  /**
+   * Programmatically set the search text and filter, as if the user typed it (runs
+   * `beforeSearchCallback` / `minSearchLength` / async `searchCallback`). Does not open the dropdown
+   * — call {@link open} if you want it visible. Pass `''` to clear (same as {@link clearSearch}).
+   */
+  search(t) {
+    var o;
+    this.flush(), (o = h(this, C)) == null || o.search(t);
+  }
+  /**
+   * Scroll the open dropdown to the option at `index` (into the current filtered list). Returns
+   * false if closed or out of range. Deferred internally so `el.open(); el.scrollToIndex(i)` works.
+   */
+  scrollToIndex(t, o) {
+    var i;
+    return this.flush(), ((i = h(this, C)) == null ? void 0 : i.scrollToIndex(t, o)) ?? !1;
+  }
+  /**
+   * Scroll the open dropdown to the option with this `value`. Returns false if it isn't in the
+   * currently visible list (filtered out by search, or under a collapsed tree branch) — call
+   * {@link clearSearch} / expand first.
+   */
+  scrollToValue(t, o) {
+    var i;
+    return this.flush(), ((i = h(this, C)) == null ? void 0 : i.scrollToValue(t, o)) ?? !1;
+  }
+  /**
+   * Scroll to a group: its header in standard rendering, or the group's first option in
+   * virtual-scroll mode (no headers there). Returns false in tree mode or if the group is empty
+   * in the current filtered list.
+   */
+  scrollToGroup(t, o) {
+    var i;
+    return this.flush(), ((i = h(this, C)) == null ? void 0 : i.scrollToGroup(t, o)) ?? !1;
+  }
+  // ── imperative open/close API (flush pending writes, then delegate) ─────────
+  /** Open the dropdown. */
+  open() {
+    var t;
+    this.flush(), (t = h(this, C)) == null || t.open();
+  }
+  /** Close the dropdown. */
+  close() {
+    var t;
+    this.flush(), (t = h(this, C)) == null || t.close();
+  }
+  /** Toggle the dropdown open/closed. */
+  toggle() {
+    var t;
+    this.flush(), (t = h(this, C)) == null || t.toggle();
+  }
+  /** Whether the dropdown is currently open. Assigning opens/closes it. */
+  get isOpen() {
+    var t;
+    return this.flush(), ((t = h(this, C)) == null ? void 0 : t.isOpen) ?? !1;
+  }
+  set isOpen(t) {
+    this.flush(), h(this, C) && (h(this, C).isOpen = t);
   }
   destroy() {
     var t;
-    (t = p(this, z)) == null || t.destroy();
+    (t = h(this, C)) == null || t.destroy();
+  }
+  // ── render gate (`defer`) ───────────────────────────────────────────────────
+  /**
+   * Release the `defer` render gate: build the picker now (once), with every
+   * option, callback and listener wired while deferred already in place. No-op
+   * when the element wasn't deferred or is already built. `flush()` first so a
+   * synchronous `el.options = …; el.customStylesCallback = …; el.ready()` lands
+   * those pending writes in the single build rather than after it. Latched — the
+   * gate never re-closes. Fires the `ready` event on the first build.
+   */
+  ready() {
+    I(this, Fe, !0), this.flush(), this.isConnected && !h(this, C) && v(this, x, Tt).call(this);
+  }
+  /** Whether the picker has been built (the `ready` event has fired). False while a `defer` gate is still held. */
+  get isReady() {
+    return this.hasAttribute("is-ready");
   }
 }
-Q = new WeakMap(), z = new WeakMap(), pe = new WeakMap(), at = new WeakMap(), lt = new WeakMap(), ct = new WeakMap(), Be = new WeakMap(), He = new WeakMap(), Te = new WeakMap(), x = new WeakSet(), /** Resolve `mobile-presentation` against `env` and relay it to the live picker. */
-vt = function(t) {
+Q = new WeakMap(), C = new WeakMap(), fe = new WeakMap(), ut = new WeakMap(), Fe = new WeakMap(), mt = new WeakMap(), pt = new WeakMap(), ft = new WeakMap(), Ke = new WeakMap(), We = new WeakMap(), Ie = new WeakMap(), x = new WeakSet(), /** Whether the initial render is being held by the `defer` gate (not yet released). */
+as = function() {
+  return this.config.deferRender === !0 && !h(this, Fe);
+}, /** Resolve `mobile-presentation` against `env` and relay it to the live picker. */
+Ct = function(t) {
   var r;
-  const o = this.config.mobilePresentation ?? "auto", i = Li(o, t);
-  (r = p(this, z)) == null || r.setPresentation(i === "modal" ? "fullscreen" : i);
-}, fe = new WeakMap(), /**
+  const o = this.config.mobilePresentation ?? "auto", i = Hi(o, t);
+  (r = h(this, C)) == null || r.setPresentation(i === "modal" ? "fullscreen" : i);
+}, ge = new WeakMap(), /**
  * Resolve `collapse-badges-below` against `width` and relay the decision to the
  * live picker. The override is pushed via `updateOptions` (never written back to
  * `this.config`), so `this.config.badgesDisplayMode` stays the consumer's truth
  * and widening past the threshold restores it exactly. A structural JS decision,
  * so it lives here rather than in a CSS container query.
  */
-yt = function(t) {
+St = function(t) {
   const o = this.config.collapseBadgesBelow;
   if (o == null) {
-    p(this, fe) && (I(this, fe, !1), v(this, x, es).call(this));
+    h(this, ge) && (I(this, ge, !1), v(this, x, ls).call(this));
     return;
   }
   const i = t > 0 && t < o;
-  i !== p(this, fe) && (I(this, fe, i), i ? v(this, x, ts).call(this, "count") : v(this, x, es).call(this));
+  i !== h(this, ge) && (I(this, ge, i), i ? v(this, x, cs).call(this, "count") : v(this, x, ls).call(this));
 }, /** Re-assert the consumer's configured badges mode from the pristine base config. */
-es = function() {
+ls = function() {
   const t = this.config.badgesDisplayMode ?? "badges";
-  v(this, x, ts).call(this, t);
+  v(this, x, cs).call(this, t);
 }, /** Relay a badges-display-mode override to the live picker (never written to `this.config`). */
-ts = function(t) {
+cs = function(t) {
   var o;
-  (o = p(this, z)) == null || o.updateOptions({ badgesDisplayMode: t });
+  (o = h(this, C)) == null || o.updateOptions({ badgesDisplayMode: t });
 }, // ── picker lifecycle ──────────────────────────────────────────────────────
-ss = function() {
-  var t;
-  (t = p(this, z)) == null || t.destroy(), I(this, z, void 0), v(this, x, os).call(this);
-}, os = function() {
-  v(this, x, _o).call(this), v(this, x, Io).call(this);
-  const t = v(this, x, ko).call(this), o = v(this, x, Co).call(this);
-  o && o.length > 0 ? p(this, pe).dataset.initialValues = JSON.stringify(o) : delete p(this, pe).dataset.initialValues, I(this, z, new qr(p(this, pe), t)), v(this, x, is).call(this), v(this, x, ns).call(this), v(this, x, vt).call(this, St()), I(this, fe, !1), v(this, x, yt).call(this, this.getBoundingClientRect().width);
-}, _o = function() {
-  if (p(this, pe)) return;
+ds = function() {
+  var o;
+  const t = h(this, C) ? v(this, x, Ee).call(this) : void 0;
+  (o = h(this, C)) == null || o.destroy(), I(this, C, void 0), v(this, x, Tt).call(this, t);
+}, Tt = function(t) {
+  v(this, x, Eo).call(this), v(this, x, Do).call(this);
+  const o = v(this, x, Ao).call(this), i = v(this, x, zo).call(this), r = JSON.stringify(i ?? null), a = t !== void 0 && t.length > 0 && r === h(this, ut) ? t : i;
+  I(this, ut, r), a && a.length > 0 ? h(this, fe).dataset.initialValues = JSON.stringify(a) : delete h(this, fe).dataset.initialValues, I(this, C, new hn(h(this, fe), o)), v(this, x, hs).call(this), v(this, x, ms).call(this), v(this, x, Ct).call(this, Lt()), I(this, ge, !1), v(this, x, St).call(this, this.getBoundingClientRect().width), this.hasAttribute("is-ready") || (I(this, Fe, !0), this.setAttribute("is-ready", ""), this.emit("ready"));
+}, Eo = function() {
+  if (h(this, fe)) return;
   const t = document.createElement("div");
-  t.setAttribute("data-multiselect", ""), this.className && (t.className = this.className), p(this, Q).appendChild(t), I(this, at, Si(p(this, Q), { position: "first", className: "ms-custom-styles" })), I(this, pe, t);
+  t.setAttribute("data-multiselect", ""), this.className && (t.className = this.className), h(this, Q).appendChild(t), I(this, mt, Ni(h(this, Q), { position: "first", className: "ms-custom-styles" })), I(this, fe, t);
 }, /**
  * Build the picker config from the merged `this.config`, minus the keys the
  * picker doesn't own, plus the runtime wiring (event bridges, container, host,
  * declarative option data + member defaults, counter default).
  */
-ko = function() {
+Ao = function() {
   const t = { ...this.config };
-  for (const i of js) delete t[i];
+  for (const i of eo) delete t[i];
   for (const i of Object.keys(t))
     t[i] === null && delete t[i];
   let o = t.options;
-  if (p(this, Be) && p(this, He))
-    o && o.length > 0 && F.warn("[MultiSelectElement] Both declarative <option> elements and programmatic .options detected. Using declarative options."), o = p(this, He);
+  if (h(this, Ke) && h(this, We))
+    o && o.length > 0 && W.warn("[MultiSelectElement] Both declarative <option> elements and programmatic .options detected. Using declarative options."), o = h(this, We);
   else if (!o || o.length === 0) {
     const i = this.config.optionsSource;
     if (i != null) {
-      const r = this.config.optionsFormat ?? "json", { options: n, error: a } = Jr(i, r, {
+      const r = this.config.optionsFormat ?? "json", { options: n, error: a } = pn(i, r, {
         splitter: this.config.optionsSplitter,
         rowSplitter: this.config.optionsRowSplitter
       });
-      a && F.error(`[MultiSelectElement] ${a}`), o = n;
+      a && W.error(`[MultiSelectElement] ${a}`), o = n;
     }
   }
-  if (t.options = o, p(this, Be))
-    for (const { key: i, member: r, callbackKey: n } of an)
+  if (t.options = o, h(this, Ke))
+    for (const { key: i, member: r, callbackKey: n } of kn)
       t[i] === void 0 && !t[n] && (t[i] = r);
   return t.getCounterCallback || (t.getCounterCallback = (i, r) => r !== void 0 ? `+${r} more` : `${i} selected`), t.onSelect = (i) => {
     var r;
     this.emit("select", {
       option: i,
-      selectedOptions: ((r = p(this, z)) == null ? void 0 : r.getSelected()) ?? [],
-      selectedValues: v(this, x, wt).call(this)
+      selectedOptions: ((r = h(this, C)) == null ? void 0 : r.getSelected()) ?? [],
+      selectedValues: v(this, x, Ee).call(this)
     });
   }, t.onDeselect = (i) => {
     var r;
     this.emit("deselect", {
       option: i,
-      selectedOptions: ((r = p(this, z)) == null ? void 0 : r.getSelected()) ?? [],
-      selectedValues: v(this, x, wt).call(this)
+      selectedOptions: ((r = h(this, C)) == null ? void 0 : r.getSelected()) ?? [],
+      selectedValues: v(this, x, Ee).call(this)
     });
   }, t.onChange = (i) => {
     this.emit("change", {
       selectedOptions: i,
-      selectedValues: v(this, x, wt).call(this)
+      selectedValues: v(this, x, Ee).call(this)
     });
-  }, t.container = p(this, Q), t.hostElement = this, t;
-}, Co = function() {
-  if (p(this, Te) && p(this, Te).length > 0)
-    return p(this, Te);
+  }, t.onAddNew = (i) => {
+    var r;
+    this.emit("add", {
+      value: i.value,
+      option: i.option,
+      selectedOptions: ((r = h(this, C)) == null ? void 0 : r.getSelected()) ?? [],
+      selectedValues: v(this, x, Ee).call(this)
+    });
+  }, t.container = h(this, Q), t.hostElement = this, t;
+}, zo = function() {
+  if (h(this, Ie) && h(this, Ie).length > 0)
+    return h(this, Ie);
   const t = this.config.initialValues;
   return t && t.length > 0 ? t : void 0;
-}, wt = function() {
+}, Ee = function() {
   var o;
-  const t = (o = p(this, z)) == null ? void 0 : o.getValue();
+  const t = (o = h(this, C)) == null ? void 0 : o.getValue();
   return t == null ? [] : Array.isArray(t) ? t : [t];
 }, // ── §12.8 custom styles ───────────────────────────────────────────────────
-is = function() {
-  const t = p(this, at);
+hs = function() {
+  const t = h(this, mt);
   if (!t) return;
   const o = this.config.customStylesCallback;
   if (typeof o != "function") {
@@ -5596,9 +6187,9 @@ is = function() {
   }
   try {
     const i = o();
-    t.set(i), i && v(this, x, So).call(this, i);
+    t.set(i), i && v(this, x, No).call(this, i);
   } catch (i) {
-    F.warn("[MultiSelectElement] customStylesCallback threw", i), t.clear();
+    W.warn("[MultiSelectElement] customStylesCallback threw", i), t.clear();
   }
 }, /**
  * Dev-only lint: warn when `customStylesCallback` *sets* a `--ms-*` variable
@@ -5609,28 +6200,28 @@ is = function() {
  * De-duped per instance. If you genuinely define a `--ms-*` var for your own
  * custom-rendered content, ignore the warning (or use a different prefix).
  */
-So = function(t) {
-  const o = nn();
+No = function(t) {
+  const o = _n();
   if (o.size !== 0)
-    for (const { name: i, suggestions: r } of Pi(t, { prefix: "--ms-", consumed: o }))
-      p(this, lt).has(i) || (p(this, lt).add(i), console.warn(
+    for (const { name: i, suggestions: r } of Ri(t, { prefix: "--ms-", consumed: o }))
+      h(this, pt).has(i) || (h(this, pt).add(i), console.warn(
         `[web-multiselect] customStylesCallback sets "${i}", which no web-multiselect style consumes — it will have no effect.` + (r.length ? ` Did you mean: ${r.join(", ")}?` : "") + " (If it's for your own custom-rendered content, ignore this.)"
       ));
 }, // ── CSS-var sugar ─────────────────────────────────────────────────────────
-To = function() {
-  for (const t of Object.keys(pt)) v(this, x, rs).call(this, pt[t], this.config[t]);
-}, Oo = function(t) {
-  for (const o of Object.keys(pt))
-    o in t && v(this, x, rs).call(this, pt[o], t[o]);
-}, rs = function(t, o) {
+$o = function() {
+  for (const t of Object.keys(yt)) v(this, x, us).call(this, yt[t], this.config[t]);
+}, Vo = function(t) {
+  for (const o of Object.keys(yt))
+    o in t && v(this, x, us).call(this, yt[o], t[o]);
+}, us = function(t, o) {
   o == null || o === "" ? this.style.removeProperty(t) : this.style.setProperty(t, String(o));
 }, // ── declarative <option> parsing (light DOM, once) ────────────────────────
-Io = function() {
-  if (p(this, ct)) return;
-  I(this, ct, !0);
-  const t = v(this, x, Po).call(this);
-  t && (I(this, He, t), I(this, Be, !0));
-}, Po = function() {
+Do = function() {
+  if (h(this, ft)) return;
+  I(this, ft, !0);
+  const t = v(this, x, Ro).call(this);
+  t && (I(this, We, t), I(this, Ke, !0));
+}, Ro = function() {
   const t = Array.from(this.children);
   if (t.length === 0) return null;
   const o = [];
@@ -5641,7 +6232,7 @@ Io = function() {
       value: n.value || ((c = n.textContent) == null ? void 0 : c.trim()) || "",
       label: ((d = n.textContent) == null ? void 0 : d.trim()) || n.value || ""
     };
-    a && (l.group = a), n.hasAttribute("selected") && (p(this, Te) ?? I(this, Te, [])).push(l.value), n.hasAttribute("disabled") && (l.disabled = !0), n.hasAttribute("data-icon") && (l.icon = n.getAttribute("data-icon")), n.hasAttribute("data-subtitle") && (l.subtitle = n.getAttribute("data-subtitle")), o.push(l), i = !0;
+    a && (l.group = a), n.hasAttribute("selected") && (h(this, Ie) ?? I(this, Ie, [])).push(l.value), n.hasAttribute("disabled") && (l.disabled = !0), n.hasAttribute("data-icon") && (l.icon = n.getAttribute("data-icon")), n.hasAttribute("data-subtitle") && (l.subtitle = n.getAttribute("data-subtitle")), o.push(l), i = !0;
   };
   for (const n of t)
     if (n.tagName === "OPTION")
@@ -5652,70 +6243,70 @@ Io = function() {
         r(c, l);
     }
   if (!i) return null;
-  F.debug(`[MultiSelectElement] Parsed ${o.length} declarative options from Light DOM`);
+  W.debug(`[MultiSelectElement] Parsed ${o.length} declarative options from Light DOM`);
   for (const n of t)
     (n.tagName === "OPTION" || n.tagName === "OPTGROUP") && n.remove();
   return o;
 }, // ── debug panel (deprecated; kept for back-compat) ────────────────────────
-ns = function() {
-  const t = p(this, Q).querySelector(".ms__debug-info");
+ms = function() {
+  const t = h(this, Q).querySelector(".ms__debug-info");
   if (t && t.remove(), !this.config.showDebugInfo) return;
   const o = document.createElement("div");
   o.className = "ms__debug-info";
   const i = document.createElement("details"), r = document.createElement("summary");
   r.textContent = "Debug Info";
   const n = document.createElement("div");
-  n.className = "ms__debug-stats", i.appendChild(r), i.appendChild(n), o.appendChild(i), p(this, Q).appendChild(o), v(this, x, as).call(this);
-}, as = function() {
-  var l, c, d, h;
-  const t = p(this, Q).querySelector(".ms__debug-stats");
-  if (!t || !p(this, z)) return;
-  const o = "2.0.0-rc10", i = typeof window < "u" && ((c = (l = window.components) == null ? void 0 : l["web-multiselect"]) == null ? void 0 : c.getInstances().length) || 0, r = p(this, z).getSelected().length, n = ((d = this.config.options) == null ? void 0 : d.length) || 0, a = p(this, z);
+  n.className = "ms__debug-stats", i.appendChild(r), i.appendChild(n), o.appendChild(i), h(this, Q).appendChild(o), v(this, x, ps).call(this);
+}, ps = function() {
+  var l, c, d, u;
+  const t = h(this, Q).querySelector(".ms__debug-stats");
+  if (!t || !h(this, C)) return;
+  const o = "2.2.0-rc01", i = typeof window < "u" && ((c = (l = window.components) == null ? void 0 : l["web-multiselect"]) == null ? void 0 : c.getInstances().length) || 0, r = h(this, C).getSelected().length, n = ((d = this.config.options) == null ? void 0 : d.length) || 0, a = h(this, C);
   t.innerHTML = `
       <span>Version: ${o}</span>
       <span>Total Instances: ${i}</span>
       <span>Options: ${n}</span>
-      <span>Filtered: ${((h = a.filteredOptions) == null ? void 0 : h.length) || 0}</span>
+      <span>Filtered: ${((u = a.filteredOptions) == null ? void 0 : u.length) || 0}</span>
       <span>Selected: ${r}</span>
       <span>Dropdown: ${a.isOpen ? "Open" : "Closed"}</span>
       <span>Search: ${a.searchTerm || "none"}</span>
       <span>Loading: ${a.isLoading ? "Yes" : "No"}</span>
     `, setTimeout(() => {
-    this.config.showDebugInfo && v(this, x, as).call(this);
+    this.config.showDebugInfo && v(this, x, ps).call(this);
   }, 500);
 }, // Opt into the form-associated custom element lifecycle so form.reset() and
 // form.elements see the control.
-m(Ze, "formAssociated", !0), m(Ze, "inputs", sn), m(Ze, "events", on);
-typeof customElements < "u" && !customElements.get("web-multiselect") && customElements.define("web-multiselect", Ze);
-_i("web-multiselect", Ze, {
+m(it, "formAssociated", !0), m(it, "inputs", wn), m(it, "events", yn);
+typeof customElements < "u" && !customElements.get("web-multiselect") && customElements.define("web-multiselect", it);
+Ei("web-multiselect", it, {
   config: {
     name: "@keenmate/web-multiselect",
-    version: "2.0.0-rc10",
-    author: "Keenmate",
+    version: "2.2.0-rc01",
+    author: "Keenmate s.r.o.",
     license: "MIT",
     repository: "git+https://github.com/keenmate/web-multiselect.git",
     homepage: "https://web-multiselect.keenmate.dev"
   },
-  logging: le
+  logging: ce
 });
 export {
-  dn as LOGGING_CATEGORIES,
-  Ze as MultiSelectElement,
-  Yr as OPTIONS_FORMATS,
-  Zo as TABLET_MIN_SHORT_SIDE,
-  qr as WebMultiSelect,
-  ei as classifyDevice,
-  cn as configureBreakpoints,
-  F as dataLogger,
-  un as disableLogging,
-  hn as enableLogging,
-  St as getEnvironment,
-  mt as initLogger,
-  W as interactionLogger,
-  Jo as observeEnvironment,
-  Qo as observeViewport,
-  Jr as parseOptionsData,
-  pn as setCategoryLevel,
-  mn as setLogLevel,
+  Tn as LOGGING_CATEGORIES,
+  it as MultiSelectElement,
+  mn as OPTIONS_FORMATS,
+  ci as TABLET_MIN_SHORT_SIDE,
+  hn as WebMultiSelect,
+  di as classifyDevice,
+  Sn as configureBreakpoints,
+  W as dataLogger,
+  On as disableLogging,
+  In as enableLogging,
+  Lt as getEnvironment,
+  wt as initLogger,
+  R as interactionLogger,
+  ai as observeEnvironment,
+  li as observeViewport,
+  pn as parseOptionsData,
+  Mn as setCategoryLevel,
+  Pn as setLogLevel,
   Y as uiLogger
 };

@@ -71,7 +71,7 @@ defmodule TestAppWeb.Examples.ResponsiveLive do
         <code>mobile_presentation="auto"</code> (floating here).
       </.note>
 
-      <.card title="RS01 · mobile_presentation — floating vs fullscreen">
+      <.card title="RS01 · mobile-presentation — floating vs fullscreen">
         <.tip><code>mobile_presentation="auto | floating | fullscreen"</code></.tip>
         <p>
           <code>auto</code> keeps the floating panel on desktop/tablet and switches to a full-screen
@@ -88,7 +88,7 @@ defmodule TestAppWeb.Examples.ResponsiveLive do
         <.code_block lang="heex">&lt;.web_multiselect mobile_presentation="fullscreen" /&gt;</.code_block>
       </.card>
 
-      <.card title="RS02 · fullscreen_autofocus — soft keyboard on phones">
+      <.card title="RS02 · fullscreen-autofocus — soft keyboard on phones">
         <.tip><code>{"fullscreen_autofocus={true}"}</code></.tip>
         <p>
           By default the fullscreen sheet opens with the list visible and the keyboard closed — it
@@ -116,7 +116,7 @@ defmodule TestAppWeb.Examples.ResponsiveLive do
         </label>
       </.card>
 
-      <.card title="RS03 · filter vs navigate — live switch + fullscreen toggle">
+      <.card title="RS03 · filter vs navigate — live switch">
         <.tip><code>search_mode="navigate"</code> · <code>show_search_mode_toggle</code></.tip>
         <p>
           In <code>navigate</code> mode the list stays whole and typing jumps focus between matches.
@@ -193,7 +193,7 @@ defmodule TestAppWeb.Examples.ResponsiveLive do
         </p>
       </.card>
 
-      <.card title="RS07 · Drag the box — collapse_badges_below={360}">
+      <.card title={"RS07 · Drag the box — collapse-badges-below=\"360\""}>
         <.tip><code>{"collapse_badges_below={360}"}</code></.tip>
         <p>Drag the resize handle at the box's corner: below 360px wide the badges collapse to a count.</p>
         <div class="rs-resize">
@@ -273,15 +273,17 @@ defmodule TestAppWeb.Examples.ResponsiveLive do
         ].map((label, i) => ({ value: 'svc-' + i, label }));
 
         // Preview-as-fullscreen: flip mobile-presentation between 'fullscreen' and 'auto'.
-        document.querySelectorAll('input[type="checkbox"][data-preview]').forEach((cb) => {
-          const ids = cb.dataset.preview.split(/\s+/);
-          cb.addEventListener('change', (e) => {
-            const mode = e.target.checked ? 'fullscreen' : 'auto';
+        // Delegated on document so the listener survives LiveView's DOM patch on connect.
+        document.addEventListener('change', (e) => {
+          const cb = e.target;
+          if (cb && cb.matches('input[type="checkbox"][data-preview]')) {
+            const ids = cb.dataset.preview.split(/\s+/);
+            const mode = cb.checked ? 'fullscreen' : 'auto';
             ids.forEach((id) => {
               const el = document.getElementById(id);
               if (el) el.setAttribute('mobile-presentation', mode);
             });
-          });
+          }
         });
 
         // RS01 / RS02
@@ -293,8 +295,13 @@ defmodule TestAppWeb.Examples.ResponsiveLive do
         wait('nav-fs-select').then((el) => {
           el.options = services;
           el.setSelected(services.slice(0, 4).map((o) => o.value));
-          document.querySelectorAll('input[name="nav-fs-mode"]').forEach((r) => {
-            r.addEventListener('change', () => { if (r.checked) el.setAttribute('search-mode', r.value); });
+          // Delegated change listener (kept in this closure so it can reference `el`)
+          // so the radios keep working after LiveView patches the DOM on connect.
+          document.addEventListener('change', (e) => {
+            const r = e.target;
+            if (r && r.name === 'nav-fs-mode' && r.checked) {
+              el.setAttribute('search-mode', r.value);
+            }
           });
         });
 

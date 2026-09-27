@@ -3,6 +3,13 @@ defmodule TestAppWeb.Examples.IndexLive do
 
   @pages [
     %{
+      href: "/examples/elixir-only",
+      icon: "💧",
+      title: "Elixir Only",
+      description:
+        "The declarative surface: options, selection, a shared shadow-DOM theme from `config`, and CSS-variable theming — pure HEEx + config, no per-instance JavaScript."
+    },
+    %{
       href: "/examples/basic",
       icon: "📦",
       title: "Basic Usage",

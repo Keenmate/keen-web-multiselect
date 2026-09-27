@@ -43,12 +43,20 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
                     }
                   end)
 
+  @scrollto_code ~S"""
+  el.open();
+  el.scrollToIndex(14999);              // instant — row 14,999 isn't rendered yet
+  el.scrollToValue(12345);             // resolves value → index
+  el.scrollToIndex(7500, { block: 'center' });
+  """
+
   def mount(_params, _session, socket) do
     socket =
       socket
       |> assign(:page_title, "Virtual Scrolling — keen_web_multiselect")
       |> assign(:large_dataset, @large_dataset)
       |> assign(:rich_products, @rich_products)
+      |> assign(:scrollto_code, @scrollto_code)
 
     {:ok, socket}
   end
@@ -67,7 +75,7 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
         .stat-label { font-size: 0.875rem; color: #666; margin-top: 0.25rem; }
       </style>
 
-      <.card title="🚀 Large Dataset Performance">
+      <.card title="VS01 · Large Dataset Performance">
         <.tip><code>{"enable_virtual_scroll={true}"}</code> · <code>{"virtual_scroll_threshold={100}"}</code> · <code>{"option_height={50}"}</code> · <code>{"virtual_scroll_buffer={10}"}</code></.tip>
         <p>This demo tests the component with 15,000 randomly generated options to evaluate performance under heavy load.</p>
 
@@ -125,7 +133,7 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
         </.note>
       </.card>
 
-      <.card title="🎨 Rich Rendering with Virtual Scroll">
+      <.card title="VS02 · Rich Rendering with Virtual Scroll">
         <.tip><code>{"badge_height={50}"}</code> sizes popover rows · <code>{"option_height={70}"}</code> · <code>{"enable_virtual_scroll={true}"}</code></.tip>
         <p>Testing custom rendering callbacks with 150 items to trigger virtual scrolling in the selected items popover (threshold: 100).</p>
 
@@ -151,6 +159,44 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
             and <code>getSelectionBadgeClassCallback</code> for rich badge styling.
           </span>
         </.form_group>
+      </.card>
+
+      <.card title="VS03 · Scroll-to API with Virtual Scroll">
+        <.tip>JS-only: <code>scrollToIndex</code> / <code>scrollToValue</code> jump by index math — the target row need not be rendered; pass <code>{"{ block: 'center' }"}</code> to center.</.tip>
+        <p>
+          In virtual mode <code>scrollToIndex</code> / <code>scrollToValue</code> scroll by
+          fixed-height <strong>index math</strong> — the target row need not be rendered, so
+          jumping to item #14,999 in a 15,000-row list is instant. Pair with <code>open()</code>
+          for an "open + jump" gesture. Default alignment is <code>start</code> (target at the top);
+          pass <code>{"{ block: 'center' }"}</code> to center it.
+        </p>
+        <.form_group style="margin-top: 1rem;">
+          <label for="scroll-virtual-large">15,000 options</label>
+          <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
+            <div style="flex:1 1 260px; min-width:260px;">
+              <.web_multiselect
+                id="scroll-virtual-large"
+                value_member="value"
+                display_value_member="label"
+                enable_virtual_scroll={true}
+                virtual_scroll_threshold={100}
+                search_placeholder="Search or use the buttons..."
+                options={@large_dataset}
+              />
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.5rem; flex:0 0 auto; min-width:210px;">
+              <button type="button" data-vs="index:0">⇱ index 0</button>
+              <button type="button" data-vs="index:7500">index 7500</button>
+              <button type="button" data-vs="index:14999">index 14999 (last)</button>
+              <button type="button" data-vs="value:12345">value 12345</button>
+              <button type="button" data-vs="center:7500">index 7500 · block "center"</button>
+              <button type="button" data-vs="clear">clearSearch()</button>
+            </div>
+          </div>
+          <span class="form-text">The log shows the resulting <code>scrollTop</code> and which rows landed in view.</span>
+          <div id="vs-scroll-log" class="log-panel"><div class="muted">scrollTo* results log here…</div></div>
+        </.form_group>
+        <.code_block lang="js">{@scrollto_code}</.code_block>
       </.card>
     </.example_page>
 
@@ -283,6 +329,65 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
           if (e.detail.selectedOptions.length >= 100) {
             console.log('✅ Virtual scroll enabled in popover!');
           }
+        });
+      });
+
+      // --- VS03 · Scroll-to API with virtual scroll ------------
+      // Options are provided server-side via the wrapper; the scroll math is index-based
+      // so the target row need not be rendered.
+      wait('scroll-virtual-large').then((vsLarge) => {
+        const vsLogEl = document.getElementById('vs-scroll-log');
+        const vsLog = (msg) => {
+          if (!vsLogEl) return;
+          if (vsLogEl.querySelector('.muted')) vsLogEl.innerHTML = '';
+          const row = document.createElement('div');
+          row.style.marginBottom = '0.4rem';
+          row.textContent = msg;
+          vsLogEl.appendChild(row);
+          vsLogEl.scrollTop = vsLogEl.scrollHeight;
+        };
+        // Inspect the shadow DOM to report where the (virtual) scroll landed.
+        const vsDescribe = (el, targetIndex) => {
+          const container = el.shadowRoot && el.shadowRoot.querySelector('.ms__options');
+          if (!container) { vsLog('   ↳ (dropdown not open)'); return; }
+          const crect = container.getBoundingClientRect();
+          const rows = [...container.querySelectorAll('.ms__option')];
+          const visible = rows.filter((o) => {
+            const r = o.getBoundingClientRect();
+            return r.bottom > crect.top + 1 && r.top < crect.bottom - 1;
+          });
+          const idxOf = (o) => o.closest('[data-index]')?.dataset.index ?? '?';
+          const first = visible[0];
+          const last = visible[visible.length - 1];
+          const lbl = (o) => o ? `#${idxOf(o)} "${(o.querySelector('.ms__option-title') || o).textContent.trim()}"` : '—';
+          let note = '';
+          if (targetIndex != null) {
+            const hit = visible.some((o) => o.closest('[data-index]')?.dataset.index === String(targetIndex));
+            note = hit ? ` · target index ${targetIndex} VISIBLE` : ` · target index ${targetIndex} NOT in view`;
+          }
+          vsLog(`   ↳ scrollTop=${Math.round(container.scrollTop)} · shows ${lbl(first)} … ${lbl(last)} (${visible.length} rows)${note}`);
+        };
+
+        // Delegate on document so the listeners survive LiveView's DOM patch on connect.
+        // As of @keenmate/web-multiselect 2.1.0 no stopPropagation()/capture-phase workaround
+        // is needed: open() and every scrollTo* arm a one-tick outside-click guard, so
+        // re-driving the already-open dropdown from an external button no longer closes it.
+        document.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-vs]');
+          if (!btn) return;
+          vsLarge.open();
+          const spec = btn.dataset.vs;
+          if (spec === 'clear') { vsLarge.clearSearch(); vsLog('clearSearch() — search reset'); return; }
+          const [kind, arg] = spec.split(':');
+          let ok, targetIndex = null;
+          if (kind === 'index')       { ok = vsLarge.scrollToIndex(Number(arg)); targetIndex = Number(arg); }
+          else if (kind === 'value')  { ok = vsLarge.scrollToValue(Number(arg)); }
+          else if (kind === 'center') { ok = vsLarge.scrollToIndex(Number(arg), { block: 'center' }); targetIndex = Number(arg); }
+          const call = kind === 'value' ? `scrollToValue(${arg})`
+            : kind === 'center' ? `scrollToIndex(${arg}, {block:'center'})`
+            : `scrollToIndex(${arg})`;
+          vsLog(`▶ ${call} → ${ok}`);
+          setTimeout(() => vsDescribe(vsLarge, targetIndex), 90);
         });
       });
     </script>

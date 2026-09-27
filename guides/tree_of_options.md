@@ -65,7 +65,7 @@ exactly as they do for a flat list.
 | `has_children_member` | Key holding a precomputed `hasChildren` flag. Optional — derived from the tree when unset. |
 | `is_selectable_member` | Key holding a per-option selectability flag (see below). Optional. |
 | `tree_path_separator` | Separator used in paths. Defaults to `"."`. |
-| `checkbox_mode` | `"independent"` (default) or `"cascade"` — cascade checks a node's whole subtree with a tristate box (see below). |
+| `checkbox_mode` | `"cascade"` (default) or `"independent"` — cascade checks a node's whole subtree with a tristate box (see below); independent toggles only the clicked node. |
 | `cascade_select_policy` | In cascade mode, which values a selection emits: `"rolled-up"` (default), `"leaves"`, or `"all"`. |
 
 Using a different separator:
@@ -129,10 +129,11 @@ genuinely unavailable rather than merely structural.
 
 ## Cascade checkboxes and the value policy
 
-By default a checkbox toggles only its own node (`checkbox_mode="independent"`).
-Set `checkbox_mode="cascade"` and checking a node toggles its **whole subtree**,
-while a partially-selected branch shows a **tristate** (dash) box. Tree +
-multiple only.
+By default (`checkbox_mode="cascade"`) checking a node toggles its **whole
+subtree**, while a partially-selected branch shows a **tristate** (dash) box —
+what most tree-select UIs do. Set `checkbox_mode="independent"` to make a checkbox
+toggle only its own node. Tree + multiple only (cascade has no effect on flat
+lists or single-select — there is no subtree to cascade into).
 
 Orthogonally, `cascade_select_policy` decides **which values a cascade selection
 emits** — the values you get as badges, in the form, and in `change` events:

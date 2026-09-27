@@ -15,7 +15,7 @@ defmodule TestAppWeb.Endpoint do
     at: "/keen_web_multiselect",
     from: {:keen_web_multiselect, "priv/static"},
     gzip: false,
-    only: ~w(multiselect.js multiselect.css keen_web_multiselect_hook.js)
+    only: ~w(multiselect.js multiselect.css keen_web_multiselect_hook.js keen_web_multiselect_defaults.js)
 
   # Phoenix runtime JS (phoenix.mjs + phoenix_live_view.esm.js) — served from the
   # transitive deps so the test app needs no esbuild step.

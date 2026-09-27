@@ -14,10 +14,26 @@
 //
 //   <.web_multiselect id="tags" hook="KeenWebMultiselectHook" options={@options} />
 //
-// The hook forwards three events to the server:
+// The hook ALWAYS forwards four events to the server:
 //   - "web_multiselect:select"   payload: { id, value, values }
 //   - "web_multiselect:deselect" payload: { id, value, values }
 //   - "web_multiselect:change"   payload: { id, values }
+//   - "web_multiselect:add"      payload: { id, value, option }
+//                                (fires when allow-add-new is on and the user chose
+//                                 the "Add new …" prompt; `value` is the typed text,
+//                                 `option` is the created option's scalar value or null)
+//
+// It also forwards a fifth, OPT-IN event when the wrapper renders
+// data-ready-event="<name>" (from the ready_event= assign):
+//   - "<name>"                   payload: { id }
+//                                (fires ONCE when the picker has finished its first
+//                                 build — after the element is upgraded and, with
+//                                 `defer`, after release. This is the reliable moment
+//                                 to drive it from the server: the hook's listeners
+//                                 are attached and the dropdown DOM exists, so a
+//                                 push_command/3 issued in reply won't be dropped.)
+//                                Opt-in because an always-on new event would crash any
+//                                consumer LiveView lacking a matching handle_event/3.
 //
 // The hook also LISTENS for one server→client event so consumers can mutate
 // element state from the LV process. This is necessary because the wrapper
@@ -33,6 +49,38 @@
 //   - id      DOM id of the target element; events with non-matching id are ignored
 //   - options (optional) new option list; assigned to el.options
 //   - value   (optional) new selection; passed to el.setSelected([...])
+//
+// The hook also listens for "web_multiselect:command" — the imperative channel behind
+// Keenmate.WebMultiselect.push_command/3. It drives the dropdown without changing options
+// or selection:
+//
+//   push_command(socket, "tags", open: true)
+//   push_command(socket, "tags", scroll_to_value: "py")
+//   push_command(socket, "tags", search: "back")
+//
+// Payload shape:  { id, open?, close?, toggle?, search?, clear_search?,
+//                    scroll_to_value?, scroll_to_group?, scroll_to_index? }
+// Each key maps to the matching element method (open/close/toggle/search/clearSearch/
+// scrollToValue/scrollToGroup/scrollToIndex). Unknown/absent keys are ignored.
+
+// Install the shared shadow-styles registry (window.KeenWebMultiselect) as a side
+// effect of importing the hook, so an app that wires up the hook can also register
+// project-wide shadow CSS from JS. Bundlers (esbuild) follow this relative import
+// automatically. See keen_web_multiselect_defaults.js.
+import "./keen_web_multiselect_defaults.js";
+
+// Ergonomic ESM re-exports so app.js can `import { registerShadowStyles, getShadowStyles }`
+// from the hook module instead of reaching for the global. They delegate to the same
+// window.KeenWebMultiselect registry the <.shadow_styles/> component uses.
+export const registerShadowStyles = (css) =>
+  typeof window !== "undefined" && window.KeenWebMultiselect
+    ? window.KeenWebMultiselect.registerShadowStyles(css)
+    : undefined;
+
+export const getShadowStyles = () =>
+  typeof window !== "undefined" && window.KeenWebMultiselect
+    ? window.KeenWebMultiselect.getShadowStyles()
+    : undefined;
 
 // Ensure <web-multiselect> exposes a .form getter so Phoenix LV's phx-change
 // delegation can resolve the parent form. LV's form change handler does
@@ -64,12 +112,30 @@ const KeenWebMultiselectHook = {
     this._handlers = {
       select: (event) => this._forward("web_multiselect:select", event),
       deselect: (event) => this._forward("web_multiselect:deselect", event),
-      change: (event) => this._forwardChange(event)
+      change: (event) => this._forwardChange(event),
+      add: (event) => this._forwardAdd(event),
+      ready: () => this._forwardReady()
     };
 
     this.el.addEventListener("select", this._handlers.select);
     this.el.addEventListener("deselect", this._handlers.deselect);
     this.el.addEventListener("change", this._handlers.change);
+    this.el.addEventListener("add", this._handlers.add);
+
+    // Ready forwarding is OPT-IN via data-ready-event (rendered when the wrapper is
+    // given ready_event=). It must NOT be always-on: it would push a brand-new event
+    // to every hooked consumer, crashing any LiveView that lacks a matching
+    // handle_event/3 clause. Only wire it when the consumer asked for it. Mirrors the
+    // data-search-event opt-in below.
+    if (this.el.dataset.readyEvent) {
+      this.el.addEventListener("ready", this._handlers.ready);
+      // The `ready` event may have ALREADY fired before this hook mounted — the
+      // element upgrades and (unless deferred) builds synchronously on connect,
+      // which can precede the hook's mounted(). `el.isReady` latches true on that
+      // first build, so if it's already set, replay the notification now so a
+      // server "open on entry" handler never misses it.
+      if (this.el.isReady === true) this._forwardReady();
+    }
 
     this.handleEvent("web_multiselect:update", (payload) => {
       if (!payload || payload.id !== this.el.id) return;
@@ -81,6 +147,25 @@ const KeenWebMultiselectHook = {
         if (typeof this.el.setSelected === "function") this.el.setSelected(next);
         else this.el.value = next;
       }
+    });
+
+    // Imperative command channel — Keenmate.WebMultiselect.push_command/3. Drives the
+    // dropdown (open/close/scroll/search) without touching options or selection. Each key
+    // maps to the element method of the same name; guard on presence + callability so an
+    // older bundle lacking a given method silently ignores it.
+    this.handleEvent("web_multiselect:command", (payload) => {
+      if (!payload || payload.id !== this.el.id) return;
+      const call = (method, ...args) => {
+        if (typeof this.el[method] === "function") this.el[method](...args);
+      };
+      if (payload.close) call("close");
+      if (payload.open) call("open");
+      if (payload.toggle) call("toggle");
+      if ("clear_search" in payload && payload.clear_search) call("clearSearch");
+      if ("search" in payload) call("search", payload.search == null ? "" : String(payload.search));
+      if ("scroll_to_value" in payload) call("scrollToValue", payload.scroll_to_value);
+      if ("scroll_to_group" in payload) call("scrollToGroup", payload.scroll_to_group);
+      if ("scroll_to_index" in payload) call("scrollToIndex", payload.scroll_to_index);
     });
 
     // Server-driven async search. When the wrapper renders data-search-event="...",
@@ -113,6 +198,8 @@ const KeenWebMultiselectHook = {
     this.el.removeEventListener("select", this._handlers.select);
     this.el.removeEventListener("deselect", this._handlers.deselect);
     this.el.removeEventListener("change", this._handlers.change);
+    this.el.removeEventListener("add", this._handlers.add);
+    this.el.removeEventListener("ready", this._handlers.ready);
   },
 
   _forward(name, event) {
@@ -150,6 +237,29 @@ const KeenWebMultiselectHook = {
     const detail = event.detail || {};
     const values = detail.selectedValues || [];
     this.pushEventTo(this.el, "web_multiselect:change", { id: this.el.id, values });
+  },
+
+  // The `ready` event carries no useful detail — the id is all the server needs to
+  // route "open on entry" handlers. Push the consumer-named event (data-ready-event);
+  // guard against a double emit (real event + the isReady replay in mounted()) so the
+  // server only ever sees it once per mount.
+  _forwardReady() {
+    const name = this.el.dataset.readyEvent;
+    if (!name || this._readyForwarded) return;
+    this._readyForwarded = true;
+    this.pushEventTo(this.el, name, { id: this.el.id });
+  },
+
+  // The `add` event (allow-add-new). `detail.value` is the raw typed text; `detail.option`
+  // is the option materialized by an `addNewCallback`, or absent when creation is left to the
+  // server. Forward both — the typed text verbatim, and a safe scalar for the created option.
+  _forwardAdd(event) {
+    const detail = event.detail || {};
+    this.pushEventTo(this.el, "web_multiselect:add", {
+      id: this.el.id,
+      value: detail.value != null ? detail.value : null,
+      option: this._optionValue(detail.option != null ? detail.option : null)
+    });
   }
 };
 

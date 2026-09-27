@@ -1,6 +1,6 @@
 # Feature inventory — `keen_web_multiselect` wrapper
 
-Mirrors the upstream `@keenmate/web-multiselect` `FEATURES.md` (v1.12.0-rc05) with two columns
+Mirrors the upstream `@keenmate/web-multiselect` `FEATURES.md` (v2.0.1) with two columns
 filled in for this wrapper: **Wrapped?** = how the wrapper exposes the feature to a Phoenix /
 LiveView consumer, and **E2E?** = whether a Playwright spec under `e2e/` exercises it.
 
@@ -34,7 +34,7 @@ These remain as follow-ups after the fixes above:
 
 1. **Live attribute reactivity is partly blocked.** Upstream's `attributeChangedCallback` is great for cascading multiselects, but the wrapper renders `phx-update="ignore"` on the element (necessary to keep morphdom out of the shadow DOM children), which also blocks LV from morphing attribute changes. The wrapper's answer is the `web_multiselect:update` push_event channel — that's the canonical way to mutate `options` / `value` from a LV process. Plain `data-options` changes from a re-render will not propagate.
 2. **Callbacks are JS-only by design** — render callbacks, member callbacks, badge tooltips, action-button click handlers all live on `el.xCallback = ...`. The wrapper does not (and probably should not) try to wrap them as HEEx attrs, but **only one callback has a declarative shortcut**: `searchCallback` via `search_event="..."` + hook installer.
-3. **E2E now covers the wrapper-specific surface and the headline upstream behaviors.** 41 specs across 10 files: the wrapper-specific channel (`search_event`, `push_update`, `declarative`, hook event forwarding, `phx-update="ignore"`/`data-ready=""`, FormField) plus the behavior-level specs added in this revision (`virtual_scroll`, `badges_popover`, `add_new`, declarative icon/subtitle, the audit-added typed attrs, event dedup/order). Coverage is still spot-check for JS-only callbacks (one per family by design — see §6/§7).
+3. **E2E now covers the wrapper-specific surface and the headline upstream behaviors.** 41 specs across 10 files: the wrapper-specific channel (`search_event`, `push_update`, `declarative`, hook event forwarding, `phx-update="ignore"`/`data-placeholder-ready=""`, FormField) plus the behavior-level specs added in this revision (`virtual_scroll`, `badges_popover`, `add_new`, declarative icon/subtitle, the audit-added typed attrs, event dedup/order). Coverage is still spot-check for JS-only callbacks (one per family by design — see §6/§7).
 
 ---
 
@@ -63,7 +63,7 @@ These remain as follow-ups after the fixes above:
 | Group callback | callback | `getGroupCallback` | — | ⚠️ JS-only | ❌ |
 | Disabled callback | callback | `getDisabledCallback` | — | ⚠️ JS-only | ❌ |
 | Initial / pre-selected values | attr | `initial-values` (JSON) | — | ✅ `initial_values` typed attr, or `value=` / `field=` (via `FormHelpers`) | ✅ `selection.spec`, `form.spec` |
-| Add-new (tag creation) | attr + callback | `allow-add-new` + `addNewCallback` | `bool(false)` | ⚠️ `allow_add_new` typed attr ✅; `addNewCallback` is JS-only | ✅ `add_new.spec` (type unknown term + Enter → created & selected) |
+| Add-new (creation mode) | attr + callback + event | `allow-add-new` + `add-new-text` / `add-new-pending-text` + `addNewCallback` / `getAddNewTextCallback` + `add` event | `bool(false)` | ✅ `allow_add_new` / `add_new_text` / `add_new_pending_text` typed attrs; `add` event forwarded as `"web_multiselect:add"`; the two callbacks are ⚠️ JS-only | ✅ `add_new.spec` (type unknown term + Enter → created & selected) |
 
 ## 2. Async / hybrid search
 
@@ -101,6 +101,7 @@ These remain as follow-ups after the fixes above:
 | Badges threshold mode | attr/prop | `badges-threshold-mode` | `'count'` | ✅ `badges_threshold_mode` typed attr (enum constrained) | ❌ |
 | Max visible badges (partial) | attr/prop | `badges-max-visible` | — | ✅ `badges_max_visible` typed attr | ✅ `attributes.spec`, `badges_popover.spec` (only N visible + overflow) |
 | In-input counter badge | attr/prop | `show-counter` | `bool(false)` | ✅ `show_counter` typed attr | ❌ |
+| Inline clear (✕) button | attr/prop | `show-clear` (internal `isClearShown`) | `bool(false)` | ✅ `show_clear` typed attr | ❌ |
 | Counter text callback (i18n) | callback | `getCounterCallback` | — | ⚠️ JS-only | ❌ |
 | Read selected options | method | `getSelected()` | — | ⚠️ JS-only | ❌ |
 | Read selected value(s) | method | `getValue()` | — | ⚠️ JS-only | ✅ `selection.spec` (called via `el.evaluate`) |
@@ -188,6 +189,7 @@ These remain as follow-ups after the fixes above:
 | Close on select | attr/prop | `close-on-select` | `bool(false)` | ✅ `close_on_select` typed attr | ✅ `selection.spec` |
 | Auto-positioning (Floating UI) | behavior | dropdown / popover / tooltip placement | — | n/a — upstream auto-flip + overflow-escape, no wrapper surface | ❌ |
 | Lock placement | attr/prop | `lock-placement` | `bool(true)` | ✅ `lock_placement` typed attr | ❌ |
+| Single-active overlay group | attr/prop | `overlay-group` | — | ✅ `overlay_group` typed attr | ✅ `single-active.spec` (upstream) |
 | Keep search on close | attr/prop | `should-keep-search-on-close` | `bool(true)` | ✅ `should_keep_search_on_close` typed attr | ❌ |
 | Dropdown min width | attr/prop | `dropdown-min-width` | — | ✅ `dropdown_min_width` typed attr | ❌ |
 | Dropdown max width | attr/prop | `dropdown-max-width` | — | ✅ `dropdown_max_width` typed attr | ✅ `attributes.spec` |
@@ -208,6 +210,8 @@ These remain as follow-ups after the fixes above:
 | Select event | event | `select` | `{ option, selectedOptions, selectedValues }` | ✅ hook forwards as `"web_multiselect:select"` with `%{id, value, values}` | ✅ `events.spec` |
 | Deselect event | event | `deselect` | same | ✅ hook forwards as `"web_multiselect:deselect"` | ✅ `events.spec` |
 | Change event | event | `change` | `{ selectedOptions, selectedValues }` | ✅ hook forwards as `"web_multiselect:change"` with `%{id, values}` | ✅ `events.spec` (one click → select+change exactly once each, no double-fire; select-before-change order) |
+| Add event (creation mode) | event | `add` | `{ value, option?, selectedOptions, selectedValues }` | ✅ hook forwards as `"web_multiselect:add"` with `%{id, value, option}` (requires `allow_add_new`) | ❌ |
+| Add handler | event/prop | `onAdd` / `onAddNew` | — | ⚠️ JS-only (`on*` twin / config callback) | ❌ |
 | Select handler (rc05 rename) | event/prop | `onSelect` (was `selectCallback`) | — | ⚠️ JS-only (`on*` property twin of the DOM event) | ❌ |
 | Deselect handler (rc05 rename) | event/prop | `onDeselect` (was `deselectCallback`) | — | ⚠️ JS-only | ❌ |
 | Change handler (rc05 rename) | event/prop | `onChange` (was `changeCallback`) | — | ⚠️ JS-only | ❌ |
@@ -223,6 +227,9 @@ These remain as follow-ups after the fixes above:
 | Set selected | method | `setSelected(values[])` | ✅ via `push_event("web_multiselect:update", %{value: ...})` (hook calls `el.setSelected/1`); also accepts `options:` to replace the option list | ✅ `push_update.spec` |
 | Get value | method | `getValue()` | ⚠️ JS-only | ✅ `selection.spec` (via `el.evaluate`) |
 | Destroy | method | `destroy()` | n/a — LV teardown handles unmount | ❌ |
+| Open / close / toggle dropdown | method / prop | `open()` / `close()` / `toggle()` / `isOpen` | ✅ from LV via `push_command(socket, id, open:/close:/toggle:)`; also ⚠️ JS-side | ❌ |
+| Scroll an option/group into view | method | `scrollToValue()` / `scrollToGroup()` / `scrollToIndex()` | ✅ from LV via `push_command(socket, id, scroll_to_value:/scroll_to_group:/scroll_to_index:)`; also ⚠️ JS-side | ❌ |
+| Programmatic search | method / getter | `search(term)` / `searchText` / `clearSearch()` | ✅ from LV via `push_command(socket, id, search:/clear_search:)`; also ⚠️ JS-side | ❌ |
 | Live attribute reactivity | behavior | `attributeChangedCallback` | ⚠️ **blocked** by the wrapper's `phx-update="ignore"`; use `web_multiselect:update` push_event channel instead | ❌ |
 
 ## 14. Theming, styling & i18n
@@ -277,16 +284,17 @@ These exist purely in `keen_web_multiselect` and have no upstream row:
 |---|---|---|---|---|
 | LV hook attribute | attr | `hook={true}` (or `hook="Custom"`) | Sets `phx-hook` to enable event forwarding + server→client mutation. `true` resolves to the bundled `"KeenWebMultiselectHook"`; a string names a custom hook; `false`/`nil` render none. | ✅ `events.spec`, unit tests |
 | Server→client mutation helper | function | `Keenmate.WebMultiselect.push_update(socket, id, options?/value?)` | Ergonomic wrapper over the `web_multiselect:update` push_event; only the keys passed are sent | ✅ unit tests (payload shaping) |
+| Server→client imperative command helper | function | `Keenmate.WebMultiselect.push_command(socket, id, open:/close:/toggle:/search:/clear_search:/scroll_to_value:/scroll_to_group:/scroll_to_index:)` | Drives the dropdown from LV over the `web_multiselect:command` push_event; hook dispatches to the element's imperative methods. Only the keys passed are sent | ✅ unit tests (payload shaping) |
 | Installer | mix task | `mix keen_web_multiselect.install` | Idempotently wires app.js imports + `LiveSocket` hooks and app.css import on esbuild apps; conservative fallback-to-manual; `--dry-run` | ✅ unit tests (pure transforms) |
 | `phx-update="ignore"` auto-emission | behavior | rendered automatically when `:id` is set | Protects upstream's internally-managed shadow-DOM children from morphdom | ✅ `selection.spec` |
-| `data-ready=""` pre-emission | behavior | rendered on element | Avoids placeholder flash by satisfying upstream's `:host([data-ready])` CSS rule before `requestAnimationFrame` fires | ✅ `selection.spec` |
+| `data-placeholder-ready=""` pre-emission | behavior | rendered on element | Avoids placeholder flash by satisfying upstream's `:host([data-placeholder-ready])` CSS rule before `requestAnimationFrame` fires (renamed from `data-ready` upstream) | ✅ `selection.spec` |
 | `.form` getter polyfill | behavior | `customElements.whenDefined("web-multiselect")` patches the prototype | Without this, Phoenix LV's `phx-change` delegation drops the CustomEvent because `e.target.form === undefined`. Polyfill runs once at module load even if no element opts into the hook. | ✅ `form.spec` (implicit — phx-change shape would fail without it) |
 | Declarative server-side search | attr + hook | `search_event="my_event"` + `KeenWebMultiselectHook` | Hook installs a `searchCallback` that does `pushEventTo(el, "my_event", %{id, query}, replyCallback)` and resolves with `reply.results`. AbortSignal-aware. | ✅ `search_event.spec` |
 | Server→client option/value mutation | push_event | `push_event(socket, "web_multiselect:update", %{id, options?, value?})` | Bridges the `phx-update="ignore"` boundary. Filters by `payload.id`. | ✅ `push_update.spec` |
 | `FormField` integration | helper | `<.web_multiselect field={@form[:tags]} />` | `Keenmate.WebMultiselect.FormHelpers.assign_from_field/1` fills `id`/`name`/value→`initial-values`. Explicit assigns win. | ✅ `form.spec` |
 | Tuple option list | helper | `[{value, label}, ...]` | `OptionHelpers.normalize_option/1` accepts the tuple shape and converts to maps before JSON encoding | ❌ |
 | Auto-default member attrs | helper | unconditionally emits `value-member="value"`, `display-value-member="label"`, `icon-member="icon"`, `subtitle-member="subtitle"`, `group-member="group"`, `disabled-member="disabled"` on every render | Upstream's own member fallback (`Is` array in `multiselect.js`) only fires on the declarative `<option>` path; the data-options JSON path, the JS-side `el.options = [...]` path, and async `searchCallback` results all leave `valueMember` etc. as `undefined` and rows fall through to `[N/A]`. We emit the canonical-shape defaults once per render so consumers never need to spell them out — explicit `*_member` assigns still win. Missing keys on the data side are harmless (upstream renders without that field). `search-value-member` is intentionally not defaulted. | ✅ `attributes.spec` (value/label), `declarative.spec` (full set), unit tests |
-| `upstream_version/0` | function | `Keenmate.WebMultiselect.upstream_version()` | Returns the bundled `@keenmate/web-multiselect` version (currently `"1.12.0-rc05"`) | n/a |
+| `upstream_version/0` | function | `Keenmate.WebMultiselect.upstream_version()` | Returns the bundled `@keenmate/web-multiselect` version (currently `"2.0.1"`) | n/a |
 | `asset_path/1` | function | `Keenmate.WebMultiselect.asset_path("multiselect.js")` | Absolute path into `priv/static/` for asset-copy setup tasks | n/a |
 
 ---

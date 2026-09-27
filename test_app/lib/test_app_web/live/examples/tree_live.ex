@@ -132,7 +132,7 @@ defmodule TestAppWeb.Examples.TreeLive do
     show_checkboxes={true} checkbox_mode="cascade" cascade_select_policy="rolled-up" />
 
   // Both are live — flip them any time (in JS) and the current selection re-projects:
-  el.checkboxMode = "cascade"            // independent (default) | cascade
+  el.checkboxMode = "cascade"            // cascade (default) | independent
   el.cascadeSelectPolicy = "rolled-up"   // rolled-up (default) | leaves | all
   """
 
@@ -200,6 +200,28 @@ defmodule TestAppWeb.Examples.TreeLive do
   end
   """
 
+  @nav_code ~S"""
+  <!-- keep the whole tree on screen; jump focus between matches -->
+  <web-multiselect path-member="path" search-mode="navigate"></web-multiselect>
+
+  <!-- add a built-in filter<->navigate toggle to the fullscreen search bar -->
+  <web-multiselect path-member="path" search-mode="navigate" show-search-mode-toggle></web-multiselect>
+
+  /* Fullscreen (phones) adds a count + prev/next match navigator automatically;
+     desktop steps with Ctrl+ArrowUp / Ctrl+ArrowDown. */
+  """
+
+  @scrollto_code ~S"""
+  el.open();
+  el.scrollToValue('2211');        // any node by value — tree is always expanded
+  el.scrollToIndex(el /* count-1 */); // last visible node
+  el.scrollToGroup('x');           // → false in tree mode
+
+  // If a search filtered the node out, reveal it first:
+  el.clearSearch();
+  el.scrollToValue('2211');
+  """
+
   def mount(_params, _session, socket) do
     {:ok,
      socket
@@ -222,7 +244,9 @@ defmodule TestAppWeb.Examples.TreeLive do
      |> assign(:count_code, @count_code)
      |> assign(:widths_code, @widths_code)
      |> assign(:actions_code, @actions_code)
-     |> assign(:paths_code, @paths_code)}
+     |> assign(:paths_code, @paths_code)
+     |> assign(:scrollto_code, @scrollto_code)
+     |> assign(:nav_code, @nav_code)}
   end
 
   # Precompute an `is_selectable_member` flag so only leaves are selectable: a node
@@ -279,7 +303,7 @@ defmodule TestAppWeb.Examples.TreeLive do
       title="Tree of Options"
       subtitle="Render options as an always-expanded hierarchy, indented by depth"
     >
-      <.card title="1. Basic Tree">
+      <.card title="TR01 · Basic Tree">
         <.tip>Set <code>path_member="path"</code> — tree mode auto-enables; parent/depth are derived from the path.</.tip>
         <p>
           Give each option a materialized dot-path (<code>"1"</code>, <code>"1.1"</code>,
@@ -301,11 +325,14 @@ defmodule TestAppWeb.Examples.TreeLive do
         </.note>
       </.card>
 
-      <.card title="2. Single-Select & Checkboxes">
+      <.card title="TR02 · Single-Select & Checkboxes">
         <.tip>Every node is a normal option — <code>{"multiple={false}"}</code> and <code>{"show_checkboxes={true}"}</code> work as on a flat list.</.tip>
         <p>
-          Every node — branch or leaf — is a normal, selectable option. Selection, single/multi
-          mode, and checkboxes all behave exactly as they do for a flat list.
+          Every node — branch or leaf — is a normal, selectable option. With
+          <code>checkbox_mode="independent"</code> selection, single/multi mode, and checkboxes
+          all behave exactly as they do for a flat list (each node toggles on its own). For the
+          cascade behavior that is now the <strong>default</strong> in multi-select trees, see
+          <strong>TR10</strong>.
         </p>
         <div class="demo-grid">
           <div>
@@ -313,13 +340,13 @@ defmodule TestAppWeb.Examples.TreeLive do
             <.web_multiselect id="tree-single" multiple={false} placeholder="Pick one…" options={@categories} path_member="path" />
           </div>
           <div>
-            <label class="demo-label">With checkboxes (<code>{"show_checkboxes={true}"}</code>):</label>
-            <.web_multiselect id="tree-checks" show_checkboxes={true} placeholder="Pick categories…" options={@categories} path_member="path" />
+            <label class="demo-label">With checkboxes (<code>{"show_checkboxes={true}"}</code>, <code>{"checkbox_mode=\"independent\""}</code>):</label>
+            <.web_multiselect id="tree-checks" show_checkboxes={true} checkbox_mode="independent" placeholder="Pick categories…" options={@categories} path_member="path" />
           </div>
         </div>
       </.card>
 
-      <.card title="3. Ancestor-Preserving Search">
+      <.card title="TR03 · Ancestor-Preserving Search">
         <.tip>Typing filters to matches <strong>plus their ancestors</strong>, so indentation stays coherent.</.tip>
         <p>
           Typing filters the hierarchy to the <strong>matching nodes plus their ancestors</strong>,
@@ -331,7 +358,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         </div>
       </.card>
 
-      <.card title="4. Custom Path Separator">
+      <.card title="TR04 · Custom Path Separator">
         <.tip><code>tree_path_separator="/"</code> — when your paths use <code>1/1/2</code> instead of <code>1.1.2</code>.</.tip>
         <p>
           When your paths use a different separator (e.g. <code>1/1/2</code>), set
@@ -344,7 +371,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block>{@separator_code}</.code_block>
       </.card>
 
-      <.card title="5. Full Breadcrumb on Badges">
+      <.card title="TR05 · Full Breadcrumb on Badges">
         <.tip><code>full_title_member="full_title"</code> + <code>{"show_badge_full_title={true}"}</code> — badges show the fully-qualified path.</.tip>
         <p>
           A <strong>full title</strong> is a fully-qualified label that ships with the data
@@ -359,7 +386,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block>{@fulltitle_code}</.code_block>
       </.card>
 
-      <.card title="6. Selectable Leaves Only">
+      <.card title="TR06 · Selectable Leaves Only">
         <.tip><code>is_selectable_member="selectable"</code> — branches render normally but aren't selectable.</.tip>
         <p>
           A node can be marked <strong>non-selectable</strong> via <code>is_selectable_member</code>
@@ -375,7 +402,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block lang="elixir">{@leaves_code}</.code_block>
       </.card>
 
-      <.card title="7. Styling the Indentation">
+      <.card title="TR07 · Styling the Indentation">
         <.tip>Tune <code>--ms-tree-indent</code> (per-level step) and <code>--ms-tree-base-indent</code> (first-level offset).</.tip>
         <p>
           Each row is indented via an inline <code>--ms-tree-depth</code> custom property
@@ -397,7 +424,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block lang="css">{@indent_code}</.code_block>
       </.card>
 
-      <.card title="8. Row Height & Long Labels">
+      <.card title="TR08 · Row Height & Long Labels">
         <.tip>Set <code>--ms-option-min-height</code> for a consistent row height; flip the <code>--ms-option-title-*</code> trio to truncate.</.tip>
         <p>
           Deep indentation eats horizontal space, so long labels matter. By default a title
@@ -428,7 +455,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block lang="css">{@rowheight_code}</.code_block>
       </.card>
 
-      <.card title="9. Real Data — Full ISCO-08 Classification">
+      <.card title="TR09 · Real Data — Full ISCO-08 Classification">
         <.tip>Dense rows via <code>{"option_height={32}"}</code>; <code>getBadgeDisplayCallback</code> / <code>getBadgeTooltipCallback</code> / <code>getSearchValueCallback</code> wired in JS.</.tip>
         <p>
           Everything at once on real data: the whole <strong>International Standard Classification
@@ -462,7 +489,47 @@ defmodule TestAppWeb.Examples.TreeLive do
         </small>
       </.card>
 
-      <.card title="10. Cascade Checkboxes & Value Policy">
+      <.card title="TR09b · Scroll-to API in a tree">
+        <.tip>JS-only: <code>scrollToValue</code> reaches any node (tree is always expanded); <code>scrollToGroup</code> returns <code>false</code> in tree mode.</.tip>
+        <p>
+          The tree is <strong>always fully expanded</strong>, so <code>scrollToValue</code> reaches
+          any node by its value (here the ISCO code) — and it works with virtual scroll (the row
+          need not be rendered). <code>scrollToGroup</code> does <em>not</em> apply in tree mode and
+          returns <code>false</code>. If a <strong>search</strong> has filtered the tree, the node
+          may be hidden — call <code>clearSearch()</code> first to reveal it, then scroll.
+        </p>
+        <div class="demo-area">
+          <label class="demo-label">Jump to an ISCO occupation by code:</label>
+          <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
+            <div style="flex:1 1 260px; min-width:260px;">
+              <.web_multiselect
+                id="tree-scroll"
+                multiple={true}
+                enable_virtual_scroll={true}
+                option_height={32}
+                options={@isco}
+                path_member="path"
+                value_member="value"
+                display_value_member="label"
+                is_selectable_member="selectable"
+                style="--ms-option-padding: 0.3rem 0.85rem; --ms-option-title-white-space: nowrap; --ms-option-title-overflow: hidden; --ms-option-title-text-overflow: ellipsis;"
+              />
+            </div>
+            <div style="display:flex; flex-direction:column; gap:0.5rem; flex:0 0 auto; min-width:210px;">
+              <button type="button" data-tr="value:1111">1111 · Legislators</button>
+              <button type="button" data-tr="value:2211">2211 · Medical Practitioners</button>
+              <button type="button" data-tr="value:7212">7212 · Welders</button>
+              <button type="button" data-tr="last">⇲ last node (index)</button>
+              <button type="button" data-tr="group:health">scrollToGroup (tree → false)</button>
+              <button type="button" data-tr="clear">clearSearch()</button>
+            </div>
+          </div>
+          <div id="tr-scroll-log" class="log-panel"><div class="muted">scrollTo* results log here…</div></div>
+        </div>
+        <.code_block lang="js">{@scrollto_code}</.code_block>
+      </.card>
+
+      <.card title="TR10 · Cascade Checkboxes & Value Policy">
         <.tip>Both are live — flip <code>checkbox_mode</code> / <code>cascade_select_policy</code> (JS props) any time and the current selection re-projects.</.tip>
         <p>
           Two orthogonal knobs. <code>checkbox_mode</code> controls <em>how checking a branch
@@ -472,8 +539,8 @@ defmodule TestAppWeb.Examples.TreeLive do
           emitted value changes in each mode.
         </p>
         <ul>
-          <li><code>checkbox_mode="independent"</code> <em>(default)</em> — each node toggles on its own; checking a branch selects <strong>only that node</strong>.</li>
-          <li><code>checkbox_mode="cascade"</code> — checking a branch checks its <strong>whole subtree</strong>; a partial branch shows a <strong>tristate</strong> (dash) box.</li>
+          <li><code>checkbox_mode="cascade"</code> <em>(default)</em> — checking a branch checks its <strong>whole subtree</strong>; a partial branch shows a <strong>tristate</strong> (dash) box.</li>
+          <li><code>checkbox_mode="independent"</code> — each node toggles on its own; checking a branch selects <strong>only that node</strong>.</li>
         </ul>
         <ul>
           <li><code>rolled-up</code> <em>(default)</em> — <strong>minimal cover</strong>: a fully-selected subtree collapses to its root; a partial branch emits its individually-checked descendants.</li>
@@ -483,14 +550,14 @@ defmodule TestAppWeb.Examples.TreeLive do
         <div class="demo-area">
           <div class="controls" id="mode-group">
             <strong><code>checkbox_mode</code>:</strong>
-            <label><input type="radio" name="cb-mode" value="independent" checked /> <code>independent</code></label>
-            <label><input type="radio" name="cb-mode" value="cascade" /> <code>cascade</code></label>
+            <label><input type="radio" name="cb-mode" value="independent" /> <code>independent</code></label>
+            <label><input type="radio" name="cb-mode" value="cascade" checked /> <code>cascade</code></label>
           </div>
-          <div class="controls" id="policy-group" data-disabled="true">
+          <div class="controls" id="policy-group" data-disabled="false">
             <strong><code>cascade_select_policy</code>:</strong>
-            <label><input type="radio" name="cb-policy" value="rolled-up" checked disabled /> <code>rolled-up</code></label>
-            <label><input type="radio" name="cb-policy" value="leaves" disabled /> <code>leaves</code></label>
-            <label><input type="radio" name="cb-policy" value="all" disabled /> <code>all</code></label>
+            <label><input type="radio" name="cb-policy" value="rolled-up" checked /> <code>rolled-up</code></label>
+            <label><input type="radio" name="cb-policy" value="leaves" /> <code>leaves</code></label>
+            <label><input type="radio" name="cb-policy" value="all" /> <code>all</code></label>
           </div>
           <label class="demo-label">Check "Fruit", then remove a badge:</label>
           <.web_multiselect id="tree-casc-live" show_checkboxes={true} placeholder="Pick categories…" options={@categories} path_member="path" />
@@ -502,7 +569,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block>{@cascade_code}</.code_block>
       </.card>
 
-      <.card title="11. Action Buttons">
+      <.card title="TR11 · Action Buttons">
         <.tip>Built-in Select All via <code>{"show_select_all={true}"}</code>; custom actions are JS-only (<code>el.actionButtons</code>). Select All is cascade-aware.</.tip>
         <p>
           Action buttons work with tree mode. The built-in <code>select-all</code> /
@@ -527,7 +594,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block lang="js">{@actions_code}</.code_block>
       </.card>
 
-      <.card title="12. Custom Node Rendering">
+      <.card title="TR12 · Custom Node Rendering">
         <.tip>JS-only: <code>renderOptionContentCallback(item, ctx)</code> — in tree mode <code>ctx</code> carries tree metadata (<code>isBranch</code>, <code>childCount</code>, <code>level</code>, <code>depth</code>, <code>path</code>, <code>isIndeterminate</code>…).</.tip>
         <p>
           <code>renderOptionContentCallback</code> works on tree rows too — it replaces the
@@ -557,7 +624,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block lang="js">{@rendering_code}</.code_block>
       </.card>
 
-      <.card title="13. No Badges — Selections in a Popover">
+      <.card title="TR13 · No Badges — Selections in a Popover">
         <.tip><code>badges_display_mode="count"</code> + <code>{"show_counter={true}"}</code> — a compact chip that opens the selected-items popover.</.tip>
         <p>
           For a deep tree, a wall of badges gets noisy fast. Set <code>badges_display_mode="count"</code>
@@ -590,7 +657,7 @@ defmodule TestAppWeb.Examples.TreeLive do
         <.code_block>{@count_code}</.code_block>
       </.card>
 
-      <.card title="14. Independent Panel Widths">
+      <.card title="TR14 · Independent Panel Widths">
         <.tip><code>dropdown_width</code> / <code>selected_popover_width</code> set the panel widths (or the <code>--ms-dropdown-width</code> / <code>--ms-selected-popover-width</code> vars at theme level).</.tip>
         <p>
           The control, the options dropdown, and the selected-items popover are three separate panels —
@@ -624,6 +691,46 @@ defmodule TestAppWeb.Examples.TreeLive do
           />
         </div>
         <.code_block>{@widths_code}</.code_block>
+      </.card>
+
+      <.card title="TR15 · Navigate Mode — Jump Between Matches">
+        <.tip><code>search_mode="navigate"</code> keeps the whole tree visible and jumps focus between matches; add <code>show_search_mode_toggle</code> for a built-in filter↔navigate switch in the fullscreen search bar.</.tip>
+        <p>
+          Section TR03 shows the default <strong>filter</strong> search (the hierarchy narrows to matches
+          plus their ancestors). <code>search_mode="navigate"</code> is the alternative: the
+          <strong>whole tree stays visible</strong> and typing <em>jumps focus</em> between matching
+          nodes instead of hiding anything — handy on a tree, where filtering can hide the structure you
+          were reading. Matched rows keep a highlight; step through them with
+          <kbd>Ctrl</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> on desktop. In the <strong>fullscreen overlay</strong>
+          (touch, or the preview toggle below) a <code>N of M</code> count with prev/next buttons appears
+          under the search box, since touch has no keyboard shortcut.
+        </p>
+        <p>
+          This picker also sets <code>show_search_mode_toggle</code>, which adds a
+          <strong>built-in mode switch</strong> to the fullscreen search bar: the leading icon
+          (magnifier = navigate, funnel = filter) flips the mode <em>in place</em> on tap — no reopen.
+          Enable fullscreen preview, then tap the icon to switch without touching the host-page radios.
+        </p>
+        <div class="controls">
+          <span>Search mode:</span>
+          <label><input type="radio" name="tree-nav-mode" value="filter" /> <code>filter</code></label>
+          <label><input type="radio" name="tree-nav-mode" value="navigate" checked /> <code>navigate</code></label>
+        </div>
+        <label class="toggle-label">
+          <input type="checkbox" id="tree-nav-fs-preview" /> Preview as fullscreen (desktop)
+        </label>
+        <div class="demo-area">
+          <label class="demo-label">Open the tree and type <code>a</code> — in navigate mode every node stays put and focus jumps between the matches:</label>
+          <.web_multiselect
+            id="tree-navigate"
+            multiple={true}
+            search_mode="navigate"
+            show_search_mode_toggle={true}
+            options={@categories}
+            path_member="path"
+          />
+        </div>
+        <.code_block>{@nav_code}</.code_block>
       </.card>
 
       <.keen_card title="Sending paths to the server (LiveView)">
@@ -681,20 +788,41 @@ defmodule TestAppWeb.Examples.TreeLive do
       // both are applied live, so the current selection re-projects the instant a radio flips.
       wait('tree-casc-live').then((el) => {
         const emittedOut = document.getElementById('casc-emitted');
-        const policyGroup = document.getElementById('policy-group');
         const showEmitted = () => { emittedOut.textContent = JSON.stringify(el.getValue()); };
         el.addEventListener('change', showEmitted);
-        document.querySelectorAll('input[name="cb-mode"]').forEach((r) => {
-          r.addEventListener('change', () => {
-            const cascade = r.value === 'cascade' && r.checked;
+        // Delegate on document: listeners bound directly to these radios are dropped when
+        // LiveView patches the card's DOM on connect (the <web-multiselect> survives via
+        // phx-update="ignore", plain radios do not). policyGroup is re-resolved at event
+        // time in case its node was replaced too.
+        document.addEventListener('change', (e) => {
+          const r = e.target;
+          if (!r) return;
+          if (r.name === 'cb-mode' && r.checked) {
+            const policyGroup = document.getElementById('policy-group');
+            const cascade = r.value === 'cascade';
             el.checkboxMode = cascade ? 'cascade' : 'independent';
             policyGroup.dataset.disabled = String(!cascade);
             policyGroup.querySelectorAll('input').forEach((p) => { p.disabled = !cascade; });
             showEmitted();
-          });
+          } else if (r.name === 'cb-policy' && r.checked) {
+            el.cascadeSelectPolicy = r.value;
+            showEmitted();
+          }
         });
-        document.querySelectorAll('input[name="cb-policy"]').forEach((r) => {
-          r.addEventListener('change', () => { if (r.checked) el.cascadeSelectPolicy = r.value; showEmitted(); });
+      });
+
+      // §15 Navigate mode on a tree — whole tree stays visible, focus jumps between
+      // matches. A radio group flips search-mode live; a checkbox previews the
+      // fullscreen overlay (where the N-of-M match navigator shows) on desktop.
+      wait('tree-navigate').then((treeNav) => {
+        // Delegate on document: listeners bound directly to these controls are dropped
+        // when LiveView patches the card's DOM on connect (the <web-multiselect> survives
+        // via phx-update="ignore", plain controls do not).
+        document.addEventListener('change', (e) => {
+          const t = e.target;
+          if (!t) return;
+          if (t.name === 'tree-nav-mode' && t.checked) treeNav.setAttribute('search-mode', t.value);
+          else if (t.id === 'tree-nav-fs-preview') treeNav.setAttribute('mobile-presentation', t.checked ? 'fullscreen' : 'auto');
         });
       });
 
@@ -748,6 +876,66 @@ defmodule TestAppWeb.Examples.TreeLive do
           return segs.length > 1 ? `.. / ${last}` : last;
         };
         el.getBadgeTooltipCallback = (item) => item.full_title || item.label;
+      });
+
+      // §9b Scroll-to in a tree — reuses the ISCO data (server-provided). The tree is
+      // always expanded, so scrollToValue reaches any node; scrollToGroup returns false.
+      wait('tree-scroll').then((treeScroll) => {
+        const trLogEl = document.getElementById('tr-scroll-log');
+        if (!trLogEl) return;
+        treeScroll.getSearchValueCallback = (item) => `${item.label} ${item.value} ${item.full_title}`;
+
+        const trLog = (msg) => {
+          if (trLogEl.querySelector('.muted')) trLogEl.innerHTML = '';
+          const row = document.createElement('div');
+          row.style.marginBottom = '0.4rem';
+          row.textContent = msg;
+          trLogEl.appendChild(row);
+          trLogEl.scrollTop = trLogEl.scrollHeight;
+        };
+        const trDescribe = (targetValue) => {
+          const container = treeScroll.shadowRoot && treeScroll.shadowRoot.querySelector('.ms__options');
+          if (!container) { trLog('   ↳ (dropdown not open)'); return; }
+          const crect = container.getBoundingClientRect();
+          const rows = [...container.querySelectorAll('.ms__option')];
+          const visible = rows.filter((o) => {
+            const r = o.getBoundingClientRect();
+            return r.bottom > crect.top + 1 && r.top < crect.bottom - 1;
+          });
+          const lbl = (o) => o ? `"${(o.querySelector('.ms__option-title') || o).textContent.trim()}"` : '—';
+          let note = '';
+          if (targetValue != null) {
+            const hit = visible.some((o) => o.dataset.value === String(targetValue));
+            note = hit ? ` · target ${targetValue} VISIBLE` : ` · target ${targetValue} NOT in view`;
+          }
+          trLog(`   ↳ scrollTop=${Math.round(container.scrollTop)} · shows ${lbl(visible[0])} … ${lbl(visible[visible.length - 1])} (${visible.length} rows)${note}`);
+        };
+
+        // Delegate on document so the listeners survive LiveView's DOM patch on connect.
+        // As of @keenmate/web-multiselect 2.1.0 no stopPropagation()/capture-phase workaround
+        // is needed: open() and every scrollTo* arm a one-tick outside-click guard, so
+        // re-driving the already-open dropdown from an external button no longer closes it.
+        document.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-tr]');
+          if (!btn) return;
+          treeScroll.open();
+          const spec = btn.dataset.tr;
+          if (spec === 'clear') { treeScroll.clearSearch(); trLog('clearSearch() — search reset, full tree restored'); return; }
+          if (spec === 'last') {
+            const lastIndex = (treeScroll.options ? treeScroll.options.length : 0) - 1;
+            const ok = treeScroll.scrollToIndex(lastIndex);
+            trLog(`▶ scrollToIndex(${lastIndex}) → ${ok}`);
+            setTimeout(() => trDescribe(null), 90);
+            return;
+          }
+          const [kind, arg] = spec.split(':');
+          let ok, target = null;
+          if (kind === 'value')      { ok = treeScroll.scrollToValue(arg); target = arg; }
+          else if (kind === 'group') { ok = treeScroll.scrollToGroup(arg); }
+          const call = kind === 'group' ? `scrollToGroup('${arg}')` : `scrollToValue('${arg}')`;
+          trLog(`▶ ${call} → ${ok}`);
+          if (kind === 'value') setTimeout(() => trDescribe(target), 90);
+        });
       });
     </script>
     """
