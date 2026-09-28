@@ -48,16 +48,37 @@ defmodule Keenmate.WebMultiselect do
 
     * a binary — treated as inline CSS
     * `{:inline, css}` — inline CSS (explicit)
-    * `{:file, path}` — read the CSS from a file (`path` as given, i.e. relative to
-      the app's working directory unless absolute)
+    * `{:file, path}` — read the CSS from a file at **runtime, on every render**, with
+      `path` used as given (relative to the current working directory unless absolute)
     * a 0-arity function or `{module, function, args}` — called to produce the CSS
       string (computed on the server, e.g. from theme config)
 
+  > #### `{:file, path}` breaks in a release {: .warning}
+  >
+  > `{:file, path}` runs `File.read!(path)` at runtime. A **relative** path resolves
+  > against the OS process's current working directory — your project root under
+  > `mix phx.server`, but the *release root* in a deployed release, where `priv` lives
+  > under `Application.app_dir/2` (e.g. `/app/lib/my_app-x.y.z/priv/…`), not `./priv`.
+  > So `{:file, "priv/static/…"}` works in dev and then crashes the release with
+  > `** (File.Error) could not read file …`. Use one of the release-safe patterns below.
+
   ## Examples
 
-      config :keen_web_multiselect, shadow_styles: "assets/ms-shadow.css" |> File.read!()
-      config :keen_web_multiselect, shadow_styles: {:file, "assets/ms-shadow.css"}
+      # Release-safe: read + inline the CSS at COMPILE time (no runtime file IO). `__DIR__`
+      # makes the path independent of the working directory the build runs from.
+      config :keen_web_multiselect,
+        shadow_styles: File.read!(Path.join(__DIR__, "../priv/static/assets/ms-shadow.css"))
+
+      # Release-safe: an ABSOLUTE path resolved at runtime from the app's priv dir. Put this
+      # in runtime.exs so Application.app_dir/2 resolves against the real release layout.
+      config :keen_web_multiselect,
+        shadow_styles: {:file, Application.app_dir(:my_app, "priv/static/assets/ms-shadow.css")}
+
+      # Computed on the server (e.g. from theme config).
       config :keen_web_multiselect, shadow_styles: {MyApp.Theme, :multiselect_css, []}
+
+      # ⚠️ Dev-only: a relative {:file, …} crashes in a release — see the warning above.
+      config :keen_web_multiselect, shadow_styles: {:file, "assets/ms-shadow.css"}
   """
   @spec shadow_styles_css() :: String.t() | nil
   def shadow_styles_css do
