@@ -1,8 +1,11 @@
 # Changelog
 
-## [2.2.0-rc.1] - 2026-09-27
+## [2.0.0-rc.2] - 2026-09-28 [PUBLISHED]
 
-_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.2.0-rc01`._
+_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.2.0-rc02`. Consolidates every
+wrapper change since the published `2.0.0-rc.1` — this package is versioned **independently** of
+upstream (see "Versioning" in the README), and `Keenmate.WebMultiselect.upstream_version/0` reports
+the bundled upstream version._
 
 ### Added
 
@@ -26,28 +29,78 @@ _Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.2.0-rc01`._
   "+N more"), and the selected-items popover; `selected_order_member` names the sort-key property
   for `"member"`. Display only — the submitted form value keeps as-selected order, and the options
   dropdown is never reordered.
+- **`custom-styles` attr — inject a static shadow-DOM stylesheet without JS (upstream).** The
+  bundled element now accepts a `custom-styles` attribute: a raw CSS string (selectors and all)
+  dropped verbatim into the same replaceable shadow-DOM style slot that `customStylesCallback`
+  targets (the callback wins when both are set). It's the attribute-friendly path for arbitrary
+  shadow CSS that doesn't need to be computed in JS. The wrapper has no dedicated typed attr, but
+  its `:global` passthrough carries it — `custom-styles={"..."}` on `<.web_multiselect>` reaches
+  the element verbatim. For a project-wide sheet shared across many instances, prefer
+  `<.shadow_styles/>` (adopted, not duplicated per element). Typed in `multiselect.d.ts` as
+  `MultiSelectConfig.customStyles`.
+- **Share shadow-DOM styles once — `shadow_styles/1` component.** A project with many `<web-multiselect>` instances can now theme the component's shadow internals in one place instead of on every element. Point `:shadow_styles` at CSS (an inline string, `{:file, path}`, or a function / `{mod, fun, args}` returning CSS) and drop `<Keenmate.WebMultiselect.Components.shadow_styles/>` once in your root layout — it inlines the CSS and the client registry compiles it into a single Constructable Stylesheet and **adopts it into every element's shadow root** (`adoptedStyleSheets`), now and for elements added later (dead views and LiveView), with an optional CSP `nonce`. One shared sheet, applied deterministically, that survives the component's own re-renders and isn't duplicated per instance. Because the sheet lives in each shadow root, `:host(.your-class) …` selectors work — a select opts into or diverges from the shared theme with a plain `class`, no per-instance JavaScript. Importing the hook re-exports `registerShadowStyles(css)` / `getShadowStyles()` for runtime tweaks. New: `Keenmate.WebMultiselect.shadow_styles_css/0` and `defaults_js/0`, and the shipped `priv/static/keen_web_multiselect_defaults.js`. Documented in `guides/theming.md`.
+- **Flash-free shared styles via upstream's `defer` render gate — `defer` attribute.** Upstream's `defer` boolean holds the very first render (the element reserves space but builds nothing) until the gate is released — by `el.ready()` or, for server-driven frameworks, by removing the attribute. **When `:shadow_styles` is configured, `web_multiselect/1` emits `defer` automatically**, and the client registry adopts the shared sheet into the shadow root *before* releasing the gate — so themed badges paint in one shot, no upgrade-then-restyle flash. Also available per-instance: `defer={true}` holds the build for your own async wiring (release from a `hook`'s `mounted()` with `el.ready()`), `defer={false}` opts a single select out of the automatic gate. Auto-gates emit a bare `defer` (LiveView's connect-time patch leaves it off once released → clean DOM); a manual `defer={true}` is flagged `data-kwms-manual`. **Requires `<.shadow_styles/>` in your layout when `:shadow_styles` is set.**
+- **"Add new" creation mode — `add_new_text` / `add_new_pending_text` (+ the `add` event).** With `allow_add_new` on, a search that yields no matches shows a clickable **"Add new …"** prompt in the empty dropdown instead of the plain `empty_message`; choosing it (click or <kbd>Enter</kbd>) commits the creation. `add_new_text` sets the prompt template (`{value}` is the typed text; default `Add "{value}"`), `add_new_pending_text` the spinner label shown while an async `addNewCallback` runs. Creation works **with or without** a JS `addNewCallback` — supply it to auto-create + select the option (async + cancelable: resolve to `null`/`undefined` to abort), or omit it and handle creation server-side.
+- **`add` event forwarded to the server.** When a hook is attached, choosing the "Add new …" prompt pushes `"web_multiselect:add"` with `%{"id", "value" => typed_text, "option" => created_value_or_nil}` — so a LiveView can own option creation with no JS `addNewCallback`. The hook now forwards four events (add joins select/deselect/change).
+- **`show_clear` — inline clear (✕) button.** A boolean that renders a small ✕ inside the input, left of the toggle chevron. It appears only while something is selected and the control is enabled; clicking it wipes the whole selection and any search text, fires a single `change`, and refocuses. Themeable via the `--ms-input-clear-*` variables.
+- **`overlay_group` — scope the "one overlay open at a time" coordination.** A named group in which multiselects (and other Keenmate overlays that dispatch `km-overlay-activated`) dismiss each other when one opens. Unset = the default ungrouped group in which every ungrouped overlay coordinates; different groups are independent. Outside-click dismissal is unchanged and always on.
+- **`Keenmate.WebMultiselect.push_command/3` — server-driven imperative control.** Drive a mounted picker from the LiveView process without touching options or selection: `open` / `close` / `toggle` the dropdown, `search` / `clear_search` the box, or `scroll_to_value` / `scroll_to_group` / `scroll_to_index` an option into view. Backed by a `"web_multiselect:command"` channel the hook dispatches to the element's imperative methods (`open`/`close`/`toggle`/`isOpen`, `search`/`searchText`/`clearSearch`, `scrollToValue`/`scrollToGroup`/`scrollToIndex`).
+- **Mobile / fullscreen presentation — `mobile_presentation` / `fullscreen_autofocus`.** On phone-sized touch devices the open dropdown (and the selected-items popover) can become a full-screen overlay with its own search field, close button, and page-scroll lock, instead of a floating panel anchored to the input. `mobile_presentation` (`"auto"` default | `"floating"` | `"fullscreen"`) picks the behaviour — `fullscreen` forces the overlay on any device, handy for previewing on desktop — and resolves reactively to orientation/resize. `fullscreen_autofocus` (default `false`) controls whether opening the sheet pops the soft keyboard immediately.
+- **`show_search_mode_toggle`.** Adds a clickable toggle in the phone fullscreen overlay's search header that flips `search_mode` between `filter` and `navigate` live. Fullscreen-only; off by default.
+- **`collapse_badges_below` — container-responsive badge collapse.** A pixel width that makes the control watch its **own** border box (not the window) and collapse `badges_display_mode` to `count` ("N selected") while narrower than that — so a picker in a narrow column/sidebar never overflows with pills, even on a wide monitor. A distinct axis from `mobile_presentation`, and composes with it.
+- **`enable_selected_popover`.** Defaults to `true`; set `false` to make the selected-items popover inert (and drop its pointer cursor) when you render your own selection UI from the `change` event. Pairs with `badges_display_mode="none"` + `show_counter`.
 
 ### Changed
 
-- **Bundled `@keenmate/web-multiselect` upgraded to `2.2.0-rc01`** (from `2.1.0`). Headline
-  behaviour change: **tree `checkbox_mode` now defaults to `cascade`** (was `independent`) —
-  checking a branch checks its whole subtree and the emitted selection follows
-  `cascade_select_policy` (default `rolled-up`). Set `checkbox_mode="independent"` to keep the
-  old per-node behaviour. Also folds in the new flat `group_select_mode="cascade"` (above) and
-  two fixes: changing a cosmetic attribute (`badges_display_mode` / `badges_position`) or a
-  reinit one (`search_input_mode` / `search_mode`) no longer wipes the current selection, and
-  `search_input_mode="hidden"` no longer collapses the input row (the toggle stays at the
-  trailing edge), and the **"+N more" badge's X now removes the hidden items** instead of just
-  opening the popover. Cascade group headers (`group_select_mode="cascade"`) now show a
-  **per-group selected count** (shown on every group header, cascade or not, as the same `[N]`
-  chip as the in-input counter), a shared `getCountLabelCallback((selected, total) => string)` that
-  formats both counters (e.g. `x/y`), and every render callback now gets a context argument carrying
-  the presentation (`renderGroupLabelContentCallback` gains members + selection;
-  `renderSelectedItemContentCallback` / `renderSelectedContentCallback` gain the presentation
-  context) — all additive, for JS consumers of the underlying element. Includes upstream's internal
-  `data-ready` → `data-placeholder-ready` rename
-  (the wrapper pre-seeds `data-placeholder-ready=""` for morph-safety). `priv/static/multiselect.{js,css}`
-  re-bundled; `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.2.0-rc01"`.
+- **Bundled `@keenmate/web-multiselect` upgraded `2.0.0-rc02` → `2.2.0-rc02`** — one bundle jump
+  spanning the rest of the 2.0.0 line (rc03–rc12, the published `2.0.0`, and `2.0.1`), `2.1.0`, and
+  `2.2.0` (rc01–rc02). **Headline behaviour change: tree `checkbox_mode` now defaults to `cascade`**
+  (was `independent`) — checking a branch checks its whole subtree and the emitted selection follows
+  `cascade_select_policy` (default `rolled-up`); set `checkbox_mode="independent"` to keep the old
+  per-node behaviour. Milestones along the way: the imperative open/close/scroll API, the inline
+  clear (✕) button, and the flex "field shell" input (2.0.0-rc11); cross-component single-active
+  overlays + themeable toggle-chevron rotation (2.0.0-rc12); the phone fullscreen overlay,
+  `search_mode="navigate"` on trees, and RTL rebuilt on CSS logical properties (2.0.0-rc10); the
+  `defer` render gate (2.1.0); and the flat `group_select_mode="cascade"`, the per-group `[N]` count
+  chip, and the "+N more" ✕ now removing the hidden items rather than just opening the popover
+  (2.2.0). Two selection-stability fixes also landed: changing a cosmetic attribute
+  (`badges_display_mode` / `badges_position`) or a reinit one (`search_input_mode` / `search_mode`)
+  no longer wipes the current selection, and `search_input_mode="hidden"` no longer collapses the
+  input row. Includes upstream's internal `data-ready` → `data-placeholder-ready` rename (the wrapper
+  pre-seeds `data-placeholder-ready=""` for morph-safety). `priv/static/multiselect.{js,css,d.ts}`
+  re-bundled; `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.2.0-rc02"`.
+- **Theming: the `--base-*` contract + field-shell knobs.** `--ms-rem` now bridges `var(--base-rem, 10px)` and the icon glyphs chain `--ms-icon-*: var(--base-icon-*, <fallback>)`, so a theme reskins/rescales every Keenmate component from one base layer. The rc11 field-shell rework replaced the absolutely-positioned input decorations with a flex layout: the vars `--ms-input-padding`, `--ms-input-padding-right`, `--ms-toggle-right`, `--ms-counter-offset`, `--ms-input-clear-inset`, `--ms-input-clear-gutter`, and `--ms-transform-center-y` were **removed**; `--ms-input-padding-h` and `--ms-input-gap` are the new knobs. New `--ms-add-new-*`, `--ms-input-clear-*`, `--ms-toggle-rotate-closed/open`, `--ms-fullscreen-*`, and `--ms-message-*` variables. Documented in `guides/theming.md`.
+- **`keen_web_multiselect_hook.js` now imports `keen_web_multiselect_defaults.js`** (the shared shadow-styles registry) as a side effect and re-exports `registerShadowStyles` / `getShadowStyles`. Bundlers (esbuild) inline the import automatically. **If you serve the dep's files individually via `Plug.Static`, add `keen_web_multiselect_defaults.js` to the `only:` allowlist** — otherwise the hook's import 404s. Not needed if you load neither the hook nor `<.shadow_styles/>`.
+- **New JS-only element callbacks for hook-based consumers** (no HEEx attr — set them on the element from a `hook`): `keydownCallback` (remap/veto keys before built-in handling), `renderBadgeCallback` (return the whole badge markup, not just its content), `showMessage()` / `hideMessage()` (a component-anchored toast; a `beforeSelect`/`beforeDeselectCallback` returning a string now vetoes *and* surfaces it as a warning toast), and `getCountLabelCallback((selected, total) => string)` (formats both the in-input counter and the per-group `[N]` chip, e.g. `x/y`). Every render callback now also receives a presentation context (`isFullscreen` / `isModal`), and `renderGroupLabelContentCallback` gains its group's members + selection — so one renderer can vary between the desktop dropdown and the phone sheet. All additive.
+
+### Fixed
+
+- **Async-search dropdowns no longer overflow the viewport bottom when results arrive.** An async
+  `searchCallback` opens the panel while it's still empty / showing the loader — short, so with the
+  default `lock-placement` it freezes to `bottom`. When results streamed in and grew the panel to
+  full height, the frozen `bottom` placement stayed pinned below the input and the panel spilled
+  past the viewport instead of flipping above into the free space. The bundle now re-anchors an
+  already-open floating dropdown from scratch when its content grows (upstream's private
+  `repositionDropdown`), re-running core's flip-on-first-compute against the panel's **current**
+  height and then re-freezing — so `lock-placement` still holds for the common already-populated
+  case (local filtering, which opens the panel already sized, never hits this path). Ships in the
+  re-bundled `priv/static/multiselect.{js,d.ts}`.
+- **Single-select no longer keeps a stale multi-selection when seeded with more than one value.**
+  Via the bundled upstream: `parseInitialSelection()` added *every* seeded value to the selection
+  unconditionally, so a `multiple={false}` picker could hold — and highlight — several rows at once.
+  It surfaced two ways: a declarative multi-value seed on a single-select (`value` / `initial-values`
+  carrying more than one), and (more visibly) flipping `multiple` from `true` → `false` at runtime with
+  items selected — the reinit reseeded the live multi-selection into the fresh single-select, leaving
+  the extra rows rendered as selected even though only one is the real value. The picker now trims the
+  seed to the **first** value when not multiple, so exactly one row stays selected.
+- **Per-group count chip now scales with the header in the phone fullscreen overlay.** Via the bundled
+  upstream: the `[N]` per-group chip pinned `--ms-counter-font-size` (baked at `:host` against the base
+  `--ms-rem`, so it never scaled), while the fullscreen overlay re-declares a larger group-label font
+  size — leaving the count as small text in an oversized, distorted box. The chip now inherits the
+  group-label font-size (colours / weight / radius still borrow the in-input counter), so it scales with
+  the header in the overlay and its box height matches the header line. No layout shift.
+- **Single-select no longer deselects on re-click.** Via the bundled upstream: clicking (or pressing <kbd>Enter</kbd> on) the already-selected option in a `multiple={false}` picker used to silently empty it — surprising, since a single-select row has no checkbox to signal "un-picking". A re-click is now a no-op that just closes the dropdown; the value stays. Clearing is the ✕ (`show_clear`) button's job. Multi-select toggle-off and single-select *replacement* (picking a different option) are unchanged.
+- **Checkbox checkmark sizing — new `--base-icon-check-size` variable.** The selected-row checkmark masked its glyph at `contain` (~100% of the box), which oversized edge-to-edge custom glyphs and diverged from pure-admin's `.pa-checkbox`. It now reads `var(--base-icon-check-size, 68%)` — the same knob `.pa-checkbox` uses — so the mark renders identically in both and a theme can rescale it once for every Keenmate component. **Note:** the default Lucide check shrinks ~100% → 68% (intended); set `--base-icon-check-size` (or `--ms-*`) to restore the larger mark. Documented in `guides/theming.md`.
 
 ### Internal — demo site
 
@@ -88,83 +141,14 @@ _Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.2.0-rc01`._
   `@keenmate/web-multiselect`, which promotes the `<form>` panel, the `.form-actions` footer and
   the `.demo-area > button` spacing into the shared sheet — restoring the demo's intended spacing.
   (`test_app/` is excluded from the Hex package.)
-
-## [2.1.0] - 2026-09-21
-
-_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.1.0`._
-
-### Added
-
-- **Share shadow-DOM styles once — `shadow_styles/1` component.** A project with many `<web-multiselect>` instances can now theme the component's shadow internals in one place instead of on every element. Point `:shadow_styles` at CSS (an inline string, `{:file, path}`, or a function / `{mod, fun, args}` returning CSS) and drop `<Keenmate.WebMultiselect.Components.shadow_styles/>` once in your root layout — it inlines the CSS and the client registry compiles it into a single Constructable Stylesheet and **adopts it into every element's shadow root** (`adoptedStyleSheets`), now and for elements added later (dead views and LiveView), with an optional CSP `nonce`. One shared sheet, applied deterministically, that survives the component's own re-renders and isn't duplicated per instance. Because the sheet lives in each shadow root, `:host(.your-class) …` selectors work — a select opts into or diverges from the shared theme with a plain `class`, no per-instance JavaScript. Importing the hook re-exports `registerShadowStyles(css)` / `getShadowStyles()` for runtime tweaks (e.g. `registerShadowStyles(getShadowStyles() + extra)`). New: `Keenmate.WebMultiselect.shadow_styles_css/0` and `defaults_js/0`, and the shipped `priv/static/keen_web_multiselect_defaults.js`. Documented in `guides/theming.md` (which leads with "CSS custom properties first — this is for the arbitrary shadow-DOM CSS residual").
-- **Flash-free shared styles via upstream's `defer` render gate — new `defer` attribute.** Upstream 2.1.0 adds a `defer` boolean that holds the very first render (the element reserves space but builds nothing) until the gate is released — by `el.ready()` or, for server-driven frameworks, by removing the attribute. The wrapper uses it to close the upgrade-then-restyle flash the shared-styles feature could otherwise show (default badge styles for a beat before the adopted sheet lands): **when `:shadow_styles` is configured, `web_multiselect/1` emits `defer` automatically**, and the client registry adopts the shared sheet into the (already-attached) shadow root *before* releasing the gate — so themed badges paint in one shot. The new `defer` attr is also available per-instance: `defer={true}` holds the build for your own async wiring (release it from a `hook`'s `mounted()` with `el.ready()`), `defer={false}` opts a single select out of the automatic gate. Auto-gates emit a bare `defer` (which LiveView's connect-time DOM patch leaves off once released → clean DOM); a manual `defer={true}` is flagged `data-kwms-manual` so the registry adopts the shared sheet but leaves the release to you. **Requires `<.shadow_styles/>` in your layout when `:shadow_styles` is set** (already required for the feature) — it ships the registry that releases the gate.
-
-### Changed
-
-- **Bundled `@keenmate/web-multiselect` upgraded to `2.1.0`** (from `2.0.1`) — the `defer` render gate (above) plus a fix: re-driving an already-open dropdown from an *external* control (a repeat `open()`/`toggle()` or a `scrollTo*` command) no longer bubbles to the outside-click handler and closes the panel. `priv/static/multiselect.{js,css,d.ts}` re-bundled (the new `:host([defer]:not([is-ready]))` reserve-space rule is in the CSS); `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.1.0"`. No `Components` attribute, hook, or `push_*` API changes beyond the additive `defer` attr.
-- **`keen_web_multiselect_hook.js` now imports `keen_web_multiselect_defaults.js`** (the shared shadow-styles registry) as a side effect and re-exports `registerShadowStyles` / `getShadowStyles`. Bundlers (esbuild) inline the import automatically. **If you serve the dep's files individually via `Plug.Static`, add `keen_web_multiselect_defaults.js` to the `only:` allowlist** — otherwise the hook's import 404s. Not needed if you load neither the hook nor `<.shadow_styles/>`.
-
-### Internal — demo site
-
-- **`test_app/` demo site re-mirrored against upstream `2.1.0`** — a new **API09 · Deferred initialization** card on `examples-data-api` demonstrating `defer` / `ready()` (held 2 s, then styled pre-selected badges paint in one shot), the 💧 Elixir Only page updated to credit `defer` for the flash-free paint, and the `stopPropagation()`/capture-phase workaround dropped from the scroll-to demos (`examples-basic`, `examples-tree`, `examples-virtual-scrolling`) now that upstream's outside-click guard covers the already-open case. (`test_app/` is excluded from the Hex package.)
-
-## [2.0.1] - 2026-09-20
-
-_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.0.1`._
-
-### Fixed
-
-- **Single-select no longer deselects on re-click.** Via the bundled upstream: clicking (or pressing <kbd>Enter</kbd> on) the already-selected option in a `multiple={false}` picker used to silently empty it — surprising, since a single-select row has no checkbox to signal "un-picking". A re-click is now a no-op that just closes the dropdown; the value stays. Clearing is the ✕ (`show_clear`) button's job. Multi-select toggle-off and single-select *replacement* (picking a different option) are unchanged.
-- **Checkbox checkmark sizing — new `--base-icon-check-size` variable.** The selected-row checkmark masked its glyph at `contain` (~100% of the box), which oversized edge-to-edge custom glyphs and diverged from pure-admin's `.pa-checkbox`. It now reads `var(--base-icon-check-size, 68%)` — the same knob `.pa-checkbox` uses — so the mark renders identically in both and a theme can rescale it once for every Keenmate component. **Note:** the default Lucide check shrinks ~100% → 68% (intended); set `--base-icon-check-size` (or `--ms-*`) to restore the larger mark. Documented in `guides/theming.md`.
-
-### Changed
-
-- **Bundled `@keenmate/web-multiselect` upgraded to `2.0.1`** (from `2.0.0`) — the two fixes above plus internal build tooling (a variable-manifest validator and manifest-drift cleanup) that don't affect the shipped bundle. `priv/static/multiselect.{js,css,d.ts}` re-bundled; `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.0.1"`. No `Components` attribute, hook, or `push_*` API changes.
-
-## [2.0.0] - 2026-09-20
-
-_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.0.0` (the published final)._
-
-### Added
-
-- **"Add new" creation mode — `add_new_text` / `add_new_pending_text` (+ the `add` event).** With `allow_add_new` on, a search that yields no matches now shows a clickable **"Add new …"** prompt in the empty dropdown instead of the plain `empty_message`; choosing it (click or <kbd>Enter</kbd>) commits the creation. `add_new_text` sets the prompt template (`{value}` is the typed text; default `Add "{value}"`), `add_new_pending_text` the spinner label shown while an async `addNewCallback` runs (default `Adding "{value}"…`). Creation works **with or without** a JS `addNewCallback` — supply it to auto-create + select the option (it may return a rich option object and is async + cancelable: resolve to `null`/`undefined` to abort), or omit it and handle creation server-side. The `allow_add_new` doc was rewritten to describe all of this.
-- **`add` event forwarded to the server.** When a hook is attached, choosing the "Add new …" prompt now pushes `"web_multiselect:add"` with `%{"id", "value" => typed_text, "option" => created_value_or_nil}` — so a LiveView can own option creation with no JS `addNewCallback`. The hook now forwards four events (add joins select/deselect/change).
-- **`show_clear` — inline clear (✕) button.** A new boolean that renders a small ✕ inside the input, left of the toggle chevron. It appears only while something is selected and the control is enabled; clicking it wipes the whole selection and any search text, fires a single `change`, and refocuses. Themeable via the new `--ms-input-clear-*` variables.
-- **`overlay_group` — scope the "one overlay open at a time" coordination.** A named group in which multiselects (and other Keenmate overlays that dispatch `km-overlay-activated`) dismiss each other when one opens. Unset = the default ungrouped group in which every ungrouped overlay coordinates; different groups are independent. Outside-click dismissal is unchanged and always on.
-- **`Keenmate.WebMultiselect.push_command/3` — server-driven imperative control.** Drive a mounted picker from the LiveView process without touching options or selection: `open` / `close` / `toggle` the dropdown, `search` / `clear_search` the box, or `scroll_to_value` / `scroll_to_group` / `scroll_to_index` an option into view. Backed by a new `"web_multiselect:command"` channel the hook dispatches to the element's imperative methods (`open`/`close`/`toggle`/`isOpen`, `search`/`searchText`/`clearSearch`, `scrollToValue`/`scrollToGroup`/`scrollToIndex`), all new in upstream 2.0.0.
-
-### Changed
-
-- **Bundled `@keenmate/web-multiselect` upgraded to `2.0.0`** (from `2.0.0-rc10`) — the published final, spanning rc11 (imperative open/close API, inline clear button, flex "field shell" input) and rc12 (cross-component single-active overlays via `overlay-group`, themeable toggle-chevron rotation, dedicated fullscreen-nav glyph). `priv/static/multiselect.{js,css,d.ts}` re-bundled (still a self-contained bundle — the core is inlined); `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.0.0"`.
-- **Theming: the `--base-*` contract + field-shell knobs.** `--ms-rem` now bridges `var(--base-rem, 10px)` and the icon glyphs chain `--ms-icon-*: var(--base-icon-*, <fallback>)`, so a theme reskins/rescales every Keenmate component from one base layer. The rc11 field-shell rework replaced the absolutely-positioned input decorations with a flex layout: the vars `--ms-input-padding`, `--ms-input-padding-right`, `--ms-toggle-right`, `--ms-counter-offset`, `--ms-input-clear-inset`, `--ms-input-clear-gutter`, and `--ms-transform-center-y` were **removed**; `--ms-input-padding-h` and `--ms-input-gap` are the new knobs. The checkbox check/dash render as mask glyphs now (`--ms-checkbox-checkmark-thickness` is a documented no-op). New `--ms-add-new-*`, `--ms-input-clear-*`, `--ms-toggle-rotate-closed/open`, and `--ms-fullscreen-nav-btn-icon` variables. Documented in `guides/theming.md`.
-
-### Internal — docs & demo site
-
-- **README "What's New" + Theming guide updated**, `FEATURES.md` and `ai/*` refreshed for the new attributes, the `add` event, and `push_command/3`.
-- **`test_app/` demo site re-mirrored against upstream `2.0.0`** — new cards for `show_clear` and the scroll-to API (`examples-basic`), the imperative open/close + `search(term)` API (`examples-data-api`), the "add new" creation mode (`examples-events-callbacks`), scroll-to on the ISCO tree (`examples-tree`) and the 15,000-row list (`examples-virtual-scrolling`), and the Material Design toggle-rotate opt-out (`examples-theming`). (`test_app/` is excluded from the Hex package.)
-
-## [2.0.0-rc.2] - 2026-09-07
-
-_Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.0.0-rc10`._
-
-### Added
-
-- **Mobile / fullscreen presentation — `mobile_presentation` / `fullscreen_autofocus`.** On phone-sized touch devices the open dropdown (and the selected-items popover) can become a full-screen overlay with its own search field, close button, and page-scroll lock, instead of a floating panel anchored to the input (which thrashes the soft keyboard). `mobile_presentation` (`"auto"` default | `"floating"` | `"fullscreen"`) picks the behaviour — `fullscreen` forces the overlay on any device, handy for previewing on desktop — and resolves reactively to orientation/resize. `fullscreen_autofocus` (default `false`) controls whether opening the sheet pops the soft keyboard immediately; the default opens with the list visible and the keyboard closed.
-- **`show_search_mode_toggle`.** Adds a clickable toggle in the phone fullscreen overlay's search header that flips `search_mode` between `filter` and `navigate` live (internal: `isSearchModeToggleShown`). Fullscreen-only; off by default.
-- **`collapse_badges_below` — container-responsive badge collapse.** A pixel width that makes the control watch its **own** border box (not the window) and collapse `badges_display_mode` to `count` ("N selected") while narrower than that — so a picker in a narrow column/sidebar never overflows with pills, even on a wide monitor. A distinct axis from `mobile_presentation`, and composes with it.
-- **`enable_selected_popover`.** Defaults to `true` upstream; set `false` to make the selected-items popover inert (and drop its pointer cursor) when you render your own selection UI from the `change` event. Pairs with `badges_display_mode="none"` + `show_counter`.
-
-### Changed
-
-- **Bundled `@keenmate/web-multiselect` upgraded to `2.0.0-rc10`** (from `2.0.0-rc02`) — eight RCs, largely the mobile/fullscreen work above (built on `@keenmate/web-components-core` `1.0.0-rc09`'s size/viewport reactivity hooks), plus: `search_mode="navigate"` now works on trees (with a fullscreen `N of M` match navigator); RTL rebuilt on CSS logical properties with runtime `dir` switching; a bumped default `--ms-border-color` (`light-dark(#cbd5e1, #52525b)`) for a visible-but-soft edge; the close/remove `×` swapped to the exact Lucide `x`; the `--ms-checkbox-margin-top` nudge scoped to `[data-checkbox-align="top"]` (default `0`, so centred checkboxes stay centred); and rounded-dropdown-corner fixes (`--ms-dropdown-inner-border-radius`). `priv/static/multiselect.{js,css,d.ts}` re-bundled (still a self-contained bundle — the core is inlined); `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.0.0-rc10"`.
-- **New JS-only element callbacks available for hook-based consumers** (no HEEx attr — set them on the element): `keydownCallback` (remap/veto keys before built-in handling), `renderBadgeCallback` (return the *whole* badge markup, not just its content), and `showMessage()` / `hideMessage()` (a component-anchored toast; `beforeSelect/DeselectCallback` returning a string now vetoes *and* shows that string as a warning toast). The render-callback contexts also carry a `presentation` flag (`isFullscreen`), so one renderer can vary between the desktop dropdown and the phone sheet.
-
-### Internal — docs
-
-- **README "What's New" + Theming guide + Tree guide updated.** New README section for the mobile/fullscreen attrs and the JS-only callbacks; a new "Mobile & fullscreen overlay" section in `guides/theming.md` documenting the `--ms-fullscreen-*` scaling knob + header/close/search/nav/info/tree variable families and the `--ms-message-*` toast variables (plus the `viewport-fit=cover` consumer note); and a note in `guides/tree_of_options.md` that `search_mode="navigate"` now works on trees.
-
-### Internal — demo site
-
-- **`test_app/` demo site re-mirrored 1:1 against upstream `2.0.0-rc10`.** Upstream renamed and split its example pages (coded section headings like `DA01`; `examples-classic` → `examples-data-api` + a new `examples-basic`; `performance` → `virtual-scrolling`; `search-index` → `external-search`; `templating` → `custom-rendering`) and added new **Mobile & Fullscreen** and **Responsive** pages. The wrapper's `/examples/*` LiveViews and routes were realigned to match, with new demos for `mobile_presentation` / `fullscreen_autofocus` / `show_search_mode_toggle`, `collapse_badges_below`, `enable_selected_popover`, `renderBadgeCallback`, `keydownCallback`, and `showMessage()`. (`test_app/` is excluded from the Hex package.)
+- **Earlier in the span, the `/examples/*` gallery was re-mirrored 1:1 against upstream at each step**
+  (`2.0.0-rc10`, `2.0.0`, `2.1.0`): upstream renamed/split its example pages (`classic` → `data-api`
+  plus a new `basic`; `performance` → `virtual-scrolling`; `search-index` → `external-search`;
+  `templating` → `custom-rendering`) and added Mobile/Responsive, Events & Interceptors, and
+  Deferred-initialization (`defer` / `ready()`) demos; the wrapper's LiveViews and routes were
+  realigned to match, with new cards for the mobile/fullscreen attrs, `show_clear`, the imperative
+  open/close + scroll-to API, the "add new" mode, `overlay_group`, and `<.shadow_styles/>`.
+  (`test_app/` is excluded from the Hex package.)
 
 ## [2.0.0-rc.1] - 2026-08-04 [PUBLISHED]
 

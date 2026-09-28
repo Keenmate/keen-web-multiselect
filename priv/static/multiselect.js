@@ -1,10 +1,10 @@
 var Ho = Object.defineProperty;
-var Ss = (s) => {
+var Ts = (s) => {
   throw TypeError(s);
 };
 var Fo = (s, e, t) => e in s ? Ho(s, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : s[e] = t;
-var m = (s, e, t) => Fo(s, typeof e != "symbol" ? e + "" : e, t), Ut = (s, e, t) => e.has(s) || Ss("Cannot " + t);
-var h = (s, e, t) => (Ut(s, e, "read from private field"), t ? t.call(s) : e.get(s)), L = (s, e, t) => e.has(s) ? Ss("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(s) : e.set(s, t), I = (s, e, t, o) => (Ut(s, e, "write to private field"), o ? o.call(s, t) : e.set(s, t), t), v = (s, e, t) => (Ut(s, e, "access private method"), t);
+var m = (s, e, t) => Fo(s, typeof e != "symbol" ? e + "" : e, t), Ut = (s, e, t) => e.has(s) || Ts("Cannot " + t);
+var h = (s, e, t) => (Ut(s, e, "read from private field"), t ? t.call(s) : e.get(s)), L = (s, e, t) => e.has(s) ? Ts("Cannot add the same private member more than once") : e instanceof WeakSet ? e.add(s) : e.set(s, t), I = (s, e, t, o) => (Ut(s, e, "write to private field"), o ? o.call(s, t) : e.set(s, t), t), b = (s, e, t) => (Ut(s, e, "access private method"), t);
 function K(s, e = {}) {
   const t = new Set(s), o = e.shouldNullOnInvalid ? null : e.default ?? null;
   return {
@@ -37,7 +37,7 @@ function X(s = {}) {
     }
   };
 }
-function z(s = {}) {
+function E(s = {}) {
   const e = s.isNullable === !0, t = s.default ?? (e ? null : ""), o = (i) => s.shouldTrim ? i.trim() : i;
   return {
     fromAttribute(i) {
@@ -164,7 +164,7 @@ function Jo() {
     }
   };
 }
-const to = {
+const so = {
   pointer: "fine",
   hasCoarsePointer: !1,
   canHover: !0,
@@ -177,12 +177,12 @@ const to = {
   isApple: !1,
   isAndroid: !1
 }, Yo = { mobile: 640, tablet: 1024, desktop: 1 / 0 };
-let xt = so(Yo);
+let xt = oo(Yo);
 const rt = /* @__PURE__ */ new Set(), nt = /* @__PURE__ */ new Set();
 let Oe = null, It = [], _t = !1;
-const Ts = 30;
+const Is = 30;
 let Ae, kt = 0;
-function so(s) {
+function oo(s) {
   return Object.entries(s).sort((e, t) => e[1] - t[1]);
 }
 function Zo(s) {
@@ -192,10 +192,10 @@ function Zo(s) {
   const e = xt[xt.length - 1];
   return e ? e[0] : "desktop";
 }
-function fs() {
+function gs() {
   return typeof window < "u" && typeof window.matchMedia == "function";
 }
-function Is() {
+function Os() {
   return typeof navigator < "u" && (navigator.maxTouchPoints ?? 0) > 1;
 }
 function Qo() {
@@ -209,25 +209,25 @@ function Qo() {
     if (e.includes("ios"))
       return "ios";
     if (e.includes("mac"))
-      return Is() ? "ios" : "macos";
+      return Os() ? "ios" : "macos";
     if (e.includes("windows"))
       return "windows";
     if (e.includes("linux"))
       return "linux";
   }
   const t = navigator.userAgent ?? "";
-  return /android/i.test(t) ? "android" : /iphone|ipod|ipad/i.test(t) ? "ios" : /macintosh|mac os x/i.test(t) ? Is() ? "ios" : "macos" : /windows/i.test(t) ? "windows" : /linux/i.test(t) ? "linux" : "unknown";
+  return /android/i.test(t) ? "android" : /iphone|ipod|ipad/i.test(t) ? "ios" : /macintosh|mac os x/i.test(t) ? Os() ? "ios" : "macos" : /windows/i.test(t) ? "windows" : /linux/i.test(t) ? "linux" : "unknown";
 }
 let ei;
 function ti() {
   return ei ?? (ei = Qo());
 }
 function qe(s) {
-  return fs() && window.matchMedia(s).matches;
+  return gs() && window.matchMedia(s).matches;
 }
-function gs() {
-  if (!fs())
-    return { ...to };
+function bs() {
+  if (!gs())
+    return { ...so };
   const s = qe("(any-pointer: coarse)"), e = qe("(pointer: coarse)"), t = qe("(pointer: fine)"), o = qe("(hover: hover)"), i = e ? "coarse" : t ? "fine" : "none", r = window.innerWidth, n = window.innerHeight, a = ti();
   return {
     pointer: i,
@@ -250,13 +250,13 @@ function oi(s, e) {
   return s.viewportWidth === e.viewportWidth && s.viewportHeight === e.viewportHeight;
 }
 function Ot() {
-  const s = gs(), e = Oe;
+  const s = bs(), e = Oe;
   if (Oe = s, !e || !si(e, s))
     for (const t of [...rt])
       t(s);
   nt.size > 0 && (!e || !oi(e, s)) && ii();
 }
-function Os() {
+function Ps() {
   const s = Oe;
   if (s)
     for (const e of [...nt])
@@ -266,11 +266,11 @@ function ii() {
   if (Ae !== void 0)
     return;
   const s = Date.now() - kt;
-  s >= Ts ? (kt = Date.now(), Os()) : Ae = setTimeout(() => {
-    Ae = void 0, kt = Date.now(), Os();
-  }, Ts - s);
+  s >= Is ? (kt = Date.now(), Ps()) : Ae = setTimeout(() => {
+    Ae = void 0, kt = Date.now(), Ps();
+  }, Is - s);
 }
-const Pt = () => Ot(), oo = () => {
+const Pt = () => Ot(), io = () => {
   if (typeof requestAnimationFrame == "function") {
     if (_t)
       return;
@@ -286,9 +286,9 @@ function ri(s) {
 function ni(s) {
   typeof s.removeEventListener == "function" ? s.removeEventListener("change", Pt) : typeof s.removeListener == "function" && s.removeListener(Pt);
 }
-function io() {
-  if (!fs()) {
-    Oe = { ...to };
+function ro() {
+  if (!gs()) {
+    Oe = { ...so };
     return;
   }
   It = [
@@ -300,37 +300,37 @@ function io() {
   ];
   for (const s of It)
     ri(s);
-  typeof window.addEventListener == "function" && window.addEventListener("resize", oo), Oe = gs();
+  typeof window.addEventListener == "function" && window.addEventListener("resize", io), Oe = bs();
 }
-function ro() {
+function no() {
   for (const s of It)
     ni(s);
-  It = [], typeof window < "u" && typeof window.removeEventListener == "function" && window.removeEventListener("resize", oo), _t = !1, Ae !== void 0 && (clearTimeout(Ae), Ae = void 0), kt = 0, Oe = null;
+  It = [], typeof window < "u" && typeof window.removeEventListener == "function" && window.removeEventListener("resize", io), _t = !1, Ae !== void 0 && (clearTimeout(Ae), Ae = void 0), kt = 0, Oe = null;
 }
 function Mt() {
   return rt.size + nt.size;
 }
 function Lt() {
-  return Oe ?? gs();
+  return Oe ?? bs();
 }
 function ai(s, e = {}) {
   const t = Mt() === 0;
-  rt.add(s), t && io(), e.immediate !== !1 && s(Lt());
+  rt.add(s), t && ro(), e.immediate !== !1 && s(Lt());
   let o = !0;
   return () => {
-    o && (o = !1, rt.delete(s), Mt() === 0 && ro());
+    o && (o = !1, rt.delete(s), Mt() === 0 && no());
   };
 }
 function li(s, e = {}) {
   const t = Mt() === 0;
-  nt.add(s), t && io(), e.immediate !== !1 && s(Lt());
+  nt.add(s), t && ro(), e.immediate !== !1 && s(Lt());
   let o = !0;
   return () => {
-    o && (o = !1, nt.delete(s), Mt() === 0 && ro());
+    o && (o = !1, nt.delete(s), Mt() === 0 && no());
   };
 }
 function Sn(s) {
-  xt = so(s), rt.size > 0 && Ot();
+  xt = oo(s), rt.size > 0 && Ot();
 }
 const ci = 600;
 function di(s) {
@@ -343,7 +343,7 @@ let qt = 0;
 function ui() {
   return typeof ResizeObserver < "u";
 }
-function no(s) {
+function ao(s) {
   if (typeof s.getBoundingClientRect != "function")
     return { width: 0, height: 0 };
   const e = s.getBoundingClientRect();
@@ -356,11 +356,11 @@ function pi(s, e) {
   if (mi(s.lastFired, e) || (s.pendingSize = e, s.timer !== void 0))
     return;
   const t = Date.now() - s.lastNotify;
-  t >= s.throttleMs ? (s.lastNotify = Date.now(), Ps(s)) : s.timer = setTimeout(() => {
-    s.timer = void 0, s.lastNotify = Date.now(), Ps(s);
+  t >= s.throttleMs ? (s.lastNotify = Date.now(), Ms(s)) : s.timer = setTimeout(() => {
+    s.timer = void 0, s.lastNotify = Date.now(), Ms(s);
   }, s.throttleMs - t);
 }
-function Ps(s) {
+function Ms(s) {
   const e = s.pendingSize;
   e && (s.lastFired = e, s.cb(e, s.el));
 }
@@ -369,7 +369,7 @@ function fi(s) {
     const t = et.get(e.target);
     if (!t)
       continue;
-    const o = no(e.target);
+    const o = ao(e.target);
     for (const i of [...t])
       pi(i, o);
   }
@@ -385,7 +385,7 @@ function bi(s, e, t = {}) {
     lastNotify: 0
   };
   if (t.immediate !== !1) {
-    const n = no(s);
+    const n = ao(s);
     o.lastFired = n, o.lastNotify = Date.now(), e(n, s);
   }
   const i = gi();
@@ -414,12 +414,12 @@ function wi(s, e) {
 function yi(s) {
   return Array.from(Et.get(s) ?? []);
 }
-const ao = /* @__PURE__ */ new Map();
+const lo = /* @__PURE__ */ new Map();
 function xi(s, e) {
-  ao.set(s.toLowerCase(), e);
+  lo.set(s.toLowerCase(), e);
 }
 function _i(s) {
-  return ao.get(s.toLowerCase());
+  return lo.get(s.toLowerCase());
 }
 function ki(s, e, t, o = {}) {
   return s.dispatchEvent(new CustomEvent(e, {
@@ -442,7 +442,7 @@ function Ti(s) {
   }) : [];
 }
 const Ii = typeof HTMLElement < "u" ? HTMLElement : class {
-}, Ms = /* @__PURE__ */ new WeakSet();
+}, Ls = /* @__PURE__ */ new WeakSet();
 let Oi = 0;
 const Pi = { trace() {
 }, debug() {
@@ -450,7 +450,7 @@ const Pi = { trace() {
 }, warn() {
 }, error() {
 } }, Mi = new Proxy({}, { get: () => Pi });
-var me, ct, _e, dt, ke, ht, Bt, Ce, pe, Se, Te, Ne, $e, Ve, De, Re, Be, Ht, ie, He, O, lo, co, ho, Z, uo, mo, es, ts, tt, ss, po;
+var me, ct, _e, dt, ke, ht, Bt, Ce, pe, Se, Te, Ne, $e, Ve, De, Re, Be, Ht, ie, He, O, co, ho, uo, Z, mo, po, es, ts, tt, ss, fo;
 const xe = class xe extends Ii {
   constructor() {
     super();
@@ -462,7 +462,7 @@ const xe = class xe extends Ii {
     /** Live handler currently bound via each managed `on<Name>` property, keyed by event name. */
     L(this, ke, /* @__PURE__ */ new Map());
     L(this, ht, Jo());
-    L(this, Bt, () => v(this, O, ss).call(this));
+    L(this, Bt, () => b(this, O, ss).call(this));
     L(this, Ce, null);
     L(this, pe, !1);
     L(this, Se, []);
@@ -489,12 +489,12 @@ const xe = class xe extends Ii {
     L(this, ie);
     L(this, He);
     const t = this.constructor, o = t.inputs ?? [], i = Ti(t.events);
-    v(this, O, ho).call(this, o, i);
+    b(this, O, uo).call(this, o, i);
     for (const r of o)
       h(this, ct).set(r.configKey, r), r.attribute && h(this, _e).set(r.attribute, r);
     for (const r of i)
       h(this, dt).set(r.name, r);
-    v(this, O, lo).call(this, o), v(this, O, uo).call(this, o), v(this, O, mo).call(this, i);
+    b(this, O, co).call(this, o), b(this, O, mo).call(this, o), b(this, O, po).call(this, i);
   }
   static get observedAttributes() {
     const t = (this.inputs ?? []).filter((o) => o.attribute).map((o) => o.attribute);
@@ -516,12 +516,12 @@ const xe = class xe extends Ii {
     try {
       n = qo(r, i, this);
     } catch (l) {
-      v(this, O, Z).call(this, `converter for "${r.configKey}" threw parsing attribute ${t}="${i}"; using default`, l), n = v(this, O, co).call(this, r);
+      b(this, O, Z).call(this, `converter for "${r.configKey}" threw parsing attribute ${t}="${i}"; using default`, l), n = b(this, O, ho).call(this, r);
     }
-    v(this, O, ts).call(this, n);
+    b(this, O, ts).call(this, n);
   }
   connectedCallback() {
-    vi(this.localName, this), h(this, Te) || (I(this, Te, !0), I(this, Ne, null), I(this, pe, !0)), v(this, O, tt).call(this), this.connect(), this.environmentChanged !== xe.prototype.environmentChanged && I(this, Ve, ai((t) => this.environmentChanged(t))), this.viewportChanged !== xe.prototype.viewportChanged && I(this, De, li((t) => this.viewportChanged(t))), this.resized !== xe.prototype.resized && I(this, Re, bi(this, (t) => this.resized(t), { immediate: !1 }));
+    vi(this.localName, this), h(this, Te) || (I(this, Te, !0), I(this, Ne, null), I(this, pe, !0)), b(this, O, tt).call(this), this.connect(), this.environmentChanged !== xe.prototype.environmentChanged && I(this, Ve, ai((t) => this.environmentChanged(t))), this.viewportChanged !== xe.prototype.viewportChanged && I(this, De, li((t) => this.viewportChanged(t))), this.resized !== xe.prototype.resized && I(this, Re, bi(this, (t) => this.resized(t), { immediate: !1 }));
   }
   disconnectedCallback() {
     var t, o, i;
@@ -532,13 +532,13 @@ const xe = class xe extends Ii {
   setAttributes(t) {
     for (const [o, i] of Object.entries(t)) {
       const r = h(this, ct).get(o) ?? h(this, _e).get(o);
-      r && v(this, O, es).call(this, r, i);
+      r && b(this, O, es).call(this, r, i);
     }
-    v(this, O, tt).call(this);
+    b(this, O, tt).call(this);
   }
   /** Run `fn` and coalesce every input change it makes into a single reinit/update. */
   batch(t) {
-    t(), v(this, O, tt).call(this);
+    t(), b(this, O, tt).call(this);
   }
   /**
    * Apply any pending input writes **synchronously, now** — running the
@@ -554,7 +554,7 @@ const xe = class xe extends Ii {
    * `await whenSettled()` between the two.
    */
   flush() {
-    v(this, O, tt).call(this);
+    b(this, O, tt).call(this);
   }
   /**
    * Resolves once the element is **settled** — i.e. every staged input change
@@ -802,7 +802,7 @@ const xe = class xe extends Ii {
   }
 };
 me = new WeakMap(), ct = new WeakMap(), _e = new WeakMap(), dt = new WeakMap(), ke = new WeakMap(), ht = new WeakMap(), Bt = new WeakMap(), Ce = new WeakMap(), pe = new WeakMap(), Se = new WeakMap(), Te = new WeakMap(), Ne = new WeakMap(), $e = new WeakMap(), Ve = new WeakMap(), De = new WeakMap(), Re = new WeakMap(), Be = new WeakMap(), Ht = new WeakMap(), ie = new WeakMap(), He = new WeakMap(), O = new WeakSet(), // ── internals ─────────────────────────────────────────────────────────────
-lo = function(t) {
+co = function(t) {
   var o;
   for (const i of t) {
     let r = i.default;
@@ -810,25 +810,25 @@ lo = function(t) {
       try {
         r = i.converter.fromAttribute(null, this, i.attribute ?? i.configKey);
       } catch (n) {
-        v(this, O, Z).call(this, `converter for "${i.configKey}" threw computing its default; using \`default\``, n), r = i.default;
+        b(this, O, Z).call(this, `converter for "${i.configKey}" threw computing its default; using \`default\``, n), r = i.default;
       }
     h(this, me)[i.configKey] = r, i.field && (this[i.field] = r);
   }
-}, co = function(t) {
+}, ho = function(t) {
   return { configKey: t.configKey, field: t.field, value: t.default, on: t.on ?? "update" };
 }, /** Sanity-check the input + event tables once per class; warn (never throw) on mistakes. */
-ho = function(t, o) {
+uo = function(t, o) {
   var l;
   const i = this.constructor;
-  if (Ms.has(i))
+  if (Ls.has(i))
     return;
-  Ms.add(i);
+  Ls.add(i);
   const r = /* @__PURE__ */ new Set(), n = /* @__PURE__ */ new Set();
   for (const c of t)
-    r.has(c.configKey) && v(this, O, Z).call(this, `invalid input table: duplicate configKey "${c.configKey}"`), r.add(c.configKey), c.attribute && (n.has(c.attribute) && v(this, O, Z).call(this, `invalid input table: duplicate attribute "${c.attribute}"`), n.add(c.attribute)), c.reflect && !c.attribute && v(this, O, Z).call(this, `invalid input table: "${c.configKey}" has reflect:true but no attribute to reflect to`), c.reflect && !((l = c.converter) != null && l.toAttribute) && v(this, O, Z).call(this, `invalid input table: "${c.configKey}" has reflect:true but its converter has no toAttribute`);
+    r.has(c.configKey) && b(this, O, Z).call(this, `invalid input table: duplicate configKey "${c.configKey}"`), r.add(c.configKey), c.attribute && (n.has(c.attribute) && b(this, O, Z).call(this, `invalid input table: duplicate attribute "${c.attribute}"`), n.add(c.attribute)), c.reflect && !c.attribute && b(this, O, Z).call(this, `invalid input table: "${c.configKey}" has reflect:true but no attribute to reflect to`), c.reflect && !((l = c.converter) != null && l.toAttribute) && b(this, O, Z).call(this, `invalid input table: "${c.configKey}" has reflect:true but its converter has no toAttribute`);
   const a = /* @__PURE__ */ new Set();
   for (const c of o)
-    a.has(c.name) && v(this, O, Z).call(this, `invalid event table: duplicate event "${c.name}"`), a.add(c.name), /^[a-z][a-z0-9-]*$/.test(c.name) || v(this, O, Z).call(this, `invalid event table: event "${c.name}" should be lowercase kebab-case (e.g. "date-select")`), c.property && r.has(c.property) && v(this, O, Z).call(this, `invalid event table: event "${c.name}" property "${c.property}" collides with an input configKey`);
+    a.has(c.name) && b(this, O, Z).call(this, `invalid event table: duplicate event "${c.name}"`), a.add(c.name), /^[a-z][a-z0-9-]*$/.test(c.name) || b(this, O, Z).call(this, `invalid event table: event "${c.name}" should be lowercase kebab-case (e.g. "date-select")`), c.property && r.has(c.property) && b(this, O, Z).call(this, `invalid event table: event "${c.name}" property "${c.property}" collides with an input configKey`);
 }, /**
  * Always-on console warning for input validation failures. Deliberately uses
  * `console.warn` directly — NOT the (future) categorized logger — so rejected
@@ -836,14 +836,14 @@ ho = function(t, o) {
  */
 Z = function(t, ...o) {
   console.warn(`[BlissElement] <${this.localName ?? "unknown"}> ${t}`, ...o);
-}, uo = function(t) {
+}, mo = function(t) {
   for (const o of t) {
     const i = o.configKey, r = Object.prototype.hasOwnProperty.call(this, i), n = r ? this[i] : void 0;
     r && delete this[i], Object.defineProperty(this, i, {
       configurable: !0,
       enumerable: !0,
       get: () => h(this, me)[i],
-      set: (a) => v(this, O, es).call(this, o, a)
+      set: (a) => b(this, O, es).call(this, o, a)
     }), r && ((h(this, Ne) ?? I(this, Ne, /* @__PURE__ */ new Set())).add(i), this[i] = n);
   }
 }, /**
@@ -851,7 +851,7 @@ Z = function(t, ...o) {
  * (de)registers a real listener for the event, so the property behaves like
  * `addEventListener(name, …)` and its handler receives the `CustomEvent`.
  */
-mo = function(t) {
+po = function(t) {
   for (const o of t) {
     const i = o.property;
     if (!i)
@@ -875,10 +875,10 @@ mo = function(t) {
   var r;
   const i = Xo(t, o);
   if (!i) {
-    v(this, O, Z).call(this, `rejected invalid value for property "${t.configKey}"; keeping previous value`, o);
+    b(this, O, Z).call(this, `rejected invalid value for property "${t.configKey}"; keeping previous value`, o);
     return;
   }
-  if (v(this, O, ts).call(this, i), t.reflect && t.attribute && ((r = t.converter) != null && r.toAttribute)) {
+  if (b(this, O, ts).call(this, i), t.reflect && t.attribute && ((r = t.converter) != null && r.toAttribute)) {
     const n = t.converter.toAttribute(i.value);
     I(this, $e, !0);
     try {
@@ -891,14 +891,14 @@ mo = function(t) {
   h(this, me)[t.configKey] = t.value, t.field && (this[t.field] = t.value), t.on !== "none" && (t.on === "reinit" && I(this, pe, !0), (h(this, Ce) ?? I(this, Ce, {}))[t.configKey] = t.value, h(this, ht).schedule(h(this, Bt)));
 }, /** Cancel any queued microtask and flush pending changes synchronously now. */
 tt = function() {
-  h(this, ht).cancel(), v(this, O, ss).call(this);
+  h(this, ht).cancel(), b(this, O, ss).call(this);
 }, ss = function() {
   if (!this.isConnected)
     return;
   const t = h(this, pe), o = h(this, Ce);
-  I(this, pe, !1), I(this, Ce, null), t ? this.reinit() : o && Object.keys(o).length > 0 && this.update(o), v(this, O, po).call(this);
+  I(this, pe, !1), I(this, Ce, null), t ? this.reinit() : o && Object.keys(o).length > 0 && this.update(o), b(this, O, fo).call(this);
 }, /** Resolve everyone awaiting {@link whenSettled} for the flush that just ran. */
-po = function() {
+fo = function() {
   if (h(this, Se).length === 0)
     return;
   const t = h(this, Se);
@@ -913,7 +913,7 @@ m(xe, "inputs"), /**
  */
 m(xe, "events");
 let Qt = xe;
-function Ls(s, e, t) {
+function Es(s, e, t) {
   typeof customElements > "u" || customElements.get(s) || customElements.define(s, e, t);
 }
 function Li(s) {
@@ -932,12 +932,12 @@ function Ei(s, e, t) {
     version: () => o.version,
     config: o,
     ...i ? { logging: Li(i) } : {},
-    register: () => Ls(s, e),
+    register: () => Es(s, e),
     getInstances: () => yi(s)
   };
-  return typeof window < "u" && ((window.components ?? (window.components = {}))[s] = n), r && Ls(s, e), n;
+  return typeof window < "u" && ((window.components ?? (window.components = {}))[s] = n), r && Es(s, e), n;
 }
-const Es = /* @__PURE__ */ new Map(), As = /* @__PURE__ */ new WeakMap();
+const As = /* @__PURE__ */ new Map(), zs = /* @__PURE__ */ new WeakMap();
 let gt;
 function Ai(s) {
   if (typeof CSSStyleSheet > "u" || !("adoptedStyleSheets" in s))
@@ -953,8 +953,8 @@ function Ai(s) {
 function zi(s, ...e) {
   if (typeof document > "u")
     return;
-  let t = As.get(s);
-  t || As.set(s, t = /* @__PURE__ */ new Set());
+  let t = zs.get(s);
+  t || zs.set(s, t = /* @__PURE__ */ new Set());
   const o = e.filter((r) => r && !t.has(r));
   if (o.length === 0)
     return;
@@ -962,8 +962,8 @@ function zi(s, ...e) {
     t.add(r);
   if (Ai(s)) {
     const r = o.map((n) => {
-      let a = Es.get(n);
-      return a || (a = new CSSStyleSheet(), a.replaceSync(n), Es.set(n, a)), a;
+      let a = As.get(n);
+      return a || (a = new CSSStyleSheet(), a.replaceSync(n), As.set(n, a)), a;
     });
     s.adoptedStyleSheets = [...s.adoptedStyleSheets, ...r];
     return;
@@ -995,18 +995,18 @@ function Ni(s, e = {}) {
     }
   };
 }
-function fo(s) {
+function go(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 function $i(s, e) {
-  const t = /* @__PURE__ */ new Set(), o = new RegExp(`var\\(\\s*(${fo(e)}[a-z0-9-]+)`, "gi");
+  const t = /* @__PURE__ */ new Set(), o = new RegExp(`var\\(\\s*(${go(e)}[a-z0-9-]+)`, "gi");
   let i;
   for (; i = o.exec(s); )
     i[1] && t.add(i[1]);
   return t;
 }
 function Vi(s, e) {
-  const t = /* @__PURE__ */ new Set(), o = new RegExp(`(${fo(e)}[a-z0-9-]+)\\s*:`, "gi");
+  const t = /* @__PURE__ */ new Set(), o = new RegExp(`(${go(e)}[a-z0-9-]+)\\s*:`, "gi");
   let i;
   for (; i = o.exec(s); )
     i[1] && t.add(i[1]);
@@ -1068,27 +1068,27 @@ function Ki(s) {
     e.removeEventListener("resize", i), e.removeEventListener("scroll", i), s.style.height = "", s.style.top = "";
   };
 }
-const bs = "km-overlay-activated", Wi = Symbol("km-overlay-all-groups"), At = /* @__PURE__ */ new Set(), Ye = /* @__PURE__ */ new Map();
+const vs = "km-overlay-activated", Wi = Symbol("km-overlay-all-groups"), At = /* @__PURE__ */ new Set(), Ye = /* @__PURE__ */ new Map();
 let zt = !1;
-function vs() {
+function ws() {
   return typeof document < "u";
 }
 function ji(s, e) {
   return e === Wi || s === e;
 }
-function go(s) {
+function bo(s) {
   const e = s.detail, t = e == null ? void 0 : e.source, o = e == null ? void 0 : e.group;
   for (const i of Array.from(At))
     i.id !== t && ji(i.group, o) && i.dismiss();
 }
 function Gi() {
-  zt || !vs() || (document.addEventListener(bs, go), zt = !0);
+  zt || !ws() || (document.addEventListener(vs, bo), zt = !0);
 }
 function Ui() {
-  zt && At.size === 0 && vs() && (document.removeEventListener(bs, go), zt = !1);
+  zt && At.size === 0 && ws() && (document.removeEventListener(vs, bo), zt = !1);
 }
 function qi(s, e) {
-  vs() && document.dispatchEvent(new CustomEvent(bs, { detail: { source: s, group: e } }));
+  ws() && document.dispatchEvent(new CustomEvent(vs, { detail: { source: s, group: e } }));
 }
 function Xi(s, e) {
   const t = { id: {}, group: e, dismiss: s };
@@ -1111,10 +1111,10 @@ const G = {
   WARN: 3,
   ERROR: 4,
   SILENT: 5
-}, zs = ["trace", "debug", "info", "warn", "error"], Nt = () => {
+}, Ns = ["trace", "debug", "info", "warn", "error"], Nt = () => {
 };
 let Ji = "km-log";
-function Ns(s) {
+function $s(s) {
   const t = console[s];
   return typeof t == "function" ? t.bind(console) : Nt;
 }
@@ -1122,7 +1122,7 @@ function Yi(s) {
   if (s === "debug" && (s = "log"), typeof console > "u")
     return Nt;
   const e = console;
-  return e[s] !== void 0 ? Ns(s) : e.log !== void 0 ? Ns("log") : Nt;
+  return e[s] !== void 0 ? $s(s) : e.log !== void 0 ? $s("log") : Nt;
 }
 const Zi = (s) => Yi(s);
 function Ze(s) {
@@ -1134,7 +1134,7 @@ function Ze(s) {
 }
 let ue;
 const $t = {};
-class bo {
+class vo {
   constructor(e, t) {
     m(this, "name");
     m(this, "levels", G);
@@ -1163,7 +1163,7 @@ class bo {
     const t = this.storageKey();
     if (typeof window > "u" || !t)
       return;
-    const o = (zs[e] ?? "silent").toUpperCase();
+    const o = (Ns[e] ?? "silent").toUpperCase();
     try {
       window.localStorage[t] = o;
     } catch {
@@ -1191,7 +1191,7 @@ class bo {
   }
   replaceLoggingMethods() {
     const e = this.getLevel();
-    zs.forEach((t, o) => {
+    Ns.forEach((t, o) => {
       this[t] = o < e ? Nt : this.methodFactory(t, e, this.name);
     }), this.log = this.debug;
   }
@@ -1219,14 +1219,14 @@ class bo {
         $t[e].rebuild();
   }
 }
-ue = new bo(void 0, Zi);
+ue = new vo(void 0, Zi);
 function Qi(s) {
   if (typeof s != "string" || s === "")
     throw new TypeError("You must supply a non-empty name when creating a logger.");
   let e = $t[s];
-  return e || (e = $t[s] = new bo(s, ue.methodFactory)), e;
+  return e || (e = $t[s] = new vo(s, ue.methodFactory)), e;
 }
-const er = ["INIT", "DATA", "UI"], tr = "debug", $s = [
+const er = ["INIT", "DATA", "UI"], tr = "debug", Vs = [
   "#4c8bf5",
   // blue
   "#2ea043",
@@ -1243,11 +1243,11 @@ const er = ["INIT", "DATA", "UI"], tr = "debug", $s = [
   // teal
   "#8a6d3b"
   // brown
-], Vs = /* @__PURE__ */ new WeakSet();
+], Ds = /* @__PURE__ */ new WeakSet();
 function sr(s, e, t) {
-  if (Vs.has(s))
+  if (Ds.has(s))
     return;
-  Vs.add(s);
+  Ds.add(s);
   const o = s.methodFactory, i = `color:${t};font-weight:bold`;
   s.methodFactory = (r, n, a) => {
     const l = o(r, n, a);
@@ -1278,7 +1278,7 @@ function rr(s, e, t) {
 function nr(s, e = er) {
   const t = {}, o = {};
   e.forEach((r, n) => {
-    const a = `${s}:${r}`, l = $s[n % $s.length], c = Qi(a);
+    const a = `${s}:${r}`, l = Vs[n % Vs.length], c = Qi(a);
     sr(c, a, l), t[r] = c, o[r] = { label: a, color: l, logger: c };
   });
   const i = (r) => {
@@ -1318,7 +1318,7 @@ const be = Math.min, ne = Math.max, Vt = Math.round, vt = Math.floor, ae = (s) =
   bottom: "top",
   top: "bottom"
 };
-function vo(s, e, t) {
+function wo(s, e, t) {
   return ne(s, be(e, t));
 }
 function je(s, e) {
@@ -1330,22 +1330,22 @@ function Pe(s) {
 function Ge(s) {
   return s.split("-")[1];
 }
-function wo(s) {
+function yo(s) {
   return s === "x" ? "y" : "x";
 }
-function ws(s) {
+function ys(s) {
   return s === "y" ? "height" : "width";
 }
 function re(s) {
   const e = s[0];
   return e === "t" || e === "b" ? "y" : "x";
 }
-function ys(s) {
-  return wo(re(s));
+function xs(s) {
+  return yo(re(s));
 }
 function lr(s, e, t) {
   t === void 0 && (t = !1);
-  const o = Ge(s), i = ys(s), r = ws(i);
+  const o = Ge(s), i = xs(s), r = ys(i);
   let n = i === "x" ? o === (t ? "end" : "start") ? "right" : "left" : o === "start" ? "bottom" : "top";
   return e.reference[r] > e.floating[r] && (n = Dt(n)), [n, Dt(n)];
 }
@@ -1356,12 +1356,12 @@ function cr(s) {
 function os(s) {
   return s.includes("start") ? s.replace("start", "end") : s.replace("end", "start");
 }
-const Ds = ["left", "right"], Rs = ["right", "left"], dr = ["top", "bottom"], hr = ["bottom", "top"];
+const Rs = ["left", "right"], Bs = ["right", "left"], dr = ["top", "bottom"], hr = ["bottom", "top"];
 function ur(s, e, t) {
   switch (s) {
     case "top":
     case "bottom":
-      return t ? e ? Rs : Ds : e ? Ds : Rs;
+      return t ? e ? Bs : Rs : e ? Rs : Bs;
     case "left":
     case "right":
       return e ? dr : hr;
@@ -1387,7 +1387,7 @@ function pr(s) {
     left: (i = s.left) != null ? i : 0
   };
 }
-function yo(s) {
+function xo(s) {
   return typeof s != "number" ? pr(s) : {
     top: s,
     right: s,
@@ -1413,12 +1413,12 @@ function Rt(s) {
     y: t
   };
 }
-function Bs(s, e, t) {
+function Hs(s, e, t) {
   let {
     reference: o,
     floating: i
   } = s;
-  const r = re(e), n = ys(e), a = ws(n), l = Pe(e), c = r === "y", d = o.x + o.width / 2 - i.width / 2, u = o.y + o.height / 2 - i.height / 2, f = o[a] / 2 - i[a] / 2;
+  const r = re(e), n = xs(e), a = ys(n), l = Pe(e), c = r === "y", d = o.x + o.width / 2 - i.width / 2, u = o.y + o.height / 2 - i.height / 2, f = o[a] / 2 - i[a] / 2;
   let p;
   switch (l) {
     case "top":
@@ -1470,8 +1470,8 @@ async function fr(s, e) {
     elementContext: u = "floating",
     altBoundary: f = !1,
     padding: p = 0
-  } = je(e, s), g = yo(p), y = a[f ? u === "floating" ? "reference" : "floating" : u], b = Rt(await r.getClippingRect({
-    element: (t = await (r.isElement == null ? void 0 : r.isElement(y))) == null || t ? y : y.contextElement || await (r.getDocumentElement == null ? void 0 : r.getDocumentElement(a.floating)),
+  } = je(e, s), g = xo(p), x = a[f ? u === "floating" ? "reference" : "floating" : u], v = Rt(await r.getClippingRect({
+    element: (t = await (r.isElement == null ? void 0 : r.isElement(x))) == null || t ? x : x.contextElement || await (r.getDocumentElement == null ? void 0 : r.getDocumentElement(a.floating)),
     boundary: c,
     rootBoundary: d,
     strategy: l
@@ -1483,17 +1483,17 @@ async function fr(s, e) {
   } : n.reference, k = await (r.getOffsetParent == null ? void 0 : r.getOffsetParent(a.floating)), P = await (r.isElement == null ? void 0 : r.isElement(k)) && await (r.getScale == null ? void 0 : r.getScale(k)) || {
     x: 1,
     y: 1
-  }, N = Rt(r.convertOffsetParentRelativeRectToViewportRelativeRect ? await r.convertOffsetParentRelativeRectToViewportRelativeRect({
+  }, $ = Rt(r.convertOffsetParentRelativeRectToViewportRelativeRect ? await r.convertOffsetParentRelativeRectToViewportRelativeRect({
     elements: a,
     rect: _,
     offsetParent: k,
     strategy: l
   }) : _);
   return {
-    top: (b.top - N.top + g.top) / P.y,
-    bottom: (N.bottom - b.bottom + g.bottom) / P.y,
-    left: (b.left - N.left + g.left) / P.x,
-    right: (N.right - b.right + g.right) / P.x
+    top: (v.top - $.top + g.top) / P.y,
+    bottom: ($.bottom - v.bottom + g.bottom) / P.y,
+    left: (v.left - $.left + g.left) / P.x,
+    right: ($.right - v.right + g.right) / P.x
   };
 }
 const gr = 50, br = async (s, e, t) => {
@@ -1513,19 +1513,19 @@ const gr = 50, br = async (s, e, t) => {
   }), {
     x: d,
     y: u
-  } = Bs(c, o, l), f = o, p = 0;
+  } = Hs(c, o, l), f = o, p = 0;
   const g = {};
   for (let w = 0; w < r.length; w++) {
-    const y = r[w];
-    if (!y)
+    const x = r[w];
+    if (!x)
       continue;
     const {
-      name: b,
+      name: v,
       fn: _
-    } = y, {
+    } = x, {
       x: k,
       y: P,
-      data: N,
+      data: $,
       reset: D
     } = await _({
       x: d,
@@ -1541,9 +1541,9 @@ const gr = 50, br = async (s, e, t) => {
         floating: e
       }
     });
-    d = k ?? d, u = P ?? u, g[b] = {
-      ...g[b],
-      ...N
+    d = k ?? d, u = P ?? u, g[v] = {
+      ...g[v],
+      ...$
     }, D && p < gr && (p++, typeof D == "object" && (D.placement && (f = D.placement), D.rects && (c = D.rects === !0 ? await n.getElementRects({
       reference: s,
       floating: e,
@@ -1551,7 +1551,7 @@ const gr = 50, br = async (s, e, t) => {
     }) : D.rects), {
       x: d,
       y: u
-    } = Bs(c, f, l)), w = -1);
+    } = Hs(c, f, l)), w = -1);
   }
   return {
     x: d,
@@ -1578,13 +1578,13 @@ const gr = 50, br = async (s, e, t) => {
     } = je(s, e) || {};
     if (c == null)
       return {};
-    const u = yo(d), f = {
+    const u = xo(d), f = {
       x: t,
       y: o
-    }, p = ys(i), g = ws(p), w = await n.getDimensions(c), y = p === "y", b = y ? "top" : "left", _ = y ? "bottom" : "right", k = y ? "clientHeight" : "clientWidth", P = r.reference[g] + r.reference[p] - f[p] - r.floating[g], N = f[p] - r.reference[p], D = await (n.getOffsetParent == null ? void 0 : n.getOffsetParent(c));
+    }, p = xs(i), g = ys(p), w = await n.getDimensions(c), x = p === "y", v = x ? "top" : "left", _ = x ? "bottom" : "right", k = x ? "clientHeight" : "clientWidth", P = r.reference[g] + r.reference[p] - f[p] - r.floating[g], $ = f[p] - r.reference[p], D = await (n.getOffsetParent == null ? void 0 : n.getOffsetParent(c));
     let j = D ? D[k] : 0;
     (!j || !await (n.isElement == null ? void 0 : n.isElement(D))) && (j = a.floating[k] || r.floating[g]);
-    const q = P / 2 - N / 2, V = j / 2 - w[g] / 2 - 1, S = be(u[b], V), M = be(u[_], V), A = j - w[g] - M, B = j / 2 - w[g] / 2 + q, T = vo(S, B, A), F = !l.arrow && Ge(i) != null && B !== T && r.reference[g] / 2 - (B < S ? S : M) - w[g] / 2 < 0, se = F ? B < S ? B - S : B - A : 0;
+    const q = P / 2 - $ / 2, V = j / 2 - w[g] / 2 - 1, S = be(u[v], V), M = be(u[_], V), z = j - w[g] - M, B = j / 2 - w[g] / 2 + q, T = wo(S, B, z), F = !l.arrow && Ge(i) != null && B !== T && r.reference[g] / 2 - (B < S ? S : M) - w[g] / 2 < 0, se = F ? B < S ? B - S : B - z : 0;
     return {
       [p]: f[p] + se,
       data: {
@@ -1617,15 +1617,15 @@ const gr = 50, br = async (s, e, t) => {
         fallbackStrategy: p = "bestFit",
         fallbackAxisSideDirection: g = "none",
         flipAlignment: w = !0,
-        ...y
+        ...x
       } = je(s, e);
       if ((t = r.arrow) != null && t.alignmentOffset)
         return {};
-      const b = Pe(i), _ = re(a), k = Pe(a) === a, P = await (l.isRTL == null ? void 0 : l.isRTL(c.floating)), N = f || (k || !w ? [Dt(a)] : cr(a)), D = g !== "none";
-      !f && D && N.push(...mr(a, w, g, P));
-      const j = [a, ...N], q = await l.detectOverflow(e, y), V = [];
+      const v = Pe(i), _ = re(a), k = Pe(a) === a, P = await (l.isRTL == null ? void 0 : l.isRTL(c.floating)), $ = f || (k || !w ? [Dt(a)] : cr(a)), D = g !== "none";
+      !f && D && $.push(...mr(a, w, g, P));
+      const j = [a, ...$], q = await l.detectOverflow(e, x), V = [];
       let S = ((o = r.flip) == null ? void 0 : o.overflows) || [];
-      if (d && V.push(q[b]), u) {
+      if (d && V.push(q[v]), u) {
         const T = lr(i, n, P);
         V.push(q[T[0]], q[T[1]]);
       }
@@ -1633,7 +1633,7 @@ const gr = 50, br = async (s, e, t) => {
         placement: i,
         overflows: V
       }], !V.every((T) => T <= 0)) {
-        var M, A;
+        var M, z;
         const T = (((M = r.flip) == null ? void 0 : M.index) || 0) + 1, F = j[T];
         if (F && (!(u === "alignment" ? _ !== re(F) : !1) || // We leave the current main axis only if every placement on that axis
         // overflows the main axis.
@@ -1647,7 +1647,7 @@ const gr = 50, br = async (s, e, t) => {
               placement: F
             }
           };
-        let se = (A = S.filter((we) => we.overflows[0] <= 0).sort((we, J) => we.overflows[1] - J.overflows[1])[0]) == null ? void 0 : A.placement;
+        let se = (z = S.filter((we) => we.overflows[0] <= 0).sort((we, J) => we.overflows[1] - J.overflows[1])[0]) == null ? void 0 : z.placement;
         if (!se)
           switch (p) {
             case "bestFit": {
@@ -1757,20 +1757,20 @@ const _r = function(s) {
       } = je(s, e), d = {
         x: t,
         y: o
-      }, u = await r.detectOverflow(e, c), f = re(i), p = wo(f);
+      }, u = await r.detectOverflow(e, c), f = re(i), p = yo(f);
       let g = d[p], w = d[f];
-      const y = (_, k) => vo(k + u[_ === "y" ? "top" : "left"], k, k - u[_ === "y" ? "bottom" : "right"]);
-      n && (g = y(p, g)), a && (w = y(f, w));
-      const b = l.fn({
+      const x = (_, k) => wo(k + u[_ === "y" ? "top" : "left"], k, k - u[_ === "y" ? "bottom" : "right"]);
+      n && (g = x(p, g)), a && (w = x(f, w));
+      const v = l.fn({
         ...e,
         [p]: g,
         [f]: w
       });
       return {
-        ...b,
+        ...v,
         data: {
-          x: b.x - t,
-          y: b.y - o,
+          x: v.x - t,
+          y: v.y - o,
           enabled: {
             [p]: n,
             [f]: a
@@ -1799,9 +1799,9 @@ const _r = function(s) {
       } = o.floating;
       let g, w;
       c === "top" || c === "bottom" ? (g = c, w = d === (await (i.isRTL == null ? void 0 : i.isRTL(r.floating)) ? "start" : "end") ? "left" : "right") : (w = c, g = d === "end" ? "top" : "bottom");
-      const y = p - l.top - l.bottom, b = f - l.left - l.right, _ = be(p - l[g], y), k = be(f - l[w], b), P = e.middlewareData.shift, N = !P;
+      const x = p - l.top - l.bottom, v = f - l.left - l.right, _ = be(p - l[g], x), k = be(f - l[w], v), P = e.middlewareData.shift, $ = !P;
       let D = _, j = k;
-      P != null && P.enabled.x && (j = b), P != null && P.enabled.y && (D = y), N && !d && (u ? j = f - 2 * ne(l.left, l.right) : D = p - 2 * ne(l.top, l.bottom)), await n({
+      P != null && P.enabled.x && (j = v), P != null && P.enabled.y && (D = x), $ && !d && (u ? j = f - 2 * ne(l.left, l.right) : D = p - 2 * ne(l.top, l.bottom)), await n({
         ...e,
         availableWidth: j,
         availableHeight: D
@@ -1819,7 +1819,7 @@ function Ft() {
   return typeof window < "u";
 }
 function Ue(s) {
-  return xo(s) ? (s.nodeName || "").toLowerCase() : "#document";
+  return _o(s) ? (s.nodeName || "").toLowerCase() : "#document";
 }
 function U(s) {
   var e;
@@ -1827,9 +1827,9 @@ function U(s) {
 }
 function le(s) {
   var e;
-  return (e = (xo(s) ? s.ownerDocument : s.document) || window.document) == null ? void 0 : e.documentElement;
+  return (e = (_o(s) ? s.ownerDocument : s.document) || window.document) == null ? void 0 : e.documentElement;
 }
-function xo(s) {
+function _o(s) {
   return Ft() ? s instanceof Node || s instanceof U(s).Node : !1;
 }
 function ee(s) {
@@ -1838,7 +1838,7 @@ function ee(s) {
 function ve(s) {
   return Ft() ? s instanceof HTMLElement || s instanceof U(s).HTMLElement : !1;
 }
-function Hs(s) {
+function Fs(s) {
   return !Ft() || typeof ShadowRoot > "u" ? !1 : s instanceof ShadowRoot || s instanceof U(s).ShadowRoot;
 }
 function Kt(s) {
@@ -1867,14 +1867,14 @@ function Wt(s) {
 }
 const Tr = /transform|translate|scale|rotate|perspective|filter/, Ir = /paint|layout|strict|content/, ye = (s) => !!s && s !== "none";
 let Xt;
-function xs(s) {
+function _s(s) {
   const e = ee(s) ? te(s) : s;
-  return ye(e.transform) || ye(e.translate) || ye(e.scale) || ye(e.rotate) || ye(e.perspective) || !_s() && (ye(e.backdropFilter) || ye(e.filter)) || Tr.test(e.willChange || "") || Ir.test(e.contain || "");
+  return ye(e.transform) || ye(e.translate) || ye(e.scale) || ye(e.rotate) || ye(e.perspective) || !ks() && (ye(e.backdropFilter) || ye(e.filter)) || Tr.test(e.willChange || "") || Ir.test(e.contain || "");
 }
 function Or(s) {
   let e = Me(s);
   for (; ve(e) && !at(e); ) {
-    if (xs(e))
+    if (_s(e))
       return e;
     if (Wt(e))
       return null;
@@ -1882,7 +1882,7 @@ function Or(s) {
   }
   return null;
 }
-function _s() {
+function ks() {
   return Xt == null && (Xt = typeof CSS < "u" && CSS.supports && CSS.supports("-webkit-backdrop-filter", "none")), Xt;
 }
 function at(s) {
@@ -1907,19 +1907,19 @@ function Me(s) {
     // Step into the shadow DOM of the parent of a slotted node.
     s.assignedSlot || // DOM Element detected.
     s.parentNode || // ShadowRoot detected.
-    Hs(s) && s.host || // Fallback.
+    Fs(s) && s.host || // Fallback.
     le(s)
   );
-  return Hs(e) ? e.host : e;
+  return Fs(e) ? e.host : e;
 }
-function _o(s) {
+function ko(s) {
   const e = Me(s);
-  return at(e) ? (s.ownerDocument || s).body : ve(e) && Kt(e) ? e : _o(e);
+  return at(e) ? (s.ownerDocument || s).body : ve(e) && Kt(e) ? e : ko(e);
 }
 function lt(s, e, t) {
   var o;
   e === void 0 && (e = []), t === void 0 && (t = !0);
-  const i = _o(s), r = i === ((o = s.ownerDocument) == null ? void 0 : o.body), n = U(i);
+  const i = ko(s), r = i === ((o = s.ownerDocument) == null ? void 0 : o.body), n = U(i);
   if (r) {
     const a = is(n);
     return e.concat(n, n.visualViewport || [], Kt(i) ? i : [], a && t ? lt(a) : []);
@@ -1929,7 +1929,7 @@ function lt(s, e, t) {
 function is(s) {
   return s.parent && Object.getPrototypeOf(s.parent) ? s.frameElement : null;
 }
-function ko(s) {
+function Co(s) {
   const e = te(s);
   let t = parseFloat(e.width) || 0, o = parseFloat(e.height) || 0;
   const i = ve(s), r = i ? s.offsetWidth : t, n = i ? s.offsetHeight : o, a = Vt(t) !== r || Vt(o) !== n;
@@ -1939,18 +1939,18 @@ function ko(s) {
     $: a
   };
 }
-function ks(s) {
+function Cs(s) {
   return ee(s) ? s : s.contextElement;
 }
 function ze(s) {
-  const e = ks(s);
+  const e = Cs(s);
   if (!ve(e))
     return ae(1);
   const t = e.getBoundingClientRect(), {
     width: o,
     height: i,
     $: r
-  } = ko(e);
+  } = Co(e);
   let n = (r ? Vt(t.width) : t.width) / o, a = (r ? Vt(t.height) : t.height) / i;
   return (!n || !Number.isFinite(n)) && (n = 1), (!a || !Number.isFinite(a)) && (a = 1), {
     x: n,
@@ -1958,9 +1958,9 @@ function ze(s) {
   };
 }
 const Pr = /* @__PURE__ */ ae(0);
-function Co(s) {
+function So(s) {
   const e = U(s);
-  return !_s() || !e.visualViewport ? Pr : {
+  return !ks() || !e.visualViewport ? Pr : {
     x: e.visualViewport.offsetLeft,
     y: e.visualViewport.offsetTop
   };
@@ -1970,17 +1970,17 @@ function Mr(s, e, t) {
 }
 function Le(s, e, t, o) {
   e === void 0 && (e = !1), t === void 0 && (t = !1);
-  const i = s.getBoundingClientRect(), r = ks(s);
+  const i = s.getBoundingClientRect(), r = Cs(s);
   let n = ae(1);
   e && (o ? ee(o) && (n = ze(o)) : n = ze(s));
-  const a = Mr(r, t, o) ? Co(r) : ae(0);
+  const a = Mr(r, t, o) ? So(r) : ae(0);
   let l = (i.left + a.x) / n.x, c = (i.top + a.y) / n.y, d = i.width / n.x, u = i.height / n.y;
   if (r && o) {
     const f = U(r), p = ee(o) ? U(o) : o;
     let g = f, w = is(g);
     for (; w && p !== g; ) {
-      const y = ze(w), b = w.getBoundingClientRect(), _ = te(w), k = b.left + (w.clientLeft + parseFloat(_.paddingLeft)) * y.x, P = b.top + (w.clientTop + parseFloat(_.paddingTop)) * y.y;
-      l *= y.x, c *= y.y, d *= y.x, u *= y.y, l += k, c += P, g = U(w), w = is(g);
+      const x = ze(w), v = w.getBoundingClientRect(), _ = te(w), k = v.left + (w.clientLeft + parseFloat(_.paddingLeft)) * x.x, P = v.top + (w.clientTop + parseFloat(_.paddingTop)) * x.y;
+      l *= x.x, c *= x.y, d *= x.x, u *= x.y, l += k, c += P, g = U(w), w = is(g);
     }
   }
   return Rt({
@@ -1994,7 +1994,7 @@ function Gt(s, e) {
   const t = jt(s).scrollLeft;
   return e ? e.left + t : Le(le(s)).left + t;
 }
-function So(s, e) {
+function To(s, e) {
   const t = s.getBoundingClientRect(), o = t.left + e.scrollLeft - Gt(s, t), i = t.top + e.scrollTop;
   return {
     x: o,
@@ -2020,7 +2020,7 @@ function Lr(s) {
     const p = Le(o);
     c = ze(o), d.x = p.x + o.clientLeft, d.y = p.y + o.clientTop;
   }
-  const f = n && !u && !r ? So(n, l) : ae(0);
+  const f = n && !u && !r ? To(n, l) : ae(0);
   return {
     width: t.width * c.x,
     height: t.height * c.y,
@@ -2048,12 +2048,12 @@ function Nr(s, e, t) {
   const o = t === "layoutViewport", i = U(s), r = le(s), n = i.visualViewport;
   let a = r.clientWidth, l = r.clientHeight, c = 0, d = 0;
   if (n) {
-    const f = !_s() || e === "fixed";
+    const f = !ks() || e === "fixed";
     o ? f || (c = -n.offsetLeft, d = -n.offsetTop) : (a = n.width, l = n.height, f && (c = n.offsetLeft, d = n.offsetTop));
   }
   if (Gt(r) <= 0) {
-    const f = r.ownerDocument, p = f.body, g = getComputedStyle(p), w = f.compatMode === "CSS1Compat" && parseFloat(g.marginLeft) + parseFloat(g.marginRight) || 0, y = Math.abs(r.clientWidth - p.clientWidth - w), b = getComputedStyle(r).scrollbarGutter === "stable both-edges" ? y / 2 : y;
-    b <= zr && (a -= b);
+    const f = r.ownerDocument, p = f.body, g = getComputedStyle(p), w = f.compatMode === "CSS1Compat" && parseFloat(g.marginLeft) + parseFloat(g.marginRight) || 0, x = Math.abs(r.clientWidth - p.clientWidth - w), v = getComputedStyle(r).scrollbarGutter === "stable both-edges" ? x / 2 : x;
+    v <= zr && (a -= v);
   }
   return {
     width: a,
@@ -2071,7 +2071,7 @@ function $r(s, e) {
     y: c
   };
 }
-function Fs(s, e, t) {
+function Ks(s, e, t) {
   let o;
   if (e === "viewport" || e === "layoutViewport")
     o = Nr(s, t, e);
@@ -2080,7 +2080,7 @@ function Fs(s, e, t) {
   else if (ee(e))
     o = $r(e, t);
   else {
-    const i = Co(s);
+    const i = So(s);
     o = {
       x: e.x - i.x,
       y: e.y - i.y,
@@ -2098,7 +2098,7 @@ function Vr(s, e) {
   const r = te(s).position === "fixed";
   let n = r ? Me(s) : s;
   for (; ee(n) && !at(n); ) {
-    const a = te(n), l = xs(n), c = i ? i.position : r ? "fixed" : "";
+    const a = te(n), l = _s(n), c = i ? i.position : r ? "fixed" : "";
     !l && (c === "fixed" || c === "absolute" && a.position === "static") ? o = o.filter((u) => u !== n) : i = a, n = Me(n);
   }
   return e.set(s, o), o;
@@ -2110,10 +2110,10 @@ function Dr(s) {
     rootBoundary: o,
     strategy: i
   } = s;
-  const n = [...t === "clippingAncestors" ? Wt(e) ? [] : Vr(e, this._c) : [].concat(t), o], a = Fs(e, n[0], i);
+  const n = [...t === "clippingAncestors" ? Wt(e) ? [] : Vr(e, this._c) : [].concat(t), o], a = Ks(e, n[0], i);
   let l = a.top, c = a.right, d = a.bottom, u = a.left;
   for (let f = 1; f < n.length; f++) {
-    const p = Fs(e, n[f], i);
+    const p = Ks(e, n[f], i);
     l = ne(p.top, l), c = be(p.right, c), d = be(p.bottom, d), u = ne(p.left, u);
   }
   return {
@@ -2127,7 +2127,7 @@ function Rr(s) {
   const {
     width: e,
     height: t
-  } = ko(s);
+  } = Co(s);
   return {
     width: e,
     height: t
@@ -2145,7 +2145,7 @@ function Br(s, e, t) {
     l.x = f.x + e.clientLeft, l.y = f.y + e.clientTop;
   }
   !o && i && (l.x = Gt(i));
-  const c = i && !o && !r ? So(i, a) : ae(0), d = n.left + a.scrollLeft - l.x - c.x, u = n.top + a.scrollTop - l.y - c.y;
+  const c = i && !o && !r ? To(i, a) : ae(0), d = n.left + a.scrollLeft - l.x - c.x, u = n.top + a.scrollTop - l.y - c.y;
   return {
     x: d,
     y: u,
@@ -2156,7 +2156,7 @@ function Br(s, e, t) {
 function Jt(s) {
   return te(s).position === "static";
 }
-function Ks(s, e) {
+function Ws(s, e) {
   if (!ve(s) || te(s).position === "fixed")
     return null;
   if (e)
@@ -2164,7 +2164,7 @@ function Ks(s, e) {
   let t = s.offsetParent;
   return le(s) === t && (t = t.ownerDocument.body), t;
 }
-function To(s, e) {
+function Io(s, e) {
   const t = U(s);
   if (Wt(s))
     return t;
@@ -2177,13 +2177,13 @@ function To(s, e) {
     }
     return t;
   }
-  let o = Ks(s, e);
+  let o = Ws(s, e);
   for (; o && Sr(o) && Jt(o); )
-    o = Ks(o, e);
-  return o && at(o) && Jt(o) && !xs(o) ? t : o || Or(s) || t;
+    o = Ws(o, e);
+  return o && at(o) && Jt(o) && !_s(o) ? t : o || Or(s) || t;
 }
 const Hr = async function(s) {
-  const e = this.getOffsetParent || To, t = this.getDimensions, o = await t(s.floating);
+  const e = this.getOffsetParent || Io, t = this.getDimensions, o = await t(s.floating);
   return {
     reference: Br(s.reference, await e(s.floating), s.strategy),
     floating: {
@@ -2197,11 +2197,11 @@ const Hr = async function(s) {
 function Fr(s) {
   return te(s).direction === "rtl";
 }
-const Io = {
+const Oo = {
   convertOffsetParentRelativeRectToViewportRelativeRect: Lr,
   getDocumentElement: le,
   getClippingRect: Dr,
-  getOffsetParent: To,
+  getOffsetParent: Io,
   getElementRects: Hr,
   getClientRects: Er,
   getDimensions: Rr,
@@ -2209,7 +2209,7 @@ const Io = {
   isElement: ee,
   isRTL: Fr
 };
-function Oo(s, e) {
+function Po(s, e) {
   return s.x === e.x && s.y === e.y && s.width === e.width && s.height === e.height;
 }
 function Kr(s, e, t) {
@@ -2225,18 +2225,18 @@ function Kr(s, e, t) {
       left: p,
       top: g,
       width: w,
-      height: y
+      height: x
     } = f;
-    if (d || e(), !w || !y)
+    if (d || e(), !w || !x)
       return;
-    const b = vt(g), _ = vt(r.clientWidth - (p + w)), k = vt(r.clientHeight - (g + y)), P = vt(p), D = {
-      rootMargin: -b + "px " + -_ + "px " + -k + "px " + -P + "px",
+    const v = vt(g), _ = vt(r.clientWidth - (p + w)), k = vt(r.clientHeight - (g + x)), P = vt(p), D = {
+      rootMargin: -v + "px " + -_ + "px " + -k + "px " + -P + "px",
       threshold: ne(0, be(1, u)) || 1
     };
     let j = !0;
     function q(V) {
       const S = V[0].intersectionRatio;
-      if (!Oo(f, s.getBoundingClientRect()))
+      if (!Po(f, s.getBoundingClientRect()))
         return a();
       if (S !== u) {
         if (!j)
@@ -2271,35 +2271,35 @@ function Wr(s, e, t, o) {
     elementResize: n = typeof ResizeObserver == "function",
     layoutShift: a = typeof IntersectionObserver == "function",
     animationFrame: l = !1
-  } = o, c = ks(s), d = i || r ? [...c ? lt(c) : [], ...e ? lt(e) : []] : [];
-  d.forEach((b) => {
-    i && b.addEventListener("scroll", t), r && b.addEventListener("resize", t);
+  } = o, c = Cs(s), d = i || r ? [...c ? lt(c) : [], ...e ? lt(e) : []] : [];
+  d.forEach((v) => {
+    i && v.addEventListener("scroll", t), r && v.addEventListener("resize", t);
   });
   const u = c && a ? Kr(c, t, r) : null;
   let f = -1, p = null;
-  n && (p = new ResizeObserver((b) => {
-    let [_] = b;
+  n && (p = new ResizeObserver((v) => {
+    let [_] = v;
     _ && _.target === c && p && e && (p.unobserve(e), cancelAnimationFrame(f), f = requestAnimationFrame(() => {
       var k;
       (k = p) == null || k.observe(e);
     })), t();
   }), c && !l && p.observe(c), e && p.observe(e));
   let g, w = l ? Le(s) : null;
-  l && y();
-  function y() {
-    const b = Le(s);
-    w && !Oo(w, b) && t(), w = b, g = requestAnimationFrame(y);
+  l && x();
+  function x() {
+    const v = Le(s);
+    w && !Po(w, v) && t(), w = v, g = requestAnimationFrame(x);
   }
   return t(), () => {
-    var b;
+    var v;
     d.forEach((_) => {
       i && _.removeEventListener("scroll", t), r && _.removeEventListener("resize", t);
-    }), u == null || u(), (b = p) == null || b.disconnect(), p = null, l && cancelAnimationFrame(g);
+    }), u == null || u(), (v = p) == null || v.disconnect(), p = null, l && cancelAnimationFrame(g);
   };
 }
 const jr = _r, Gr = kr, Ur = wr, Yt = Cr, qr = vr, Xr = (s, e, t) => {
   const o = /* @__PURE__ */ new Map(), i = t ?? {}, r = {
-    ...Io,
+    ...Oo,
     ...i.platform,
     _c: o
   };
@@ -2339,7 +2339,7 @@ function Yr(s, e, t) {
   }
   return null;
 }
-function Po(s) {
+function Mo(s) {
   const e = getComputedStyle(s), t = [];
   e.transform !== "none" && t.push(`transform: ${e.transform}`), e.perspective !== "none" && t.push(`perspective: ${e.perspective}`), e.filter !== "none" && t.push(`filter: ${e.filter}`);
   const o = e.backdropFilter;
@@ -2367,7 +2367,7 @@ function Qr(s) {
     driftY: n,
     culprit: a,
     culpritDescription: a ? Zr(a) : "an ancestor element (could not auto-identify)",
-    culpritCss: a ? Po(a) : ""
+    culpritCss: a ? Mo(a) : ""
   };
 }
 function en(s, e) {
@@ -2382,7 +2382,7 @@ function sn(s, e, t) {
   const o = e.split("-")[0], i = tn[o];
   s.style.left = t.x != null ? `${t.x}px` : "", s.style.top = t.y != null ? `${t.y}px` : "", s.style.right = "", s.style.bottom = "", s.style[i] = `-${s.offsetWidth / 2}px`;
 }
-function Ws(s, e) {
+function js(s, e) {
   const t = [jr(s.offset ?? 4)];
   if (s.matchWidth) {
     const i = s.matchWidth;
@@ -2421,21 +2421,21 @@ function Ws(s, e) {
 function ot(s, e, t = {}) {
   const o = t.strategy ?? "fixed";
   t.inheritThemeFrom && en(t.inheritThemeFrom, s), s.style.position = o, s.style.left = "0", s.style.top = "0";
-  let i = t.placement ?? "bottom-start", r = t.flip ?? !0, n = Ws(t, r);
+  let i = t.placement ?? "bottom-start", r = t.flip ?? !0, n = js(t, r);
   const a = t.lockPlacement === "freeze";
   let l = !1;
-  const c = !!t.fixedContainingBlock && !t.platform, d = t.platform ?? (c ? { ...Io, getOffsetParent: () => ns(s) } : void 0), u = () => {
+  const c = !!t.fixedContainingBlock && !t.platform, d = t.platform ?? (c ? { ...Oo, getOffsetParent: () => ns(s) } : void 0), u = () => {
     var p;
     (p = t.beforeCompute) == null || p.call(t), Xr(e, s, {
       placement: i,
       strategy: o,
       middleware: n,
       ...d ? { platform: d } : {}
-    }).then(({ x: g, y: w, placement: y, middlewareData: b }) => {
+    }).then(({ x: g, y: w, placement: x, middlewareData: v }) => {
       var _, k;
-      if (s.style.left = `${g}px`, s.style.top = `${w}px`, t.arrow && sn(t.arrow.element, y, b.arrow), a && !l && (l = !0, i = y, r = !1, n = Ws(t, !1)), (_ = t.onPlaced) == null || _.call(t, y), (k = t.onComputed) == null || k.call(t, { x: g, y: w, placement: y }), t.onDrift && e instanceof Element) {
-        const P = c ? ns(s) : window, N = Qr({ panel: s, reference: e, expectedX: g, expectedY: w, offsetParent: P });
-        N && t.onDrift(N);
+      if (s.style.left = `${g}px`, s.style.top = `${w}px`, t.arrow && sn(t.arrow.element, x, v.arrow), a && !l && (l = !0, i = x, r = !1, n = js(t, !1)), (_ = t.onPlaced) == null || _.call(t, x), (k = t.onComputed) == null || k.call(t, { x: g, y: w, placement: x }), t.onDrift && e instanceof Element) {
+        const P = c ? ns(s) : window, $ = Qr({ panel: s, reference: e, expectedX: g, expectedY: w, offsetParent: P });
+        $ && t.onDrift($);
       }
     });
   };
@@ -2475,12 +2475,12 @@ function rn(s) {
     }), s.followCursor && s.trigger.addEventListener("mousemove", f), r.classList.add(o);
   }, w = () => {
     p(), a && (a = !1, r.classList.remove(o), s.followCursor && s.trigger.removeEventListener("mousemove", f), n == null || n.destroy(), n = void 0, r.remove());
-  }, y = () => {
+  }, x = () => {
     p(), i.show > 0 ? l = setTimeout(g, i.show) : g();
-  }, b = () => {
+  }, v = () => {
     p(), i.hide > 0 ? c = setTimeout(w, i.hide) : w();
   };
-  return s.trigger.addEventListener("mouseenter", y), s.trigger.addEventListener("mouseleave", b), s.trigger.addEventListener("focusin", y), s.trigger.addEventListener("focusout", b), {
+  return s.trigger.addEventListener("mouseenter", x), s.trigger.addEventListener("mouseleave", v), s.trigger.addEventListener("focusin", x), s.trigger.addEventListener("focusout", v), {
     element: r,
     get isVisible() {
       return a;
@@ -2488,7 +2488,7 @@ function rn(s) {
     show: g,
     hide: w,
     destroy() {
-      s.trigger.removeEventListener("mouseenter", y), s.trigger.removeEventListener("mouseleave", b), s.trigger.removeEventListener("focusin", y), s.trigger.removeEventListener("focusout", b), w();
+      s.trigger.removeEventListener("mouseenter", x), s.trigger.removeEventListener("mouseleave", v), s.trigger.removeEventListener("focusin", x), s.trigger.removeEventListener("focusout", v), w();
     }
   };
 }
@@ -2527,7 +2527,7 @@ function nn(s) {
     }
   };
 }
-const Mo = ["INIT", "DATA", "UI", "INTERACTION"], ce = nr("MULTISELECT", Mo), wt = ce.loggers.INIT, W = ce.loggers.DATA, Y = ce.loggers.UI, R = ce.loggers.INTERACTION, Tn = Mo.map((s) => `MULTISELECT:${s}`);
+const Lo = ["INIT", "DATA", "UI", "INTERACTION"], ce = nr("MULTISELECT", Lo), wt = ce.loggers.INIT, W = ce.loggers.DATA, Y = ce.loggers.UI, R = ce.loggers.INTERACTION, Tn = Lo.map((s) => `MULTISELECT:${s}`);
 function In() {
   ce.enableLogging();
 }
@@ -2541,7 +2541,7 @@ function Mn(s, e) {
   const t = s.includes(":") ? s.split(":").pop() : s;
   ce.setCategoryLevel(t, e);
 }
-class js {
+class Gs {
   constructor(e) {
     m(this, "container");
     m(this, "wrapper");
@@ -2673,7 +2673,7 @@ class js {
     this.container.removeEventListener("scroll", this.scrollHandler), this.resizeObserver && this.resizeObserver.disconnect(), this.container.innerHTML = "";
   }
 }
-function Gs(s) {
+function Us(s) {
   return {
     treeId: "",
     id: -1,
@@ -2694,10 +2694,10 @@ function an(s, e = ".") {
   const t = s.lastIndexOf(e);
   return t === -1 ? "" : s.substring(0, t);
 }
-function Us(s, e, t = ".") {
+function qs(s, e, t = ".") {
   return st(e) ? s : s.startsWith(e + t) ? s.substring(e.length + t.length) : s;
 }
-function qs(s, e = 0, t = 1, o = ".") {
+function Xs(s, e = 0, t = 1, o = ".") {
   return s.split(o).slice(e, e + t).join(o);
 }
 function ln(s, e) {
@@ -2707,10 +2707,10 @@ function he(s, e) {
   return s[e];
 }
 function cn(s = {}) {
-  const e = s.idMember, t = s.pathMember, o = s.getPathCallback, i = s.parentPathMember, r = s.levelMember, n = s.hasChildrenMember, a = s.isSelectableMember, l = s.getIsSelectableCallback, c = s.treeId || "multiselect-tree", d = s.orderMember, u = s.getDisplayValueCallback, f = st(i), p = st(r), g = st(n), w = st(a), y = "x", b = s.treePathSeparator || ".", _ = Gs();
+  const e = s.idMember, t = s.pathMember, o = s.getPathCallback, i = s.parentPathMember, r = s.levelMember, n = s.hasChildrenMember, a = s.isSelectableMember, l = s.getIsSelectableCallback, c = s.treeId || "multiselect-tree", d = s.orderMember, u = s.getDisplayValueCallback, f = st(i), p = st(r), g = st(n), w = st(a), x = "x", v = s.treePathSeparator || ".", _ = Us();
   let k = 0, P = null;
-  const N = (V) => o ? o(V) : t ? he(V, t) : void 0, D = {
-    treePathSeparator: b,
+  const $ = (V) => o ? o(V) : t ? he(V, t) : void 0, D = {
+    treePathSeparator: v,
     root: _,
     get tree() {
       return Object.values(_.children);
@@ -2722,38 +2722,38 @@ function cn(s = {}) {
     get flatNodes() {
       if (P) return P;
       const V = [], S = s.isSorted ?? !1, M = s.sortCallback;
-      function A(B) {
+      function z(B) {
         let T = Object.values(B.children);
         S && M && T.length > 0 && (T = M(T));
         for (const F of T)
-          V.push(F), F.hasChildren && A(F);
+          V.push(F), F.hasChildren && z(F);
       }
-      return A(_), P = V, V;
+      return z(_), P = V, V;
     },
     insertArray(V) {
       V = V || [], _.children = {}, k = 0, P = null;
       const S = [];
-      let M = V.map((A, B) => {
-        const T = Gs();
-        T.treeId = c, T.id = e ? he(A, e) : void 0;
-        const F = N(A);
-        return F == null || F === "" || typeof F != "string" ? (S.push(`index ${B}`), null) : (T.path = F, (T.id === void 0 || T.id === -1) && (T.id = F), f ? T.parentPath = an(T.path, b) : T.parentPath = he(A, i), T.pathSegment = qs(
-          Us(T.path, T.parentPath ?? "", b),
+      let M = V.map((z, B) => {
+        const T = Us();
+        T.treeId = c, T.id = e ? he(z, e) : void 0;
+        const F = $(z);
+        return F == null || F === "" || typeof F != "string" ? (S.push(`index ${B}`), null) : (T.path = F, (T.id === void 0 || T.id === -1) && (T.id = F), f ? T.parentPath = an(T.path, v) : T.parentPath = he(z, i), T.pathSegment = Xs(
+          qs(T.path, T.parentPath ?? "", v),
           0,
           1,
-          b
-        ), p ? T.level = ln(T.path, b) : T.level = he(A, r), g || (T.hasChildren = he(A, n)), T.data = A, T);
-      }).filter((A) => A !== null);
+          v
+        ), p ? T.level = ln(T.path, v) : T.level = he(z, r), g || (T.hasChildren = he(z, n)), T.data = z, T);
+      }).filter((z) => z !== null);
       s.isSorted || (s.sortCallback ? M = s.sortCallback(M) : M = q(M));
-      for (const A of M)
-        j(A.parentPath ?? "", A);
+      for (const z of M)
+        j(z.parentPath ?? "", z);
       if (l || !w)
-        for (const A of M)
+        for (const z of M)
           if (l)
-            A.isSelectable = l(A) !== !1;
+            z.isSelectable = l(z) !== !1;
           else {
-            const B = he(A.data, a);
-            A.isSelectable = B == null ? !0 : !!B;
+            const B = he(z.data, a);
+            z.isSelectable = B == null ? !0 : !!B;
           }
       S.length > 0 && console.warn(
         `[ltree ${c}] ${S.length} option(s) had an invalid path and were skipped (pathMember="${t}"). Offending: ${S.slice(0, 5).join(", ")}` + (S.length > 5 ? ", …" : "")
@@ -2762,9 +2762,9 @@ function cn(s = {}) {
     getNodeByPath(V, S) {
       let M = S || _;
       if (V) {
-        const A = V.split(b);
-        for (let B = 0; B < A.length; B++) {
-          const T = y + A[B];
+        const z = V.split(v);
+        for (let B = 0; B < z.length; B++) {
+          const T = x + z[B];
           if (!M.children.hasOwnProperty(T))
             return null;
           M = M.children[T];
@@ -2778,13 +2778,13 @@ function cn(s = {}) {
     if (!M)
       return `Node: ${S.path} - Could not find parent node: ${V}`;
     p && (S.level = (M.level || 0) + 1);
-    const A = y + qs(Us(S.path, V, b), 0, 1, b);
-    return M.children.hasOwnProperty(A) || (M.children[A] = S, g && !M.hasChildren && (M.hasChildren = !0), k = Math.max(k, S.level || 0)), null;
+    const z = x + Xs(qs(S.path, V, v), 0, 1, v);
+    return M.children.hasOwnProperty(z) || (M.children[z] = S, g && !M.hasChildren && (M.hasChildren = !0), k = Math.max(k, S.level || 0)), null;
   }
   function q(V) {
     return V.sort((S, M) => {
-      const A = S.level || 0, B = M.level || 0;
-      if (A !== B) return A - B;
+      const z = S.level || 0, B = M.level || 0;
+      if (z !== B) return z - B;
       if (S.parentPath !== M.parentPath)
         return S.parentPath ? M.parentPath ? S.parentPath.localeCompare(M.parentPath) : 1 : -1;
       if (d && S.data && M.data) {
@@ -2796,7 +2796,7 @@ function cn(s = {}) {
   }
   return D;
 }
-function Xs(s, e) {
+function Js(s, e) {
   const t = /* @__PURE__ */ new Map(), o = /* @__PURE__ */ new Map(), i = /* @__PURE__ */ new Set(), r = (l) => String(e(l.data)), n = (l) => {
     t.set(r(l), l);
     const c = [];
@@ -2808,7 +2808,7 @@ function Xs(s, e) {
   for (const l of a) n(l);
   return { nodeByValue: t, atomsUnder: o, atomPaths: i, roots: a };
 }
-function Cs(s, e, t) {
+function Ss(s, e, t) {
   const o = s.atomsUnder.get(e.path);
   if (!o || o.length === 0) return "unchecked";
   let i = 0;
@@ -2825,7 +2825,7 @@ function Qe(s, e) {
   return t;
 }
 function dn(s, e, t) {
-  const o = s.atomsUnder.get(e.path) ?? [], i = new Set(t), r = Cs(s, e, t), n = [], a = [];
+  const o = s.atomsUnder.get(e.path) ?? [], i = new Set(t), r = Ss(s, e, t), n = [], a = [];
   if (r === "checked")
     for (const l of o) i.delete(l) && a.push(l);
   else
@@ -2834,7 +2834,7 @@ function dn(s, e, t) {
 }
 function Zt(s, e, t, o) {
   const i = (a) => String(o(a.data)), r = [], n = (a) => {
-    const l = Cs(s, a, e);
+    const l = Ss(s, a, e);
     if (l === "unchecked") return;
     const c = a.isSelectable !== !1, d = Object.values(a.children);
     if (t === "leaves") {
@@ -2856,7 +2856,7 @@ function Zt(s, e, t, o) {
   for (const a of s.roots) n(a);
   return r;
 }
-var $;
+var N;
 class hn {
   constructor(e, t = {}) {
     m(this, "element");
@@ -2865,7 +2865,7 @@ class hn {
     // Backing field for the open state. Read/written internally via `this.#isOpen`
     // so the public `isOpen` accessor (get/set) can drive open()/close() without
     // recursing. See the imperative API at the bottom of the class.
-    L(this, $, !1);
+    L(this, N, !1);
     m(this, "selectedValues", /* @__PURE__ */ new Set());
     m(this, "selectedOptions", /* @__PURE__ */ new Map());
     m(this, "allOptions", []);
@@ -3264,7 +3264,7 @@ class hn {
       treePathSeparator: this.options.treePathSeparator,
       treeId: this.instanceId,
       getDisplayValueCallback: (e) => this.getItemDisplayValue(e.data)
-    }), this.tree.insertArray(this.allOptions), this.cascadeIndex = this.isCascadeMode() ? Xs(this.tree, (e) => String(this.getItemValue(e))) : null, this.rebuildTreeVisible();
+    }), this.tree.insertArray(this.allOptions), this.cascadeIndex = this.isCascadeMode() ? Js(this.tree, (e) => String(this.getItemValue(e))) : null, this.rebuildTreeVisible();
   }
   /**
    * Whether cascade checkbox mode is active: a multi-select tree with
@@ -3466,7 +3466,7 @@ class hn {
     t.className = "ms__input-wrapper", this.inputWrapper = t, this.input = document.createElement("input"), this.input.type = "text", this.input.className = "ms__input", this.input.placeholder = this.getPlaceholderText(), this.input.autocomplete = "off", this.options.searchInputMode === "readonly" ? this.input.readOnly = !0 : this.options.searchInputMode === "hidden" && (this.input.style.visibility = "hidden");
     const o = document.createElement("span");
     o.className = "ms__toggle", o.addEventListener("mousedown", (n) => {
-      n.preventDefault(), n.stopPropagation(), h(this, $) ? (this.justClosedViaClick = !0, this.close(), setTimeout(() => {
+      n.preventDefault(), n.stopPropagation(), h(this, N) ? (this.justClosedViaClick = !0, this.close(), setTimeout(() => {
         this.justClosedViaClick = !1;
       }, 0)) : (this.open(), this.presentationMode !== "fullscreen" && this.input.focus());
     }), this.counter = document.createElement("span"), this.counter.className = "ms__counter", this.counter.style.display = "none", this.clearButton = document.createElement("button"), this.clearButton.type = "button", this.clearButton.className = "ms__input-clear", this.clearButton.tabIndex = -1, this.clearButton.setAttribute("aria-label", "Clear selection"), this.clearButton.style.display = "none", this.clearButton.addEventListener("mousedown", (n) => n.preventDefault()), this.clearButton.addEventListener("click", (n) => {
@@ -3599,26 +3599,26 @@ class hn {
       const d = this.isGroupCascadeActive();
       Object.keys(l).forEach((u) => {
         if (t += '<div class="ms__group">', u !== "__ungrouped__") {
-          const f = ` data-group="${this.escapeHtml(u)}"`, p = d ? ' data-group-select="cascade"' : "", g = this.groupSelectionInfo(l[u]), w = d ? this.groupCheckboxHtml(g.checkState) : "", y = d ? "ms__group-label ms__group-label--selectable" : "ms__group-label";
+          const f = ` data-group="${this.escapeHtml(u)}"`, p = d ? ' data-group-select="cascade"' : "", g = this.groupSelectionInfo(l[u]), w = d ? this.groupCheckboxHtml(g.checkState) : "", x = d ? "ms__group-label ms__group-label--selectable" : "ms__group-label";
           if (this.options.renderGroupLabelContentCallback) {
-            const b = {
+            const v = {
               ...Xe(this.presentationMode),
               groupName: u,
               ...g
-            }, _ = this.options.renderGroupLabelContentCallback(u, b);
+            }, _ = this.options.renderGroupLabelContentCallback(u, v);
             if (_ instanceof HTMLElement) {
               const k = document.createElement("div");
-              if (k.className = y, k.dataset.group = u, d) {
+              if (k.className = x, k.dataset.group = u, d) {
                 k.dataset.groupSelect = "cascade";
                 const P = document.createElement("template");
                 P.innerHTML = w, P.content.firstChild && k.appendChild(P.content.firstChild);
               }
               k.appendChild(_), t += k.outerHTML;
             } else
-              t += `<div class="${y}"${f}${p}>${w}${_}</div>`;
+              t += `<div class="${x}"${f}${p}>${w}${_}</div>`;
           } else {
-            const b = this.groupCountHtml(g.selectedCount, g.memberCount), _ = b ? `${y} ms__group-label--has-count` : y;
-            t += `<div class="${_}"${f}${p}>${w}${this.escapeHtml(u)}${b}</div>`;
+            const v = this.groupCountHtml(g.selectedCount, g.memberCount), _ = v ? `${x} ms__group-label--has-count` : x;
+            t += `<div class="${_}"${f}${p}>${w}${this.escapeHtml(u)}${v}</div>`;
           }
         }
         l[u].forEach((f) => {
@@ -3687,7 +3687,7 @@ class hn {
     }
     const e = this.scaledOptionHeight(), t = this.options.virtualScrollBuffer ?? 10;
     requestAnimationFrame(() => {
-      this.optionsContainer && (this.virtualScroll ? (this.virtualScroll.setItemHeight(e), this.virtualScroll.setItems(this.filteredOptions)) : this.virtualScroll = new js({
+      this.optionsContainer && (this.virtualScroll ? (this.virtualScroll.setItemHeight(e), this.virtualScroll.setItems(this.filteredOptions)) : this.virtualScroll = new Gs({
         container: this.optionsContainer,
         itemHeight: e,
         items: this.filteredOptions,
@@ -3722,13 +3722,13 @@ class hn {
       let p;
       d.getIsDisabledCallback ? p = d.getIsDisabledCallback(this) : d.isDisabled !== void 0 ? p = d.isDisabled : p = this.getBuiltInActionDisabled(d.action);
       const g = p ? " disabled" : "", w = d.getTextCallback ? d.getTextCallback(this) : d.text;
-      let y = "";
+      let x = "";
       if (d.getClassCallback) {
         const k = this.classSuffix(d.getClassCallback(this));
-        k && (y = ` ${k}`);
-      } else d.cssClass && (y = ` ${d.cssClass}`);
-      const b = Math.max(1, Math.floor(d.row ?? 1)), _ = `<button type="button"${g} class="ms__action-btn${y}" data-action="${d.action}" data-button-index="${u}">${w}</button>`;
-      l.has(b) || l.set(b, []), l.get(b).push(_);
+        k && (x = ` ${k}`);
+      } else d.cssClass && (x = ` ${d.cssClass}`);
+      const v = Math.max(1, Math.floor(d.row ?? 1)), _ = `<button type="button"${g} class="ms__action-btn${x}" data-action="${d.action}" data-button-index="${u}">${w}</button>`;
+      l.has(v) || l.set(v, []), l.get(v).push(_);
     }), l.size === 0) return "";
     const c = Array.from(l.keys()).sort((d, u) => d - u).map((d) => `<div class="ms__actions-row" data-row="${d}">${l.get(d).join("")}</div>`).join("");
     return `<div class="ms__actions${i}${r}${n}${a}">${c}</div>`;
@@ -3772,11 +3772,11 @@ class hn {
    * chevron/toggle — every node is just a normal, selectable option.
    */
   renderTreeNode(e, t) {
-    const o = e.data, i = this.getItemValue(o), r = this.getItemDisplayValue(o), n = this.getItemIcon(o), a = this.getItemSubtitle(o), l = this.getItemDisabled(o), c = this.isCascadeMode() && this.cascadeIndex, d = c ? Cs(this.cascadeIndex, e, this.cascadeCheckedAtoms) : null, u = c ? d === "checked" : this.selectedValues.has(String(i)), f = d === "indeterminate", p = t === this.focusedIndex, g = this.matchingIndices.has(t), w = e.isSelectable !== !1, y = e.level ?? 1, b = Math.max(0, y - 1), _ = ["ms__option", "ms__option--tree"];
+    const o = e.data, i = this.getItemValue(o), r = this.getItemDisplayValue(o), n = this.getItemIcon(o), a = this.getItemSubtitle(o), l = this.getItemDisabled(o), c = this.isCascadeMode() && this.cascadeIndex, d = c ? Ss(this.cascadeIndex, e, this.cascadeCheckedAtoms) : null, u = c ? d === "checked" : this.selectedValues.has(String(i)), f = d === "indeterminate", p = t === this.focusedIndex, g = this.matchingIndices.has(t), w = e.isSelectable !== !1, x = e.level ?? 1, v = Math.max(0, x - 1), _ = ["ms__option", "ms__option--tree"];
     _.push(e.hasChildren ? "ms__option--tree-branch" : "ms__option--tree-leaf"), u && _.push("ms__option--selected"), f && _.push("ms__option--indeterminate"), p && _.push("ms__option--focused"), g && _.push("ms__option--matched"), l && _.push("ms__option--disabled"), w || _.push("ms__option--tree-unselectable");
     const k = this.options.checkboxAlign && this.options.checkboxAlign !== "center" ? ` data-checkbox-align="${this.options.checkboxAlign}"` : "", P = w ? "" : ' data-selectable="false"';
-    let N = `<div class="${_.join(" ")}" data-value="${i}" data-index="${t}" data-path="${e.path}" data-level="${y}" style="--ms-tree-depth: ${b};"${k}${P}>`;
-    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && w && (N += this.checkboxHtml({ checked: u, indeterminate: f, disabled: l })), N += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
+    let $ = `<div class="${_.join(" ")}" data-value="${i}" data-index="${t}" data-path="${e.path}" data-level="${x}" style="--ms-tree-depth: ${v};"${k}${P}>`;
+    if (this.options.isCheckboxesShown && this.options.isMultipleEnabled && w && ($ += this.checkboxHtml({ checked: u, indeterminate: f, disabled: l })), $ += '<div class="ms__option-content">', this.options.renderOptionContentCallback) {
       const D = {
         index: t,
         isSelected: u,
@@ -3790,16 +3790,16 @@ class hn {
         isBranch: e.hasChildren,
         isLeaf: !e.hasChildren,
         childCount: Object.keys(e.children).length,
-        level: y,
-        depth: b,
+        level: x,
+        depth: v,
         path: e.path,
         isSelectable: w,
         isIndeterminate: f
       };
-      N += this.toHtml(this.options.renderOptionContentCallback(o, D));
+      $ += this.toHtml(this.options.renderOptionContentCallback(o, D));
     } else
-      n && (N += `<span class="ms__option-icon">${n}</span>`), N += '<div class="ms__option-text">', N += `<div class="ms__option-title">${this.highlightMatch(r, this.searchTerm)}</div>`, a && (N += `<div class="ms__option-subtitle">${a}</div>`), N += "</div>";
-    return N += this.renderOptionInfoButton(), N += "</div>", N += "</div>", N;
+      n && ($ += `<span class="ms__option-icon">${n}</span>`), $ += '<div class="ms__option-text">', $ += `<div class="ms__option-title">${this.highlightMatch(r, this.searchTerm)}</div>`, a && ($ += `<div class="ms__option-subtitle">${a}</div>`), $ += "</div>";
+    return $ += this.renderOptionInfoButton(), $ += "</div>", $ += "</div>", $;
   }
   /**
    * Empty-dropdown content. When "add new" is enabled (isAddNewAllowed) AND the user has typed
@@ -3882,11 +3882,11 @@ class hn {
       e[0] && (this.options.renderSelectedContentCallback ? r = this.options.renderSelectedContentCallback(
         e[0],
         Xe(this.presentationMode)
-      ) : r = this.getItemDisplayValue(e[0])), !h(this, $) && t > 0 && e.length > 0 ? this.input.value = r : h(this, $) || (this.input.value = "");
+      ) : r = this.getItemDisplayValue(e[0])), !h(this, N) && t > 0 && e.length > 0 ? this.input.value = r : h(this, N) || (this.input.value = "");
       return;
     }
     let o = this.options.badgesDisplayMode;
-    if (this.options.badgesThreshold !== null && t > this.options.badgesThreshold && o !== "none" && (o = this.options.badgesThresholdMode || "count"), !h(this, $))
+    if (this.options.badgesThreshold !== null && t > this.options.badgesThreshold && o !== "none" && (o = this.options.badgesThresholdMode || "count"), !h(this, N))
       if (t > 0 && o === "count") {
         const r = this.options.getCounterCallback ? this.options.getCounterCallback(t) : `${t} selected`;
         this.input.placeholder = r;
@@ -3943,14 +3943,14 @@ class hn {
   }
   attachEvents() {
     this.input.addEventListener("mousedown", (e) => {
-      e.stopPropagation(), h(this, $) ? (this.justClosedViaClick = !0, this.close(), setTimeout(() => {
+      e.stopPropagation(), h(this, N) ? (this.justClosedViaClick = !0, this.close(), setTimeout(() => {
         this.justClosedViaClick = !1;
       }, 0)) : (this.presentationMode === "fullscreen" && e.preventDefault(), this.open());
     }), this.input.addEventListener("focus", () => {
-      !h(this, $) && !this.justClosedViaClick && this.open();
+      !h(this, N) && !this.justClosedViaClick && this.open();
     }), this.input.addEventListener("input", (e) => {
       const t = e.target.value;
-      this.options.isSearchEnabled && !h(this, $) && this.open(), this.handleSearch(t);
+      this.options.isSearchEnabled && !h(this, N) && this.open(), this.handleSearch(t);
     }), this.input.addEventListener("keydown", (e) => this.handleKeydown(e)), this.documentClickHandler = (e) => this.handleClickOutside(e), setTimeout(() => {
       document.addEventListener("click", this.documentClickHandler);
     }, 0), this.overlayCoord = Xi(() => this.close(), this.options.overlayGroup || void 0), this.documentKeydownHandler = (e) => {
@@ -4046,10 +4046,10 @@ class hn {
       const i = await this.options.searchCallback(t, o.signal);
       if (o.signal.aborted || this.searchTerm !== e) return;
       const r = i || [];
-      this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(r) : this.filteredOptions = [...r], this.isLoading = !1, this.matchingIndices.clear(), this.focusedIndex = this.options.isSearchEnabled && this.filteredOptions.length > 0 ? 0 : -1, this.renderDropdown(), W.debug(`[${this.instanceId}] Loaded ${r.length} results`);
+      this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(r) : this.filteredOptions = [...r], this.isLoading = !1, this.matchingIndices.clear(), this.focusedIndex = this.options.isSearchEnabled && this.filteredOptions.length > 0 ? 0 : -1, this.renderDropdown(), this.repositionDropdown(), W.debug(`[${this.instanceId}] Loaded ${r.length} results`);
     } catch (i) {
       if (o.signal.aborted) return;
-      W.error(`[${this.instanceId}] Error loading data:`, i), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions] : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown();
+      W.error(`[${this.instanceId}] Error loading data:`, i), this.isLoading = !1, this.options.isKeepOptionsOnSearch ? this.isTreeMode() ? this.rebuildTreeVisibleFromMatches(this.allOptions) : this.filteredOptions = [...this.allOptions] : (this.filteredOptions = [], this.isTreeMode() && (this.treeNodes = [])), this.matchingIndices.clear(), this.renderDropdown(), this.repositionDropdown();
     } finally {
       this.searchAbortController === o && (this.searchAbortController = void 0);
     }
@@ -4059,7 +4059,7 @@ class hn {
     if (!(this.options.keydownCallback && this.options.keydownCallback({
       event: e,
       key: e.key,
-      isOpen: h(this, $),
+      isOpen: h(this, N),
       presentation: this.presentationMode,
       searchTerm: this.searchTerm,
       focusedIndex: this.focusedIndex,
@@ -4068,7 +4068,7 @@ class hn {
       selectedValues: [...this.selectedValues],
       controller: this.getKeyboardController()
     }) === !0)) {
-      if (!h(this, $)) {
+      if (!h(this, N)) {
         (e.key === "Enter" || e.key === "ArrowDown") && (e.preventDefault(), this.open());
         return;
       }
@@ -4147,7 +4147,7 @@ class hn {
     }
     const i = e.target.closest('.ms__group-label[data-group-select="cascade"]');
     if (i && i.dataset.group) {
-      e.preventDefault(), R.debug(`[${this.instanceId}] Group header cascade toggle:`, i.dataset.group), this.toggleGroup(i.dataset.group), h(this, $) && this.presentationMode !== "fullscreen" ? this.input.focus() : this.presentationMode === "fullscreen" && ((a = this.fullscreenSearchInput) == null || a.blur());
+      e.preventDefault(), R.debug(`[${this.instanceId}] Group header cascade toggle:`, i.dataset.group), this.toggleGroup(i.dataset.group), h(this, N) && this.presentationMode !== "fullscreen" ? this.input.focus() : this.presentationMode === "fullscreen" && ((a = this.fullscreenSearchInput) == null || a.blur());
       return;
     }
     const r = e.target.closest(".ms__option");
@@ -4159,7 +4159,7 @@ class hn {
         optionIndex: d,
         closeOnSelect: this.options.isCloseOnSelect,
         placeholder: this.options.searchPlaceholder
-      }), d >= 0 && (this.focusedIndex = d, this.toggleOption(this.filteredOptions[d]), h(this, $) && this.presentationMode !== "fullscreen" ? this.input.focus() : this.presentationMode === "fullscreen" && ((l = this.fullscreenSearchInput) == null || l.blur()));
+      }), d >= 0 && (this.focusedIndex = d, this.toggleOption(this.filteredOptions[d]), h(this, N) && this.presentationMode !== "fullscreen" ? this.input.focus() : this.presentationMode === "fullscreen" && ((l = this.fullscreenSearchInput) == null || l.blur()));
     }
   }
   handleBadgeClick(e) {
@@ -4194,7 +4194,7 @@ class hn {
       Y.debug(`[${this.instanceId}] Closing selected popover due to click outside`), this.hideSelectedPopover();
       return;
     }
-    if (!h(this, $) || this.justOpenedViaClick) return;
+    if (!h(this, N) || this.justOpenedViaClick) return;
     const o = t.some(
       (r) => r instanceof Node && (this.element.contains(r) || this.dropdown.contains(r) || this.hint && this.hint.contains(r))
     );
@@ -4353,7 +4353,7 @@ class hn {
    */
   scrollToIndex(e, t) {
     const o = (t == null ? void 0 : t.block) ?? "start";
-    return h(this, $) ? e < 0 || e >= this.filteredOptions.length ? (R.debug(`[${this.instanceId}] scrollToIndex(${e}) → false (out of range, ${this.filteredOptions.length} options)`), !1) : (R.debug(`[${this.instanceId}] scrollToIndex(${e}, block=${o}) — virtual=${!!this.virtualScroll}, mode=${this.presentationMode}`), this.armClickGuard(), this.scrollToRenderedIndex(e, { block: o }), !0) : (R.debug(`[${this.instanceId}] scrollToIndex(${e}) → false (closed)`), !1);
+    return h(this, N) ? e < 0 || e >= this.filteredOptions.length ? (R.debug(`[${this.instanceId}] scrollToIndex(${e}) → false (out of range, ${this.filteredOptions.length} options)`), !1) : (R.debug(`[${this.instanceId}] scrollToIndex(${e}, block=${o}) — virtual=${!!this.virtualScroll}, mode=${this.presentationMode}`), this.armClickGuard(), this.scrollToRenderedIndex(e, { block: o }), !0) : (R.debug(`[${this.instanceId}] scrollToIndex(${e}) → false (closed)`), !1);
   }
   /**
    * Scroll to the option whose value matches `value` (resolved within the current
@@ -4373,7 +4373,7 @@ class hn {
    */
   scrollToGroup(e, t) {
     const o = (t == null ? void 0 : t.block) ?? "start";
-    if (!h(this, $) || this.isTreeMode())
+    if (!h(this, N) || this.isTreeMode())
       return R.debug(`[${this.instanceId}] scrollToGroup(${e}) → false (${this.isTreeMode() ? "tree mode" : "closed"})`), !1;
     if (this.armClickGuard(), !this.virtualScroll) {
       const r = this.dropdown.querySelector(
@@ -4392,7 +4392,7 @@ class hn {
    * (post-open virtual init / fullscreen sheet build), then retries once.
    */
   scrollToRenderedIndex(e, t, o = !1) {
-    if (!h(this, $) || e < 0 || e >= this.filteredOptions.length) return;
+    if (!h(this, N) || e < 0 || e >= this.filteredOptions.length) return;
     if (this.virtualScroll) {
       const r = (t == null ? void 0 : t.block) === "center" ? "center" : (t == null ? void 0 : t.block) === "nearest" ? "nearest" : "start";
       this.virtualScroll.scrollToIndex(e, r), R.debug(`[${this.instanceId}] scrollToRenderedIndex(${e}) via virtual (block=${r})`);
@@ -4598,20 +4598,20 @@ class hn {
   /** Open the dropdown (no-op if already open, or if there is nothing to show). */
   open() {
     var e;
-    Y.debug(`[${this.instanceId}] open() called`, { isOpen: h(this, $) }), this.armClickGuard(), !h(this, $) && (this.hideMessage(), I(this, $, !0), this.element.classList.add("ms--open"), this.dropdown.classList.add("ms__dropdown--visible"), Y.info(`[${this.instanceId}] Dropdown opened`), this.input.placeholder = this.getPlaceholderText(), !this.options.isMultipleEnabled && this.options.isSearchEnabled && (this.input.value = this.searchTerm), this.options.searchCallback && this.options.isKeepOptionsOnSearch && !this.searchTerm && (this.filteredOptions = [...this.allOptions], Y.debug(`[${this.instanceId}] Showing ${this.allOptions.length} initial options on open`)), this.presentationMode === "fullscreen" && this.enterFullscreen(), this.renderDropdown(), this.presentationMode !== "fullscreen" && this.positionDropdown(), this.dropdown.addEventListener("scroll", this.onDropdownScroll, !0), this.hint && this.presentationMode === "floating" && (this.hint.classList.add("ms__hint--visible"), this.positionHint()), (e = this.overlayCoord) == null || e.activate());
+    Y.debug(`[${this.instanceId}] open() called`, { isOpen: h(this, N) }), this.armClickGuard(), !h(this, N) && (this.hideMessage(), I(this, N, !0), this.element.classList.add("ms--open"), this.dropdown.classList.add("ms__dropdown--visible"), Y.info(`[${this.instanceId}] Dropdown opened`), this.input.placeholder = this.getPlaceholderText(), !this.options.isMultipleEnabled && this.options.isSearchEnabled && (this.input.value = this.searchTerm), this.options.searchCallback && this.options.isKeepOptionsOnSearch && !this.searchTerm && (this.filteredOptions = [...this.allOptions], Y.debug(`[${this.instanceId}] Showing ${this.allOptions.length} initial options on open`)), this.presentationMode === "fullscreen" && this.enterFullscreen(), this.renderDropdown(), this.presentationMode !== "fullscreen" && this.positionDropdown(), this.dropdown.addEventListener("scroll", this.onDropdownScroll, !0), this.hint && this.presentationMode === "floating" && (this.hint.classList.add("ms__hint--visible"), this.positionHint()), (e = this.overlayCoord) == null || e.activate());
   }
   /** Close the dropdown (no-op if already closed). */
   close() {
     var e;
-    Y.debug(`[${this.instanceId}] close() called`, { isOpen: h(this, $) }), h(this, $) && (I(this, $, !1), this.element.classList.remove("ms--open"), this.dropdown.classList.remove("ms__dropdown--visible"), this.hint && this.hint.classList.remove("ms__hint--visible"), this.options.shouldKeepSearchOnClose || (this.searchTerm = "", (this.options.isMultipleEnabled || this.options.isSearchEnabled) && (this.input.value = ""), this.resetVisibleToAll()), this.focusedIndex = -1, this.dropdown.removeEventListener("scroll", this.onDropdownScroll, !0), this.destroyAllOptionTooltips(), this.hideLabelReveal(), this.hideMessage(), this.renderBadges(), this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.exitFullscreen(), this.dropdownPlacement = null, (e = this.overlayCoord) == null || e.deactivate(), Y.debug(`[${this.instanceId}] Dropdown closed`));
+    Y.debug(`[${this.instanceId}] close() called`, { isOpen: h(this, N) }), h(this, N) && (I(this, N, !1), this.element.classList.remove("ms--open"), this.dropdown.classList.remove("ms__dropdown--visible"), this.hint && this.hint.classList.remove("ms__hint--visible"), this.options.shouldKeepSearchOnClose || (this.searchTerm = "", (this.options.isMultipleEnabled || this.options.isSearchEnabled) && (this.input.value = ""), this.resetVisibleToAll()), this.focusedIndex = -1, this.dropdown.removeEventListener("scroll", this.onDropdownScroll, !0), this.destroyAllOptionTooltips(), this.hideLabelReveal(), this.hideMessage(), this.renderBadges(), this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.exitFullscreen(), this.dropdownPlacement = null, (e = this.overlayCoord) == null || e.deactivate(), Y.debug(`[${this.instanceId}] Dropdown closed`));
   }
   /** Toggle the dropdown open/closed. */
   toggle() {
-    h(this, $) ? this.close() : this.open();
+    h(this, N) ? this.close() : this.open();
   }
   /** Whether the dropdown is currently open. Assigning opens/closes it. */
   get isOpen() {
-    return h(this, $);
+    return h(this, N);
   }
   set isOpen(e) {
     e ? this.open() : this.close();
@@ -4698,11 +4698,29 @@ class hn {
     const e = ns(this.dropdown);
     if (e === window) return;
     this.fullscreenContainingBlockWarned = !0;
-    const t = e, o = t.id ? `#${t.id}` : "", i = t.classList.length ? `.${Array.from(t.classList).join(".")}` : "", r = `<${t.tagName.toLowerCase()}${o}${i}>`, n = Po(t);
+    const t = e, o = t.id ? `#${t.id}` : "", i = t.classList.length ? `.${Array.from(t.classList).join(".")}` : "", r = `<${t.tagName.toLowerCase()}${o}${i}>`, n = Mo(t);
     console.warn(
       `[@keenmate/web-multiselect] Fullscreen overlay is anchored to an ancestor ${r}` + (n ? ` (has ${n})` : "") + ` instead of the viewport, so it may not cover the screen (offset, clipped, or mis-sized).
 An ancestor of <web-multiselect> establishes a fixed-positioning containing block (transform / perspective / filter / backdrop-filter / will-change). Fix on your side: move the component out of that ancestor's subtree, OR remove/replace that property. If neither is acceptable, please file an issue at https://github.com/keenmate/web-multiselect/issues with the ancestor's computed CSS.`
     );
+  }
+  /**
+   * Re-anchor an already-open floating dropdown from scratch so a frozen placement
+   * is re-evaluated against the panel's CURRENT height.
+   *
+   * Why it's needed: an async `searchCallback` opens the panel while it's still
+   * empty / showing the loader — short, so it fits below the input and (with the
+   * default `lock-placement`) freezes to `bottom`. When results arrive the panel
+   * grows to full height, but the frozen placement pins it below the input, so it
+   * overflows the viewport bottom instead of flipping above into the free space.
+   * `renderDropdown()` only rewrites the inner HTML; it never re-anchors. Tearing
+   * down and recreating the anchor re-runs core's flip-on-first-compute against the
+   * new height (picking the side that fits), then re-freezes — so `lock-placement`
+   * still holds for the common case (panels that open already-populated, e.g. local
+   * filtering, never hit this path). No-op unless a floating dropdown is open.
+   */
+  repositionDropdown() {
+    !h(this, N) || this.presentationMode === "fullscreen" || (this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.dropdownPlacement = null, this.positionDropdown());
   }
   positionDropdown() {
     this.presentationMode !== "fullscreen" && (this.dropdownCleanup = this.anchorFloatingPanel(this.dropdown, {
@@ -4713,7 +4731,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
       isLocked: () => !!this.options.isPlacementLocked,
       applyMaxWidth: !0,
       afterPosition: () => {
-        this.hint && h(this, $) && this.positionHint();
+        this.hint && h(this, N) && this.positionHint();
       }
     }));
   }
@@ -4727,7 +4745,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
    * resize can swap presentation without a reopen.
    */
   setPresentation(e) {
-    e !== this.presentationMode && (this.presentationMode = e, h(this, $) ? e === "fullscreen" ? (this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.hint && this.hint.classList.remove("ms__hint--visible"), this.dropdownPlacement = null, this.enterFullscreen(), this.renderDropdown()) : (this.exitFullscreen(), this.renderDropdown(), this.positionDropdown(), this.hint && (this.hint.classList.add("ms__hint--visible"), this.positionHint())) : this.showSelectedPopover && (e === "fullscreen" ? (this.selectedPopoverCleanup && (this.selectedPopoverCleanup(), this.selectedPopoverCleanup = null), this.selectedPopoverPlacement = null, this.clearFloatingInlineGeometry(this.selectedPopover), this.selectedPopover.classList.add("ms__selected-popover--fullscreen"), this.lockBodyScroll()) : (this.selectedPopover.classList.remove("ms__selected-popover--fullscreen"), this.unlockBodyScroll(), this.positionSelectedPopover())));
+    e !== this.presentationMode && (this.presentationMode = e, h(this, N) ? e === "fullscreen" ? (this.dropdownCleanup && (this.dropdownCleanup(), this.dropdownCleanup = null), this.hintCleanup && (this.hintCleanup(), this.hintCleanup = null), this.hint && this.hint.classList.remove("ms__hint--visible"), this.dropdownPlacement = null, this.enterFullscreen(), this.renderDropdown()) : (this.exitFullscreen(), this.renderDropdown(), this.positionDropdown(), this.hint && (this.hint.classList.add("ms__hint--visible"), this.positionHint())) : this.showSelectedPopover && (e === "fullscreen" ? (this.selectedPopoverCleanup && (this.selectedPopoverCleanup(), this.selectedPopoverCleanup = null), this.selectedPopoverPlacement = null, this.clearFloatingInlineGeometry(this.selectedPopover), this.selectedPopover.classList.add("ms__selected-popover--fullscreen"), this.lockBodyScroll()) : (this.selectedPopover.classList.remove("ms__selected-popover--fullscreen"), this.unlockBodyScroll(), this.positionSelectedPopover())));
   }
   /**
    * Lock page scroll behind a fullscreen overlay via the core ref-counted helper.
@@ -4855,7 +4873,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
   /** Back gesture/button fired: our pushed entry is already gone, so just close the
    *  sheet — WITHOUT popping history again (popOverlayHistory becomes a no-op). */
   handleOverlayPopstate() {
-    this.overlayHistoryActive && (this.overlayHistoryActive = !1, window.removeEventListener("popstate", this.onOverlayPopstate), h(this, $) ? this.close() : this.showSelectedPopover && this.hideSelectedPopover());
+    this.overlayHistoryActive && (this.overlayHistoryActive = !1, window.removeEventListener("popstate", this.onOverlayPopstate), h(this, N) ? this.close() : this.showSelectedPopover && this.hideSelectedPopover());
   }
   /** Programmatic close: remove the listener and pop the entry we pushed (so the
    *  history stack returns to its pre-open state). No-op if a Back gesture already
@@ -4994,8 +5012,9 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
     const e = this.element.dataset.initialValues;
     if (e)
       try {
-        JSON.parse(e).forEach((o) => {
-          this.selectedValues.add(String(o));
+        const t = JSON.parse(e);
+        (this.options.isMultipleEnabled === !1 ? t.slice(0, 1) : t).forEach((i) => {
+          this.selectedValues.add(String(i));
         }), this.reconcileSelectedOptions(), this.renderBadges();
       } catch (t) {
         W.error(`[${this.instanceId}] Failed to parse initial values:`, t);
@@ -5024,7 +5043,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
       Y.debug(`[${this.instanceId}] showPopover() suppressed (isSelectedPopoverEnabled=false)`);
       return;
     }
-    h(this, $) && this.close(), this.hideMessage(), this.showSelectedPopover = !0, this.renderSelectedPopover(), this.selectedPopover.classList.add("ms__selected-popover--visible");
+    h(this, N) && this.close(), this.hideMessage(), this.showSelectedPopover = !0, this.renderSelectedPopover(), this.selectedPopover.classList.add("ms__selected-popover--visible");
     const e = this.options.virtualScrollThreshold ?? 100;
     this.selectedValues.size >= e && this.selectedPopover.classList.add("ms__selected-popover--virtual"), this.presentationMode === "fullscreen" ? (this.selectedPopover.classList.add("ms__selected-popover--fullscreen"), this.lockBodyScroll(), this.clampDocumentOverflowX(), this.pushOverlayHistory()) : this.positionSelectedPopover();
   }
@@ -5067,7 +5086,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
     if (!this.selectedPopoverContainer) return;
     const o = this.scaledBadgeHeight(), i = Math.round(4 * this.fullscreenScale()), r = o + i, n = this.options.virtualScrollBuffer ?? 10;
     requestAnimationFrame(() => {
-      this.selectedPopoverContainer && (this.selectedPopoverVirtualScroll ? this.selectedPopoverVirtualScroll.setItems(e) : this.selectedPopoverVirtualScroll = new js({
+      this.selectedPopoverContainer && (this.selectedPopoverVirtualScroll ? this.selectedPopoverVirtualScroll.setItems(e) : this.selectedPopoverVirtualScroll = new Gs({
         container: this.selectedPopoverContainer,
         itemHeight: r,
         items: e,
@@ -5219,7 +5238,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
     if (t !== o) return !1;
     Object.assign(this.options, e);
     const i = "pathMember" in e || "getPathCallback" in e || "parentPathMember" in e || "levelMember" in e || "hasChildrenMember" in e || "treePathSeparator" in e || "isTreeEnabled" in e || "isSelectableMember" in e || "getIsSelectableCallback" in e;
-    if ("options" in e && e.options !== void 0 ? (this.allOptions = e.options, this.reconcileSelectedOptions(), this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]) : i && (this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]), ("checkboxMode" in e || "cascadeSelectPolicy" in e) && !i && !("options" in e) && this.isTreeMode() && (this.cascadeIndex = this.isCascadeMode() ? Xs(this.tree, (a) => String(this.getItemValue(a))) : null, this.isCascadeMode() && this.cascadeIndex)) {
+    if ("options" in e && e.options !== void 0 ? (this.allOptions = e.options, this.reconcileSelectedOptions(), this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]) : i && (this.isTreeMode() ? this.buildTree() : this.filteredOptions = this.searchTerm ? this.filteredOptions : [...this.allOptions]), ("checkboxMode" in e || "cascadeSelectPolicy" in e) && !i && !("options" in e) && this.isTreeMode() && (this.cascadeIndex = this.isCascadeMode() ? Js(this.tree, (a) => String(this.getItemValue(a))) : null, this.isCascadeMode() && this.cascadeIndex)) {
       this.cascadeCheckedAtoms = Qe(this.cascadeIndex, this.selectedValues);
       const a = Zt(
         this.cascadeIndex,
@@ -5247,7 +5266,7 @@ An ancestor of <web-multiselect> establishes a fixed-positioning containing bloc
         this.effectiveBadgesPosition === "left" || this.effectiveBadgesPosition === "right"
       );
     }
-    return h(this, $) || (this.input.placeholder = this.getPlaceholderText()), "searchInputMode" in e && (this.input.readOnly = this.options.searchInputMode === "readonly", this.input.style.visibility = this.options.searchInputMode === "hidden" ? "hidden" : ""), "searchHint" in e && this.hint && (this.hint.textContent = this.options.searchHint || ""), this.renderDropdown(), this.renderBadges(), this.updateHiddenInput(), !0;
+    return h(this, N) || (this.input.placeholder = this.getPlaceholderText()), "searchInputMode" in e && (this.input.readOnly = this.options.searchInputMode === "readonly", this.input.style.visibility = this.options.searchInputMode === "hidden" ? "hidden" : ""), "searchHint" in e && this.hint && (this.hint.textContent = this.options.searchHint || ""), this.renderDropdown(), this.renderBadges(), this.updateHiddenInput(), !0;
   }
   get selectedItem() {
     return this.selectedOptions.size === 0 ? null : Array.from(this.selectedOptions.values())[0];
@@ -5459,7 +5478,7 @@ ${o}` : t;
     const o = (t == null ? void 0 : t.variant) ?? "info", i = (t == null ? void 0 : t.duration) ?? 3e3, r = o === "error" || o === "warning", n = document.createElement("div");
     n.className = `ms__message ms__message--${o}`, n.setAttribute("role", r ? "alert" : "status"), n.setAttribute("aria-live", r ? "assertive" : "polite"), typeof e == "string" ? n.textContent = e : n.appendChild(e), n.addEventListener("click", () => this.hideMessage());
     const a = this.element.getRootNode(), l = a instanceof ShadowRoot ? a : null;
-    if ((this.options.container ?? l ?? document.body).appendChild(n), this.messageEl = n, this.presentationMode === "fullscreen" && (h(this, $) || this.showSelectedPopover))
+    if ((this.options.container ?? l ?? document.body).appendChild(n), this.messageEl = n, this.presentationMode === "fullscreen" && (h(this, N) || this.showSelectedPopover))
       n.classList.add("ms__message--fullscreen");
     else {
       const u = ot(n, this.inputWrapper, {
@@ -5539,7 +5558,7 @@ ${o}` : t;
     this.destroyAllTooltips(), this.hideLabelReveal(), this.hideMessage(), this.searchDebounceTimer && (clearTimeout(this.searchDebounceTimer), this.searchDebounceTimer = void 0), this.abortInFlightSearch(), this.dropdownCleanup && this.dropdownCleanup(), this.hintCleanup && this.hintCleanup(), this.selectedPopoverCleanup && this.selectedPopoverCleanup(), this.overlayHistoryActive && (this.overlayHistoryActive = !1, typeof window < "u" && window.removeEventListener("popstate", this.onOverlayPopstate)), this.exitFullscreen(), this.documentClickHandler && (document.removeEventListener("click", this.documentClickHandler), this.documentClickHandler = null), this.documentKeydownHandler && (document.removeEventListener("keydown", this.documentKeydownHandler), this.documentKeydownHandler = null), (e = this.overlayCoord) == null || e.dispose(), this.overlayCoord = null, this.virtualScroll && (this.virtualScroll.destroy(), this.virtualScroll = null), this.dropdown && this.dropdown.remove(), this.hint && this.hint.remove(), this.selectedPopover && this.selectedPopover.remove(), this.element.innerHTML = "", this.element.classList.remove("ms", "ms--open", "ms--no-checkboxes"), wt.info(`[${this.instanceId}] Component destroyed`);
   }
 }
-$ = new WeakMap();
+N = new WeakMap();
 function un() {
   return {
     fromAttribute(s) {
@@ -5561,11 +5580,11 @@ function un() {
     }
   };
 }
-const mn = ["json", "csv", "plain"], Js = ",", Ys = `
+const mn = ["json", "csv", "plain"], Ys = ",", Zs = `
 `;
 function pn(s, e, t = {}) {
   if (s == null || s.trim() === "") return { options: [] };
-  const o = Zs(t.splitter ?? Js) || Js, i = Zs(t.rowSplitter ?? Ys) || Ys;
+  const o = Qs(t.splitter ?? Ys) || Ys, i = Qs(t.rowSplitter ?? Zs) || Zs;
   switch (e) {
     case "csv":
       return bn(s, o, i);
@@ -5576,7 +5595,7 @@ function pn(s, e, t = {}) {
       return fn(s);
   }
 }
-function Zs(s) {
+function Qs(s) {
   return s.replace(
     /\\[ntr\\]/g,
     (e) => e === "\\n" ? `
@@ -5620,7 +5639,7 @@ function vn(s, e, t) {
   }
   return i.push(r), o.push(i), o;
 }
-const Lo = `@layer variables,component,overrides;@layer variables{:host{display:block;--ms-rem: var(--base-rem, 10px);font-family:var(--ms-font-family, var(--base-font-family, inherit));--ms-accent-color: var(--base-accent-color, #3b82f6);--ms-accent-color-hover: var(--base-accent-color-hover, #2563eb);--ms-accent-color-active: var(--base-accent-color-active, #1d4ed8);--ms-accent-color-light: var(--base-accent-color-light, light-dark(#eff6ff, #1e3a5f));--ms-accent-color-light-hover: var(--base-accent-color-light-hover, light-dark(#e0f2fe, #264a73));--ms-text-color-1: var(--base-text-color-1, light-dark(#111827, #f5f5f5));--ms-text-color-2: var(--base-text-color-2, light-dark(#353b47, #d4d4d4));--ms-text-color-3: var(--base-text-color-3, light-dark(#6b7280, #a3a3a3));--ms-text-color-4: var(--base-text-color-4, light-dark(#a0a3a9, #737373));--ms-text-color-on-accent: var(--base-text-color-on-accent, #ffffff);--ms-text-primary: var(--ms-text-color-1);--ms-text-secondary: var(--ms-text-color-3);--ms-primary-bg: var(--base-hover-bg, color-mix(in srgb, var(--ms-text-color-1) 8%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-primary-bg-hover: var(--base-active-bg, color-mix(in srgb, var(--ms-text-color-1) 14%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-border-color: var(--base-border-color, light-dark(#cbd5e1, #52525b));--ms-border: var(--base-border, 1px solid var(--ms-border-color));--ms-input-bg: var(--base-input-bg, light-dark(#ffffff, #1a1a1a));--ms-input-color: var(--base-input-color, var(--ms-text-color-1));--ms-input-border: var(--base-input-border, 1px solid var(--ms-border-color));--ms-input-border-hover: var(--base-input-border-hover, 1px solid var(--ms-accent-color));--ms-input-border-focus: var(--base-input-border-focus, 1px solid var(--ms-accent-color));--ms-input-placeholder-color: var(--base-input-placeholder-color, var(--ms-text-color-4));--ms-toggle-icon-color: var(--ms-text-color-3);--ms-toggle-icon-color-open: var(--ms-text-color-3);--ms-toggle-icon-size: calc(1.6 * var(--ms-rem));--ms-toggle-rotate-closed: 90deg;--ms-toggle-rotate-open: -90deg;--ms-counter-badge-bg: var(--ms-accent-color);--ms-counter-badge-bg-hover: var(--ms-accent-color-hover);--ms-counter-badge-color: var(--ms-text-color-on-accent);--ms-hint-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-hint-color: var(--ms-text-color-4);--ms-hint-border-color: var(--ms-border-color);--ms-dropdown-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-dropdown-text-color: var(--ms-text-color-1);--ms-dropdown-border-color: var(--ms-border-color);--ms-dropdown-box-shadow-semantic: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-actions-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-actions-border-color: var(--ms-border-color);--ms-action-button-bg: transparent;--ms-action-button-bg-hover: var(--ms-primary-bg);--ms-action-button-border-color: var(--ms-border-color);--ms-action-button-border-color-hover: var(--ms-accent-color);--ms-action-button-color: var(--ms-text-color-1);--ms-group-border-color: var(--ms-border-color);--ms-option-text-color: var(--ms-text-color-1);--ms-option-bg: transparent;--ms-option-bg-hover: var(--ms-primary-bg);--ms-option-color-hover: inherit;--ms-option-bg-focused: var(--ms-primary-bg);--ms-option-color-focused: inherit;--ms-option-outline-color-focused: var(--ms-accent-color);--ms-option-bg-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-option-bg-matched: color-mix(in srgb, var(--ms-accent-color) 8%, transparent);--ms-option-color-matched: inherit;--ms-option-border-matched-color: color-mix(in srgb, var(--ms-accent-color) 40%, transparent);--ms-option-title-color: var(--ms-text-color-1);--ms-option-subtitle-color: var(--ms-text-color-3);--ms-option-mark-bg: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-option-mark-color: inherit;--ms-loading-color: var(--ms-text-color-3);--ms-badge-bg: var(--ms-accent-color-light);--ms-badge-bg-hover: color-mix(in srgb, var(--ms-badge-bg) 88%, var(--ms-badge-text-color) 12%);--ms-badge-bg-active: var(--ms-accent-color-light-hover);--ms-badge-text-bg-hover: color-mix(in srgb, var(--ms-badge-text-bg) 88%, var(--ms-badge-text-color) 12%);--ms-badge-text-color-hover: var(--ms-badge-text-color);--ms-badge-counter-border-color: var(--ms-border-color);--ms-badge-counter-text-bg: color-mix(in srgb, var(--ms-text-color-1) 10%, transparent);--ms-badge-counter-text-bg-hover: color-mix(in srgb, var(--ms-text-color-1) 16%, transparent);--ms-badge-counter-text-color: var(--ms-text-color-1);--ms-badge-counter-text-color-hover: var(--ms-text-color-1);--ms-badge-counter-remove-bg: color-mix(in srgb, var(--ms-text-color-1) 10%, transparent);--ms-badge-counter-remove-bg-hover: color-mix(in srgb, var(--ms-text-color-1) 16%, transparent);--ms-badge-counter-remove-color: var(--ms-text-color-3);--ms-badge-counter-remove-color-hover: var(--ms-text-color-1);--ms-counter-wrapper-border-color: var(--ms-border-color);--ms-tooltip-bg: var(--base-tooltip-bg, var(--base-inverse-bg, light-dark(#333333, #f5f5f5)));--ms-tooltip-text-color: var(--base-tooltip-text-color, light-dark(#ffffff, #1a1a1a));--ms-selected-popover-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-selected-popover-border-color: var(--ms-border-color);--ms-selected-popover-header-border-color: var(--ms-border-color);--ms-input-padding-h: calc(1.2 * var(--ms-rem));--ms-input-gap: calc(.6 * var(--ms-rem));--ms-input-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-border-width: 1px;--ms-input-border-radius: var(--ms-border-radius-md);--ms-input-text: var(--ms-text-color-1);--ms-input-bg-disabled: var(--base-input-bg-disabled, rgba(107, 114, 128, .05));--ms-toggle-color: var(--ms-text-color-3);--ms-transform-rotate-180: 180deg;--ms-input-clear-size: calc(2.4 * var(--ms-rem));--ms-input-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-input-clear-color: var(--base-input-clear-color, var(--ms-text-secondary));--ms-input-clear-bg-hover: var(--base-input-clear-bg-hover, var(--ms-option-bg-matched, transparent));--ms-input-clear-border-radius: var(--ms-border-radius);--ms-counter-padding: calc(.2 * var(--ms-rem)) calc(.4 * var(--ms-rem));--ms-counter-bg: var(--ms-accent-color);--ms-counter-color: var(--ms-text-color-on-accent);--ms-counter-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-counter-font-weight: var(--base-font-weight-semibold, 600);--ms-counter-border-radius: var(--ms-border-radius-sm);--ms-counter-bg-hover: var(--ms-accent-color-hover);--ms-transform-scale-hover: 1.1;--ms-hint-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-hint-border: 1px solid var(--ms-hint-border-color);--ms-hint-border-radius: var(--ms-border-radius-lg);--ms-hint-box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--ms-hint-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-dropdown-border: var(--base-dropdown-border, 1px solid var(--ms-dropdown-border-color));--ms-dropdown-border-radius: var(--ms-border-radius-lg);--ms-dropdown-inner-border-radius: max(0px, calc(var(--ms-dropdown-border-radius) - 1px));--ms-dropdown-box-shadow: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-input-current-width: auto;--ms-dropdown-width: var(--ms-input-current-width);--ms-options-max-height: calc(32 * var(--ms-rem));--ms-option-color: var(--ms-text-color-1);--ms-z-index-dropdown: 9999;--ms-z-index-sticky: 1;--ms-z-index-fullscreen: 10001;--ms-z-index-fullscreen-tooltip: 10002;--ms-fullscreen-rem: 12px;--ms-fullscreen-bg: var(--ms-dropdown-bg);--ms-fullscreen-text-color: var(--ms-dropdown-text-color);--ms-fullscreen-header-bg: var(--ms-dropdown-bg);--ms-fullscreen-header-border: 1px solid var(--ms-dropdown-border-color);--ms-fullscreen-header-gap: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-v: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-h: calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding: var(--ms-fullscreen-header-padding-v) var(--ms-fullscreen-header-padding-h);--ms-fullscreen-header-min-height: calc(5.6 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-size: calc(1.7 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-weight: var(--base-font-weight-semibold, 600);--ms-fullscreen-search-border: var(--ms-input-border);--ms-fullscreen-search-border-radius: var(--ms-input-border-radius);--ms-fullscreen-search-padding: calc(.8 * var(--ms-fullscreen-rem)) calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-search-font-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-icon-size: calc(1.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-inset: calc(.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-gutter: calc(3.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-search-clear-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-mode-toggle-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-icon-size: calc(1.5 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-gap: var(--ms-fullscreen-header-gap);--ms-fullscreen-mode-toggle-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-mode-toggle-bg: transparent;--ms-fullscreen-mode-toggle-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-size: calc(3.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-color: var(--ms-dropdown-text-color);--ms-fullscreen-close-bg: transparent;--ms-fullscreen-close-border: none;--ms-fullscreen-close-border-radius: 50%;--ms-fullscreen-close-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-edge-nudge: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-icon-size: calc(1.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-color: var(--ms-accent-color);--ms-fullscreen-info-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-gap: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-padding-top: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-font-size: calc(1.3 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-nav-btn-size: calc(3.2 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-color: var(--ms-dropdown-text-color);--ms-fullscreen-nav-btn-bg: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-btn-bg-hover: color-mix(in srgb, var(--ms-accent-color) 22%, transparent);--ms-fullscreen-nav-btn-icon: var(--ms-icon-chevron);--ms-icon-chevron: var(--base-icon-chevron, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 18 6-6-6-6'/></svg>"));--ms-icon-info: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/><circle cx='12' cy='7.5' r='1.3' fill='black'/><path d='M12 11v6' stroke='black' stroke-width='2' stroke-linecap='round' fill='none'/></svg>");--ms-fullscreen-tree-base-indent: calc(.7 * var(--ms-fullscreen-rem));--ms-fullscreen-tree-indent: calc(1.2 * var(--ms-fullscreen-rem));--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem));--ms-actions-border-bottom: 1px solid var(--ms-actions-border-color);--ms-action-btn-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-action-btn-border: var(--ms-border);--ms-action-btn-border-radius: var(--ms-border-radius-sm);--ms-action-btn-bg: transparent;--ms-action-btn-color: inherit;--ms-action-btn-bg-hover: var(--ms-primary-bg);--ms-action-btn-border-color-hover: var(--ms-accent-color);--ms-transform-scale-active: .98;--ms-options-padding: 0;--ms-group-border-top: 1px solid var(--ms-group-border-color);--ms-group-margin-top: calc(.4 * var(--ms-rem));--ms-group-padding-top: calc(.4 * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-font-weight: var(--base-font-weight-semibold, 600);--ms-group-label-color: var(--ms-text-color-3);--ms-group-label-transform: uppercase;--ms-group-label-letter-spacing: .05em;--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-padding-h: calc(1.2 * var(--ms-rem));--ms-option-min-height: auto;--ms-option-outline-focused: 2px solid var(--ms-option-outline-color-focused);--ms-option-focus-outline-offset: -2px;--ms-option-border-matched: 3px solid var(--ms-option-border-matched-color);--ms-option-bg-focused-hover: var(--ms-primary-bg);--ms-option-bg-matched-hover: color-mix(in srgb, var(--ms-accent-color) 12%, transparent);--ms-option-bg-selected-focused: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-bg-selected-matched: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-disabled-bg: var(--base-disabled-bg, transparent);--ms-option-bg-disabled-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-disabled-opacity: .5;--ms-option-content-gap: calc(.8 * var(--ms-rem));--ms-option-icon-size: calc(2 * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-mark-font-weight: var(--base-font-weight-semibold, 600);--ms-option-title-white-space: normal;--ms-option-title-overflow: visible;--ms-option-title-text-overflow: clip;--ms-option-subtitle-margin-top: calc(.4 * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-subtitle-line-height: var(--base-line-height-tight, 1.25);--ms-checkbox-margin-top: 0;--ms-checkbox-margin-right: 0;--ms-checkbox-margin-bottom: 0;--ms-checkbox-margin-left: 0;--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-checkbox-scale: 1;--ms-checkbox-align: center;--ms-checkbox-bg: var(--ms-input-bg);--ms-checkbox-border-width: 1px;--ms-checkbox-border-color: var(--base-checkbox-border-color, #8f8f8f);--ms-checkbox-border: var(--ms-checkbox-border-width) solid var(--ms-checkbox-border-color);--ms-checkbox-border-radius: calc(.3 * var(--ms-rem));--ms-checkbox-checkmark-thickness: 2.5px;--ms-checkbox-checked-bg: var(--ms-accent-color);--ms-checkbox-checked-border: var(--ms-checkbox-border-width) solid var(--ms-accent-color);--ms-checkbox-checkmark-color: var(--ms-text-color-on-accent);--ms-checkbox-hover-border-color: var(--ms-accent-color);--ms-checkbox-disabled-bg: var(--ms-primary-bg);--ms-checkbox-disabled-border: var(--ms-checkbox-border-width) solid var(--ms-border-color);--ms-checkbox-checked-bg-hover: var(--ms-accent-color-hover);--ms-checkbox-checked-border-color-hover: var(--ms-accent-color-hover);--ms-state-min-height: calc(8 * var(--ms-rem));--ms-empty-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-empty-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-empty-color: var(--ms-text-color-3);--ms-add-new-padding: var(--ms-option-padding);--ms-add-new-gap: var(--ms-option-gap);--ms-add-new-font-size: var(--ms-empty-font-size);--ms-add-new-color: var(--ms-accent-color);--ms-add-new-color-hover: var(--ms-accent-color);--ms-add-new-bg-hover: var(--ms-option-bg-hover);--ms-add-new-icon-size: calc(1.6 * var(--ms-rem));--ms-loader-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-loader-gap: calc(.8 * var(--ms-rem));--ms-loading-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-loading-text-color: var(--ms-text-color-3);--ms-badges-gap: calc(.8 * var(--ms-rem));--ms-badges-margin-bottom: calc(.8 * var(--ms-rem));--ms-badges-margin-top: calc(.8 * var(--ms-rem));--ms-badges-margin-left: calc(.4 * var(--ms-rem));--ms-badges-margin-right: calc(.4 * var(--ms-rem));--ms-inline-align: center;--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(2.7 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-font-weight: var(--base-font-weight-semibold, 600);--ms-badge-border-radius: var(--ms-border-radius-sm);--ms-order-first: -1;--ms-badge-text-padding: 0 calc(.8 * var(--ms-rem));--ms-badge-text-bg: var(--ms-accent-color-light);--ms-badge-text-color: var(--ms-accent-color);--ms-badge-text-border: none;--ms-badge-remove-width: calc(2.7 * var(--ms-rem));--ms-badge-remove-bg: var(--ms-accent-color);--ms-badge-remove-color: var(--ms-text-color-on-accent);--ms-badge-remove-border: none;--ms-badge-remove-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-remove-bg-hover: var(--ms-accent-color-hover);--ms-badge-remove-box-shadow-focus: 0 0 0 2px color-mix(in srgb, var(--ms-accent-color) 50%, transparent);--ms-badge-remove-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-remove: var(--base-icon-remove, var(--base-icon-close, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 6 18'/><path d='m6 6 12 12'/></svg>")));--ms-icon-search-clear: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m13.5 8.5-5 5'/><path d='m8.5 8.5 5 5'/><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");--ms-icon-search: var(--base-icon-search, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>"));--ms-icon-filter: var(--base-icon-filter, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'/></svg>"));--ms-icon-check: var(--base-icon-check, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>"));--ms-icon-indeterminate: var(--base-icon-indeterminate, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/></svg>"));--ms-icon-check-size: var(--base-icon-check-size, 68%);--ms-icon-add-new: var(--base-icon-plus, var(--base-icon-add, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/><path d='M12 5v14'/></svg>")));--ms-badge-counter-bg: transparent;--ms-badge-counter-border: 1px solid var(--ms-badge-counter-border-color);--ms-badge-counter-border-radius: var(--ms-border-radius-sm);--ms-more-badge-bg: var(--ms-accent-color-light);--ms-more-badge-hover-bg: var(--ms-badge-bg-hover);--ms-more-badge-active-bg: var(--ms-accent-color-light-hover);--ms-count-display-margin-bottom: calc(.8 * var(--ms-rem));--ms-count-display-margin-top: calc(.8 * var(--ms-rem));--ms-count-display-margin-left: calc(.8 * var(--ms-rem));--ms-count-display-margin-right: calc(.8 * var(--ms-rem));--ms-counter-wrapper-bg: transparent;--ms-counter-wrapper-border: var(--ms-border);--ms-counter-wrapper-border-radius: var(--ms-border-radius-sm);--ms-counter-wrapper-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-counter-wrapper-gap: calc(.4 * var(--ms-rem));--ms-counter-wrapper-bg-hover: var(--ms-primary-bg);--ms-counter-wrapper-border-color-hover: var(--ms-accent-color);--ms-count-text-bg: transparent;--ms-count-text-border: none;--ms-count-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-count-text-color: var(--ms-text-color-1);--ms-count-clear-size: calc(1.6 * var(--ms-rem));--ms-count-clear-bg: transparent;--ms-count-clear-color: var(--ms-text-color-3);--ms-count-clear-font-size: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-count-clear-border-radius: var(--ms-border-radius-sm);--ms-count-clear-bg-hover: var(--ms-accent-color);--ms-count-clear-color-hover: var(--ms-text-color-on-accent);--ms-count-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-clear: var(--base-icon-clear, var(--ms-icon-remove));--ms-tooltip-color: var(--ms-tooltip-text-color);--ms-tooltip-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tooltip-border-radius: var(--ms-border-radius-lg);--ms-tooltip-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-tooltip-max-width: calc(32 * var(--ms-rem));--ms-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, .15);--ms-tooltip-z-index: 10000;--ms-option-tooltip-bg: var(--ms-tooltip-bg);--ms-option-tooltip-text-color: var(--ms-tooltip-text-color);--ms-option-tooltip-padding: var(--ms-tooltip-padding);--ms-option-tooltip-border-radius: var(--ms-tooltip-border-radius);--ms-option-tooltip-font-size: var(--ms-tooltip-font-size);--ms-option-tooltip-max-width: var(--ms-tooltip-max-width);--ms-option-tooltip-shadow: var(--ms-tooltip-shadow);--ms-option-tooltip-z-index: var(--ms-tooltip-z-index);--ms-message-bg: var(--ms-message-info-bg);--ms-message-color: var(--ms-message-info-color);--ms-message-border: 1px solid transparent;--ms-message-border-radius: var(--ms-border-radius-lg);--ms-message-padding: calc(1 * var(--ms-rem)) calc(1.4 * var(--ms-rem));--ms-message-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-message-font-weight: var(--base-font-weight-medium, 500);--ms-message-max-width: calc(40 * var(--ms-rem));--ms-message-shadow: 0 4px 16px rgb(0 0 0 / .18);--ms-message-fullscreen-offset: calc(2.4 * var(--ms-fullscreen-rem));--ms-message-z-index: var(--ms-z-index-fullscreen-tooltip);--ms-message-info-bg: var(--ms-tooltip-bg);--ms-message-info-color: var(--ms-tooltip-text-color);--ms-message-warning-bg: var(--base-warning-bg, #f59e0b);--ms-message-warning-color: var(--base-warning-color, #1a1a1a);--ms-message-error-bg: var(--base-danger-bg, #ef4444);--ms-message-error-color: var(--base-danger-color, #ffffff);--ms-message-success-bg: var(--base-success-bg, #10b981);--ms-message-success-color: var(--base-success-color, #ffffff);--ms-z-index-popover: 10000;--ms-selected-popover-width: var(--ms-input-current-width);--ms-selected-popover-max-height: calc(32 * var(--ms-rem));--ms-selected-popover-border: 1px solid var(--ms-selected-popover-border-color);--ms-selected-popover-border-radius: var(--ms-border-radius-lg);--ms-selected-popover-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-selected-popover-header-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-selected-popover-header-bg: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-selected-popover-header-border-bottom: 1px solid var(--ms-selected-popover-header-border-color);--ms-selected-popover-header-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-selected-popover-header-font-weight: var(--base-font-weight-semibold, 600);--ms-selected-popover-header-color: var(--ms-text-color-1);--ms-popover-close-size: calc(2.4 * var(--ms-rem));--ms-selected-popover-close-bg: transparent;--ms-selected-popover-close-color: var(--ms-text-color-3);--ms-selected-popover-close-font-size: calc(var(--base-font-size-xl, 2) * var(--ms-rem));--ms-selected-popover-close-border-radius: var(--ms-border-radius-sm);--ms-selected-popover-close-bg-hover: var(--ms-accent-color);--ms-selected-popover-close-color-hover: var(--ms-text-color-on-accent);--ms-selected-popover-close-icon-size: calc(1.4 * var(--ms-rem));--ms-selected-popover-body-gap: calc(.4 * var(--ms-rem));--ms-selected-popover-body-padding: calc(.8 * var(--ms-rem));--ms-selected-popover-body-max-height: calc(28.8 * var(--ms-rem));--ms-font-size-2xs: calc(var(--base-font-size-2xs, 1) * var(--ms-rem));--ms-font-size-xs: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-font-size-sm: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-font-size-base: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-font-size-lg: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-font-weight-normal: var(--base-font-weight-normal, 400);--ms-font-weight-medium: var(--base-font-weight-medium, 500);--ms-font-weight-semibold: var(--base-font-weight-semibold, 600);--ms-line-height-none: 1;--ms-line-height-tight: var(--base-line-height-tight, 1.25);--ms-line-height-normal: var(--base-line-height-normal, 1.5);--ms-line-height-relaxed: var(--base-line-height-relaxed, 1.75);--ms-border-radius-sm: calc(var(--base-border-radius-sm, .4) * var(--ms-rem));--ms-border-radius-md: calc(var(--base-border-radius-md, .6) * var(--ms-rem));--ms-border-radius-lg: calc(var(--base-border-radius-lg, .8) * var(--ms-rem));--ms-border-radius: var(--ms-border-radius-md);--ms-spacing-xs: calc(.4 * var(--ms-rem));--ms-spacing-sm: calc(.8 * var(--ms-rem));--ms-spacing-md: calc(1.2 * var(--ms-rem));--ms-spacing-lg: calc(1.6 * var(--ms-rem));--ms-transition-fast: .15s;--ms-transition-normal: .2s;--ms-easing-snappy: var(--base-ease-standard, cubic-bezier(.4, 0, .2, 1));--ms-placeholder-opacity: .6;--ms-disabled-input-opacity: .6;--ms-scrollbar-width: 8px;--ms-scrollbar-track-bg: transparent;--ms-scrollbar-thumb-bg: var(--ms-border-color);--ms-scrollbar-thumb-bg-hover: var(--ms-text-color-3);--ms-scrollbar-thumb-border-radius: 4px;--ms-debug-bg: var(--base-elevated-bg, light-dark(#f9fafb, #2b2b2b));--ms-debug-border-color: var(--ms-border-color);--ms-debug-text-color: var(--ms-text-color-1);--ms-debug-border-radius: var(--ms-border-radius-md);--ms-debug-summary-color: var(--ms-accent-color);--ms-debug-summary-bg-hover: var(--ms-primary-bg);--ms-debug-summary-outline-color: var(--ms-accent-color);--ms-debug-summary-border-radius: var(--ms-border-radius-sm);--ms-debug-stats-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-debug-stats-border-radius: var(--ms-border-radius-sm);--ms-debug-bullet-color: var(--ms-accent-color)}}@layer component{web-multiselect:not(:defined){display:block;min-height:calc(3.5 * var(--ms-rem));color:transparent!important;background:transparent}:host([defer]:not([is-ready])){display:block;min-height:calc(3.5 * var(--ms-rem))}:host{-webkit-tap-highlight-color:transparent}.ms__wrapper{display:flex;flex-direction:column;align-items:stretch}.ms__wrapper--inline{flex-direction:row;align-items:var(--ms-inline-align, center)}.ms{position:relative;width:100%}}@layer component{.ms__input-wrapper{box-sizing:border-box;position:relative;display:flex;align-items:center;gap:var(--ms-input-gap);height:var(--ms-input-height);padding-inline:var(--ms-input-padding-h);background:var(--ms-input-bg);color:var(--ms-input-color);border:var(--ms-input-border);border-radius:var(--ms-input-border-radius);cursor:pointer;transition:border var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input-wrapper:hover:not(:focus-within){border:var(--ms-input-border-hover)}.ms__input-wrapper:focus-within{border:var(--ms-input-border-focus)}.ms__input{flex:1 1 auto;min-width:0;box-sizing:border-box;font-family:inherit;height:100%;padding:0;border:none;background:transparent;font-size:var(--ms-input-font-size);color:var(--ms-input-color);cursor:pointer;outline:none}.ms__input::placeholder{color:var(--ms-input-placeholder-color);opacity:0;transition:opacity var(--ms-transition-fast) var(--ms-easing-snappy)}:host([data-placeholder-ready]) .ms__input::placeholder{opacity:var(--ms-placeholder-opacity)}.ms__toggle{flex:0 0 auto;display:block;width:var(--ms-toggle-icon-size);height:var(--ms-toggle-icon-size);color:var(--ms-toggle-icon-color);cursor:pointer}.ms__toggle:before{content:"";display:block;width:100%;height:100%;background-color:currentColor;-webkit-mask:var(--ms-icon-chevron) center / contain no-repeat;mask:var(--ms-icon-chevron) center / contain no-repeat;transform:rotate(var(--ms-toggle-rotate-closed, 90deg));transition:transform var(--ms-transition-fast) var(--ms-easing-snappy)}.ms--open .ms__toggle{color:var(--ms-toggle-icon-color-open)}.ms--open .ms__toggle:before{transform:rotate(var(--ms-toggle-rotate-open, -90deg))}.ms__counter{flex:0 0 auto;padding:var(--ms-counter-padding);background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-size:var(--ms-counter-font-size);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter:hover{background:var(--ms-counter-badge-bg-hover);transform:scale(var(--ms-transform-scale-hover))}.ms__input-clear{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-input-clear-size);height:var(--ms-input-clear-size);padding:0;color:var(--ms-input-clear-color);background:transparent;border:none;border-radius:var(--ms-input-clear-border-radius);cursor:pointer;transition:background var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input-clear:hover{background:var(--ms-input-clear-bg-hover)}.ms__input-clear:before{content:"";display:block;width:var(--ms-input-clear-icon-size);height:var(--ms-input-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}.ms__actions{display:flex;flex-direction:column;gap:var(--ms-actions-gap);padding:var(--ms-actions-padding)}.ms__actions--top{border-bottom:var(--ms-actions-border-bottom)}.ms__actions--bottom{flex-direction:column-reverse;border-top:var(--ms-actions-border-bottom)}.ms__actions-row{display:flex;flex-wrap:nowrap;gap:var(--ms-actions-gap)}.ms__actions--wrap .ms__actions-row{flex-wrap:wrap}.ms__actions--sticky{position:sticky;z-index:var(--ms-z-index-sticky);background:var(--ms-actions-bg)}.ms__actions--sticky.ms__actions--top{top:0}.ms__actions--sticky.ms__actions--bottom{bottom:0}.ms__actions--align-stretch .ms__action-btn{flex:1}.ms__actions--align-left .ms__actions-row{justify-content:flex-start}.ms__actions--align-right .ms__actions-row{justify-content:flex-end}.ms__actions--align-center .ms__actions-row{justify-content:center}.ms__actions--align-space-between .ms__actions-row{justify-content:space-between}.ms__action-btn{font-family:inherit;padding:var(--ms-action-btn-padding);font-size:var(--ms-action-btn-font-size);border:var(--ms-action-btn-border);border-radius:var(--ms-action-btn-border-radius);background:var(--ms-action-button-bg);color:var(--ms-action-button-color);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}@media (hover: hover){.ms__action-btn:hover{background:var(--ms-action-button-bg-hover);border-color:var(--ms-action-button-border-color-hover)}}.ms__action-btn:active{transform:scale(var(--ms-transform-scale-active))}.ms__action-btn:disabled,.ms__action-btn[disabled]{opacity:var(--ms-disabled-opacity);cursor:not-allowed;pointer-events:none}}@layer component{.ms__hint{display:none;position:fixed;z-index:var(--ms-z-index-popover);padding:var(--ms-hint-padding);background:var(--ms-hint-bg);border:var(--ms-hint-border);border-radius:var(--ms-hint-border-radius);box-shadow:var(--ms-hint-box-shadow);font-size:var(--ms-hint-font-size);color:var(--ms-hint-color);line-height:var(--ms-line-height-relaxed);max-width:100%}.ms__hint--visible{display:block}.ms__dropdown{display:none;position:fixed;box-sizing:border-box;font-family:inherit;z-index:var(--ms-z-index-dropdown);background:var(--ms-dropdown-bg);border:var(--ms-dropdown-border);border-radius:var(--ms-dropdown-border-radius);box-shadow:var(--ms-dropdown-box-shadow);width:var(--ms-dropdown-width);max-height:var(--ms-options-max-height);overflow:hidden;color:var(--ms-dropdown-text-color)}.ms__dropdown--visible{display:flex;flex-direction:column}.ms__dropdown--fullscreen,.ms__selected-popover--fullscreen{--ms-rem: var(--ms-fullscreen-rem);--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tree-base-indent: var(--ms-fullscreen-tree-base-indent);--ms-tree-indent: var(--ms-fullscreen-tree-indent)}.ms__selected-popover--fullscreen{--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(4.2 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-badge-text-padding: 0 calc(1.2 * var(--ms-rem));--ms-badge-remove-width: calc(3.6 * var(--ms-rem));--ms-badge-remove-icon-size: calc(1.2 * var(--ms-rem));--ms-badge-remove-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-padding: calc(.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{position:fixed;top:0;inset-inline-start:0;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;--ms-dropdown-inner-border-radius: 0;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__dropdown--fullscreen .ms__dropdown-inner{display:flex;flex-direction:column;flex:1;min-height:0;max-height:none;overflow:hidden}.ms__dropdown--fullscreen .ms__options{flex:1 1 0;min-height:0;height:auto;max-height:none;overflow-y:auto;padding-bottom:var(--ms-option-gap)}.ms__dropdown--fullscreen .ms__actions{flex:0 0 auto}.ms__fullscreen-header,.ms__selected-popover--fullscreen .ms__selected-popover-header{flex:0 0 auto;display:flex;align-items:center;flex-wrap:wrap;gap:var(--ms-fullscreen-header-gap);min-height:var(--ms-fullscreen-header-min-height);padding:var(--ms-fullscreen-header-padding);background:var(--ms-fullscreen-header-bg);border-bottom:var(--ms-fullscreen-header-border)}.ms__fullscreen-header{align-content:flex-start}.ms__fullscreen-header>.ms__fullscreen-search-wrapper{min-height:var(--ms-fullscreen-header-min-height)}.ms__fullscreen-nav{flex:0 0 100%;display:flex;align-items:center;justify-content:space-between;gap:var(--ms-fullscreen-nav-gap);padding-top:var(--ms-fullscreen-nav-padding-top)}.ms__fullscreen-nav-count{font-size:var(--ms-fullscreen-nav-count-font-size);color:var(--ms-fullscreen-nav-count-color)}.ms__fullscreen-nav-controls{display:flex;align-items:center;gap:var(--ms-fullscreen-nav-gap)}.ms__fullscreen-nav-btn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-nav-btn-size);height:var(--ms-fullscreen-nav-btn-size);padding:0;color:var(--ms-fullscreen-nav-btn-color);background:var(--ms-fullscreen-nav-btn-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-nav-btn:hover:not(:disabled){background:var(--ms-fullscreen-nav-btn-bg-hover)}.ms__fullscreen-nav-btn:disabled{opacity:.4;cursor:default}.ms__fullscreen-nav-btn:before{content:"";display:block;width:var(--ms-fullscreen-nav-btn-icon-size);height:var(--ms-fullscreen-nav-btn-icon-size);background-color:currentColor;-webkit-mask:var(--ms-fullscreen-nav-btn-icon) center / contain no-repeat;mask:var(--ms-fullscreen-nav-btn-icon) center / contain no-repeat;transform:rotate(-90deg)}.ms__fullscreen-nav-btn--next:before{transform:rotate(90deg)}.ms__fullscreen-header>.ms__fullscreen-search-wrapper,.ms__selected-popover--fullscreen .ms__selected-popover-header>span{flex:1 1 0;min-width:0}.ms__fullscreen-search-wrapper{position:relative;display:flex;align-items:center}.ms__selected-popover--fullscreen .ms__selected-popover-header{font-size:var(--ms-fullscreen-title-font-size);font-weight:var(--ms-fullscreen-title-font-weight);color:var(--ms-fullscreen-text-color)}.ms__fullscreen-search{flex:1 1 auto;min-width:0;font-family:inherit;font-size:var(--ms-fullscreen-search-font-size);color:inherit;background:transparent;border:var(--ms-fullscreen-search-border);border-radius:var(--ms-fullscreen-search-border-radius);padding:var(--ms-fullscreen-search-padding);padding-inline-end:var(--ms-fullscreen-search-clear-gutter)}.ms__fullscreen-search:focus{outline:none;border:var(--ms-input-border-focus)}.ms__fullscreen-search-clear{position:absolute;inset-inline-end:var(--ms-fullscreen-search-clear-inset);top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-search-clear-size);height:var(--ms-fullscreen-search-clear-size);padding:0;color:var(--ms-fullscreen-search-clear-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-search-clear:hover{background:var(--ms-fullscreen-search-clear-bg-hover)}.ms__fullscreen-search-clear:before{content:"";display:block;width:var(--ms-fullscreen-search-clear-icon-size);height:var(--ms-fullscreen-search-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-search-clear) center / contain no-repeat;mask:var(--ms-icon-search-clear) center / contain no-repeat}.ms__fullscreen-mode-toggle{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-mode-toggle-size);height:var(--ms-fullscreen-mode-toggle-size);margin-inline-end:var(--ms-fullscreen-mode-toggle-gap);margin-inline-start:calc((var(--ms-fullscreen-close-size) - var(--ms-fullscreen-mode-toggle-size)) / 2 - var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-mode-toggle-color);background:var(--ms-fullscreen-mode-toggle-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-mode-toggle:hover{background:var(--ms-fullscreen-mode-toggle-bg-hover)}.ms__fullscreen-mode-toggle:before{content:"";display:block;width:var(--ms-fullscreen-mode-toggle-icon-size);height:var(--ms-fullscreen-mode-toggle-icon-size);background-color:currentColor;-webkit-mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat;mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat}.ms__fullscreen-mode-toggle[data-mode=navigate]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-search)}.ms__fullscreen-mode-toggle[data-mode=filter]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-filter)}.ms__fullscreen-close,.ms__selected-popover--fullscreen .ms__selected-popover-close{flex:0 0 auto;position:relative;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-close-size);height:var(--ms-fullscreen-close-size);margin-inline-end:calc(-1 * var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-close-color);background:var(--ms-fullscreen-close-bg);border:var(--ms-fullscreen-close-border);border-radius:var(--ms-fullscreen-close-border-radius);cursor:pointer}.ms__fullscreen-close:after,.ms__selected-popover--fullscreen .ms__selected-popover-close:after{content:"";position:absolute;inset-block-start:calc(-1 * var(--ms-fullscreen-close-size));inset-block-end:calc(-1 * var(--ms-fullscreen-header-padding-v));inset-inline-end:calc(-1 * var(--ms-fullscreen-header-padding-h));inset-inline-start:calc(-1 * var(--ms-fullscreen-header-gap))}.ms__fullscreen-close:hover,.ms__selected-popover--fullscreen .ms__selected-popover-close:hover{background:var(--ms-fullscreen-close-bg-hover);color:var(--ms-fullscreen-close-color)}.ms__fullscreen-close:before,.ms__selected-popover--fullscreen .ms__selected-popover-close:before{content:"";display:block;width:var(--ms-fullscreen-close-icon-size);height:var(--ms-fullscreen-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__dropdown--fullscreen .ms__option-info{flex:0 0 auto;display:none;align-items:center;justify-content:center;width:var(--ms-fullscreen-info-size);height:var(--ms-fullscreen-info-size);margin-inline-start:var(--ms-option-gap);padding:0;color:var(--ms-fullscreen-info-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__dropdown--fullscreen .ms__option--truncated .ms__option-info{display:inline-flex}@media (hover: hover){.ms__dropdown--fullscreen .ms__option-info:hover{background:var(--ms-fullscreen-info-bg-hover)}}.ms__dropdown--fullscreen .ms__option-info:before{content:"";display:block;width:var(--ms-fullscreen-info-icon-size);height:var(--ms-fullscreen-info-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-info) center / contain no-repeat;mask:var(--ms-icon-info) center / contain no-repeat}.ms__dropdown-inner{flex:1;overflow-y:auto;border-radius:var(--ms-dropdown-inner-border-radius);overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__dropdown-inner::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__dropdown-inner::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__dropdown--virtual{max-height:none}.ms__dropdown--virtual .ms__dropdown-inner{overflow:hidden}.ms__badge-tooltip{position:fixed;z-index:var(--ms-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-tooltip-bg);color:var(--ms-tooltip-text-color);padding:var(--ms-tooltip-padding);border-radius:var(--ms-tooltip-border-radius);font-size:var(--ms-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-tooltip-shadow);pointer-events:none}.ms__badge-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip{position:fixed;z-index:var(--ms-option-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-option-tooltip-bg);color:var(--ms-option-tooltip-text-color);padding:var(--ms-option-tooltip-padding);border-radius:var(--ms-option-tooltip-border-radius);font-size:var(--ms-option-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-option-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-option-tooltip-shadow);pointer-events:none}.ms__option-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip--fullscreen{z-index:var(--ms-z-index-fullscreen-tooltip)}.ms__message{position:fixed;z-index:var(--ms-message-z-index);box-sizing:border-box;max-width:var(--ms-message-max-width);padding:var(--ms-message-padding);font-family:inherit;font-size:var(--ms-message-font-size);font-weight:var(--ms-message-font-weight);line-height:var(--ms-line-height-normal);color:var(--ms-message-color);background:var(--ms-message-bg);border:var(--ms-message-border);border-radius:var(--ms-message-border-radius);box-shadow:var(--ms-message-shadow);cursor:pointer;opacity:0;transition:opacity var(--ms-transition-normal) ease;-webkit-tap-highlight-color:transparent}.ms__message--visible{opacity:1}.ms__message--info{background:var(--ms-message-info-bg);color:var(--ms-message-info-color)}.ms__message--warning{background:var(--ms-message-warning-bg);color:var(--ms-message-warning-color)}.ms__message--error{background:var(--ms-message-error-bg);color:var(--ms-message-error-color)}.ms__message--success{background:var(--ms-message-success-bg);color:var(--ms-message-success-color)}.ms__message--fullscreen{left:50%;right:auto;bottom:calc(var(--ms-message-fullscreen-offset) + env(safe-area-inset-bottom));transform:translate(-50%);max-width:min(var(--ms-message-max-width),calc(100vw - 4 * var(--ms-fullscreen-rem)));padding:calc(1 * var(--ms-fullscreen-rem)) calc(1.4 * var(--ms-fullscreen-rem));font-size:calc(var(--base-font-size-sm, 1.4) * var(--ms-fullscreen-rem))}.ms__selected-popover{display:none;position:fixed;box-sizing:border-box;z-index:var(--ms-z-index-popover);background:var(--ms-selected-popover-bg);border:var(--ms-selected-popover-border);border-radius:var(--ms-selected-popover-border-radius);box-shadow:var(--ms-selected-popover-box-shadow);width:var(--ms-selected-popover-width);max-height:var(--ms-selected-popover-max-height);overflow:hidden}.ms__selected-popover--visible{display:flex;flex-direction:column}.ms__selected-popover--virtual{display:block;overflow:visible;max-height:none}.ms__selected-popover--fullscreen{position:fixed;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;overflow:hidden;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__selected-popover--fullscreen .ms__selected-popover-body{flex:1 1 0;min-height:0;max-height:none}.ms__selected-popover-header{display:flex;align-items:center;justify-content:space-between;padding:var(--ms-selected-popover-header-padding);background:var(--ms-selected-popover-header-bg);border-bottom:var(--ms-selected-popover-header-border-bottom);font-size:var(--ms-selected-popover-header-font-size);font-weight:var(--ms-selected-popover-header-font-weight);color:var(--ms-selected-popover-header-color)}.ms__selected-popover-close{display:flex;align-items:center;justify-content:center;width:var(--ms-popover-close-size);height:var(--ms-popover-close-size);padding:0;border:none;background:var(--ms-selected-popover-close-bg);color:var(--ms-selected-popover-close-color);font-size:var(--ms-selected-popover-close-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-selected-popover-close-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__selected-popover-close:hover{background:var(--ms-selected-popover-close-bg-hover);color:var(--ms-selected-popover-close-color-hover)}.ms__selected-popover-close:before{content:"";display:block;width:var(--ms-selected-popover-close-icon-size);height:var(--ms-selected-popover-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__selected-popover-body{display:flex;flex-direction:column;gap:var(--ms-selected-popover-body-gap);padding:var(--ms-selected-popover-body-padding);overflow-y:auto;max-height:var(--ms-selected-popover-body-max-height);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__selected-popover-body::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__selected-popover-body::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__selected-popover-body .ms__badge{width:100%;min-height:fit-content;line-height:var(--ms-line-height-relaxed);flex-shrink:0}.ms__selected-popover-body .ms__badge-text{flex:1;min-width:0;white-space:normal;word-wrap:break-word}.ms__selected-popover-body--virtual{display:block;max-height:none;padding:0}.ms__selected-popover-body--virtual .ms__badge{height:var(--ms-badge-height-virtual, 36px);min-height:var(--ms-badge-height-virtual, 36px);max-height:var(--ms-badge-height-virtual, 36px);margin-bottom:var(--ms-selected-popover-body-gap);overflow:hidden;box-sizing:border-box}.ms__selected-popover-body--virtual .ms__badge-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}@layer component{.ms--disabled .ms__input-wrapper{opacity:var(--ms-disabled-input-opacity);background:var(--ms-input-bg-disabled);cursor:not-allowed}.ms--disabled .ms__input{cursor:not-allowed}.ms--no-checkboxes .ms__option{gap:0;padding-inline-start:var(--ms-option-padding-h)}.ms--no-checkboxes .ms__option-content{padding-inline-start:0}.ms--no-selected-popover .ms__counter,.ms--no-selected-popover .ms__badge[data-action=show-selected],.ms--no-selected-popover .ms__badge--counter,.ms--no-selected-popover .ms__badge--more{cursor:default}}@layer component{@keyframes ms-spin{to{transform:rotate(360deg)}}}@layer component{.ms__badges{display:flex;flex-wrap:wrap;gap:var(--ms-badges-gap);padding:0}.ms__badges:empty{display:none}.ms__badges--bottom{margin-top:var(--ms-badges-margin-bottom)}.ms__badges--top{margin-bottom:var(--ms-badges-margin-top);order:var(--ms-order-first)}.ms__badges--left{order:var(--ms-order-first);margin-right:var(--ms-badges-margin-left);justify-content:flex-end}.ms__badges--right{margin-left:var(--ms-badges-margin-right);justify-content:flex-start}.ms__badge{display:inline-flex;align-items:center;height:var(--ms-badge-height);font-size:var(--ms-badge-font-size);font-weight:var(--ms-badge-font-weight);line-height:var(--ms-line-height-none);border-radius:var(--ms-badge-border-radius);overflow:hidden;max-width:100%}.ms__badge--custom{display:block;height:auto;max-width:none;overflow:visible;border-radius:0;font-size:inherit;font-weight:inherit}.ms__badge-text{display:flex;align-items:center;box-sizing:border-box;height:100%;padding:var(--ms-badge-text-padding);background:var(--ms-badge-text-bg);color:var(--ms-badge-text-color);border:var(--ms-badge-text-border);border-inline-end:none;border-start-start-radius:var(--ms-badge-border-radius);border-end-start-radius:var(--ms-badge-border-radius);border-start-end-radius:0;border-end-end-radius:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background-color var(--ms-transition-normal) ease,color var(--ms-transition-normal) ease}.ms__badge:hover .ms__badge-text{background:var(--ms-badge-text-bg-hover, var(--ms-badge-text-bg));color:var(--ms-badge-text-color-hover, var(--ms-badge-text-color))}.ms__badge-remove{display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:0;font-family:inherit;width:var(--ms-badge-remove-width);height:100%;flex-shrink:0;background:var(--ms-badge-remove-bg);color:var(--ms-badge-remove-color);border:var(--ms-badge-remove-border);border-inline-start:none;border-start-end-radius:var(--ms-badge-border-radius);border-end-end-radius:var(--ms-badge-border-radius);border-start-start-radius:0;border-end-start-radius:0;cursor:pointer;transition:background-color var(--ms-transition-normal) ease;font-size:var(--ms-badge-remove-font-size)}.ms__badge-remove:hover{background:var(--ms-badge-remove-bg-hover)}.ms__badge-remove:focus{outline:none}.ms__badge-remove:focus-visible{outline:none;box-shadow:var(--ms-badge-remove-box-shadow-focus)}.ms__badge-remove:before{content:"";display:block;width:var(--ms-badge-remove-icon-size);height:var(--ms-badge-remove-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__badge--counter{cursor:pointer}.ms__badge--counter .ms__badge-text{background:var(--ms-badge-counter-text-bg);color:var(--ms-badge-counter-text-color);border:var(--ms-badge-counter-border);border-inline-end:none}.ms__badge--counter .ms__badge-remove{background:var(--ms-badge-counter-remove-bg);color:var(--ms-badge-counter-remove-color);border:var(--ms-badge-counter-border);border-inline-start:none}.ms__badge--counter .ms__badge-remove:hover{background:var(--ms-badge-counter-remove-bg-hover);color:var(--ms-badge-counter-remove-color-hover, var(--ms-badge-counter-remove-color))}.ms__badge--counter:hover .ms__badge-text{background:var(--ms-badge-counter-text-bg-hover, var(--ms-badge-counter-text-bg));color:var(--ms-badge-counter-text-color-hover, var(--ms-badge-counter-text-color))}.ms__badge--more,.ms__badge[data-action=show-selected]{cursor:pointer}}@layer component{.ms__count-display{display:flex;align-items:center}.ms__count-display:empty{display:none}.ms__count-display--bottom{margin-top:var(--ms-count-display-margin-bottom)}.ms__count-display--top{margin-bottom:var(--ms-count-display-margin-top);order:var(--ms-order-first)}.ms__count-display--left{order:var(--ms-order-first);margin-right:var(--ms-count-display-margin-left);justify-content:flex-start}.ms__count-display--right{margin-left:var(--ms-count-display-margin-right);justify-content:flex-end}.ms__counter-wrapper{display:inline-flex;align-items:center;gap:var(--ms-counter-wrapper-gap);background:var(--ms-counter-wrapper-bg);border:var(--ms-counter-wrapper-border);border-radius:var(--ms-counter-wrapper-border-radius);padding:var(--ms-counter-wrapper-padding);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter-wrapper:hover{background:var(--ms-counter-wrapper-bg-hover);border-color:var(--ms-counter-wrapper-border-color-hover)}.ms__count-text{display:inline-flex;align-items:center;background:var(--ms-count-text-bg);border:var(--ms-count-text-border);padding:0;font-size:var(--ms-count-text-font-size);color:var(--ms-count-text-color);cursor:pointer;transition:color var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:var(--ms-count-clear-size);height:var(--ms-count-clear-size);padding:0;border:none;background:var(--ms-count-clear-bg);color:var(--ms-count-clear-color);font-size:var(--ms-count-clear-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-count-clear-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear:hover{background:var(--ms-count-clear-bg-hover);color:var(--ms-count-clear-color-hover)}.ms__count-clear:before{content:"";display:block;width:var(--ms-count-clear-icon-size);height:var(--ms-count-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}}@layer component{.ms__debug-info{margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-bg);border:1px solid var(--ms-debug-border-color);border-radius:var(--ms-debug-border-radius);font-size:calc(1.2 * var(--ms-rem));color:var(--ms-debug-text-color)}.ms__debug-info details summary{cursor:pointer;font-weight:600;color:var(--ms-debug-summary-color);-webkit-user-select:none;user-select:none;padding:calc(.4 * var(--ms-rem));border-radius:var(--ms-debug-summary-border-radius)}.ms__debug-info details summary:hover{background-color:var(--ms-debug-summary-bg-hover)}.ms__debug-info details summary:focus{outline:2px solid var(--ms-debug-summary-outline-color);outline-offset:2px}.ms__debug-info .ms__debug-stats{display:flex;flex-direction:column;gap:calc(.4 * var(--ms-rem));margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-stats-bg);border-radius:var(--ms-debug-stats-border-radius)}.ms__debug-info .ms__debug-stats span{display:flex;justify-content:space-between;padding:2px 4px;font-family:monospace;font-size:calc(1 * var(--ms-rem))}.ms__debug-info .ms__debug-stats span:before{content:"•";margin-inline-end:calc(.4 * var(--ms-rem));color:var(--ms-debug-bullet-color)}}@layer component{.ms__options{padding:var(--ms-options-padding);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__options::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__options::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__options--virtual .ms__option,.ms__options--fixed-height .ms__option{height:var(--ms-option-height, 50px);min-height:var(--ms-option-height, 50px);max-height:var(--ms-option-height, 50px);overflow:hidden;box-sizing:border-box}.ms__group+.ms__group{border-top:var(--ms-group-border-top);margin-top:var(--ms-group-margin-top);padding-top:var(--ms-group-padding-top)}.ms__group-label{padding:var(--ms-group-label-padding);font-size:var(--ms-group-label-font-size);font-weight:var(--ms-group-label-font-weight);color:var(--ms-group-label-color);text-transform:var(--ms-group-label-transform);letter-spacing:var(--ms-group-label-letter-spacing)}.ms__group-label--selectable{display:flex;align-items:center;gap:var(--ms-option-gap);cursor:pointer;-webkit-user-select:none;user-select:none}@media (hover: hover){.ms__group-label--selectable:hover{background:var(--ms-option-bg-hover)}}.ms__group-label--has-count{display:flex;align-items:center;gap:var(--ms-option-gap)}.ms__group-count{margin-inline-start:auto;flex:0 0 auto;box-sizing:border-box;min-width:calc(2 * var(--ms-rem));padding-block:0;padding-inline:calc(.4 * var(--ms-rem));background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);text-align:center}.ms__option{display:flex;align-items:var(--ms-checkbox-align, center);gap:var(--ms-option-gap);padding:var(--ms-option-padding);position:relative;min-height:var(--ms-option-min-height, auto);color:var(--ms-option-text-color);background:var(--ms-option-bg);cursor:pointer;user-select:none;-webkit-user-select:none}@media (hover: hover){.ms__option:hover{background:var(--ms-option-bg-hover);color:var(--ms-option-color-hover, inherit)}}.ms__option--focused{background:var(--ms-option-bg-focused);color:var(--ms-option-color-focused, inherit);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--matched{background:var(--ms-option-bg-matched);color:var(--ms-option-color-matched, inherit)}.ms__option--matched:before{content:"";position:absolute;inset-block:0;inset-inline-start:0;border-inline-start:var(--ms-option-border-matched);pointer-events:none}.ms__option--selected{background:var(--ms-option-bg-selected)}@media (hover: hover){.ms__option--selected:hover{background:var(--ms-option-bg-selected-hover, var(--ms-option-bg-selected))}}.ms__option--disabled{opacity:var(--ms-disabled-opacity);cursor:not-allowed;background:var(--ms-option-disabled-bg)}.ms__option--disabled:hover{background:var(--ms-option-disabled-bg)}@media (hover: hover){.ms__option--focused:hover{background:var(--ms-option-bg-focused-hover);color:var(--ms-option-color-focused-hover, var(--ms-option-color-focused, var(--ms-option-text-color)))}}.ms__option--matched:hover{background:var(--ms-option-bg-matched-hover);color:var(--ms-option-color-matched-hover, var(--ms-option-color-matched, var(--ms-option-text-color)))}.ms__option--selected.ms__option--focused{background:var(--ms-option-bg-selected-focused);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--selected.ms__option--matched{background:var(--ms-option-bg-selected-matched)}.ms__option--disabled.ms__option--selected{background:var(--ms-option-bg-disabled-selected)}.ms__option--disabled.ms__option--focused{outline:none}.ms__option[data-checkbox-align=top]{--ms-checkbox-align: flex-start;--ms-checkbox-margin-top: calc(.2 * var(--ms-rem))}.ms__option[data-checkbox-align=bottom]{--ms-checkbox-align: flex-end}.ms__checkbox{appearance:none;-webkit-appearance:none;-moz-appearance:none;flex-shrink:0;position:relative;margin-top:var(--ms-checkbox-margin-top);margin-inline-end:var(--ms-checkbox-margin-right);margin-bottom:var(--ms-checkbox-margin-bottom);margin-inline-start:var(--ms-checkbox-margin-left);width:var(--ms-checkbox-size);height:var(--ms-checkbox-size);transform:scale(var(--ms-checkbox-scale));transform-origin:top left;cursor:pointer;background:var(--ms-checkbox-bg);border:var(--ms-checkbox-border);border-radius:var(--ms-checkbox-border-radius);transition:background-color .15s ease,border-color .15s ease}.ms__checkbox:after{content:"";position:absolute;display:none;top:0;right:0;bottom:0;left:0;background-color:var(--ms-checkbox-checkmark-color);-webkit-mask:var(--ms-icon-check) no-repeat center / var(--ms-icon-check-size);mask:var(--ms-icon-check) no-repeat center / var(--ms-icon-check-size)}.ms__checkbox:hover:not(:disabled){border-color:var(--ms-checkbox-hover-border-color)}.ms__checkbox:checked{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox:checked:after{display:block}.ms__checkbox--indeterminate{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox--indeterminate:after{display:block;-webkit-mask-image:var(--ms-icon-indeterminate);mask-image:var(--ms-icon-indeterminate)}.ms__checkbox--indeterminate:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:checked:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:focus-visible{outline:2px solid var(--ms-checkbox-checked-bg);outline-offset:2px}.ms__checkbox:disabled{cursor:not-allowed;background:var(--ms-checkbox-disabled-bg);border:var(--ms-checkbox-disabled-border);opacity:.6}.ms__checkbox:disabled:checked{background:var(--ms-checkbox-disabled-bg)}.ms__option--disabled .ms__checkbox{cursor:not-allowed}.ms__option-content{flex:1;display:flex;align-items:center;gap:var(--ms-option-content-gap);min-width:0}.ms__option-icon{flex-shrink:0;width:var(--ms-option-icon-size);height:var(--ms-option-icon-size);display:flex;align-items:center;justify-content:center;font-size:var(--ms-option-icon-font-size)}.ms__option-icon svg{width:100%;height:100%;fill:currentColor}.ms__option-text{flex:1;min-width:0}.ms__option-title{font-size:var(--ms-option-title-font-size);color:var(--ms-option-title-color);line-height:var(--ms-line-height-relaxed);white-space:var(--ms-option-title-white-space, normal);overflow:var(--ms-option-title-overflow, visible);text-overflow:var(--ms-option-title-text-overflow, clip)}@media (hover: hover){.ms__option:hover .ms__option-title{color:var(--ms-option-title-color-hover, var(--ms-option-title-color))}}.ms__option--selected .ms__option-title{color:var(--ms-option-title-color-selected, var(--ms-option-title-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-title{color:var(--ms-option-title-color-selected-hover, var(--ms-option-title-color-selected, var(--ms-option-title-color)))}}.ms__option-title mark{background:var(--ms-option-mark-bg);color:var(--ms-option-mark-color);font-weight:var(--ms-option-mark-font-weight)}.ms__option-subtitle{margin-top:var(--ms-option-subtitle-margin-top);font-size:var(--ms-option-subtitle-font-size);color:var(--ms-option-subtitle-color);line-height:var(--ms-option-subtitle-line-height)}@media (hover: hover){.ms__option:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-hover, var(--ms-option-subtitle-color))}}.ms__option--selected .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected-hover, var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color)))}}.ms__empty{display:flex;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-empty-padding);text-align:center;font-size:var(--ms-empty-font-size);color:var(--ms-empty-color)}.ms__add-new{display:flex;align-items:center;gap:var(--ms-add-new-gap);padding:var(--ms-add-new-padding);font-size:var(--ms-add-new-font-size);color:var(--ms-add-new-color);cursor:pointer;user-select:none;-webkit-user-select:none}@media (hover: hover){.ms__add-new:hover{background:var(--ms-add-new-bg-hover);color:var(--ms-add-new-color-hover)}}.ms__add-new--focused{background:var(--ms-add-new-bg-hover);color:var(--ms-add-new-color-hover)}.ms__add-new--loading{cursor:default}.ms__add-new-spinner{flex-shrink:0;width:var(--ms-add-new-icon-size);height:var(--ms-add-new-icon-size);border-radius:50%;border:2px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;animation:ms-spin .6s linear infinite}@media (prefers-reduced-motion: reduce){.ms__add-new-spinner{animation-duration:1.5s}}.ms__add-new-icon{flex-shrink:0;width:var(--ms-add-new-icon-size);height:var(--ms-add-new-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-add-new) center / contain no-repeat;mask:var(--ms-icon-add-new) center / contain no-repeat}.ms__add-new-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ms__loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-loader-padding);gap:var(--ms-loader-gap)}.ms__loading-text{font-size:var(--ms-loading-text-font-size);color:var(--ms-loading-color)}}@layer component{.ms--rtl .ms__badges{direction:rtl}.ms--rtl .ms__badges--right{margin-left:0;margin-right:var(--ms-badges-margin-right)}.ms--rtl .ms__badges--left{margin-right:0;margin-left:var(--ms-badges-margin-left)}.ms--rtl .ms__count-display{direction:rtl}.ms--rtl .ms__count-display--right{margin-left:0;margin-right:var(--ms-count-display-margin-right)}.ms--rtl .ms__count-display--left{margin-right:0;margin-left:var(--ms-count-display-margin-left)}}@layer component{.ms__option--tree{padding-inline-start:calc(var(--ms-tree-base-indent, .75rem) + var(--ms-tree-depth, 0) * var(--ms-tree-indent, 1.25rem))}.ms__option--tree-unselectable{cursor:default}.ms__option--tree-unselectable:hover{background:transparent}}@layer overrides{:host-context([data-theme="dark"]),:host-context([data-bs-theme="dark"]),:host-context(.dark){color-scheme:dark}:host-context([data-theme="light"]),:host-context([data-bs-theme="light"]),:host-context(.light){color-scheme:light}:host([data-theme="dark"]){color-scheme:dark}:host([data-theme="light"]){color-scheme:light}}`, Qs = [
+const Eo = `@layer variables,component,overrides;@layer variables{:host{display:block;--ms-rem: var(--base-rem, 10px);font-family:var(--ms-font-family, var(--base-font-family, inherit));--ms-accent-color: var(--base-accent-color, #3b82f6);--ms-accent-color-hover: var(--base-accent-color-hover, #2563eb);--ms-accent-color-active: var(--base-accent-color-active, #1d4ed8);--ms-accent-color-light: var(--base-accent-color-light, light-dark(#eff6ff, #1e3a5f));--ms-accent-color-light-hover: var(--base-accent-color-light-hover, light-dark(#e0f2fe, #264a73));--ms-text-color-1: var(--base-text-color-1, light-dark(#111827, #f5f5f5));--ms-text-color-2: var(--base-text-color-2, light-dark(#353b47, #d4d4d4));--ms-text-color-3: var(--base-text-color-3, light-dark(#6b7280, #a3a3a3));--ms-text-color-4: var(--base-text-color-4, light-dark(#a0a3a9, #737373));--ms-text-color-on-accent: var(--base-text-color-on-accent, #ffffff);--ms-text-primary: var(--ms-text-color-1);--ms-text-secondary: var(--ms-text-color-3);--ms-primary-bg: var(--base-hover-bg, color-mix(in srgb, var(--ms-text-color-1) 8%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-primary-bg-hover: var(--base-active-bg, color-mix(in srgb, var(--ms-text-color-1) 14%, var(--base-main-bg, light-dark(#ffffff, #1a1a1a))));--ms-border-color: var(--base-border-color, light-dark(#cbd5e1, #52525b));--ms-border: var(--base-border, 1px solid var(--ms-border-color));--ms-input-bg: var(--base-input-bg, light-dark(#ffffff, #1a1a1a));--ms-input-color: var(--base-input-color, var(--ms-text-color-1));--ms-input-border: var(--base-input-border, 1px solid var(--ms-border-color));--ms-input-border-hover: var(--base-input-border-hover, 1px solid var(--ms-accent-color));--ms-input-border-focus: var(--base-input-border-focus, 1px solid var(--ms-accent-color));--ms-input-placeholder-color: var(--base-input-placeholder-color, var(--ms-text-color-4));--ms-toggle-icon-color: var(--ms-text-color-3);--ms-toggle-icon-color-open: var(--ms-text-color-3);--ms-toggle-icon-size: calc(1.6 * var(--ms-rem));--ms-toggle-rotate-closed: 90deg;--ms-toggle-rotate-open: -90deg;--ms-counter-badge-bg: var(--ms-accent-color);--ms-counter-badge-bg-hover: var(--ms-accent-color-hover);--ms-counter-badge-color: var(--ms-text-color-on-accent);--ms-hint-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-hint-color: var(--ms-text-color-4);--ms-hint-border-color: var(--ms-border-color);--ms-dropdown-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-dropdown-text-color: var(--ms-text-color-1);--ms-dropdown-border-color: var(--ms-border-color);--ms-dropdown-box-shadow-semantic: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-actions-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-actions-border-color: var(--ms-border-color);--ms-action-button-bg: transparent;--ms-action-button-bg-hover: var(--ms-primary-bg);--ms-action-button-border-color: var(--ms-border-color);--ms-action-button-border-color-hover: var(--ms-accent-color);--ms-action-button-color: var(--ms-text-color-1);--ms-group-border-color: var(--ms-border-color);--ms-option-text-color: var(--ms-text-color-1);--ms-option-bg: transparent;--ms-option-bg-hover: var(--ms-primary-bg);--ms-option-color-hover: inherit;--ms-option-bg-focused: var(--ms-primary-bg);--ms-option-color-focused: inherit;--ms-option-outline-color-focused: var(--ms-accent-color);--ms-option-bg-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-option-bg-matched: color-mix(in srgb, var(--ms-accent-color) 8%, transparent);--ms-option-color-matched: inherit;--ms-option-border-matched-color: color-mix(in srgb, var(--ms-accent-color) 40%, transparent);--ms-option-title-color: var(--ms-text-color-1);--ms-option-subtitle-color: var(--ms-text-color-3);--ms-option-mark-bg: color-mix(in srgb, var(--ms-accent-color) 20%, transparent);--ms-option-mark-color: inherit;--ms-loading-color: var(--ms-text-color-3);--ms-badge-bg: var(--ms-accent-color-light);--ms-badge-bg-hover: color-mix(in srgb, var(--ms-badge-bg) 88%, var(--ms-badge-text-color) 12%);--ms-badge-bg-active: var(--ms-accent-color-light-hover);--ms-badge-text-bg-hover: color-mix(in srgb, var(--ms-badge-text-bg) 88%, var(--ms-badge-text-color) 12%);--ms-badge-text-color-hover: var(--ms-badge-text-color);--ms-badge-counter-border-color: var(--ms-border-color);--ms-badge-counter-text-bg: color-mix(in srgb, var(--ms-text-color-1) 10%, transparent);--ms-badge-counter-text-bg-hover: color-mix(in srgb, var(--ms-text-color-1) 16%, transparent);--ms-badge-counter-text-color: var(--ms-text-color-1);--ms-badge-counter-text-color-hover: var(--ms-text-color-1);--ms-badge-counter-remove-bg: color-mix(in srgb, var(--ms-text-color-1) 10%, transparent);--ms-badge-counter-remove-bg-hover: color-mix(in srgb, var(--ms-text-color-1) 16%, transparent);--ms-badge-counter-remove-color: var(--ms-text-color-3);--ms-badge-counter-remove-color-hover: var(--ms-text-color-1);--ms-counter-wrapper-border-color: var(--ms-border-color);--ms-tooltip-bg: var(--base-tooltip-bg, var(--base-inverse-bg, light-dark(#333333, #f5f5f5)));--ms-tooltip-text-color: var(--base-tooltip-text-color, light-dark(#ffffff, #1a1a1a));--ms-selected-popover-bg: var(--base-dropdown-bg, var(--base-elevated-bg, light-dark(#ffffff, #1a1a1a)));--ms-selected-popover-border-color: var(--ms-border-color);--ms-selected-popover-header-border-color: var(--ms-border-color);--ms-input-padding-h: calc(1.2 * var(--ms-rem));--ms-input-gap: calc(.6 * var(--ms-rem));--ms-input-height: calc(var(--base-input-size-md-height, 3.5) * var(--ms-rem));--ms-input-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-input-border-width: 1px;--ms-input-border-radius: var(--ms-border-radius-md);--ms-input-text: var(--ms-text-color-1);--ms-input-bg-disabled: var(--base-input-bg-disabled, rgba(107, 114, 128, .05));--ms-toggle-color: var(--ms-text-color-3);--ms-transform-rotate-180: 180deg;--ms-input-clear-size: calc(2.4 * var(--ms-rem));--ms-input-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-input-clear-color: var(--base-input-clear-color, var(--ms-text-secondary));--ms-input-clear-bg-hover: var(--base-input-clear-bg-hover, var(--ms-option-bg-matched, transparent));--ms-input-clear-border-radius: var(--ms-border-radius);--ms-counter-padding: calc(.2 * var(--ms-rem)) calc(.4 * var(--ms-rem));--ms-counter-bg: var(--ms-accent-color);--ms-counter-color: var(--ms-text-color-on-accent);--ms-counter-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-counter-font-weight: var(--base-font-weight-semibold, 600);--ms-counter-border-radius: var(--ms-border-radius-sm);--ms-counter-bg-hover: var(--ms-accent-color-hover);--ms-transform-scale-hover: 1.1;--ms-hint-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-hint-border: 1px solid var(--ms-hint-border-color);--ms-hint-border-radius: var(--ms-border-radius-lg);--ms-hint-box-shadow: 0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);--ms-hint-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-dropdown-border: var(--base-dropdown-border, 1px solid var(--ms-dropdown-border-color));--ms-dropdown-border-radius: var(--ms-border-radius-lg);--ms-dropdown-inner-border-radius: max(0px, calc(var(--ms-dropdown-border-radius) - 1px));--ms-dropdown-box-shadow: var(--base-dropdown-box-shadow, 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1));--ms-input-current-width: auto;--ms-dropdown-width: var(--ms-input-current-width);--ms-options-max-height: calc(32 * var(--ms-rem));--ms-option-color: var(--ms-text-color-1);--ms-z-index-dropdown: 9999;--ms-z-index-sticky: 1;--ms-z-index-fullscreen: 10001;--ms-z-index-fullscreen-tooltip: 10002;--ms-fullscreen-rem: 12px;--ms-fullscreen-bg: var(--ms-dropdown-bg);--ms-fullscreen-text-color: var(--ms-dropdown-text-color);--ms-fullscreen-header-bg: var(--ms-dropdown-bg);--ms-fullscreen-header-border: 1px solid var(--ms-dropdown-border-color);--ms-fullscreen-header-gap: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-v: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding-h: calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-header-padding: var(--ms-fullscreen-header-padding-v) var(--ms-fullscreen-header-padding-h);--ms-fullscreen-header-min-height: calc(5.6 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-size: calc(1.7 * var(--ms-fullscreen-rem));--ms-fullscreen-title-font-weight: var(--base-font-weight-semibold, 600);--ms-fullscreen-search-border: var(--ms-input-border);--ms-fullscreen-search-border-radius: var(--ms-input-border-radius);--ms-fullscreen-search-padding: calc(.8 * var(--ms-fullscreen-rem)) calc(1.2 * var(--ms-fullscreen-rem));--ms-fullscreen-search-font-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-icon-size: calc(1.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-inset: calc(.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-gutter: calc(3.4 * var(--ms-fullscreen-rem));--ms-fullscreen-search-clear-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-search-clear-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-mode-toggle-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-icon-size: calc(1.5 * var(--ms-fullscreen-rem));--ms-fullscreen-mode-toggle-gap: var(--ms-fullscreen-header-gap);--ms-fullscreen-mode-toggle-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-mode-toggle-bg: transparent;--ms-fullscreen-mode-toggle-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-size: calc(3.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-close-color: var(--ms-dropdown-text-color);--ms-fullscreen-close-bg: transparent;--ms-fullscreen-close-border: none;--ms-fullscreen-close-border-radius: 50%;--ms-fullscreen-close-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-close-edge-nudge: calc(.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-size: calc(2.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-icon-size: calc(1.8 * var(--ms-fullscreen-rem));--ms-fullscreen-info-color: var(--ms-accent-color);--ms-fullscreen-info-bg-hover: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-gap: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-padding-top: calc(.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-font-size: calc(1.3 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-count-color: var(--ms-text-muted-color, var(--ms-dropdown-text-color));--ms-fullscreen-nav-btn-size: calc(3.2 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-icon-size: calc(1.6 * var(--ms-fullscreen-rem));--ms-fullscreen-nav-btn-color: var(--ms-dropdown-text-color);--ms-fullscreen-nav-btn-bg: var(--ms-option-bg-matched, transparent);--ms-fullscreen-nav-btn-bg-hover: color-mix(in srgb, var(--ms-accent-color) 22%, transparent);--ms-fullscreen-nav-btn-icon: var(--ms-icon-chevron);--ms-icon-chevron: var(--base-icon-chevron, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 18 6-6-6-6'/></svg>"));--ms-icon-info: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='9' fill='none' stroke='black' stroke-width='2'/><circle cx='12' cy='7.5' r='1.3' fill='black'/><path d='M12 11v6' stroke='black' stroke-width='2' stroke-linecap='round' fill='none'/></svg>");--ms-fullscreen-tree-base-indent: calc(.7 * var(--ms-fullscreen-rem));--ms-fullscreen-tree-indent: calc(1.2 * var(--ms-fullscreen-rem));--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem));--ms-actions-border-bottom: 1px solid var(--ms-actions-border-color);--ms-action-btn-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-action-btn-border: var(--ms-border);--ms-action-btn-border-radius: var(--ms-border-radius-sm);--ms-action-btn-bg: transparent;--ms-action-btn-color: inherit;--ms-action-btn-bg-hover: var(--ms-primary-bg);--ms-action-btn-border-color-hover: var(--ms-accent-color);--ms-transform-scale-active: .98;--ms-options-padding: 0;--ms-group-border-top: 1px solid var(--ms-group-border-color);--ms-group-margin-top: calc(.4 * var(--ms-rem));--ms-group-padding-top: calc(.4 * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-font-weight: var(--base-font-weight-semibold, 600);--ms-group-label-color: var(--ms-text-color-3);--ms-group-label-transform: uppercase;--ms-group-label-letter-spacing: .05em;--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-padding-h: calc(1.2 * var(--ms-rem));--ms-option-min-height: auto;--ms-option-outline-focused: 2px solid var(--ms-option-outline-color-focused);--ms-option-focus-outline-offset: -2px;--ms-option-border-matched: 3px solid var(--ms-option-border-matched-color);--ms-option-bg-focused-hover: var(--ms-primary-bg);--ms-option-bg-matched-hover: color-mix(in srgb, var(--ms-accent-color) 12%, transparent);--ms-option-bg-selected-focused: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-bg-selected-matched: color-mix(in srgb, var(--ms-accent-color) 15%, transparent);--ms-option-disabled-bg: var(--base-disabled-bg, transparent);--ms-option-bg-disabled-selected: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-disabled-opacity: .5;--ms-option-content-gap: calc(.8 * var(--ms-rem));--ms-option-icon-size: calc(2 * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-mark-font-weight: var(--base-font-weight-semibold, 600);--ms-option-title-white-space: normal;--ms-option-title-overflow: visible;--ms-option-title-text-overflow: clip;--ms-option-subtitle-margin-top: calc(.4 * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-subtitle-line-height: var(--base-line-height-tight, 1.25);--ms-checkbox-margin-top: 0;--ms-checkbox-margin-right: 0;--ms-checkbox-margin-bottom: 0;--ms-checkbox-margin-left: 0;--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-checkbox-scale: 1;--ms-checkbox-align: center;--ms-checkbox-bg: var(--ms-input-bg);--ms-checkbox-border-width: 1px;--ms-checkbox-border-color: var(--base-checkbox-border-color, #8f8f8f);--ms-checkbox-border: var(--ms-checkbox-border-width) solid var(--ms-checkbox-border-color);--ms-checkbox-border-radius: calc(.3 * var(--ms-rem));--ms-checkbox-checkmark-thickness: 2.5px;--ms-checkbox-checked-bg: var(--ms-accent-color);--ms-checkbox-checked-border: var(--ms-checkbox-border-width) solid var(--ms-accent-color);--ms-checkbox-checkmark-color: var(--ms-text-color-on-accent);--ms-checkbox-hover-border-color: var(--ms-accent-color);--ms-checkbox-disabled-bg: var(--ms-primary-bg);--ms-checkbox-disabled-border: var(--ms-checkbox-border-width) solid var(--ms-border-color);--ms-checkbox-checked-bg-hover: var(--ms-accent-color-hover);--ms-checkbox-checked-border-color-hover: var(--ms-accent-color-hover);--ms-state-min-height: calc(8 * var(--ms-rem));--ms-empty-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-empty-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-empty-color: var(--ms-text-color-3);--ms-add-new-padding: var(--ms-option-padding);--ms-add-new-gap: var(--ms-option-gap);--ms-add-new-font-size: var(--ms-empty-font-size);--ms-add-new-color: var(--ms-accent-color);--ms-add-new-color-hover: var(--ms-accent-color);--ms-add-new-bg-hover: var(--ms-option-bg-hover);--ms-add-new-icon-size: calc(1.6 * var(--ms-rem));--ms-loader-padding: calc(1.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-loader-gap: calc(.8 * var(--ms-rem));--ms-loading-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-loading-text-color: var(--ms-text-color-3);--ms-badges-gap: calc(.8 * var(--ms-rem));--ms-badges-margin-bottom: calc(.8 * var(--ms-rem));--ms-badges-margin-top: calc(.8 * var(--ms-rem));--ms-badges-margin-left: calc(.4 * var(--ms-rem));--ms-badges-margin-right: calc(.4 * var(--ms-rem));--ms-inline-align: center;--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(2.7 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-font-weight: var(--base-font-weight-semibold, 600);--ms-badge-border-radius: var(--ms-border-radius-sm);--ms-order-first: -1;--ms-badge-text-padding: 0 calc(.8 * var(--ms-rem));--ms-badge-text-bg: var(--ms-accent-color-light);--ms-badge-text-color: var(--ms-accent-color);--ms-badge-text-border: none;--ms-badge-remove-width: calc(2.7 * var(--ms-rem));--ms-badge-remove-bg: var(--ms-accent-color);--ms-badge-remove-color: var(--ms-text-color-on-accent);--ms-badge-remove-border: none;--ms-badge-remove-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-badge-remove-bg-hover: var(--ms-accent-color-hover);--ms-badge-remove-box-shadow-focus: 0 0 0 2px color-mix(in srgb, var(--ms-accent-color) 50%, transparent);--ms-badge-remove-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-remove: var(--base-icon-remove, var(--base-icon-close, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 6 18'/><path d='m6 6 12 12'/></svg>")));--ms-icon-search-clear: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m13.5 8.5-5 5'/><path d='m8.5 8.5 5 5'/><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");--ms-icon-search: var(--base-icon-search, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>"));--ms-icon-filter: var(--base-icon-filter, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'/></svg>"));--ms-icon-check: var(--base-icon-check, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6 9 17l-5-5'/></svg>"));--ms-icon-indeterminate: var(--base-icon-indeterminate, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/></svg>"));--ms-icon-check-size: var(--base-icon-check-size, 68%);--ms-icon-add-new: var(--base-icon-plus, var(--base-icon-add, url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/><path d='M12 5v14'/></svg>")));--ms-badge-counter-bg: transparent;--ms-badge-counter-border: 1px solid var(--ms-badge-counter-border-color);--ms-badge-counter-border-radius: var(--ms-border-radius-sm);--ms-more-badge-bg: var(--ms-accent-color-light);--ms-more-badge-hover-bg: var(--ms-badge-bg-hover);--ms-more-badge-active-bg: var(--ms-accent-color-light-hover);--ms-count-display-margin-bottom: calc(.8 * var(--ms-rem));--ms-count-display-margin-top: calc(.8 * var(--ms-rem));--ms-count-display-margin-left: calc(.8 * var(--ms-rem));--ms-count-display-margin-right: calc(.8 * var(--ms-rem));--ms-counter-wrapper-bg: transparent;--ms-counter-wrapper-border: var(--ms-border);--ms-counter-wrapper-border-radius: var(--ms-border-radius-sm);--ms-counter-wrapper-padding: calc(.4 * var(--ms-rem)) calc(.8 * var(--ms-rem));--ms-counter-wrapper-gap: calc(.4 * var(--ms-rem));--ms-counter-wrapper-bg-hover: var(--ms-primary-bg);--ms-counter-wrapper-border-color-hover: var(--ms-accent-color);--ms-count-text-bg: transparent;--ms-count-text-border: none;--ms-count-text-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-count-text-color: var(--ms-text-color-1);--ms-count-clear-size: calc(1.6 * var(--ms-rem));--ms-count-clear-bg: transparent;--ms-count-clear-color: var(--ms-text-color-3);--ms-count-clear-font-size: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-count-clear-border-radius: var(--ms-border-radius-sm);--ms-count-clear-bg-hover: var(--ms-accent-color);--ms-count-clear-color-hover: var(--ms-text-color-on-accent);--ms-count-clear-icon-size: calc(1.4 * var(--ms-rem));--ms-icon-clear: var(--base-icon-clear, var(--ms-icon-remove));--ms-tooltip-color: var(--ms-tooltip-text-color);--ms-tooltip-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tooltip-border-radius: var(--ms-border-radius-lg);--ms-tooltip-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-tooltip-max-width: calc(32 * var(--ms-rem));--ms-tooltip-shadow: 0 2px 8px rgba(0, 0, 0, .15);--ms-tooltip-z-index: 10000;--ms-option-tooltip-bg: var(--ms-tooltip-bg);--ms-option-tooltip-text-color: var(--ms-tooltip-text-color);--ms-option-tooltip-padding: var(--ms-tooltip-padding);--ms-option-tooltip-border-radius: var(--ms-tooltip-border-radius);--ms-option-tooltip-font-size: var(--ms-tooltip-font-size);--ms-option-tooltip-max-width: var(--ms-tooltip-max-width);--ms-option-tooltip-shadow: var(--ms-tooltip-shadow);--ms-option-tooltip-z-index: var(--ms-tooltip-z-index);--ms-message-bg: var(--ms-message-info-bg);--ms-message-color: var(--ms-message-info-color);--ms-message-border: 1px solid transparent;--ms-message-border-radius: var(--ms-border-radius-lg);--ms-message-padding: calc(1 * var(--ms-rem)) calc(1.4 * var(--ms-rem));--ms-message-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-message-font-weight: var(--base-font-weight-medium, 500);--ms-message-max-width: calc(40 * var(--ms-rem));--ms-message-shadow: 0 4px 16px rgb(0 0 0 / .18);--ms-message-fullscreen-offset: calc(2.4 * var(--ms-fullscreen-rem));--ms-message-z-index: var(--ms-z-index-fullscreen-tooltip);--ms-message-info-bg: var(--ms-tooltip-bg);--ms-message-info-color: var(--ms-tooltip-text-color);--ms-message-warning-bg: var(--base-warning-bg, #f59e0b);--ms-message-warning-color: var(--base-warning-color, #1a1a1a);--ms-message-error-bg: var(--base-danger-bg, #ef4444);--ms-message-error-color: var(--base-danger-color, #ffffff);--ms-message-success-bg: var(--base-success-bg, #10b981);--ms-message-success-color: var(--base-success-color, #ffffff);--ms-z-index-popover: 10000;--ms-selected-popover-width: var(--ms-input-current-width);--ms-selected-popover-max-height: calc(32 * var(--ms-rem));--ms-selected-popover-border: 1px solid var(--ms-selected-popover-border-color);--ms-selected-popover-border-radius: var(--ms-border-radius-lg);--ms-selected-popover-box-shadow: 0 20px 25px -5px rgb(0 0 0 / .1), 0 8px 10px -6px rgb(0 0 0 / .1);--ms-selected-popover-header-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-selected-popover-header-bg: color-mix(in srgb, var(--ms-accent-color) 10%, transparent);--ms-selected-popover-header-border-bottom: 1px solid var(--ms-selected-popover-header-border-color);--ms-selected-popover-header-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-selected-popover-header-font-weight: var(--base-font-weight-semibold, 600);--ms-selected-popover-header-color: var(--ms-text-color-1);--ms-popover-close-size: calc(2.4 * var(--ms-rem));--ms-selected-popover-close-bg: transparent;--ms-selected-popover-close-color: var(--ms-text-color-3);--ms-selected-popover-close-font-size: calc(var(--base-font-size-xl, 2) * var(--ms-rem));--ms-selected-popover-close-border-radius: var(--ms-border-radius-sm);--ms-selected-popover-close-bg-hover: var(--ms-accent-color);--ms-selected-popover-close-color-hover: var(--ms-text-color-on-accent);--ms-selected-popover-close-icon-size: calc(1.4 * var(--ms-rem));--ms-selected-popover-body-gap: calc(.4 * var(--ms-rem));--ms-selected-popover-body-padding: calc(.8 * var(--ms-rem));--ms-selected-popover-body-max-height: calc(28.8 * var(--ms-rem));--ms-font-size-2xs: calc(var(--base-font-size-2xs, 1) * var(--ms-rem));--ms-font-size-xs: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-font-size-sm: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-font-size-base: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-font-size-lg: calc(var(--base-font-size-lg, 1.8) * var(--ms-rem));--ms-font-weight-normal: var(--base-font-weight-normal, 400);--ms-font-weight-medium: var(--base-font-weight-medium, 500);--ms-font-weight-semibold: var(--base-font-weight-semibold, 600);--ms-line-height-none: 1;--ms-line-height-tight: var(--base-line-height-tight, 1.25);--ms-line-height-normal: var(--base-line-height-normal, 1.5);--ms-line-height-relaxed: var(--base-line-height-relaxed, 1.75);--ms-border-radius-sm: calc(var(--base-border-radius-sm, .4) * var(--ms-rem));--ms-border-radius-md: calc(var(--base-border-radius-md, .6) * var(--ms-rem));--ms-border-radius-lg: calc(var(--base-border-radius-lg, .8) * var(--ms-rem));--ms-border-radius: var(--ms-border-radius-md);--ms-spacing-xs: calc(.4 * var(--ms-rem));--ms-spacing-sm: calc(.8 * var(--ms-rem));--ms-spacing-md: calc(1.2 * var(--ms-rem));--ms-spacing-lg: calc(1.6 * var(--ms-rem));--ms-transition-fast: .15s;--ms-transition-normal: .2s;--ms-easing-snappy: var(--base-ease-standard, cubic-bezier(.4, 0, .2, 1));--ms-placeholder-opacity: .6;--ms-disabled-input-opacity: .6;--ms-scrollbar-width: 8px;--ms-scrollbar-track-bg: transparent;--ms-scrollbar-thumb-bg: var(--ms-border-color);--ms-scrollbar-thumb-bg-hover: var(--ms-text-color-3);--ms-scrollbar-thumb-border-radius: 4px;--ms-debug-bg: var(--base-elevated-bg, light-dark(#f9fafb, #2b2b2b));--ms-debug-border-color: var(--ms-border-color);--ms-debug-text-color: var(--ms-text-color-1);--ms-debug-border-radius: var(--ms-border-radius-md);--ms-debug-summary-color: var(--ms-accent-color);--ms-debug-summary-bg-hover: var(--ms-primary-bg);--ms-debug-summary-outline-color: var(--ms-accent-color);--ms-debug-summary-border-radius: var(--ms-border-radius-sm);--ms-debug-stats-bg: var(--base-main-bg, light-dark(#ffffff, #1a1a1a));--ms-debug-stats-border-radius: var(--ms-border-radius-sm);--ms-debug-bullet-color: var(--ms-accent-color)}}@layer component{web-multiselect:not(:defined){display:block;min-height:calc(3.5 * var(--ms-rem));color:transparent!important;background:transparent}:host([defer]:not([is-ready])){display:block;min-height:calc(3.5 * var(--ms-rem))}:host{-webkit-tap-highlight-color:transparent}.ms__wrapper{display:flex;flex-direction:column;align-items:stretch}.ms__wrapper--inline{flex-direction:row;align-items:var(--ms-inline-align, center)}.ms{position:relative;width:100%}}@layer component{.ms__input-wrapper{box-sizing:border-box;position:relative;display:flex;align-items:center;gap:var(--ms-input-gap);height:var(--ms-input-height);padding-inline:var(--ms-input-padding-h);background:var(--ms-input-bg);color:var(--ms-input-color);border:var(--ms-input-border);border-radius:var(--ms-input-border-radius);cursor:pointer;transition:border var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input-wrapper:hover:not(:focus-within){border:var(--ms-input-border-hover)}.ms__input-wrapper:focus-within{border:var(--ms-input-border-focus)}.ms__input{flex:1 1 auto;min-width:0;box-sizing:border-box;font-family:inherit;height:100%;padding:0;border:none;background:transparent;font-size:var(--ms-input-font-size);color:var(--ms-input-color);cursor:pointer;outline:none}.ms__input::placeholder{color:var(--ms-input-placeholder-color);opacity:0;transition:opacity var(--ms-transition-fast) var(--ms-easing-snappy)}:host([data-placeholder-ready]) .ms__input::placeholder{opacity:var(--ms-placeholder-opacity)}.ms__toggle{flex:0 0 auto;display:block;width:var(--ms-toggle-icon-size);height:var(--ms-toggle-icon-size);color:var(--ms-toggle-icon-color);cursor:pointer}.ms__toggle:before{content:"";display:block;width:100%;height:100%;background-color:currentColor;-webkit-mask:var(--ms-icon-chevron) center / contain no-repeat;mask:var(--ms-icon-chevron) center / contain no-repeat;transform:rotate(var(--ms-toggle-rotate-closed, 90deg));transition:transform var(--ms-transition-fast) var(--ms-easing-snappy)}.ms--open .ms__toggle{color:var(--ms-toggle-icon-color-open)}.ms--open .ms__toggle:before{transform:rotate(var(--ms-toggle-rotate-open, -90deg))}.ms__counter{flex:0 0 auto;padding:var(--ms-counter-padding);background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-size:var(--ms-counter-font-size);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter:hover{background:var(--ms-counter-badge-bg-hover);transform:scale(var(--ms-transform-scale-hover))}.ms__input-clear{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-input-clear-size);height:var(--ms-input-clear-size);padding:0;color:var(--ms-input-clear-color);background:transparent;border:none;border-radius:var(--ms-input-clear-border-radius);cursor:pointer;transition:background var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__input-clear:hover{background:var(--ms-input-clear-bg-hover)}.ms__input-clear:before{content:"";display:block;width:var(--ms-input-clear-icon-size);height:var(--ms-input-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}.ms__actions{display:flex;flex-direction:column;gap:var(--ms-actions-gap);padding:var(--ms-actions-padding)}.ms__actions--top{border-bottom:var(--ms-actions-border-bottom)}.ms__actions--bottom{flex-direction:column-reverse;border-top:var(--ms-actions-border-bottom)}.ms__actions-row{display:flex;flex-wrap:nowrap;gap:var(--ms-actions-gap)}.ms__actions--wrap .ms__actions-row{flex-wrap:wrap}.ms__actions--sticky{position:sticky;z-index:var(--ms-z-index-sticky);background:var(--ms-actions-bg)}.ms__actions--sticky.ms__actions--top{top:0}.ms__actions--sticky.ms__actions--bottom{bottom:0}.ms__actions--align-stretch .ms__action-btn{flex:1}.ms__actions--align-left .ms__actions-row{justify-content:flex-start}.ms__actions--align-right .ms__actions-row{justify-content:flex-end}.ms__actions--align-center .ms__actions-row{justify-content:center}.ms__actions--align-space-between .ms__actions-row{justify-content:space-between}.ms__action-btn{font-family:inherit;padding:var(--ms-action-btn-padding);font-size:var(--ms-action-btn-font-size);border:var(--ms-action-btn-border);border-radius:var(--ms-action-btn-border-radius);background:var(--ms-action-button-bg);color:var(--ms-action-button-color);cursor:pointer;transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}@media (hover: hover){.ms__action-btn:hover{background:var(--ms-action-button-bg-hover);border-color:var(--ms-action-button-border-color-hover)}}.ms__action-btn:active{transform:scale(var(--ms-transform-scale-active))}.ms__action-btn:disabled,.ms__action-btn[disabled]{opacity:var(--ms-disabled-opacity);cursor:not-allowed;pointer-events:none}}@layer component{.ms__hint{display:none;position:fixed;z-index:var(--ms-z-index-popover);padding:var(--ms-hint-padding);background:var(--ms-hint-bg);border:var(--ms-hint-border);border-radius:var(--ms-hint-border-radius);box-shadow:var(--ms-hint-box-shadow);font-size:var(--ms-hint-font-size);color:var(--ms-hint-color);line-height:var(--ms-line-height-relaxed);max-width:100%}.ms__hint--visible{display:block}.ms__dropdown{display:none;position:fixed;box-sizing:border-box;font-family:inherit;z-index:var(--ms-z-index-dropdown);background:var(--ms-dropdown-bg);border:var(--ms-dropdown-border);border-radius:var(--ms-dropdown-border-radius);box-shadow:var(--ms-dropdown-box-shadow);width:var(--ms-dropdown-width);max-height:var(--ms-options-max-height);overflow:hidden;color:var(--ms-dropdown-text-color)}.ms__dropdown--visible{display:flex;flex-direction:column}.ms__dropdown--fullscreen,.ms__selected-popover--fullscreen{--ms-rem: var(--ms-fullscreen-rem);--ms-option-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-option-gap: calc(.8 * var(--ms-rem));--ms-option-title-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-option-subtitle-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-option-icon-font-size: calc(var(--base-font-size-base, 1.6) * var(--ms-rem));--ms-checkbox-size: calc(1.6 * var(--ms-rem));--ms-group-label-font-size: calc(var(--base-font-size-xs, 1.2) * var(--ms-rem));--ms-group-label-padding: calc(.4 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-tree-base-indent: var(--ms-fullscreen-tree-base-indent);--ms-tree-indent: var(--ms-fullscreen-tree-indent)}.ms__selected-popover--fullscreen{--ms-badge-gap: calc(.8 * var(--ms-rem));--ms-badge-height: calc(4.2 * var(--ms-rem));--ms-badge-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem));--ms-badge-text-padding: 0 calc(1.2 * var(--ms-rem));--ms-badge-remove-width: calc(3.6 * var(--ms-rem));--ms-badge-remove-icon-size: calc(1.2 * var(--ms-rem));--ms-badge-remove-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{--ms-actions-gap: calc(.4 * var(--ms-rem));--ms-actions-padding: calc(.8 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-padding: calc(.6 * var(--ms-rem)) calc(1.2 * var(--ms-rem));--ms-action-btn-font-size: calc(var(--base-font-size-sm, 1.4) * var(--ms-rem))}.ms__dropdown--fullscreen{position:fixed;top:0;inset-inline-start:0;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;--ms-dropdown-inner-border-radius: 0;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__dropdown--fullscreen .ms__dropdown-inner{display:flex;flex-direction:column;flex:1;min-height:0;max-height:none;overflow:hidden}.ms__dropdown--fullscreen .ms__options{flex:1 1 0;min-height:0;height:auto;max-height:none;overflow-y:auto;padding-bottom:var(--ms-option-gap)}.ms__dropdown--fullscreen .ms__actions{flex:0 0 auto}.ms__fullscreen-header,.ms__selected-popover--fullscreen .ms__selected-popover-header{flex:0 0 auto;display:flex;align-items:center;flex-wrap:wrap;gap:var(--ms-fullscreen-header-gap);min-height:var(--ms-fullscreen-header-min-height);padding:var(--ms-fullscreen-header-padding);background:var(--ms-fullscreen-header-bg);border-bottom:var(--ms-fullscreen-header-border)}.ms__fullscreen-header{align-content:flex-start}.ms__fullscreen-header>.ms__fullscreen-search-wrapper{min-height:var(--ms-fullscreen-header-min-height)}.ms__fullscreen-nav{flex:0 0 100%;display:flex;align-items:center;justify-content:space-between;gap:var(--ms-fullscreen-nav-gap);padding-top:var(--ms-fullscreen-nav-padding-top)}.ms__fullscreen-nav-count{font-size:var(--ms-fullscreen-nav-count-font-size);color:var(--ms-fullscreen-nav-count-color)}.ms__fullscreen-nav-controls{display:flex;align-items:center;gap:var(--ms-fullscreen-nav-gap)}.ms__fullscreen-nav-btn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-nav-btn-size);height:var(--ms-fullscreen-nav-btn-size);padding:0;color:var(--ms-fullscreen-nav-btn-color);background:var(--ms-fullscreen-nav-btn-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-nav-btn:hover:not(:disabled){background:var(--ms-fullscreen-nav-btn-bg-hover)}.ms__fullscreen-nav-btn:disabled{opacity:.4;cursor:default}.ms__fullscreen-nav-btn:before{content:"";display:block;width:var(--ms-fullscreen-nav-btn-icon-size);height:var(--ms-fullscreen-nav-btn-icon-size);background-color:currentColor;-webkit-mask:var(--ms-fullscreen-nav-btn-icon) center / contain no-repeat;mask:var(--ms-fullscreen-nav-btn-icon) center / contain no-repeat;transform:rotate(-90deg)}.ms__fullscreen-nav-btn--next:before{transform:rotate(90deg)}.ms__fullscreen-header>.ms__fullscreen-search-wrapper,.ms__selected-popover--fullscreen .ms__selected-popover-header>span{flex:1 1 0;min-width:0}.ms__fullscreen-search-wrapper{position:relative;display:flex;align-items:center}.ms__selected-popover--fullscreen .ms__selected-popover-header{font-size:var(--ms-fullscreen-title-font-size);font-weight:var(--ms-fullscreen-title-font-weight);color:var(--ms-fullscreen-text-color)}.ms__fullscreen-search{flex:1 1 auto;min-width:0;font-family:inherit;font-size:var(--ms-fullscreen-search-font-size);color:inherit;background:transparent;border:var(--ms-fullscreen-search-border);border-radius:var(--ms-fullscreen-search-border-radius);padding:var(--ms-fullscreen-search-padding);padding-inline-end:var(--ms-fullscreen-search-clear-gutter)}.ms__fullscreen-search:focus{outline:none;border:var(--ms-input-border-focus)}.ms__fullscreen-search-clear{position:absolute;inset-inline-end:var(--ms-fullscreen-search-clear-inset);top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-search-clear-size);height:var(--ms-fullscreen-search-clear-size);padding:0;color:var(--ms-fullscreen-search-clear-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-search-clear:hover{background:var(--ms-fullscreen-search-clear-bg-hover)}.ms__fullscreen-search-clear:before{content:"";display:block;width:var(--ms-fullscreen-search-clear-icon-size);height:var(--ms-fullscreen-search-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-search-clear) center / contain no-repeat;mask:var(--ms-icon-search-clear) center / contain no-repeat}.ms__fullscreen-mode-toggle{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-mode-toggle-size);height:var(--ms-fullscreen-mode-toggle-size);margin-inline-end:var(--ms-fullscreen-mode-toggle-gap);margin-inline-start:calc((var(--ms-fullscreen-close-size) - var(--ms-fullscreen-mode-toggle-size)) / 2 - var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-mode-toggle-color);background:var(--ms-fullscreen-mode-toggle-bg);border:none;border-radius:50%;cursor:pointer}.ms__fullscreen-mode-toggle:hover{background:var(--ms-fullscreen-mode-toggle-bg-hover)}.ms__fullscreen-mode-toggle:before{content:"";display:block;width:var(--ms-fullscreen-mode-toggle-icon-size);height:var(--ms-fullscreen-mode-toggle-icon-size);background-color:currentColor;-webkit-mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat;mask:var(--ms-fullscreen-mode-toggle-icon, var(--ms-icon-search)) center / contain no-repeat}.ms__fullscreen-mode-toggle[data-mode=navigate]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-search)}.ms__fullscreen-mode-toggle[data-mode=filter]{--ms-fullscreen-mode-toggle-icon: var(--ms-icon-filter)}.ms__fullscreen-close,.ms__selected-popover--fullscreen .ms__selected-popover-close{flex:0 0 auto;position:relative;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;width:var(--ms-fullscreen-close-size);height:var(--ms-fullscreen-close-size);margin-inline-end:calc(-1 * var(--ms-fullscreen-close-edge-nudge));padding:0;color:var(--ms-fullscreen-close-color);background:var(--ms-fullscreen-close-bg);border:var(--ms-fullscreen-close-border);border-radius:var(--ms-fullscreen-close-border-radius);cursor:pointer}.ms__fullscreen-close:after,.ms__selected-popover--fullscreen .ms__selected-popover-close:after{content:"";position:absolute;inset-block-start:calc(-1 * var(--ms-fullscreen-close-size));inset-block-end:calc(-1 * var(--ms-fullscreen-header-padding-v));inset-inline-end:calc(-1 * var(--ms-fullscreen-header-padding-h));inset-inline-start:calc(-1 * var(--ms-fullscreen-header-gap))}.ms__fullscreen-close:hover,.ms__selected-popover--fullscreen .ms__selected-popover-close:hover{background:var(--ms-fullscreen-close-bg-hover);color:var(--ms-fullscreen-close-color)}.ms__fullscreen-close:before,.ms__selected-popover--fullscreen .ms__selected-popover-close:before{content:"";display:block;width:var(--ms-fullscreen-close-icon-size);height:var(--ms-fullscreen-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__dropdown--fullscreen .ms__option-info{flex:0 0 auto;display:none;align-items:center;justify-content:center;width:var(--ms-fullscreen-info-size);height:var(--ms-fullscreen-info-size);margin-inline-start:var(--ms-option-gap);padding:0;color:var(--ms-fullscreen-info-color);background:transparent;border:none;border-radius:50%;cursor:pointer}.ms__dropdown--fullscreen .ms__option--truncated .ms__option-info{display:inline-flex}@media (hover: hover){.ms__dropdown--fullscreen .ms__option-info:hover{background:var(--ms-fullscreen-info-bg-hover)}}.ms__dropdown--fullscreen .ms__option-info:before{content:"";display:block;width:var(--ms-fullscreen-info-icon-size);height:var(--ms-fullscreen-info-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-info) center / contain no-repeat;mask:var(--ms-icon-info) center / contain no-repeat}.ms__dropdown-inner{flex:1;overflow-y:auto;border-radius:var(--ms-dropdown-inner-border-radius);overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__dropdown-inner::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__dropdown-inner::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__dropdown-inner::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__dropdown--virtual{max-height:none}.ms__dropdown--virtual .ms__dropdown-inner{overflow:hidden}.ms__badge-tooltip{position:fixed;z-index:var(--ms-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-tooltip-bg);color:var(--ms-tooltip-text-color);padding:var(--ms-tooltip-padding);border-radius:var(--ms-tooltip-border-radius);font-size:var(--ms-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-tooltip-shadow);pointer-events:none}.ms__badge-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip{position:fixed;z-index:var(--ms-option-tooltip-z-index);opacity:0;visibility:hidden;transition:opacity var(--ms-transition-normal) ease,visibility var(--ms-transition-normal) ease;background:var(--ms-option-tooltip-bg);color:var(--ms-option-tooltip-text-color);padding:var(--ms-option-tooltip-padding);border-radius:var(--ms-option-tooltip-border-radius);font-size:var(--ms-option-tooltip-font-size);line-height:var(--ms-line-height-relaxed);max-width:var(--ms-option-tooltip-max-width);word-wrap:break-word;white-space:pre-wrap;box-shadow:var(--ms-option-tooltip-shadow);pointer-events:none}.ms__option-tooltip--visible{opacity:1;visibility:visible}.ms__option-tooltip--fullscreen{z-index:var(--ms-z-index-fullscreen-tooltip)}.ms__message{position:fixed;z-index:var(--ms-message-z-index);box-sizing:border-box;max-width:var(--ms-message-max-width);padding:var(--ms-message-padding);font-family:inherit;font-size:var(--ms-message-font-size);font-weight:var(--ms-message-font-weight);line-height:var(--ms-line-height-normal);color:var(--ms-message-color);background:var(--ms-message-bg);border:var(--ms-message-border);border-radius:var(--ms-message-border-radius);box-shadow:var(--ms-message-shadow);cursor:pointer;opacity:0;transition:opacity var(--ms-transition-normal) ease;-webkit-tap-highlight-color:transparent}.ms__message--visible{opacity:1}.ms__message--info{background:var(--ms-message-info-bg);color:var(--ms-message-info-color)}.ms__message--warning{background:var(--ms-message-warning-bg);color:var(--ms-message-warning-color)}.ms__message--error{background:var(--ms-message-error-bg);color:var(--ms-message-error-color)}.ms__message--success{background:var(--ms-message-success-bg);color:var(--ms-message-success-color)}.ms__message--fullscreen{left:50%;right:auto;bottom:calc(var(--ms-message-fullscreen-offset) + env(safe-area-inset-bottom));transform:translate(-50%);max-width:min(var(--ms-message-max-width),calc(100vw - 4 * var(--ms-fullscreen-rem)));padding:calc(1 * var(--ms-fullscreen-rem)) calc(1.4 * var(--ms-fullscreen-rem));font-size:calc(var(--base-font-size-sm, 1.4) * var(--ms-fullscreen-rem))}.ms__selected-popover{display:none;position:fixed;box-sizing:border-box;z-index:var(--ms-z-index-popover);background:var(--ms-selected-popover-bg);border:var(--ms-selected-popover-border);border-radius:var(--ms-selected-popover-border-radius);box-shadow:var(--ms-selected-popover-box-shadow);width:var(--ms-selected-popover-width);max-height:var(--ms-selected-popover-max-height);overflow:hidden}.ms__selected-popover--visible{display:flex;flex-direction:column}.ms__selected-popover--virtual{display:block;overflow:visible;max-height:none}.ms__selected-popover--fullscreen{position:fixed;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;border:none;border-radius:0;overflow:hidden;background:var(--ms-fullscreen-bg);color:var(--ms-fullscreen-text-color);z-index:var(--ms-z-index-fullscreen);box-sizing:border-box;padding-top:env(safe-area-inset-top);padding-right:env(safe-area-inset-right);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left)}.ms__selected-popover--fullscreen .ms__selected-popover-body{flex:1 1 0;min-height:0;max-height:none}.ms__selected-popover-header{display:flex;align-items:center;justify-content:space-between;padding:var(--ms-selected-popover-header-padding);background:var(--ms-selected-popover-header-bg);border-bottom:var(--ms-selected-popover-header-border-bottom);font-size:var(--ms-selected-popover-header-font-size);font-weight:var(--ms-selected-popover-header-font-weight);color:var(--ms-selected-popover-header-color)}.ms__selected-popover-close{display:flex;align-items:center;justify-content:center;width:var(--ms-popover-close-size);height:var(--ms-popover-close-size);padding:0;border:none;background:var(--ms-selected-popover-close-bg);color:var(--ms-selected-popover-close-color);font-size:var(--ms-selected-popover-close-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-selected-popover-close-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__selected-popover-close:hover{background:var(--ms-selected-popover-close-bg-hover);color:var(--ms-selected-popover-close-color-hover)}.ms__selected-popover-close:before{content:"";display:block;width:var(--ms-selected-popover-close-icon-size);height:var(--ms-selected-popover-close-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__selected-popover-body{display:flex;flex-direction:column;gap:var(--ms-selected-popover-body-gap);padding:var(--ms-selected-popover-body-padding);overflow-y:auto;max-height:var(--ms-selected-popover-body-max-height);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__selected-popover-body::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__selected-popover-body::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__selected-popover-body::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__selected-popover-body .ms__badge{width:100%;min-height:fit-content;line-height:var(--ms-line-height-relaxed);flex-shrink:0}.ms__selected-popover-body .ms__badge-text{flex:1;min-width:0;white-space:normal;word-wrap:break-word}.ms__selected-popover-body--virtual{display:block;max-height:none;padding:0}.ms__selected-popover-body--virtual .ms__badge{height:var(--ms-badge-height-virtual, 36px);min-height:var(--ms-badge-height-virtual, 36px);max-height:var(--ms-badge-height-virtual, 36px);margin-bottom:var(--ms-selected-popover-body-gap);overflow:hidden;box-sizing:border-box}.ms__selected-popover-body--virtual .ms__badge-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}@layer component{.ms--disabled .ms__input-wrapper{opacity:var(--ms-disabled-input-opacity);background:var(--ms-input-bg-disabled);cursor:not-allowed}.ms--disabled .ms__input{cursor:not-allowed}.ms--no-checkboxes .ms__option{gap:0;padding-inline-start:var(--ms-option-padding-h)}.ms--no-checkboxes .ms__option-content{padding-inline-start:0}.ms--no-selected-popover .ms__counter,.ms--no-selected-popover .ms__badge[data-action=show-selected],.ms--no-selected-popover .ms__badge--counter,.ms--no-selected-popover .ms__badge--more{cursor:default}}@layer component{@keyframes ms-spin{to{transform:rotate(360deg)}}}@layer component{.ms__badges{display:flex;flex-wrap:wrap;gap:var(--ms-badges-gap);padding:0}.ms__badges:empty{display:none}.ms__badges--bottom{margin-top:var(--ms-badges-margin-bottom)}.ms__badges--top{margin-bottom:var(--ms-badges-margin-top);order:var(--ms-order-first)}.ms__badges--left{order:var(--ms-order-first);margin-right:var(--ms-badges-margin-left);justify-content:flex-end}.ms__badges--right{margin-left:var(--ms-badges-margin-right);justify-content:flex-start}.ms__badge{display:inline-flex;align-items:center;height:var(--ms-badge-height);font-size:var(--ms-badge-font-size);font-weight:var(--ms-badge-font-weight);line-height:var(--ms-line-height-none);border-radius:var(--ms-badge-border-radius);overflow:hidden;max-width:100%}.ms__badge--custom{display:block;height:auto;max-width:none;overflow:visible;border-radius:0;font-size:inherit;font-weight:inherit}.ms__badge-text{display:flex;align-items:center;box-sizing:border-box;height:100%;padding:var(--ms-badge-text-padding);background:var(--ms-badge-text-bg);color:var(--ms-badge-text-color);border:var(--ms-badge-text-border);border-inline-end:none;border-start-start-radius:var(--ms-badge-border-radius);border-end-start-radius:var(--ms-badge-border-radius);border-start-end-radius:0;border-end-end-radius:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:background-color var(--ms-transition-normal) ease,color var(--ms-transition-normal) ease}.ms__badge:hover .ms__badge-text{background:var(--ms-badge-text-bg-hover, var(--ms-badge-text-bg));color:var(--ms-badge-text-color-hover, var(--ms-badge-text-color))}.ms__badge-remove{display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:0;font-family:inherit;width:var(--ms-badge-remove-width);height:100%;flex-shrink:0;background:var(--ms-badge-remove-bg);color:var(--ms-badge-remove-color);border:var(--ms-badge-remove-border);border-inline-start:none;border-start-end-radius:var(--ms-badge-border-radius);border-end-end-radius:var(--ms-badge-border-radius);border-start-start-radius:0;border-end-start-radius:0;cursor:pointer;transition:background-color var(--ms-transition-normal) ease;font-size:var(--ms-badge-remove-font-size)}.ms__badge-remove:hover{background:var(--ms-badge-remove-bg-hover)}.ms__badge-remove:focus{outline:none}.ms__badge-remove:focus-visible{outline:none;box-shadow:var(--ms-badge-remove-box-shadow-focus)}.ms__badge-remove:before{content:"";display:block;width:var(--ms-badge-remove-icon-size);height:var(--ms-badge-remove-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-remove) center / contain no-repeat;mask:var(--ms-icon-remove) center / contain no-repeat}.ms__badge--counter{cursor:pointer}.ms__badge--counter .ms__badge-text{background:var(--ms-badge-counter-text-bg);color:var(--ms-badge-counter-text-color);border:var(--ms-badge-counter-border);border-inline-end:none}.ms__badge--counter .ms__badge-remove{background:var(--ms-badge-counter-remove-bg);color:var(--ms-badge-counter-remove-color);border:var(--ms-badge-counter-border);border-inline-start:none}.ms__badge--counter .ms__badge-remove:hover{background:var(--ms-badge-counter-remove-bg-hover);color:var(--ms-badge-counter-remove-color-hover, var(--ms-badge-counter-remove-color))}.ms__badge--counter:hover .ms__badge-text{background:var(--ms-badge-counter-text-bg-hover, var(--ms-badge-counter-text-bg));color:var(--ms-badge-counter-text-color-hover, var(--ms-badge-counter-text-color))}.ms__badge--more,.ms__badge[data-action=show-selected]{cursor:pointer}}@layer component{.ms__count-display{display:flex;align-items:center}.ms__count-display:empty{display:none}.ms__count-display--bottom{margin-top:var(--ms-count-display-margin-bottom)}.ms__count-display--top{margin-bottom:var(--ms-count-display-margin-top);order:var(--ms-order-first)}.ms__count-display--left{order:var(--ms-order-first);margin-right:var(--ms-count-display-margin-left);justify-content:flex-start}.ms__count-display--right{margin-left:var(--ms-count-display-margin-right);justify-content:flex-end}.ms__counter-wrapper{display:inline-flex;align-items:center;gap:var(--ms-counter-wrapper-gap);background:var(--ms-counter-wrapper-bg);border:var(--ms-counter-wrapper-border);border-radius:var(--ms-counter-wrapper-border-radius);padding:var(--ms-counter-wrapper-padding);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__counter-wrapper:hover{background:var(--ms-counter-wrapper-bg-hover);border-color:var(--ms-counter-wrapper-border-color-hover)}.ms__count-text{display:inline-flex;align-items:center;background:var(--ms-count-text-bg);border:var(--ms-count-text-border);padding:0;font-size:var(--ms-count-text-font-size);color:var(--ms-count-text-color);cursor:pointer;transition:color var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear{flex-shrink:0;display:flex;align-items:center;justify-content:center;width:var(--ms-count-clear-size);height:var(--ms-count-clear-size);padding:0;border:none;background:var(--ms-count-clear-bg);color:var(--ms-count-clear-color);font-size:var(--ms-count-clear-font-size);line-height:var(--ms-line-height-none);cursor:pointer;border-radius:var(--ms-count-clear-border-radius);transition:all var(--ms-transition-fast) var(--ms-easing-snappy)}.ms__count-clear:hover{background:var(--ms-count-clear-bg-hover);color:var(--ms-count-clear-color-hover)}.ms__count-clear:before{content:"";display:block;width:var(--ms-count-clear-icon-size);height:var(--ms-count-clear-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-clear) center / contain no-repeat;mask:var(--ms-icon-clear) center / contain no-repeat}}@layer component{.ms__debug-info{margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-bg);border:1px solid var(--ms-debug-border-color);border-radius:var(--ms-debug-border-radius);font-size:calc(1.2 * var(--ms-rem));color:var(--ms-debug-text-color)}.ms__debug-info details summary{cursor:pointer;font-weight:600;color:var(--ms-debug-summary-color);-webkit-user-select:none;user-select:none;padding:calc(.4 * var(--ms-rem));border-radius:var(--ms-debug-summary-border-radius)}.ms__debug-info details summary:hover{background-color:var(--ms-debug-summary-bg-hover)}.ms__debug-info details summary:focus{outline:2px solid var(--ms-debug-summary-outline-color);outline-offset:2px}.ms__debug-info .ms__debug-stats{display:flex;flex-direction:column;gap:calc(.4 * var(--ms-rem));margin-top:calc(.4 * var(--ms-rem));padding:calc(.4 * var(--ms-rem));background-color:var(--ms-debug-stats-bg);border-radius:var(--ms-debug-stats-border-radius)}.ms__debug-info .ms__debug-stats span{display:flex;justify-content:space-between;padding:2px 4px;font-family:monospace;font-size:calc(1 * var(--ms-rem))}.ms__debug-info .ms__debug-stats span:before{content:"•";margin-inline-end:calc(.4 * var(--ms-rem));color:var(--ms-debug-bullet-color)}}@layer component{.ms__options{padding:var(--ms-options-padding);scrollbar-width:thin;scrollbar-color:var(--ms-scrollbar-thumb-bg) var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar{width:var(--ms-scrollbar-width)}.ms__options::-webkit-scrollbar-track{background:var(--ms-scrollbar-track-bg)}.ms__options::-webkit-scrollbar-thumb{background:var(--ms-scrollbar-thumb-bg);border-radius:var(--ms-scrollbar-thumb-border-radius)}.ms__options::-webkit-scrollbar-thumb:hover{background:var(--ms-scrollbar-thumb-bg-hover)}.ms__options--virtual .ms__option,.ms__options--fixed-height .ms__option{height:var(--ms-option-height, 50px);min-height:var(--ms-option-height, 50px);max-height:var(--ms-option-height, 50px);overflow:hidden;box-sizing:border-box}.ms__group+.ms__group{border-top:var(--ms-group-border-top);margin-top:var(--ms-group-margin-top);padding-top:var(--ms-group-padding-top)}.ms__group-label{padding:var(--ms-group-label-padding);font-size:var(--ms-group-label-font-size);font-weight:var(--ms-group-label-font-weight);color:var(--ms-group-label-color);text-transform:var(--ms-group-label-transform);letter-spacing:var(--ms-group-label-letter-spacing)}.ms__group-label--selectable{display:flex;align-items:center;gap:var(--ms-option-gap);cursor:pointer;-webkit-user-select:none;user-select:none}@media (hover: hover){.ms__group-label--selectable:hover{background:var(--ms-option-bg-hover)}}.ms__group-label--has-count{display:flex;align-items:center;gap:var(--ms-option-gap)}.ms__group-count{margin-inline-start:auto;flex:0 0 auto;box-sizing:border-box;min-width:calc(2 * var(--ms-rem));padding-block:0;padding-inline:calc(.4 * var(--ms-rem));background:var(--ms-counter-badge-bg);color:var(--ms-counter-badge-color);font-weight:var(--ms-counter-font-weight);border-radius:var(--ms-counter-border-radius);text-align:center}.ms__option{display:flex;align-items:var(--ms-checkbox-align, center);gap:var(--ms-option-gap);padding:var(--ms-option-padding);position:relative;min-height:var(--ms-option-min-height, auto);color:var(--ms-option-text-color);background:var(--ms-option-bg);cursor:pointer;user-select:none;-webkit-user-select:none}@media (hover: hover){.ms__option:hover{background:var(--ms-option-bg-hover);color:var(--ms-option-color-hover, inherit)}}.ms__option--focused{background:var(--ms-option-bg-focused);color:var(--ms-option-color-focused, inherit);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--matched{background:var(--ms-option-bg-matched);color:var(--ms-option-color-matched, inherit)}.ms__option--matched:before{content:"";position:absolute;inset-block:0;inset-inline-start:0;border-inline-start:var(--ms-option-border-matched);pointer-events:none}.ms__option--selected{background:var(--ms-option-bg-selected)}@media (hover: hover){.ms__option--selected:hover{background:var(--ms-option-bg-selected-hover, var(--ms-option-bg-selected))}}.ms__option--disabled{opacity:var(--ms-disabled-opacity);cursor:not-allowed;background:var(--ms-option-disabled-bg)}.ms__option--disabled:hover{background:var(--ms-option-disabled-bg)}@media (hover: hover){.ms__option--focused:hover{background:var(--ms-option-bg-focused-hover);color:var(--ms-option-color-focused-hover, var(--ms-option-color-focused, var(--ms-option-text-color)))}}.ms__option--matched:hover{background:var(--ms-option-bg-matched-hover);color:var(--ms-option-color-matched-hover, var(--ms-option-color-matched, var(--ms-option-text-color)))}.ms__option--selected.ms__option--focused{background:var(--ms-option-bg-selected-focused);outline:var(--ms-option-outline-focused);outline-offset:var(--ms-option-focus-outline-offset)}.ms__option--selected.ms__option--matched{background:var(--ms-option-bg-selected-matched)}.ms__option--disabled.ms__option--selected{background:var(--ms-option-bg-disabled-selected)}.ms__option--disabled.ms__option--focused{outline:none}.ms__option[data-checkbox-align=top]{--ms-checkbox-align: flex-start;--ms-checkbox-margin-top: calc(.2 * var(--ms-rem))}.ms__option[data-checkbox-align=bottom]{--ms-checkbox-align: flex-end}.ms__checkbox{appearance:none;-webkit-appearance:none;-moz-appearance:none;flex-shrink:0;position:relative;margin-top:var(--ms-checkbox-margin-top);margin-inline-end:var(--ms-checkbox-margin-right);margin-bottom:var(--ms-checkbox-margin-bottom);margin-inline-start:var(--ms-checkbox-margin-left);width:var(--ms-checkbox-size);height:var(--ms-checkbox-size);transform:scale(var(--ms-checkbox-scale));transform-origin:top left;cursor:pointer;background:var(--ms-checkbox-bg);border:var(--ms-checkbox-border);border-radius:var(--ms-checkbox-border-radius);transition:background-color .15s ease,border-color .15s ease}.ms__checkbox:after{content:"";position:absolute;display:none;top:0;right:0;bottom:0;left:0;background-color:var(--ms-checkbox-checkmark-color);-webkit-mask:var(--ms-icon-check) no-repeat center / var(--ms-icon-check-size);mask:var(--ms-icon-check) no-repeat center / var(--ms-icon-check-size)}.ms__checkbox:hover:not(:disabled){border-color:var(--ms-checkbox-hover-border-color)}.ms__checkbox:checked{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox:checked:after{display:block}.ms__checkbox--indeterminate{background:var(--ms-checkbox-checked-bg);border:var(--ms-checkbox-checked-border)}.ms__checkbox--indeterminate:after{display:block;-webkit-mask-image:var(--ms-icon-indeterminate);mask-image:var(--ms-icon-indeterminate)}.ms__checkbox--indeterminate:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:checked:hover:not(:disabled){background:var(--ms-checkbox-checked-bg-hover);border-color:var(--ms-checkbox-checked-border-color-hover)}.ms__checkbox:focus-visible{outline:2px solid var(--ms-checkbox-checked-bg);outline-offset:2px}.ms__checkbox:disabled{cursor:not-allowed;background:var(--ms-checkbox-disabled-bg);border:var(--ms-checkbox-disabled-border);opacity:.6}.ms__checkbox:disabled:checked{background:var(--ms-checkbox-disabled-bg)}.ms__option--disabled .ms__checkbox{cursor:not-allowed}.ms__option-content{flex:1;display:flex;align-items:center;gap:var(--ms-option-content-gap);min-width:0}.ms__option-icon{flex-shrink:0;width:var(--ms-option-icon-size);height:var(--ms-option-icon-size);display:flex;align-items:center;justify-content:center;font-size:var(--ms-option-icon-font-size)}.ms__option-icon svg{width:100%;height:100%;fill:currentColor}.ms__option-text{flex:1;min-width:0}.ms__option-title{font-size:var(--ms-option-title-font-size);color:var(--ms-option-title-color);line-height:var(--ms-line-height-relaxed);white-space:var(--ms-option-title-white-space, normal);overflow:var(--ms-option-title-overflow, visible);text-overflow:var(--ms-option-title-text-overflow, clip)}@media (hover: hover){.ms__option:hover .ms__option-title{color:var(--ms-option-title-color-hover, var(--ms-option-title-color))}}.ms__option--selected .ms__option-title{color:var(--ms-option-title-color-selected, var(--ms-option-title-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-title{color:var(--ms-option-title-color-selected-hover, var(--ms-option-title-color-selected, var(--ms-option-title-color)))}}.ms__option-title mark{background:var(--ms-option-mark-bg);color:var(--ms-option-mark-color);font-weight:var(--ms-option-mark-font-weight)}.ms__option-subtitle{margin-top:var(--ms-option-subtitle-margin-top);font-size:var(--ms-option-subtitle-font-size);color:var(--ms-option-subtitle-color);line-height:var(--ms-option-subtitle-line-height)}@media (hover: hover){.ms__option:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-hover, var(--ms-option-subtitle-color))}}.ms__option--selected .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color))}@media (hover: hover){.ms__option--selected:hover .ms__option-subtitle{color:var(--ms-option-subtitle-color-selected-hover, var(--ms-option-subtitle-color-selected, var(--ms-option-subtitle-color)))}}.ms__empty{display:flex;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-empty-padding);text-align:center;font-size:var(--ms-empty-font-size);color:var(--ms-empty-color)}.ms__add-new{display:flex;align-items:center;gap:var(--ms-add-new-gap);padding:var(--ms-add-new-padding);font-size:var(--ms-add-new-font-size);color:var(--ms-add-new-color);cursor:pointer;user-select:none;-webkit-user-select:none}@media (hover: hover){.ms__add-new:hover{background:var(--ms-add-new-bg-hover);color:var(--ms-add-new-color-hover)}}.ms__add-new--focused{background:var(--ms-add-new-bg-hover);color:var(--ms-add-new-color-hover)}.ms__add-new--loading{cursor:default}.ms__add-new-spinner{flex-shrink:0;width:var(--ms-add-new-icon-size);height:var(--ms-add-new-icon-size);border-radius:50%;border:2px solid color-mix(in srgb,currentColor 25%,transparent);border-top-color:currentColor;animation:ms-spin .6s linear infinite}@media (prefers-reduced-motion: reduce){.ms__add-new-spinner{animation-duration:1.5s}}.ms__add-new-icon{flex-shrink:0;width:var(--ms-add-new-icon-size);height:var(--ms-add-new-icon-size);background-color:currentColor;-webkit-mask:var(--ms-icon-add-new) center / contain no-repeat;mask:var(--ms-icon-add-new) center / contain no-repeat}.ms__add-new-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ms__loader{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:var(--ms-state-min-height);padding:var(--ms-loader-padding);gap:var(--ms-loader-gap)}.ms__loading-text{font-size:var(--ms-loading-text-font-size);color:var(--ms-loading-color)}}@layer component{.ms--rtl .ms__badges{direction:rtl}.ms--rtl .ms__badges--right{margin-left:0;margin-right:var(--ms-badges-margin-right)}.ms--rtl .ms__badges--left{margin-right:0;margin-left:var(--ms-badges-margin-left)}.ms--rtl .ms__count-display{direction:rtl}.ms--rtl .ms__count-display--right{margin-left:0;margin-right:var(--ms-count-display-margin-right)}.ms--rtl .ms__count-display--left{margin-right:0;margin-left:var(--ms-count-display-margin-left)}}@layer component{.ms__option--tree{padding-inline-start:calc(var(--ms-tree-base-indent, .75rem) + var(--ms-tree-depth, 0) * var(--ms-tree-indent, 1.25rem))}.ms__option--tree-unselectable{cursor:default}.ms__option--tree-unselectable:hover{background:transparent}}@layer overrides{:host-context([data-theme="dark"]),:host-context([data-bs-theme="dark"]),:host-context(.dark){color-scheme:dark}:host-context([data-theme="light"]),:host-context([data-bs-theme="light"]),:host-context(.light){color-scheme:light}:host([data-theme="dark"]){color-scheme:dark}:host([data-theme="light"]){color-scheme:light}}`, eo = [
   "top",
   "top-start",
   "top-end",
@@ -5633,40 +5652,41 @@ const Lo = `@layer variables,component,overrides;@layer variables{:host{display:
   "right",
   "right-start",
   "right-end"
-], E = () => Uo(), wn = [
+], A = () => Uo(), wn = [
   // ── Strings (cosmetic → update). Optional ones are nullable: absent → null ─
-  { configKey: "searchHint", attribute: "search-hint", converter: z({ isNullable: !0 }), on: "update", description: "Small hint text shown beneath the search input." },
-  { configKey: "searchPlaceholder", attribute: "search-placeholder", converter: z({ isNullable: !0 }), on: "update", description: 'Placeholder text for the search input. When unset it defaults to "Search..."; if `show-search-mode-toggle` is on, the default instead becomes mode-aware ("Search…" in navigate, "Filter…" in filter). An explicit value always wins and stays fixed.' },
-  { configKey: "selectPlaceholder", attribute: "select-placeholder", converter: z({ default: "Pick an option..." }), on: "update", description: "Placeholder shown on the control when nothing is selected." },
-  { configKey: "noDataPlaceholder", attribute: "no-data-placeholder", converter: z({ isNullable: !0 }), on: "update", description: "Text shown when there are no options at all." },
-  { configKey: "dropdownMinWidth", attribute: "dropdown-min-width", converter: z({ isNullable: !0 }), on: "update", description: "Minimum width of the dropdown panel (any CSS length)." },
-  { configKey: "dropdownMaxWidth", attribute: "dropdown-max-width", converter: z({ isNullable: !0 }), on: "update", description: "Maximum width of the dropdown panel (any CSS length)." },
-  { configKey: "maxHeight", attribute: "max-height", converter: z({ default: "20rem" }), on: "update", description: "Maximum height of the dropdown list before it scrolls." },
-  { configKey: "emptyMessage", attribute: "empty-message", converter: z({ default: "No results found" }), on: "update", description: "Message shown when a search yields no matches." },
-  { configKey: "addNewText", attribute: "add-new-text", converter: z({ isNullable: !0 }), on: "update", description: 'Template for the clickable "add new" prompt shown (when `allow-add-new` is on) in place of the empty message once a search yields no matches. `{value}` is replaced with the typed text. Default: `Add "{value}"`. A `getAddNewTextCallback` wins.' },
-  { configKey: "addNewPendingText", attribute: "add-new-pending-text", converter: z({ isNullable: !0 }), on: "update", description: 'Template for the pending prompt (spinner + text) shown while an async `addNewCallback` runs. `{value}` is replaced with the typed text. Default: `Adding "{value}"…`.' },
-  { configKey: "loadingMessage", attribute: "loading-message", converter: z({ default: "Loading..." }), on: "update", description: "Message shown while options are loading." },
-  { configKey: "removeButtonTooltipText", attribute: "remove-button-tooltip-text", converter: z({ isNullable: !0 }), on: "update", description: "Tooltip text for a badge remove (×) button." },
-  { configKey: "formFieldId", attribute: "name", converter: z({ isNullable: !0 }), on: "reinit", description: "HTML form field name/id used for the hidden input(s)." },
+  { configKey: "searchHint", attribute: "search-hint", converter: E({ isNullable: !0 }), on: "update", description: "Small hint text shown beneath the search input." },
+  { configKey: "searchPlaceholder", attribute: "search-placeholder", converter: E({ isNullable: !0 }), on: "update", description: 'Placeholder text for the search input. When unset it defaults to "Search..."; if `show-search-mode-toggle` is on, the default instead becomes mode-aware ("Search…" in navigate, "Filter…" in filter). An explicit value always wins and stays fixed.' },
+  { configKey: "selectPlaceholder", attribute: "select-placeholder", converter: E({ default: "Pick an option..." }), on: "update", description: "Placeholder shown on the control when nothing is selected." },
+  { configKey: "noDataPlaceholder", attribute: "no-data-placeholder", converter: E({ isNullable: !0 }), on: "update", description: "Text shown when there are no options at all." },
+  { configKey: "dropdownMinWidth", attribute: "dropdown-min-width", converter: E({ isNullable: !0 }), on: "update", description: "Minimum width of the dropdown panel (any CSS length)." },
+  { configKey: "dropdownMaxWidth", attribute: "dropdown-max-width", converter: E({ isNullable: !0 }), on: "update", description: "Maximum width of the dropdown panel (any CSS length)." },
+  { configKey: "maxHeight", attribute: "max-height", converter: E({ default: "20rem" }), on: "update", description: "Maximum height of the dropdown list before it scrolls." },
+  { configKey: "emptyMessage", attribute: "empty-message", converter: E({ default: "No results found" }), on: "update", description: "Message shown when a search yields no matches." },
+  { configKey: "addNewText", attribute: "add-new-text", converter: E({ isNullable: !0 }), on: "update", description: 'Template for the clickable "add new" prompt shown (when `allow-add-new` is on) in place of the empty message once a search yields no matches. `{value}` is replaced with the typed text. Default: `Add "{value}"`. A `getAddNewTextCallback` wins.' },
+  { configKey: "addNewPendingText", attribute: "add-new-pending-text", converter: E({ isNullable: !0 }), on: "update", description: 'Template for the pending prompt (spinner + text) shown while an async `addNewCallback` runs. `{value}` is replaced with the typed text. Default: `Adding "{value}"…`.' },
+  { configKey: "loadingMessage", attribute: "loading-message", converter: E({ default: "Loading..." }), on: "update", description: "Message shown while options are loading." },
+  { configKey: "removeButtonTooltipText", attribute: "remove-button-tooltip-text", converter: E({ isNullable: !0 }), on: "update", description: "Tooltip text for a badge remove (×) button." },
+  { configKey: "formFieldId", attribute: "name", converter: E({ isNullable: !0 }), on: "reinit", description: "HTML form field name/id used for the hidden input(s)." },
+  { configKey: "customStyles", attribute: "custom-styles", converter: E({ isNullable: !0 }), on: "update", description: "Raw CSS injected into the Shadow DOM — the declarative alternative to `customStylesCallback`. The value is a full stylesheet (selectors and all), dropped verbatim into a replaceable style slot at the top of the shadow root. `customStylesCallback` takes precedence when both are set." },
   // ── CSS-var sugar (mirrored to a host style prop in reinit()/update()) ────
-  { configKey: "dropdownWidth", attribute: "dropdown-width", converter: z({ isNullable: !0 }), on: "update", description: "Fixed dropdown width; mirrored to the `--ms-dropdown-width` CSS variable." },
-  { configKey: "selectedPopoverWidth", attribute: "selected-popover-width", converter: z({ isNullable: !0 }), on: "update", description: "Selected-items popover width; mirrored to `--ms-selected-popover-width`." },
+  { configKey: "dropdownWidth", attribute: "dropdown-width", converter: E({ isNullable: !0 }), on: "update", description: "Fixed dropdown width; mirrored to the `--ms-dropdown-width` CSS variable." },
+  { configKey: "selectedPopoverWidth", attribute: "selected-popover-width", converter: E({ isNullable: !0 }), on: "update", description: "Selected-items popover width; mirrored to `--ms-selected-popover-width`." },
   // ── Member properties (structural → reinit; optional → nullable) ─────────
-  { configKey: "valueMember", attribute: "value-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name on an option object that holds its value." },
-  { configKey: "displayValueMember", attribute: "display-value-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option display label." },
-  { configKey: "searchValueMember", attribute: "search-value-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name searched against (falls back to the display value)." },
-  { configKey: "iconMember", attribute: "icon-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option icon." },
-  { configKey: "subtitleMember", attribute: "subtitle-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option subtitle." },
-  { configKey: "fullTitleMember", attribute: "full-title-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option full/long title." },
-  { configKey: "groupMember", attribute: "group-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name used to group options under headers." },
-  { configKey: "disabledMember", attribute: "disabled-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that marks an option disabled." },
+  { configKey: "valueMember", attribute: "value-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name on an option object that holds its value." },
+  { configKey: "displayValueMember", attribute: "display-value-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option display label." },
+  { configKey: "searchValueMember", attribute: "search-value-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name searched against (falls back to the display value)." },
+  { configKey: "iconMember", attribute: "icon-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option icon." },
+  { configKey: "subtitleMember", attribute: "subtitle-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option subtitle." },
+  { configKey: "fullTitleMember", attribute: "full-title-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that holds an option full/long title." },
+  { configKey: "groupMember", attribute: "group-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name used to group options under headers." },
+  { configKey: "disabledMember", attribute: "disabled-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name that marks an option disabled." },
   // ── Tree of options (structural → reinit; optional → nullable) ───────────
-  { configKey: "pathMember", attribute: "path-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node materialized tree path." },
-  { configKey: "parentPathMember", attribute: "parent-path-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node parent path." },
-  { configKey: "levelMember", attribute: "level-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node depth level." },
-  { configKey: "hasChildrenMember", attribute: "has-children-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name flagging that a node has children." },
-  { configKey: "isSelectableMember", attribute: "is-selectable-member", converter: z({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name marking whether a node can be selected." },
-  { configKey: "treePathSeparator", attribute: "tree-path-separator", converter: z({ default: "." }), reflect: !0, on: "reinit", description: "Separator between segments in a materialized tree path." },
+  { configKey: "pathMember", attribute: "path-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node materialized tree path." },
+  { configKey: "parentPathMember", attribute: "parent-path-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node parent path." },
+  { configKey: "levelMember", attribute: "level-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name holding a node depth level." },
+  { configKey: "hasChildrenMember", attribute: "has-children-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name flagging that a node has children." },
+  { configKey: "isSelectableMember", attribute: "is-selectable-member", converter: E({ isNullable: !0 }), reflect: !0, on: "reinit", description: "Property name marking whether a node can be selected." },
+  { configKey: "treePathSeparator", attribute: "tree-path-separator", converter: E({ default: "." }), reflect: !0, on: "reinit", description: "Separator between segments in a materialized tree path." },
   { configKey: "isTreeEnabled", converter: H("tristate"), on: "reinit", type: "boolean", description: "Force tree mode on/off. Property-only; when unset (null) tree mode auto-enables if a path source (path-member / getPathCallback) is present." },
   {
     configKey: "checkboxMode",
@@ -5704,17 +5724,17 @@ const Lo = `@layer variables,component,overrides;@layer variables{:host{display:
     on: "update",
     description: 'Order of the CURRENTLY-SELECTED items where they are displayed — badges, partial mode (which items sit behind the "+N more" badge), and the selected-items popover. Display only: `getValue()`, the form output, and `getSelected()` keep as-selected (insertion) order, and the options dropdown is never reordered.\n- `as-selected` (default) — the order items were picked.\n- `label-asc` / `label-desc` — by the badge label, A→Z / Z→A (locale-aware).\n- `member` — by the `selected-order-member` property (or `getSelectedOrderCallback`); numeric keys sort numerically, everything else with a locale string compare.\n- `custom` — delegate to `selectedOrderCompareCallback`.'
   },
-  { configKey: "selectedOrderMember", attribute: "selected-order-member", converter: z({ isNullable: !0 }), reflect: !0, on: "update", description: 'Property name used as the sort key when `selected-order="member"`. Sorts the SELECTED-items display only (not the dropdown). Overridden by `getSelectedOrderCallback`.' },
+  { configKey: "selectedOrderMember", attribute: "selected-order-member", converter: E({ isNullable: !0 }), reflect: !0, on: "update", description: 'Property name used as the sort key when `selected-order="member"`. Sorts the SELECTED-items display only (not the dropdown). Overridden by `getSelectedOrderCallback`.' },
   { configKey: "searchInputMode", attribute: "search-input-mode", converter: K(["normal", "readonly", "hidden"], { default: "normal" }), on: "reinit", description: "Search field mode: editable, read-only, or hidden." },
   { configKey: "searchMode", attribute: "search-mode", converter: K(["filter", "navigate"], { default: "filter" }), on: "reinit", description: "Whether typing filters the list or navigates it." },
-  { configKey: "overlayGroup", attribute: "overlay-group", converter: z({ isNullable: !0 }), on: "reinit", description: 'Scope the "one overlay open at a time" coordination to a named group. Overlays (multiselects, datepickers, external popovers) sharing a group dismiss each other when one opens; different groups are independent. Unset = the default (ungrouped) group.' },
+  { configKey: "overlayGroup", attribute: "overlay-group", converter: E({ isNullable: !0 }), on: "reinit", description: 'Scope the "one overlay open at a time" coordination to a named group. Overlays (multiselects, datepickers, external popovers) sharing a group dismiss each other when one opens; different groups are independent. Unset = the default (ungrouped) group.' },
   { configKey: "actionsLayout", attribute: "actions-layout", converter: K(["nowrap", "wrap"], { default: "nowrap" }), on: "reinit", description: "Whether the action bar wraps or stays on one line." },
   { configKey: "actionsPosition", attribute: "actions-position", converter: K(["top", "bottom"], { default: "top" }), on: "reinit", description: "Whether the action bar sits above or below the list." },
   { configKey: "actionsAlign", attribute: "actions-align", converter: K(["stretch", "left", "right", "center", "space-between"], { default: "stretch" }), on: "update", description: "Horizontal alignment of the action buttons." },
   { configKey: "checkboxAlign", attribute: "checkbox-align", converter: K(["top", "center", "bottom"], { default: "center" }), on: "update", description: "Vertical alignment of an option checkbox." },
   { configKey: "valueFormat", attribute: "value-format", converter: K(["json", "csv", "array"], { default: "json" }), on: "reinit", description: "Serialization format the control emits its value in." },
-  { configKey: "badgeTooltipPlacement", attribute: "badge-tooltip-placement", converter: K(Qs, { default: "top" }), on: "update", description: "Preferred placement of a badge tooltip relative to its badge (floating-ui placement)." },
-  { configKey: "optionTooltipPlacement", attribute: "option-tooltip-placement", converter: K(Qs, { default: "top-start" }), on: "update", description: "Preferred placement of an option tooltip (floating-ui placement)." },
+  { configKey: "badgeTooltipPlacement", attribute: "badge-tooltip-placement", converter: K(eo, { default: "top" }), on: "update", description: "Preferred placement of a badge tooltip relative to its badge (floating-ui placement)." },
+  { configKey: "optionTooltipPlacement", attribute: "option-tooltip-placement", converter: K(eo, { default: "top-start" }), on: "update", description: "Preferred placement of an option tooltip (floating-ui placement)." },
   {
     configKey: "mobilePresentation",
     attribute: "mobile-presentation",
@@ -5778,63 +5798,63 @@ const Lo = `@layer variables,component,overrides;@layer variables{:host{display:
   },
   // ── Complex property (data) ──────────────────────────────────────────────
   { configKey: "options", converter: Go(), on: "reinit", type: "ReadonlyArray<Record<string, unknown>>", description: "The array of option objects to render. The JS API — assign `el.options` directly. For HTML authoring use the `data-options` attribute (parsed per `data-options-format`) or declarative <option> children; both feed the same list and take precedence over this property in the order: <option> children > property > data-options." },
-  { configKey: "optionsSource", attribute: "data-options", converter: z({ isNullable: !0 }), on: "reinit", type: "string", description: "HTML-authoring source for the option list, parsed per `data-options-format`. Reactive: changing either attribute re-renders. Prefer the `options` property in JS; a set `options` property and declarative <option> children both win over this." },
+  { configKey: "optionsSource", attribute: "data-options", converter: E({ isNullable: !0 }), on: "reinit", type: "string", description: "HTML-authoring source for the option list, parsed per `data-options-format`. Reactive: changing either attribute re-renders. Prefer the `options` property in JS; a set `options` property and declarative <option> children both win over this." },
   { configKey: "optionsFormat", attribute: "data-options-format", converter: K(mn, { default: "json" }), on: "reinit", type: "'json' | 'csv' | 'plain'", description: "How to parse the `data-options` attribute: `json` (a JSON array of objects or [value, label] tuples), `csv` (rows split on `data-options-row-splitter`, cells on `data-options-splitter`; the first row is a header — map columns via *-member), or `plain` (bare values split on both splitters -> [value, label] tuples, value === label). Default `json`." },
-  { configKey: "optionsSplitter", attribute: "data-options-splitter", converter: z({ default: "," }), on: "reinit", type: "string", description: 'Field/cell delimiter for the `csv` and `plain` `data-options` formats. Default `,`. Escapes `\\t` `\\n` `\\r` are honoured (e.g. `data-options-splitter="\\t"` for TSV). Ignored for `json`.' },
-  { configKey: "optionsRowSplitter", attribute: "data-options-row-splitter", converter: z({ default: `
+  { configKey: "optionsSplitter", attribute: "data-options-splitter", converter: E({ default: "," }), on: "reinit", type: "string", description: 'Field/cell delimiter for the `csv` and `plain` `data-options` formats. Default `,`. Escapes `\\t` `\\n` `\\r` are honoured (e.g. `data-options-splitter="\\t"` for TSV). Ignored for `json`.' },
+  { configKey: "optionsRowSplitter", attribute: "data-options-row-splitter", converter: E({ default: `
 ` }), on: "reinit", type: "string", description: 'Row/record delimiter for the `csv` and `plain` `data-options` formats. Default newline. Escapes honoured (e.g. `data-options-row-splitter=";"` for single-line data). Ignored for `json`.' },
   { configKey: "actionButtons", converter: jo({ validate: (s) => Array.isArray(s) }), on: "reinit", type: "Array<Record<string, unknown>>", description: "Custom action buttons for the dropdown footer/header. Property-only; when unset the default Select-All / Clear buttons apply." },
   // ── Callbacks: data shape (structural → reinit) ──────────────────────────
-  { configKey: "getValueCallback", converter: E(), on: "reinit", type: "(item: unknown) => string | number", description: "Extract an option value (overrides valueMember)." },
-  { configKey: "getPathCallback", converter: E(), on: "reinit", type: "(item: unknown) => string", description: "Extract a node tree path (enables tree mode; overrides pathMember)." },
-  { configKey: "getGroupCallback", converter: E(), on: "reinit", type: "(item: unknown) => string", description: "Extract the group name from an option (overrides groupMember)." },
-  { configKey: "getDisabledCallback", converter: E(), on: "reinit", type: "(item: unknown) => boolean", description: "Whether an option is disabled (overrides disabledMember)." },
-  { configKey: "getIsSelectableCallback", converter: E(), on: "reinit", type: "(node: unknown) => boolean", description: "Whether a tree node can be selected (overrides is-selectable-member)." },
-  { configKey: "getSearchValueCallback", converter: E(), on: "reinit", type: "(item: unknown) => string", description: "Text an option is searched against (overrides searchValueMember)." },
-  { configKey: "searchCallback", converter: E(), on: "reinit", type: "(searchTerm: string, signal?: AbortSignal) => Promise<unknown[]>", description: "Custom / async search; return the filtered options." },
+  { configKey: "getValueCallback", converter: A(), on: "reinit", type: "(item: unknown) => string | number", description: "Extract an option value (overrides valueMember)." },
+  { configKey: "getPathCallback", converter: A(), on: "reinit", type: "(item: unknown) => string", description: "Extract a node tree path (enables tree mode; overrides pathMember)." },
+  { configKey: "getGroupCallback", converter: A(), on: "reinit", type: "(item: unknown) => string", description: "Extract the group name from an option (overrides groupMember)." },
+  { configKey: "getDisabledCallback", converter: A(), on: "reinit", type: "(item: unknown) => boolean", description: "Whether an option is disabled (overrides disabledMember)." },
+  { configKey: "getIsSelectableCallback", converter: A(), on: "reinit", type: "(node: unknown) => boolean", description: "Whether a tree node can be selected (overrides is-selectable-member)." },
+  { configKey: "getSearchValueCallback", converter: A(), on: "reinit", type: "(item: unknown) => string", description: "Text an option is searched against (overrides searchValueMember)." },
+  { configKey: "searchCallback", converter: A(), on: "reinit", type: "(searchTerm: string, signal?: AbortSignal) => Promise<unknown[]>", description: "Custom / async search; return the filtered options." },
   // ── Callbacks: display / render (cosmetic → update) ──────────────────────
-  { configKey: "getDisplayValueCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Compute the display label for an option (overrides displayValueMember)." },
-  { configKey: "getBadgeDisplayCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Compute the text shown on an option badge." },
-  { configKey: "getBadgeClassCallback", converter: E(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for an option badge." },
-  { configKey: "getSelectedOrderCallback", converter: E(), on: "update", type: "(item: unknown) => string | number", description: 'Sort key for the selected-items display when `selected-order="member"` (overrides `selected-order-member`).' },
-  { configKey: "selectedOrderCompareCallback", converter: E(), on: "update", type: "(a: unknown, b: unknown) => number", description: 'Comparator for the selected-items display when `selected-order="custom"`.' },
-  { configKey: "getIconCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Icon for an option (overrides iconMember)." },
-  { configKey: "getSubtitleCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Subtitle for an option (overrides subtitleMember)." },
-  { configKey: "getFullTitleCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Full title for an option (used by badges when show-badge-full-title is on)." },
-  { configKey: "getCounterCallback", converter: E(), on: "update", type: "(count: number, moreCount?: number) => string", description: "Render the selected-count label." },
-  { configKey: "getCountLabelCallback", converter: E(), on: "update", type: "(selected: number, total: number) => string", description: "Format the small count chip shared by the in-input counter and each group header count (default `[selected]`; e.g. `(s,t)=>`${s}/${t}``). One callback drives both." },
-  { configKey: "getValueFormatCallback", converter: E(), on: "update", type: "(selectedValues: (string | number)[]) => string", description: "Serialize the selected values for form submission." },
-  { configKey: "getBadgeTooltipCallback", converter: E(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option badge." },
-  { configKey: "getOptionTooltipCallback", converter: E(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option row." },
-  { configKey: "getRemoveButtonTooltipCallback", converter: E(), on: "update", type: "(item: unknown) => string", description: "Tooltip text for a badge remove button." },
-  { configKey: "getSelectedItemClassCallback", converter: E(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for a selected item." },
-  { configKey: "renderOptionContentCallback", converter: E(), on: "update", type: "(item: unknown, context: OptionContentRenderContext) => string | HTMLElement", description: "Custom render for an option row; may return HTML or an element." },
-  { configKey: "renderBadgeContentCallback", converter: E(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement", description: "Custom render for a badge content (fills the built-in pill); may return HTML or an element." },
-  { configKey: "renderBadgeCallback", converter: E(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement | null", description: 'Custom render for the WHOLE badge (main area), not just its content — return the entire pill/card. The component wraps it in `.ms__badge.ms__badge--custom` with `data-value` and delegates removal to any inner element with `data-action="remove"` (or `.ms__badge-remove`). Return null/empty to fall back to the default pill for that item.' },
-  { configKey: "renderGroupLabelContentCallback", converter: E(), on: "update", type: "(groupName: string, context: GroupLabelRenderContext) => string | HTMLElement", description: "Customize a group label; may return an HTML string or element. The second arg carries the group members + selection (e.g. `context.selectedCount`) so a custom header can show a per-group count." },
-  { configKey: "renderSelectedContentCallback", converter: E(), on: "update", type: "(item: unknown, context: SelectedContentRenderContext) => string", description: "Custom render for the single-select selected value (2nd arg carries the presentation context)." },
-  { configKey: "renderSelectedItemContentCallback", converter: E(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement", description: "Custom render for one selected item in the popover (2nd arg is a BadgeContentRenderContext; isInPopover=true)." },
-  { configKey: "customStylesCallback", converter: E(), on: "update", type: "() => string", description: "Returns a CSS string injected into the component via a replaceable style slot (§12.8)." },
+  { configKey: "getDisplayValueCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Compute the display label for an option (overrides displayValueMember)." },
+  { configKey: "getBadgeDisplayCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Compute the text shown on an option badge." },
+  { configKey: "getBadgeClassCallback", converter: A(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for an option badge." },
+  { configKey: "getSelectedOrderCallback", converter: A(), on: "update", type: "(item: unknown) => string | number", description: 'Sort key for the selected-items display when `selected-order="member"` (overrides `selected-order-member`).' },
+  { configKey: "selectedOrderCompareCallback", converter: A(), on: "update", type: "(a: unknown, b: unknown) => number", description: 'Comparator for the selected-items display when `selected-order="custom"`.' },
+  { configKey: "getIconCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Icon for an option (overrides iconMember)." },
+  { configKey: "getSubtitleCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Subtitle for an option (overrides subtitleMember)." },
+  { configKey: "getFullTitleCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Full title for an option (used by badges when show-badge-full-title is on)." },
+  { configKey: "getCounterCallback", converter: A(), on: "update", type: "(count: number, moreCount?: number) => string", description: "Render the selected-count label." },
+  { configKey: "getCountLabelCallback", converter: A(), on: "update", type: "(selected: number, total: number) => string", description: "Format the small count chip shared by the in-input counter and each group header count (default `[selected]`; e.g. `(s,t)=>`${s}/${t}``). One callback drives both." },
+  { configKey: "getValueFormatCallback", converter: A(), on: "update", type: "(selectedValues: (string | number)[]) => string", description: "Serialize the selected values for form submission." },
+  { configKey: "getBadgeTooltipCallback", converter: A(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option badge." },
+  { configKey: "getOptionTooltipCallback", converter: A(), on: "update", type: "(item: unknown) => string | HTMLElement", description: "Tooltip content for an option row." },
+  { configKey: "getRemoveButtonTooltipCallback", converter: A(), on: "update", type: "(item: unknown) => string", description: "Tooltip text for a badge remove button." },
+  { configKey: "getSelectedItemClassCallback", converter: A(), on: "update", type: "(item: unknown) => string | string[]", description: "Extra CSS class(es) for a selected item." },
+  { configKey: "renderOptionContentCallback", converter: A(), on: "update", type: "(item: unknown, context: OptionContentRenderContext) => string | HTMLElement", description: "Custom render for an option row; may return HTML or an element." },
+  { configKey: "renderBadgeContentCallback", converter: A(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement", description: "Custom render for a badge content (fills the built-in pill); may return HTML or an element." },
+  { configKey: "renderBadgeCallback", converter: A(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement | null", description: 'Custom render for the WHOLE badge (main area), not just its content — return the entire pill/card. The component wraps it in `.ms__badge.ms__badge--custom` with `data-value` and delegates removal to any inner element with `data-action="remove"` (or `.ms__badge-remove`). Return null/empty to fall back to the default pill for that item.' },
+  { configKey: "renderGroupLabelContentCallback", converter: A(), on: "update", type: "(groupName: string, context: GroupLabelRenderContext) => string | HTMLElement", description: "Customize a group label; may return an HTML string or element. The second arg carries the group members + selection (e.g. `context.selectedCount`) so a custom header can show a per-group count." },
+  { configKey: "renderSelectedContentCallback", converter: A(), on: "update", type: "(item: unknown, context: SelectedContentRenderContext) => string", description: "Custom render for the single-select selected value (2nd arg carries the presentation context)." },
+  { configKey: "renderSelectedItemContentCallback", converter: A(), on: "update", type: "(item: unknown, context: BadgeContentRenderContext) => string | HTMLElement", description: "Custom render for one selected item in the popover (2nd arg is a BadgeContentRenderContext; isInPopover=true)." },
+  { configKey: "customStylesCallback", converter: A(), on: "update", type: "() => string", description: "Returns a CSS string injected into the component via a replaceable style slot (§12.8)." },
   // ── Callbacks: before-hooks (behavior-shaping) ───────────────────────────
-  { configKey: "beforeSearchCallback", converter: E(), on: "update", type: "(searchTerm: string) => string | null", description: "Runs before a search; return a rewritten term or null to veto." },
-  { configKey: "beforeSelectCallback", converter: E(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before selecting; return false to veto, or a string to veto and show it as a message." },
-  { configKey: "beforeDeselectCallback", converter: E(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before deselecting; return false to veto, or a string to veto and show it as a message." },
-  { configKey: "addNewCallback", converter: E(), on: "update", type: "(value: string) => unknown | null | undefined | Promise<unknown | null | undefined>", description: "Create a new option from the typed text. May return a rich option object (renders via the same get*/render* callbacks as any option). Async + cancelable: return null/undefined to abort (no add, no `add` event). Omit entirely to handle creation yourself via the `add` event." },
-  { configKey: "getAddNewTextCallback", converter: E(), on: "update", type: "(value: string) => string", description: 'Dynamically compute the "add new" prompt label from the typed text (returns plain text). Takes precedence over `add-new-text`.' },
-  { configKey: "keydownCallback", converter: E(), on: "update", type: "(context: MultiSelectKeydownContext) => boolean | void", description: "Intercept keydown before built-in handling; return true to suppress the default. Gets the event, current state, and an imperative controller." }
+  { configKey: "beforeSearchCallback", converter: A(), on: "update", type: "(searchTerm: string) => string | null", description: "Runs before a search; return a rewritten term or null to veto." },
+  { configKey: "beforeSelectCallback", converter: A(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before selecting; return false to veto, or a string to veto and show it as a message." },
+  { configKey: "beforeDeselectCallback", converter: A(), on: "update", type: "(option: unknown, selectedOptions: unknown[]) => boolean | string | void", description: "Runs before deselecting; return false to veto, or a string to veto and show it as a message." },
+  { configKey: "addNewCallback", converter: A(), on: "update", type: "(value: string) => unknown | null | undefined | Promise<unknown | null | undefined>", description: "Create a new option from the typed text. May return a rich option object (renders via the same get*/render* callbacks as any option). Async + cancelable: return null/undefined to abort (no add, no `add` event). Omit entirely to handle creation yourself via the `add` event." },
+  { configKey: "getAddNewTextCallback", converter: A(), on: "update", type: "(value: string) => string", description: 'Dynamically compute the "add new" prompt label from the typed text (returns plain text). Takes precedence over `add-new-text`.' },
+  { configKey: "keydownCallback", converter: A(), on: "update", type: "(context: MultiSelectKeydownContext) => boolean | void", description: "Intercept keydown before built-in handling; return true to suppress the default. Gets the event, current state, and an imperative controller." }
 ], yn = [
   { name: "select", description: "An option was selected. `detail.option` is the selected option; `detail.selectedOptions`/`detail.selectedValues` are the full selection." },
   { name: "deselect", description: "An option was removed from the selection. `detail.option` is that option." },
   { name: "change", description: "The selection changed. `detail.selectedOptions`/`detail.selectedValues` are the full selection." },
   { name: "add", description: 'The user chose to create a new option from the typed text (via the "add new" prompt or Enter) — requires `allow-add-new`. `detail.value` is the typed text; `detail.option` is the created item when `addNewCallback` produced one.' },
   { name: "ready", description: "The picker was built and painted for the first time (once per element lifetime). Fires right after the first build — synchronously during upgrade for a normal element, or when the render gate is released (`el.ready()` / removing `defer`) for a deferred one. No detail." }
-], eo = /* @__PURE__ */ new Set(["dropdownWidth", "selectedPopoverWidth", "showDebugInfo", "initialValues", "optionsSource", "optionsFormat", "optionsSplitter", "optionsRowSplitter", "mobilePresentation", "collapseBadgesBelow", "deferRender"]), yt = {
+], to = /* @__PURE__ */ new Set(["dropdownWidth", "selectedPopoverWidth", "showDebugInfo", "initialValues", "optionsSource", "optionsFormat", "optionsSplitter", "optionsRowSplitter", "mobilePresentation", "collapseBadgesBelow", "deferRender", "customStyles"]), yt = {
   dropdownWidth: "--ms-dropdown-width",
   selectedPopoverWidth: "--ms-selected-popover-width"
 };
 let xn = null;
 function _n() {
-  return xn ?? (xn = $i(Lo, "--ms-"));
+  return xn ?? (xn = $i(Eo, "--ms-"));
 }
 const kn = [
   { key: "valueMember", member: "value", callbackKey: "getValueCallback" },
@@ -5844,11 +5864,11 @@ const kn = [
   { key: "subtitleMember", member: "subtitle", callbackKey: "getSubtitleCallback" },
   { key: "disabledMember", member: "disabled", callbackKey: "getDisabledCallback" }
 ];
-var Q, C, fe, ut, Fe, mt, pt, ft, Ke, We, Ie, x, as, Ct, ge, St, ls, cs, ds, Tt, Eo, Ao, zo, Ee, hs, No, $o, Vo, us, Do, Ro, ms, ps;
+var Q, C, fe, ut, Fe, mt, pt, ft, Ke, We, Ie, y, as, Ct, ge, St, ls, cs, ds, Tt, Ao, zo, No, Ee, hs, us, $o, Vo, ms, Do, Ro, ps, fs;
 class it extends Qt {
   constructor() {
     super();
-    L(this, x);
+    L(this, y);
     L(this, Q);
     L(this, C);
     L(this, fe);
@@ -5870,7 +5890,7 @@ class it extends Qt {
     // ── container-responsive badge collapse (core §12.9 `resized`) ─────────────
     /** Whether the live picker is currently forced to the collapsed count view. */
     L(this, ge, !1);
-    I(this, Q, this.attachShadow({ mode: "open" })), zi(h(this, Q), Lo), typeof requestAnimationFrame == "function" ? requestAnimationFrame(() => this.setAttribute("data-placeholder-ready", "")) : this.setAttribute("data-placeholder-ready", "");
+    I(this, Q, this.attachShadow({ mode: "open" })), zi(h(this, Q), Eo), typeof requestAnimationFrame == "function" ? requestAnimationFrame(() => this.setAttribute("data-placeholder-ready", "")) : this.setAttribute("data-placeholder-ready", "");
   }
   /**
    * Called by the browser when the surrounding <form> is reset. Clears the
@@ -5891,19 +5911,19 @@ class it extends Qt {
   }
   /** Structural change (or first connect): mirror CSS vars, then (re)build the picker. */
   reinit() {
-    v(this, x, $o).call(this), this.isConnected && !v(this, x, as).call(this) && v(this, x, ds).call(this);
+    b(this, y, $o).call(this), this.isConnected && !b(this, y, as).call(this) && b(this, y, ds).call(this);
   }
   /** Cosmetic change: mirror CSS vars / custom styles / debug, patch the picker in place. */
   update(t) {
-    v(this, x, Vo).call(this, t), "customStylesCallback" in t && v(this, x, hs).call(this), "showDebugInfo" in t && v(this, x, ms).call(this);
+    b(this, y, Vo).call(this, t), ("customStylesCallback" in t || "customStyles" in t) && b(this, y, hs).call(this), "showDebugInfo" in t && b(this, y, ps).call(this);
     const o = {};
     for (const [i, r] of Object.entries(t))
-      eo.has(i) || (o[i] = r === null ? void 0 : r);
-    h(this, C) && Object.keys(o).length > 0 && (h(this, C).updateOptions(o) || v(this, x, ds).call(this)), "mobilePresentation" in t && v(this, x, Ct).call(this, Lt()), "collapseBadgesBelow" in t && v(this, x, St).call(this, this.getBoundingClientRect().width);
+      to.has(i) || (o[i] = r === null ? void 0 : r);
+    h(this, C) && Object.keys(o).length > 0 && (h(this, C).updateOptions(o) || b(this, y, ds).call(this)), "mobilePresentation" in t && b(this, y, Ct).call(this, Lt()), "collapseBadgesBelow" in t && b(this, y, St).call(this, this.getBoundingClientRect().width);
   }
   /** Activate: ensure the picker exists (a DOM move destroyed it in disconnect()). */
   connect() {
-    !h(this, C) && !v(this, x, as).call(this) && v(this, x, Tt).call(this);
+    !h(this, C) && !b(this, y, as).call(this) && b(this, y, Tt).call(this);
   }
   /** Deactivate: tear the picker down (rebuilt on the next connect). */
   disconnect() {
@@ -5919,7 +5939,7 @@ class it extends Qt {
    * set before the dropdown can open.
    */
   environmentChanged(t) {
-    v(this, x, Ct).call(this, t);
+    b(this, y, Ct).call(this, t);
   }
   /**
    * This element's own border box changed (core §12.9 `resized`). Overriding the
@@ -5930,7 +5950,7 @@ class it extends Qt {
    * below` is set; otherwise it's a cheap no-op.
    */
   resized({ width: t }) {
-    v(this, x, St).call(this, t);
+    b(this, y, St).call(this, t);
   }
   // ── non-input public API ──────────────────────────────────────────────────
   /** Form field name (mirrors the `name` attribute → `formFieldId`). */
@@ -6062,14 +6082,14 @@ class it extends Qt {
    * gate never re-closes. Fires the `ready` event on the first build.
    */
   ready() {
-    I(this, Fe, !0), this.flush(), this.isConnected && !h(this, C) && v(this, x, Tt).call(this);
+    I(this, Fe, !0), this.flush(), this.isConnected && !h(this, C) && b(this, y, Tt).call(this);
   }
   /** Whether the picker has been built (the `ready` event has fired). False while a `defer` gate is still held. */
   get isReady() {
     return this.hasAttribute("is-ready");
   }
 }
-Q = new WeakMap(), C = new WeakMap(), fe = new WeakMap(), ut = new WeakMap(), Fe = new WeakMap(), mt = new WeakMap(), pt = new WeakMap(), ft = new WeakMap(), Ke = new WeakMap(), We = new WeakMap(), Ie = new WeakMap(), x = new WeakSet(), /** Whether the initial render is being held by the `defer` gate (not yet released). */
+Q = new WeakMap(), C = new WeakMap(), fe = new WeakMap(), ut = new WeakMap(), Fe = new WeakMap(), mt = new WeakMap(), pt = new WeakMap(), ft = new WeakMap(), Ke = new WeakMap(), We = new WeakMap(), Ie = new WeakMap(), y = new WeakSet(), /** Whether the initial render is being held by the `defer` gate (not yet released). */
 as = function() {
   return this.config.deferRender === !0 && !h(this, Fe);
 }, /** Resolve `mobile-presentation` against `env` and relay it to the live picker. */
@@ -6087,15 +6107,15 @@ Ct = function(t) {
 St = function(t) {
   const o = this.config.collapseBadgesBelow;
   if (o == null) {
-    h(this, ge) && (I(this, ge, !1), v(this, x, ls).call(this));
+    h(this, ge) && (I(this, ge, !1), b(this, y, ls).call(this));
     return;
   }
   const i = t > 0 && t < o;
-  i !== h(this, ge) && (I(this, ge, i), i ? v(this, x, cs).call(this, "count") : v(this, x, ls).call(this));
+  i !== h(this, ge) && (I(this, ge, i), i ? b(this, y, cs).call(this, "count") : b(this, y, ls).call(this));
 }, /** Re-assert the consumer's configured badges mode from the pristine base config. */
 ls = function() {
   const t = this.config.badgesDisplayMode ?? "badges";
-  v(this, x, cs).call(this, t);
+  b(this, y, cs).call(this, t);
 }, /** Relay a badges-display-mode override to the live picker (never written to `this.config`). */
 cs = function(t) {
   var o;
@@ -6103,13 +6123,13 @@ cs = function(t) {
 }, // ── picker lifecycle ──────────────────────────────────────────────────────
 ds = function() {
   var o;
-  const t = h(this, C) ? v(this, x, Ee).call(this) : void 0;
-  (o = h(this, C)) == null || o.destroy(), I(this, C, void 0), v(this, x, Tt).call(this, t);
+  const t = h(this, C) ? b(this, y, Ee).call(this) : void 0;
+  (o = h(this, C)) == null || o.destroy(), I(this, C, void 0), b(this, y, Tt).call(this, t);
 }, Tt = function(t) {
-  v(this, x, Eo).call(this), v(this, x, Do).call(this);
-  const o = v(this, x, Ao).call(this), i = v(this, x, zo).call(this), r = JSON.stringify(i ?? null), a = t !== void 0 && t.length > 0 && r === h(this, ut) ? t : i;
-  I(this, ut, r), a && a.length > 0 ? h(this, fe).dataset.initialValues = JSON.stringify(a) : delete h(this, fe).dataset.initialValues, I(this, C, new hn(h(this, fe), o)), v(this, x, hs).call(this), v(this, x, ms).call(this), v(this, x, Ct).call(this, Lt()), I(this, ge, !1), v(this, x, St).call(this, this.getBoundingClientRect().width), this.hasAttribute("is-ready") || (I(this, Fe, !0), this.setAttribute("is-ready", ""), this.emit("ready"));
-}, Eo = function() {
+  b(this, y, Ao).call(this), b(this, y, Do).call(this);
+  const o = b(this, y, zo).call(this), i = b(this, y, No).call(this), r = JSON.stringify(i ?? null), a = t !== void 0 && t.length > 0 && r === h(this, ut) ? t : i;
+  I(this, ut, r), a && a.length > 0 ? h(this, fe).dataset.initialValues = JSON.stringify(a) : delete h(this, fe).dataset.initialValues, I(this, C, new hn(h(this, fe), o)), b(this, y, hs).call(this), b(this, y, ps).call(this), b(this, y, Ct).call(this, Lt()), I(this, ge, !1), b(this, y, St).call(this, this.getBoundingClientRect().width), this.hasAttribute("is-ready") || (I(this, Fe, !0), this.setAttribute("is-ready", ""), this.emit("ready"));
+}, Ao = function() {
   if (h(this, fe)) return;
   const t = document.createElement("div");
   t.setAttribute("data-multiselect", ""), this.className && (t.className = this.className), h(this, Q).appendChild(t), I(this, mt, Ni(h(this, Q), { position: "first", className: "ms-custom-styles" })), I(this, fe, t);
@@ -6118,9 +6138,9 @@ ds = function() {
  * picker doesn't own, plus the runtime wiring (event bridges, container, host,
  * declarative option data + member defaults, counter default).
  */
-Ao = function() {
+zo = function() {
   const t = { ...this.config };
-  for (const i of eo) delete t[i];
+  for (const i of to) delete t[i];
   for (const i of Object.keys(t))
     t[i] === null && delete t[i];
   let o = t.options;
@@ -6144,19 +6164,19 @@ Ao = function() {
     this.emit("select", {
       option: i,
       selectedOptions: ((r = h(this, C)) == null ? void 0 : r.getSelected()) ?? [],
-      selectedValues: v(this, x, Ee).call(this)
+      selectedValues: b(this, y, Ee).call(this)
     });
   }, t.onDeselect = (i) => {
     var r;
     this.emit("deselect", {
       option: i,
       selectedOptions: ((r = h(this, C)) == null ? void 0 : r.getSelected()) ?? [],
-      selectedValues: v(this, x, Ee).call(this)
+      selectedValues: b(this, y, Ee).call(this)
     });
   }, t.onChange = (i) => {
     this.emit("change", {
       selectedOptions: i,
-      selectedValues: v(this, x, Ee).call(this)
+      selectedValues: b(this, y, Ee).call(this)
     });
   }, t.onAddNew = (i) => {
     var r;
@@ -6164,10 +6184,10 @@ Ao = function() {
       value: i.value,
       option: i.option,
       selectedOptions: ((r = h(this, C)) == null ? void 0 : r.getSelected()) ?? [],
-      selectedValues: v(this, x, Ee).call(this)
+      selectedValues: b(this, y, Ee).call(this)
     });
   }, t.container = h(this, Q), t.hostElement = this, t;
-}, zo = function() {
+}, No = function() {
   if (h(this, Ie) && h(this, Ie).length > 0)
     return h(this, Ie);
   const t = this.config.initialValues;
@@ -6180,16 +6200,16 @@ Ao = function() {
 hs = function() {
   const t = h(this, mt);
   if (!t) return;
-  const o = this.config.customStylesCallback;
+  const o = this.config.customStylesCallback, i = this.config.customStyles ?? null;
   if (typeof o != "function") {
-    t.clear();
+    t.set(i), i && b(this, y, us).call(this, i);
     return;
   }
   try {
-    const i = o();
-    t.set(i), i && v(this, x, No).call(this, i);
-  } catch (i) {
-    W.warn("[MultiSelectElement] customStylesCallback threw", i), t.clear();
+    const r = o();
+    t.set(r), r && b(this, y, us).call(this, r);
+  } catch (r) {
+    W.warn("[MultiSelectElement] customStylesCallback threw", r), t.set(i);
   }
 }, /**
  * Dev-only lint: warn when `customStylesCallback` *sets* a `--ms-*` variable
@@ -6200,7 +6220,7 @@ hs = function() {
  * De-duped per instance. If you genuinely define a `--ms-*` var for your own
  * custom-rendered content, ignore the warning (or use a different prefix).
  */
-No = function(t) {
+us = function(t) {
   const o = _n();
   if (o.size !== 0)
     for (const { name: i, suggestions: r } of Ri(t, { prefix: "--ms-", consumed: o }))
@@ -6209,17 +6229,17 @@ No = function(t) {
       ));
 }, // ── CSS-var sugar ─────────────────────────────────────────────────────────
 $o = function() {
-  for (const t of Object.keys(yt)) v(this, x, us).call(this, yt[t], this.config[t]);
+  for (const t of Object.keys(yt)) b(this, y, ms).call(this, yt[t], this.config[t]);
 }, Vo = function(t) {
   for (const o of Object.keys(yt))
-    o in t && v(this, x, us).call(this, yt[o], t[o]);
-}, us = function(t, o) {
+    o in t && b(this, y, ms).call(this, yt[o], t[o]);
+}, ms = function(t, o) {
   o == null || o === "" ? this.style.removeProperty(t) : this.style.setProperty(t, String(o));
 }, // ── declarative <option> parsing (light DOM, once) ────────────────────────
 Do = function() {
   if (h(this, ft)) return;
   I(this, ft, !0);
-  const t = v(this, x, Ro).call(this);
+  const t = b(this, y, Ro).call(this);
   t && (I(this, We, t), I(this, Ke, !0));
 }, Ro = function() {
   const t = Array.from(this.children);
@@ -6248,7 +6268,7 @@ Do = function() {
     (n.tagName === "OPTION" || n.tagName === "OPTGROUP") && n.remove();
   return o;
 }, // ── debug panel (deprecated; kept for back-compat) ────────────────────────
-ms = function() {
+ps = function() {
   const t = h(this, Q).querySelector(".ms__debug-info");
   if (t && t.remove(), !this.config.showDebugInfo) return;
   const o = document.createElement("div");
@@ -6256,12 +6276,12 @@ ms = function() {
   const i = document.createElement("details"), r = document.createElement("summary");
   r.textContent = "Debug Info";
   const n = document.createElement("div");
-  n.className = "ms__debug-stats", i.appendChild(r), i.appendChild(n), o.appendChild(i), h(this, Q).appendChild(o), v(this, x, ps).call(this);
-}, ps = function() {
+  n.className = "ms__debug-stats", i.appendChild(r), i.appendChild(n), o.appendChild(i), h(this, Q).appendChild(o), b(this, y, fs).call(this);
+}, fs = function() {
   var l, c, d, u;
   const t = h(this, Q).querySelector(".ms__debug-stats");
   if (!t || !h(this, C)) return;
-  const o = "2.2.0-rc01", i = typeof window < "u" && ((c = (l = window.components) == null ? void 0 : l["web-multiselect"]) == null ? void 0 : c.getInstances().length) || 0, r = h(this, C).getSelected().length, n = ((d = this.config.options) == null ? void 0 : d.length) || 0, a = h(this, C);
+  const o = "2.2.0-rc02", i = typeof window < "u" && ((c = (l = window.components) == null ? void 0 : l["web-multiselect"]) == null ? void 0 : c.getInstances().length) || 0, r = h(this, C).getSelected().length, n = ((d = this.config.options) == null ? void 0 : d.length) || 0, a = h(this, C);
   t.innerHTML = `
       <span>Version: ${o}</span>
       <span>Total Instances: ${i}</span>
@@ -6272,7 +6292,7 @@ ms = function() {
       <span>Search: ${a.searchTerm || "none"}</span>
       <span>Loading: ${a.isLoading ? "Yes" : "No"}</span>
     `, setTimeout(() => {
-    this.config.showDebugInfo && v(this, x, ps).call(this);
+    this.config.showDebugInfo && b(this, y, fs).call(this);
   }, 500);
 }, // Opt into the form-associated custom element lifecycle so form.reset() and
 // form.elements see the control.
@@ -6281,7 +6301,7 @@ typeof customElements < "u" && !customElements.get("web-multiselect") && customE
 Ei("web-multiselect", it, {
   config: {
     name: "@keenmate/web-multiselect",
-    version: "2.2.0-rc01",
+    version: "2.2.0-rc02",
     author: "Keenmate s.r.o.",
     license: "MIT",
     repository: "git+https://github.com/keenmate/web-multiselect.git",

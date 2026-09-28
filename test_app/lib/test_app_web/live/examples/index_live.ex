@@ -11,17 +11,31 @@ defmodule TestAppWeb.Examples.IndexLive do
     },
     %{
       href: "/examples/basic",
-      icon: "📦",
+      icon: "🧩",
       title: "Basic Usage",
       description:
         "Declarative `<option>` markup, single/multi select, keyboard-only navigation, rich content, search hints, filter-vs-navigate search, and RTL."
     },
     %{
       href: "/examples/data-api",
-      icon: "🚀",
+      icon: "📦",
       title: "Data & API",
       description:
         "Custom objects, tuple arrays, member callbacks, async search, form integration (json/csv/array), public API methods, and cascading selects."
+    },
+    %{
+      href: "/examples/events-callbacks",
+      icon: "🔔",
+      title: "Events & Interceptors",
+      description:
+        "DOM events, the `on*` property twin, `beforeSelect`/`beforeDeselect` veto interceptors (now with toast reasons), the `keydownCallback` keyboard hook, and `showMessage()`."
+    },
+    %{
+      href: "/examples/responsive",
+      icon: "📱",
+      title: "Responsive & Mobile",
+      description:
+        "Phone fullscreen overlay (`mobile_presentation`), the fullscreen search toggle, container-responsive badge collapse (`collapse_badges_below`), presentation-aware rendering, and RTL."
     },
     %{
       href: "/examples/tree",
@@ -64,20 +78,6 @@ defmodule TestAppWeb.Examples.IndexLive do
       title: "Tooltips",
       description:
         "Hover tooltips on dropdown options — default content, custom callbacks, virtual scroll, placement/follow-cursor, side placement, independent styling, and badge tooltips."
-    },
-    %{
-      href: "/examples/events-callbacks",
-      icon: "🔔",
-      title: "Events & Interceptors",
-      description:
-        "DOM events, the `on*` property twin, `beforeSelect`/`beforeDeselect` veto interceptors (now with toast reasons), the `keydownCallback` keyboard hook, and `showMessage()`."
-    },
-    %{
-      href: "/examples/responsive",
-      icon: "📱",
-      title: "Responsive & Mobile",
-      description:
-        "Phone fullscreen overlay (`mobile_presentation`), the fullscreen search toggle, container-responsive badge collapse (`collapse_badges_below`), presentation-aware rendering, and RTL."
     },
     %{
       href: "/examples/sizes",

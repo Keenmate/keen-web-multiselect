@@ -75,9 +75,9 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
         .stat-label { font-size: 0.875rem; color: #666; margin-top: 0.25rem; }
       </style>
 
-      <.card title="VS01 · Large Dataset Performance">
+      <.card title="VS01 · Large Dataset — Performance & Scroll-to API">
         <.tip><code>{"enable_virtual_scroll={true}"}</code> · <code>{"virtual_scroll_threshold={100}"}</code> · <code>{"option_height={50}"}</code> · <code>{"virtual_scroll_buffer={10}"}</code></.tip>
-        <p>This demo tests the component with 15,000 randomly generated options to evaluate performance under heavy load.</p>
+        <p>This demo tests the component with 15,000 randomly generated options to evaluate performance under heavy load — and lets you jump anywhere in that list with the scroll-to API.</p>
 
         <div id="perf-stats" phx-update="ignore" class="stats">
           <div class="stat">
@@ -122,6 +122,28 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
           </span>
         </.form_group>
 
+        <h3 class="subsection">Scroll-to API</h3>
+        <p>
+          In virtual mode <code>scrollToIndex</code> / <code>scrollToValue</code> scroll by
+          fixed-height <strong>index math</strong> — the target row need not be rendered, so
+          jumping to item #14,999 in this 15,000-row list is instant. Pair with <code>open()</code>
+          for an "open + jump" gesture. Default alignment is <code>start</code> (target at the top);
+          pass <code>{"{ block: 'center' }"}</code> to center it. The buttons below drive the same picker.
+        </p>
+        <.form_group style="margin-top: 1rem;">
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" data-vs="index:0">⇱ index 0</button>
+            <button type="button" data-vs="index:7500">index 7500</button>
+            <button type="button" data-vs="index:14999">index 14999 (last)</button>
+            <button type="button" data-vs="value:12345">value 12345</button>
+            <button type="button" data-vs="center:7500">index 7500 · block "center"</button>
+            <button type="button" data-vs="clear">clearSearch()</button>
+          </div>
+          <span class="form-text">The log shows the resulting <code>scrollTop</code> and which rows landed in view.</span>
+          <div id="vs-scroll-log" class="log-panel"><div class="muted">scrollTo* results log here…</div></div>
+        </.form_group>
+        <.code_block lang="js">{@scrollto_code}</.code_block>
+
         <.note variant="warning" title="💡 Performance Tips">
           <ul>
             <li>Type to search - the component uses efficient string matching</li>
@@ -161,43 +183,6 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
         </.form_group>
       </.card>
 
-      <.card title="VS03 · Scroll-to API with Virtual Scroll">
-        <.tip>JS-only: <code>scrollToIndex</code> / <code>scrollToValue</code> jump by index math — the target row need not be rendered; pass <code>{"{ block: 'center' }"}</code> to center.</.tip>
-        <p>
-          In virtual mode <code>scrollToIndex</code> / <code>scrollToValue</code> scroll by
-          fixed-height <strong>index math</strong> — the target row need not be rendered, so
-          jumping to item #14,999 in a 15,000-row list is instant. Pair with <code>open()</code>
-          for an "open + jump" gesture. Default alignment is <code>start</code> (target at the top);
-          pass <code>{"{ block: 'center' }"}</code> to center it.
-        </p>
-        <.form_group style="margin-top: 1rem;">
-          <label for="scroll-virtual-large">15,000 options</label>
-          <div style="display:flex; gap:1rem; align-items:flex-start; flex-wrap:wrap;">
-            <div style="flex:1 1 260px; min-width:260px;">
-              <.web_multiselect
-                id="scroll-virtual-large"
-                value_member="value"
-                display_value_member="label"
-                enable_virtual_scroll={true}
-                virtual_scroll_threshold={100}
-                search_placeholder="Search or use the buttons..."
-                options={@large_dataset}
-              />
-            </div>
-            <div style="display:flex; flex-direction:column; gap:0.5rem; flex:0 0 auto; min-width:210px;">
-              <button type="button" data-vs="index:0">⇱ index 0</button>
-              <button type="button" data-vs="index:7500">index 7500</button>
-              <button type="button" data-vs="index:14999">index 14999 (last)</button>
-              <button type="button" data-vs="value:12345">value 12345</button>
-              <button type="button" data-vs="center:7500">index 7500 · block "center"</button>
-              <button type="button" data-vs="clear">clearSearch()</button>
-            </div>
-          </div>
-          <span class="form-text">The log shows the resulting <code>scrollTop</code> and which rows landed in view.</span>
-          <div id="vs-scroll-log" class="log-panel"><div class="muted">scrollTo* results log here…</div></div>
-        </.form_group>
-        <.code_block lang="js">{@scrollto_code}</.code_block>
-      </.card>
     </.example_page>
 
     <script type="module">
@@ -332,10 +317,10 @@ defmodule TestAppWeb.Examples.VirtualScrollingLive do
         });
       });
 
-      // --- VS03 · Scroll-to API with virtual scroll ------------
+      // --- Scroll-to API (drives the same #performance-test 15k picker) ------------
       // Options are provided server-side via the wrapper; the scroll math is index-based
       // so the target row need not be rendered.
-      wait('scroll-virtual-large').then((vsLarge) => {
+      wait('performance-test').then((vsLarge) => {
         const vsLogEl = document.getElementById('vs-scroll-log');
         const vsLog = (msg) => {
           if (!vsLogEl) return;

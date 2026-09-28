@@ -252,6 +252,13 @@ declare interface MultiSelectConfig<T = any> {
     getBadgeClassCallback?: (item: T) => string | string[];
     /** Callback to inject custom CSS into Shadow DOM - return CSS string for styling custom classes */
     customStylesCallback?: () => string;
+    /**
+     * Static CSS string injected into the Shadow DOM (attribute alternative to
+     * `customStylesCallback`, via the `custom-styles` attribute). The value is a
+     * raw stylesheet — selectors and all — dropped verbatim into the same
+     * replaceable style slot. `customStylesCallback` wins when both are set.
+     */
+    customStyles?: string;
     /** Member property name for search value extraction */
     searchValueMember?: string;
     /** Callback to extract search value from item */
@@ -1707,6 +1714,22 @@ export declare class WebMultiSelect<T = any> {
      * so they don't actually break the sheet.
      */
     private warnFullscreenContainingBlock;
+    /**
+     * Re-anchor an already-open floating dropdown from scratch so a frozen placement
+     * is re-evaluated against the panel's CURRENT height.
+     *
+     * Why it's needed: an async `searchCallback` opens the panel while it's still
+     * empty / showing the loader — short, so it fits below the input and (with the
+     * default `lock-placement`) freezes to `bottom`. When results arrive the panel
+     * grows to full height, but the frozen placement pins it below the input, so it
+     * overflows the viewport bottom instead of flipping above into the free space.
+     * `renderDropdown()` only rewrites the inner HTML; it never re-anchors. Tearing
+     * down and recreating the anchor re-runs core's flip-on-first-compute against the
+     * new height (picking the side that fits), then re-freezes — so `lock-placement`
+     * still holds for the common case (panels that open already-populated, e.g. local
+     * filtering, never hit this path). No-op unless a floating dropdown is open.
+     */
+    private repositionDropdown;
     private positionDropdown;
     /**
      * Switch how the open panels are presented. 'floating' anchors them to the input
