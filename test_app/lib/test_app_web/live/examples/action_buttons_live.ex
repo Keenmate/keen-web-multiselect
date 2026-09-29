@@ -4,324 +4,43 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
   import Keenmate.WebMultiselect.Components
   import TestAppWeb.Examples.SharedComponents
 
-  @code_basic ~S"""
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: 'Select All'
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All'
-    }
-  ];
-  """
+  # Mirrors upstream @keenmate/web-multiselect examples-action-buttons.html
+  # (AB01–AB07): everything the action bar can do, each as ONE live picker you
+  # configure with control switches — built-in & static props, the dynamic
+  # callbacks (and their priority over statics), custom actions, icon buttons,
+  # layout, and a device-adaptive toolbar. Action buttons are a JS-only property
+  # (the onClick / get*Callback functions can't be serialized as attributes), so
+  # options and config are assigned to the wrapper element by id in the trailing
+  # inline script; the control switches are wired with document-delegated
+  # listeners so they survive LiveView's DOM patch on connect.
 
   @code_static ~S"""
   multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: 'Select All',
-      tooltip: 'Select all available colors',
-      cssClass: 'custom-select-btn',
-      isVisible: true,
-      isDisabled: false
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All',
-      tooltip: 'Remove all selections',
-      isVisible: true,
-      isDisabled: false
-    },
-    {
-      action: 'custom',
-      text: 'Hidden Button',
-      isVisible: false,  // This button is hidden
-      onClick: (ms) => console.log('Clicked')
-    },
-    {
-      action: 'custom',
-      text: 'Disabled Button',
-      tooltip: 'This button is always disabled',
-      isDisabled: true,  // This button is disabled
-      onClick: (ms) => console.log('Clicked')
-    }
-  ];
-  """
-
-  @code_visibility ~S"""
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: 'Select All',
-      tooltip: 'Select all numbers',
-      // Only show when not all items are selected
-      getIsVisibleCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        const selected = ms.getSelected().length;
-        return selected < total;
-      }
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All',
-      tooltip: 'Clear selection',
-      // Only show when at least one item is selected
-      getIsVisibleCallback: (ms) => ms.getSelected().length > 0
-    }
-  ];
-  """
-
-  @code_disabled ~S"""
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: 'Select All',
-      tooltip: 'Select all fruits',
-      // Disabled when all items are selected
-      getIsDisabledCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        return ms.getSelected().length >= total;
-      }
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All',
-      tooltip: 'Clear selection',
-      // Disabled when nothing is selected
-      getIsDisabledCallback: (ms) => ms.getSelected().length === 0
-    },
-    {
-      action: 'custom',
-      text: 'Select First 3',
-      tooltip: 'Select first 3 items',
-      // Disabled when less than 3 items available
-      getIsDisabledCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        return total < 3;
-      },
-      onClick: (ms) => {
-        const firstThree = ms.options.options.slice(0, 3).map(opt => opt[0]);
-        ms.setSelected(firstThree);
-      }
-    }
-  ];
-  """
-
-  @code_text ~S"""
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: 'Select All',  // Fallback text
-      // Show count in button text
-      getTextCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        return `Select All (${total})`;
-      }
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All',
-      // Show selected count in button text
-      getTextCallback: (ms) => {
-        const count = ms.getSelected().length;
-        return count > 0 ? `Clear ${count} Selected` : 'Clear All';
-      }
-    },
-    {
-      action: 'custom',
-      text: 'Toggle',
-      // Toggle text based on state
-      getTextCallback: (ms) => {
-        const selected = ms.getSelected().length;
-        const total = ms.options.options?.length || 0;
-        return selected === total ? 'Deselect All' : 'Select All';
-      },
-      onClick: (ms) => {
-        const selected = ms.getSelected().length;
-        const total = ms.options.options?.length || 0;
-        if (selected === total) {
-          ms.setSelected([]);
-        } else {
-          ms.selectAll();
-        }
-      }
-    }
-  ];
-  """
-
-  @code_classes ~S"""
-  // Inject custom CSS into Shadow DOM
-  multiselect.customStylesCallback = () => `
-    .success-btn { background: #48bb78 !important; color: white !important; }
-    .warning-btn { background: #ed8936 !important; color: white !important; }
-    .danger-btn { background: #f56565 !important; color: white !important; }
-    .active-state { border: 2px solid #667eea !important; }
-    .inactive-state { opacity: 0.6; }
-  `;
-
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: 'Select All',
-      cssClass: 'default-class',  // Fallback
-      // Return single class name as string
-      getClassCallback: (ms) => {
-        const selected = ms.getSelected().length;
-        return selected === 0 ? 'success-btn' : 'warning-btn';
-      }
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All',
-      // Return array of class names
-      getClassCallback: (ms) => {
-        const selected = ms.getSelected().length;
-        const classes = [];
-        if (selected > 0) {
-          classes.push('danger-btn', 'active-state');
-        } else {
-          classes.push('inactive-state');
-        }
-        return classes;
-      }
-    }
-  ];
-  """
-
-  @code_tooltip ~S"""
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: 'Select All',
-      tooltip: 'Default tooltip',  // Fallback
-      // Dynamic tooltip showing current state
-      getTooltipCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        const selected = ms.getSelected().length;
-        const remaining = total - selected;
-        return `Select all ${total} items (${remaining} remaining)`;
-      }
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All',
-      // Show what will be cleared
-      getTooltipCallback: (ms) => {
-        const count = ms.getSelected().length;
-        return count > 0
-          ? `Remove ${count} selected item${count !== 1 ? 's' : ''}`
-          : 'Nothing to clear';
-      }
-    },
-    {
-      action: 'custom',
-      text: 'Random Select',
-      // Contextual help in tooltip
-      getTooltipCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        return `Randomly select 3 items from ${total} available`;
-      },
-      onClick: (ms) => {
-        const allOptions = ms.options.options || [];
-        const shuffled = [...allOptions].sort(() => Math.random() - 0.5);
-        const randomThree = shuffled.slice(0, 3).map(opt => opt[0]);
-        ms.setSelected(randomThree);
-      }
-    }
+    { action: 'select-all', text: 'Select All',
+      tooltip: 'Select all available colors',   // static tooltip
+      cssClass: 'custom-select-btn' },          // needs customStylesCallback (Shadow DOM)
+    { action: 'clear-all', text: 'Clear All' },
+    { action: 'custom', text: 'Hidden Button',   isVisible: false,  onClick: (ms) => {} },
+    { action: 'custom', text: 'Disabled Button', isDisabled: true,  onClick: (ms) => {} },
   ];
   """
 
   @code_custom ~S"""
   multiselect.actionButtons = [
-    {
-      action: 'custom',
-      text: 'Select Popular',
-      tooltip: 'Select JS, Python, and TypeScript',
+    { action: 'custom', text: 'Select Popular',
+      onClick: (ms) => ms.setSelected(['js', 'py', 'ts']) },
+    { action: 'custom', text: 'Invert Selection',
       onClick: (ms) => {
-        ms.setSelected(['js', 'py', 'ts']);
-      }
-    },
-    {
-      action: 'custom',
-      text: 'Invert Selection',
-      tooltip: 'Invert current selection',
+        const all = ms.options.options.map(o => o[0]);
+        const sel = ms.getValue();
+        ms.setSelected(all.filter(v => !sel.includes(v)));
+      } },
+    { action: 'custom', text: 'Select Random',
       onClick: (ms) => {
-        const allOptions = ms.options.options || [];
-        const allValues = allOptions.map(opt => opt[0]);
-        const selectedValues = ms.getValue();
-        const inverted = allValues.filter(v => !selectedValues.includes(v));
-        ms.setSelected(inverted);
-      }
-    },
-    {
-      action: 'custom',
-      text: 'Select Random',
-      tooltip: 'Select 2 random languages',
-      onClick: (ms) => {
-        const allOptions = ms.options.options || [];
-        const shuffled = [...allOptions].sort(() => Math.random() - 0.5);
-        const random = shuffled.slice(0, 2).map(opt => opt[0]);
-        ms.setSelected(random);
-      }
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear All'
-    }
-  ];
-  """
-
-  @code_combined ~S"""
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      // Static properties (will be OVERRIDDEN by callbacks)
-      text: 'Static Text',
-      tooltip: 'Static Tooltip',
-      cssClass: 'static-class',
-      isVisible: false,  // Would hide, but callback overrides
-      isDisabled: true,  // Would disable, but callback overrides
-
-      // Dynamic callbacks (TAKE PRIORITY)
-      getTextCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        const selected = ms.getSelected().length;
-        return `Select All (${selected}/${total})`;
-      },
-      getTooltipCallback: (ms) => {
-        const selected = ms.getSelected().length;
-        return selected >= 5
-          ? 'Maximum 5 items allowed'
-          : 'Click to select all items';
-      },
-      getClassCallback: (ms) => {
-        const selected = ms.getSelected().length;
-        return selected >= 5 ? 'danger-btn' : 'success-btn';
-      },
-      getIsVisibleCallback: (ms) => {
-        const total = ms.options.options?.length || 0;
-        const selected = ms.getSelected().length;
-        return selected < total;  // Always visible when not all selected
-      },
-      getIsDisabledCallback: (ms) => {
-        return ms.getSelected().length >= 5;  // Disabled at max
-      }
-    },
-    {
-      action: 'clear-all',
-      text: 'Clear',
-      getTextCallback: (ms) => {
-        const count = ms.getSelected().length;
-        return `Clear (${count})`;
-      },
-      getClassCallback: (ms) => {
-        return ms.getSelected().length > 0 ? ['danger-btn', 'active-state'] : 'inactive-state';
-      },
-      getIsVisibleCallback: (ms) => ms.getSelected().length > 0,
-      getIsDisabledCallback: (ms) => ms.getSelected().length === 0
-    }
+        const shuffled = [...ms.options.options].sort(() => Math.random() - 0.5);
+        ms.setSelected(shuffled.slice(0, 2).map(o => o[0]));
+      } },
+    { action: 'clear-all', text: 'Clear All' },
   ];
   """
 
@@ -330,21 +49,11 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
   // one dependency, the same signal the component reacts to internally.
   import { observeViewport, classifyDevice } from '@keenmate/web-multiselect';
 
-  // Two configurations. Full toolbar for roomy layouts; essentials for a phone.
-  const desktopActions = [ /* Select All, Clear, First 3, Even, Odd, Invert, … 12 total */ ];
-  const mobileActions  = [
-    { action: 'select-all', text: 'All' },
-    { action: 'clear-all',  text: 'Clear' },
-    { action: 'custom', text: 'Invert', onClick: (ms) => { /* … */ } },
-  ];
-
-  // observeViewport fires on every (throttled) width change, so the ≤600px desktop
-  // rule updates smoothly; classifyDevice adds the capability axis (phone/tablet).
   observeViewport((env) => {
     const device = classifyDevice(env);           // 'mobile' | 'tablet' | 'desktop'
     if (device === 'mobile') {                     // phone: essentials, wrapped
       el.actionButtons = mobileActions;  el.actionsLayout = 'wrap';
-    } else if (device === 'tablet') {              // tablet: full set, wrapped (won't fit one row)
+    } else if (device === 'tablet') {              // tablet: full set, wrapped
       el.actionButtons = desktopActions; el.actionsLayout = 'wrap';
     } else {                                        // desktop: two rows once ≤ 600px, else one
       el.actionButtons = desktopActions;
@@ -354,22 +63,6 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
   """
 
   @code_layout ~S"""
-  // Example with 12 action buttons
-  multiselect.actionButtons = [
-    { action: 'select-all', text: 'Select All Items' },
-    { action: 'clear-all', text: 'Clear Selection' },
-    { action: 'custom', text: 'First 3 Items', onClick: ... },
-    { action: 'custom', text: 'Last 3 Items', onClick: ... },
-    { action: 'custom', text: 'Even Positions', onClick: ... },
-    { action: 'custom', text: 'Odd Positions', onClick: ... },
-    { action: 'custom', text: 'Random Selection', onClick: ... },
-    { action: 'custom', text: 'First Half', onClick: ... },
-    { action: 'custom', text: 'Second Half', onClick: ... },
-    { action: 'custom', text: 'Invert', onClick: ... },
-    { action: 'custom', text: 'Every Third', onClick: ... },
-    { action: 'custom', text: 'Shuffle All', onClick: ... }
-  ];
-
   // Default - buttons squeezed in single row
   <web-multiselect actions-layout="nowrap"></web-multiselect>
 
@@ -377,94 +70,10 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
   <web-multiselect actions-layout="wrap"></web-multiselect>
   """
 
-  @code_fa ~S"""
-  // STEP 0: Register the FONT at document level (page <head>), once:
-  //   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/.../font-awesome/6.5.1/css/all.min.css">
-  // A shadow-scoped @font-face is ignored, so this is what makes the glyphs render.
-
-  // STEP 1: Inject the icon CLASS RULES into the Shadow DOM
-  multiselect.customStylesCallback = () => `
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
-
-    /* Optional: Style the icons */
-    .ms__action-btn i {
-      margin-right: 0.35rem;
-    }
-  `;
-
-  // STEP 2: Use Font Awesome icons in buttons
-  multiselect.actionButtons = [
-    {
-      action: 'select-all',
-      text: '<i class="fas fa-check-double"></i> Select All',
-      tooltip: 'Select all available items'
-    },
-    {
-      action: 'clear-all',
-      text: '<i class="fas fa-times"></i> Clear',
-      tooltip: 'Clear selection'
-    },
-    {
-      action: 'custom',
-      text: '<i class="fas fa-random"></i> Random',
-      tooltip: 'Select 3 random items',
-      onClick: (ms) => {
-        const shuffled = [...options].sort(() => Math.random() - 0.5);
-        ms.setSelected(shuffled.slice(0, 3).map(o => o[0]));
-      }
-    },
-    // Icon-only button
-    {
-      action: 'custom',
-      text: '<i class="fas fa-sync-alt"></i>',
-      tooltip: 'Invert Selection',  // Essential for accessibility
-      onClick: (ms) => { /* ... */ }
-    },
-    // Dynamic icon with getTextCallback
-    {
-      action: 'custom',
-      text: 'Toggle',  // Fallback
-      getTextCallback: (ms) => {
-        const count = ms.getSelected().length;
-        const total = ms.options.options?.length || 0;
-        const icon = count === total
-          ? '<i class="fas fa-toggle-on"></i>'
-          : '<i class="fas fa-toggle-off"></i>';
-        return `${icon} ${count}/${total}`;
-      },
-      onClick: (ms) => { /* ... */ }
-    }
-  ];
-  """
-
-  @code_lucide ~S"""
-  // No setup needed — SVG just works in Shadow DOM.
-  // Lucide SVGs use stroke="currentColor" so they inherit the button color.
-  const check = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-    style="vertical-align:-3px"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>`;
-
-  multiselect.actionButtons = [
-    { action: 'select-all', text: `${check} Select All`, tooltip: 'Select all' },
-    { action: 'clear-all',  text: `${xIcon} Clear`,      tooltip: 'Clear selection' },
-    // ...custom buttons with shuffle / refresh / toggle SVGs
-  ];
-  """
-
-  @code_positioning ~S"""
-  <web-multiselect actions-position="bottom" actions-align="right"></web-multiselect>
-
-  multiselect.actionButtons = [
-    { action: 'select-all', text: 'Select All', row: 1 },
-    { action: 'clear-all',  text: 'Clear All',  row: 1 },
-    { action: 'custom', text: 'First 3', row: 2, onClick: ... },
-    { action: 'custom', text: 'Invert',  row: 2, onClick: ... },
-  ];
-  """
-
   @code_summary_static ~S"""
   action: 'select-all' | 'clear-all' | 'custom'  // Required
   text: string                                    // Required
+  row?: number                                    // Optional (default: 1) — which button row
   tooltip?: string                                // Optional
   cssClass?: string                               // Optional
   isVisible?: boolean                             // Optional (default: true)
@@ -480,30 +89,27 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
   getTooltipCallback?: (multiselect) => string      // Dynamic tooltip
   """
 
+  @code_summary_layout ~S"""
+  actions-position  // 'top' (default) | 'bottom'
+  actions-layout    // 'nowrap' (default) | 'wrap'
+  actions-align     // 'stretch' (default) | 'left' | 'center' | 'right' | 'space-between'
+  """
+
   def mount(_params, _session, socket) do
     {:ok,
      socket
      |> assign(:page_title, "Action Buttons — keen_web_multiselect")
-     # Font Awesome (§11) is font-based: the @font-face must live at the document
+     # Font Awesome (AB04) is font-based: the @font-face must live at the document
      # level, not just inside the shadow DOM via customStylesCallback, or the glyphs
      # render as empty boxes. This flag adds the FA <link> to the layout <head>.
      |> assign(:font_awesome, true)
-     |> assign(:code_basic, @code_basic)
      |> assign(:code_static, @code_static)
-     |> assign(:code_visibility, @code_visibility)
-     |> assign(:code_disabled, @code_disabled)
-     |> assign(:code_text, @code_text)
-     |> assign(:code_classes, @code_classes)
-     |> assign(:code_tooltip, @code_tooltip)
      |> assign(:code_custom, @code_custom)
-     |> assign(:code_combined, @code_combined)
      |> assign(:code_adaptive, @code_adaptive)
      |> assign(:code_layout, @code_layout)
-     |> assign(:code_fa, @code_fa)
-     |> assign(:code_lucide, @code_lucide)
-     |> assign(:code_positioning, @code_positioning)
      |> assign(:code_summary_static, @code_summary_static)
-     |> assign(:code_summary_dynamic, @code_summary_dynamic)}
+     |> assign(:code_summary_dynamic, @code_summary_dynamic)
+     |> assign(:code_summary_layout, @code_summary_layout)}
   end
 
   def render(assigns) do
@@ -511,7 +117,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
     <.example_page
       icon="🎛️"
       title="Action Buttons"
-      subtitle="Comprehensive guide to all action button configuration options"
+      subtitle="Everything the action bar can do, each as ONE live picker you configure with control switches — built-in & static props, the dynamic callbacks (and their priority over statics), custom actions, icon buttons, layout, and a device-adaptive toolbar."
     >
       <.note title="Why this page uses inline scripts">
         Action buttons are configured via the JS-side <code>.actionButtons</code>
@@ -520,160 +126,169 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         config to the wrapper element by id after the custom element upgrades.
       </.note>
 
-      <.card title="AB01 · Basic Built-in Actions">
-        <.tip>JS property (no attribute): set <code>el.actionButtons</code> with <code>action: 'select-all'</code> · <code>action: 'clear-all'</code></.tip>
+      <.card title="AB01 · Built-in & Static Properties">
+        <.tip>JS <code>el.actionButtons</code> · static per-button props: <code>tooltip</code> · <code>cssClass</code> · <code>isVisible</code> · <code>isDisabled</code></.tip>
         <p class="description">
-          Simple select-all and clear-all buttons with default settings.
+          The two built-in actions — <code>select-all</code> and <code>clear-all</code> — plus the static
+          per-button properties: <code>tooltip</code>, <code>cssClass</code>, <code>isVisible</code>, and
+          <code>isDisabled</code>. Toggle the switches to rebuild the <code>actionButtons</code> array live.
         </p>
-        <.form_group>
-          <label class="demo-label">Select Languages:</label>
-          <.web_multiselect id="basic-actions" multiple={true} />
-          <.output_panel id="output-basic" label="Selected:" placeholder="[]" />
-        </.form_group>
-        <.code_block lang="js">{@code_basic}</.code_block>
-      </.card>
+        <.note title="Built-in smart defaults:">
+          With no static <code>isDisabled</code> (and no <code>getIsDisabledCallback</code>),
+          <strong>Select All</strong> auto-disables once every option is selected and
+          <strong>Clear All</strong> auto-disables while nothing is selected. Select all colors and watch
+          Select All disable.
+        </.note>
 
-      <.card title="AB02 · Static Properties">
-        <.tip>Per-button static props on <code>el.actionButtons</code>: <code>isVisible</code> · <code>isDisabled</code> · <code>cssClass</code> · <code>tooltip</code></.tip>
-        <p class="description">
-          Using static properties: <code>isVisible</code>, <code>isDisabled</code>,
-          <code>cssClass</code>, and <code>tooltip</code>.
-        </p>
+        <div class="controls">
+          <label title="Include the built-in select-all button. It selects every option and auto-disables once all are selected."><input type="checkbox" id="st-selall" checked /> include <code>select-all</code></label>
+          <label title="Include the built-in clear-all button. It clears the selection and auto-disables while nothing is selected."><input type="checkbox" id="st-clrall" checked /> include <code>clear-all</code></label>
+          <label title="Add a static tooltip string to each button (shown on hover)."><input type="checkbox" id="st-tooltips" /> static <code>tooltip</code>s</label>
+          <label title="Apply cssClass:'custom-select-btn' to Select All. The class is injected into the Shadow DOM via customStylesCallback (page CSS can't reach inside)."><input type="checkbox" id="st-style" /> <code>cssClass</code> on Select All</label>
+        </div>
+        <div class="controls">
+          <label title="Add a custom button with isVisible:false — it stays in the config but is not rendered. Proof that isVisible hides a button."><input type="checkbox" id="st-hidden" /> add a hidden button (<code>isVisible:false</code>)</label>
+          <label title="Add a custom button with isDisabled:true — rendered but greyed out and non-clickable."><input type="checkbox" id="st-disabled" /> add a disabled button (<code>isDisabled:true</code>)</label>
+        </div>
+
         <.form_group>
           <label class="demo-label">Select Colors:</label>
-          <.web_multiselect id="static-props" multiple={true} />
-          <.output_panel id="output-static" label="Selected:" placeholder="[]" />
+          <.web_multiselect id="ab-static" multiple={true} />
+          <.output_panel id="out-static" label="Selected:" placeholder="[]" />
         </.form_group>
         <.code_block lang="js">{@code_static}</.code_block>
       </.card>
 
-      <.card title="AB03 · Dynamic Visibility (getIsVisibleCallback)">
-        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getIsVisibleCallback: (ms) => …</code></.tip>
+      <.card title="AB02 · Dynamic Callbacks (& Priority)">
+        <.tip>Per-button callbacks on <code>el.actionButtons</code>: <code>getIsVisibleCallback</code> · <code>getIsDisabledCallback</code> · <code>getTextCallback</code> · <code>getClassCallback</code> · <code>getTooltipCallback</code></.tip>
         <p class="description">
-          Show/hide buttons based on current selection state using
-          <code>getIsVisibleCallback</code>.
+          Each button property has a dynamic twin that recomputes from the live component:
+          <code>getIsVisibleCallback</code>, <code>getIsDisabledCallback</code>,
+          <code>getTextCallback</code>, <code>getClassCallback</code>, and
+          <code>getTooltipCallback</code>. Pick which one drives the buttons — or choose
+          <strong>all (priority)</strong> to see every callback active at once, overriding the static
+          <code>text</code> / <code>isVisible</code> / <code>isDisabled</code> that are also set.
         </p>
+
+        <div class="controls">
+          <span>callback:</span>
+          <label title="No dynamic callbacks — the buttons use only their static text/tooltip. Baseline to compare against."><input type="radio" name="dyn-cb" value="none" checked /> none (static)</label>
+          <label title="getIsVisibleCallback — show/hide buttons by selection state: Clear All appears once something is selected; Select All hides when everything is selected."><input type="radio" name="dyn-cb" value="visibility" /> visibility</label>
+          <label title="getIsDisabledCallback — enable/disable by state: Select All disables when all are selected, Clear All while nothing is; plus a 'Select First 3' button disabled when fewer than 3 options exist."><input type="radio" name="dyn-cb" value="disabled" /> disabled</label>
+          <label title="getTextCallback — the button label recomputes live, e.g. 'Select All (8)', 'Clear 3 Selected', and a Select/Deselect toggle."><input type="radio" name="dyn-cb" value="text" /> text</label>
+          <label title="getClassCallback — swap CSS classes by state (green→amber Select All; red active Clear). The classes are injected into the Shadow DOM via customStylesCallback."><input type="radio" name="dyn-cb" value="class" /> class</label>
+          <label title="getTooltipCallback — the hover text recomputes live (remaining count, how many will be cleared); plus a 'Random Select' button. Hover the buttons to see it."><input type="radio" name="dyn-cb" value="tooltip" /> tooltip</label>
+          <label title="Every callback active at once on buttons that ALSO set static isVisible:false / isDisabled:true — the callbacks win over the statics. Selection caps at 5."><input type="radio" name="dyn-cb" value="all" /> all (priority)</label>
+        </div>
+
         <.form_group>
-          <label class="demo-label">Select Numbers:</label>
-          <.web_multiselect id="dynamic-visibility" multiple={true} />
-          <.output_panel id="output-visibility" label="Selected:" placeholder="[]" />
+          <label class="demo-label">Select Items (the <code>all</code> mode caps at 5):</label>
+          <.web_multiselect id="ab-dynamic" multiple={true} />
+          <.output_panel id="out-dynamic" label="Selected:" placeholder="[]" />
         </.form_group>
-        <.code_block lang="js">{@code_visibility}</.code_block>
-        <.note title="Try it:">
-          Select some items to see "Clear All" appear. Select all items to see "Select All" disappear.
+
+        <.note title="Priority:">
+          When both a static property and its callback are set, the callback wins:
+          <code>get*Callback</code> &gt; static &gt; default. Try <strong>all (priority)</strong> — the
+          buttons carry <code>isVisible:false</code> / <code>isDisabled:true</code> yet the callbacks keep
+          them visible and enabled.
         </.note>
       </.card>
 
-      <.card title="AB04 · Dynamic Disabled State (getIsDisabledCallback)">
-        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getIsDisabledCallback: (ms) => …</code></.tip>
-        <p class="description">
-          Enable/disable buttons based on conditions using <code>getIsDisabledCallback</code>.
-        </p>
-        <.form_group>
-          <label class="demo-label">Select Fruits:</label>
-          <.web_multiselect id="dynamic-disabled" multiple={true} />
-          <.output_panel id="output-disabled" label="Selected:" placeholder="[]" />
-        </.form_group>
-        <.code_block lang="js">{@code_disabled}</.code_block>
-      </.card>
-
-      <.card title="AB05 · Dynamic Text (getTextCallback)">
-        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getTextCallback: (ms) => …</code></.tip>
-        <p class="description">
-          Change button text based on current state using <code>getTextCallback</code>.
-        </p>
-        <.form_group>
-          <label class="demo-label">Select Items:</label>
-          <.web_multiselect id="dynamic-text" multiple={true} />
-          <.output_panel id="output-text" label="Selected:" placeholder="[]" />
-        </.form_group>
-        <.code_block lang="js">{@code_text}</.code_block>
-        <.note title="Try it:">
-          Watch the button text change as you select/deselect items.
-        </.note>
-      </.card>
-
-      <.card title="AB06 · Dynamic CSS Classes (getClassCallback)">
-        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getClassCallback: (ms) => …</code> · classes injected via <code>el.customStylesCallback</code></.tip>
-        <p class="description">
-          Apply CSS classes dynamically based on state using <code>getClassCallback</code>.
-          Custom styles are injected via <code>customStylesCallback</code> into the Shadow DOM.
-        </p>
-        <.form_group>
-          <label class="demo-label">Select Options:</label>
-          <.web_multiselect id="dynamic-classes" multiple={true} />
-          <.output_panel id="output-classes" label="Selected:" placeholder="[]" />
-        </.form_group>
-        <.code_block lang="js">{@code_classes}</.code_block>
-        <.note title="Important:">
-          Custom CSS classes must be injected via <code>customStylesCallback</code>
-          because the component uses Shadow DOM. Regular page styles won't affect
-          elements inside the shadow root. The callback can return a string or array of strings.
-        </.note>
-      </.card>
-
-      <.card title="AB07 · Dynamic Tooltip (getTooltipCallback)">
-        <.tip>Per-button callback on <code>el.actionButtons</code>: <code>getTooltipCallback: (ms) => …</code></.tip>
-        <p class="description">
-          Show contextual information in tooltips using <code>getTooltipCallback</code>.
-        </p>
-        <.form_group>
-          <label class="demo-label">Select Items:</label>
-          <.web_multiselect id="dynamic-tooltip" multiple={true} />
-          <.output_panel id="output-tooltip" label="Selected:" placeholder="[]" />
-        </.form_group>
-        <.code_block lang="js">{@code_tooltip}</.code_block>
-        <.note title="Try it:">
-          Hover over the buttons to see dynamic tooltips that change based on the current state.
-        </.note>
-      </.card>
-
-      <.card title="AB08 · Custom Actions with onClick">
+      <.card title="AB03 · Custom Actions with onClick">
         <.tip>Per-button config on <code>el.actionButtons</code>: <code>action: 'custom'</code> + <code>onClick: (ms) => …</code></.tip>
         <p class="description">
-          Create custom buttons with <code>action: 'custom'</code> and custom
-          <code>onClick</code> handlers.
+          Build your own buttons with <code>action: 'custom'</code> and an <code>onClick(ms)</code> handler
+          that drives the component imperatively (<code>setSelected</code>, <code>selectAll</code>,
+          <code>getValue</code>, …). Here: pick popular languages, invert the selection, or pick two at
+          random — plus the built-in Clear All.
         </p>
         <.form_group>
           <label class="demo-label">Select Programming Languages:</label>
-          <.web_multiselect id="custom-actions" multiple={true} />
-          <.output_panel id="output-custom" label="Selected:" placeholder="[]" />
+          <.web_multiselect id="ab-custom" multiple={true} />
+          <.output_panel id="out-custom" label="Selected:" placeholder="[]" />
         </.form_group>
         <.code_block lang="js">{@code_custom}</.code_block>
       </.card>
 
-      <.card title="AB09 · Combined Features & Callback Priority">
-        <.tip>Callbacks on <code>el.actionButtons</code> override static props: <code>getTextCallback</code> · <code>getClassCallback</code> · <code>getIsVisibleCallback</code></.tip>
+      <.card title="AB04 · Icon Buttons — Font Awesome vs Lucide (SVG)">
+        <.tip>Icon HTML in a button's <code>text</code> · Lucide SVG needs zero setup · Font Awesome needs the font at document level + rules via <code>el.customStylesCallback</code></.tip>
         <p class="description">
-          Demonstrating multiple callbacks working together and callback priority
-          over static properties.
+          Button <code>text</code> accepts HTML, so icons work — but the two families need different setup
+          in a Shadow DOM component. <strong>Font Awesome</strong> is font-based: the <code>@font-face</code>
+          must live at document level (a <code>link</code> in the page <code>head</code>) <em>and</em>
+          the <code>.fa-*</code> class rules must be injected into the shadow root via
+          <code>customStylesCallback</code>. <strong>Lucide</strong> is inline SVG: it renders natively in
+          Shadow DOM with <em>zero</em> setup and inherits the button color via
+          <code>stroke="currentColor"</code>. Flip the switch to compare.
         </p>
+
+        <div class="controls">
+          <span>icon library:</span>
+          <label title="Inline SVG icons (Lucide). Render natively in Shadow DOM — no font, no head link, no CSS injection — and inherit the button color via stroke='currentColor'. The recommended path."><input type="radio" name="ico-lib" value="lucide" checked /> Lucide (SVG · zero setup)</label>
+          <label title="Font-based icons (Font Awesome). Need BOTH the @font-face at document level (the link in the page head) AND the .fa-* class rules injected into the shadow root via customStylesCallback, or glyphs render as empty boxes."><input type="radio" name="ico-lib" value="fa" /> Font Awesome (font)</label>
+        </div>
+
         <.form_group>
-          <label class="demo-label">Select Items (max 5):</label>
-          <.web_multiselect id="combined" multiple={true} />
-          <.output_panel id="output-combined" label="Selected:" placeholder="[]" />
+          <label class="demo-label">Select Technologies:</label>
+          <.web_multiselect id="ab-icons" multiple={true} />
+          <.output_panel id="out-icons" label="Selected:" placeholder="[]" />
         </.form_group>
-        <.code_block lang="js">{@code_combined}</.code_block>
-        <.note title="Callback Priority:">
-          Notice how the callbacks override the static properties. Even though
-          <code>isVisible: false</code> and <code>isDisabled: true</code> are set,
-          the callbacks take priority and determine the actual state.
+
+        <.note title="Prefer SVG in Shadow DOM:">
+          Inline SVG needs no <code>@font-face</code>, no document-level link, and no CSS injection —
+          the markup is self-contained and themes for free. Font icons work, but require both halves (font
+          at document level + class rules in the shadow) or the glyphs render as empty <code>□</code> boxes.
+          Icon-only buttons should always carry a descriptive <code>tooltip</code>.
         </.note>
       </.card>
 
-      <.card title="AB10 · Device-Adaptive Actions">
+      <.card title="AB05 · Positioning, Rows & Alignment">
+        <.tip><code>actions_position="top | bottom"</code> · per-button <code>row</code> · <code>actions_align="stretch | left | center | right | space-between"</code></.tip>
+        <p class="description">
+          Place the actions block at the <code>top</code> (default) or <code>bottom</code> of the dropdown,
+          flow buttons across multiple rows with the per-button <code>row</code> property, and set horizontal
+          alignment with <code>actions-align</code>. Open the dropdown to see the bar move.
+        </p>
+
+        <div class="controls">
+          <span><code>actions-position</code>:</span>
+          <label title="Render the action bar above the options list (the default)."><input type="radio" name="lay-pos" value="top" checked /> top</label>
+          <label title="Render the action bar below the options list."><input type="radio" name="lay-pos" value="bottom" /> bottom</label>
+          <label style="margin-inline-start:1rem" title="Split the buttons across two rows using each button's per-button row property (row:1 / row:2). Off = a single row."><input type="checkbox" id="lay-rows" checked /> two rows (per-button <code>row</code>)</label>
+        </div>
+        <div class="controls">
+          <span><code>actions-align</code>:</span>
+          <label title="actions-align:'stretch' (default) — buttons stretch to fill the bar width."><input type="radio" name="lay-align" value="stretch" checked /> stretch</label>
+          <label title="actions-align:'left' — buttons packed to the start of the bar."><input type="radio" name="lay-align" value="left" /> left</label>
+          <label title="actions-align:'center' — buttons centered in the bar."><input type="radio" name="lay-align" value="center" /> center</label>
+          <label title="actions-align:'right' — buttons packed to the end of the bar."><input type="radio" name="lay-align" value="right" /> right</label>
+          <label title="actions-align:'space-between' — buttons pushed to the edges with the gap distributed between them."><input type="radio" name="lay-align" value="space-between" /> space-between</label>
+        </div>
+
+        <.form_group>
+          <label class="demo-label">Open the dropdown to see the action bar:</label>
+          <.web_multiselect id="ab-layout" multiple={true} />
+        </.form_group>
+
+        <.note title="Row ordering:">
+          Row 1 always sits at the panel's outer edge; higher rows stack inward toward the options list.
+          So <code>top</code> renders row 1 first (top), and <code>bottom</code> renders row 1 last (bottom).
+        </.note>
+      </.card>
+
+      <.card title="AB06 · Device-Adaptive Actions">
         <.tip>JS: <code>import &lbrace; observeViewport, classifyDevice &rbrace;</code> → swap <code>el.actionButtons</code> + <code>el.actionsLayout</code> per device/width</.tip>
         <p class="description">
           Twelve action buttons fit one row on a wide desktop, but there's no room on a phone, a
-          tablet, or a narrowed window — squeezed into one line they run past the edge or become
-          unreadable. The fix isn't a CSS trick: define your action sets and pick the right one for
-          the space. The library re-exports the same device/viewport signal the component uses
-          internally, so you react to the <em>event that tells you the device and width</em> and
-          choose accordingly — here, granularly:
+          tablet, or a narrowed window. The fix isn't a CSS trick: define your action sets and pick the right
+          one for the space. The library re-exports the same device/viewport signal the component uses
+          internally, so you react to the <em>event that tells you the device and width</em> and choose
+          accordingly — here, granularly:
         </p>
         <ul>
           <li><strong>Desktop, wide (&gt; 600px):</strong> all twelve buttons, one row (<code>nowrap</code>).</li>
-          <li><strong>Desktop, narrowed (≤ 600px):</strong> all twelve, but flowed onto two rows (<code>wrap</code>).</li>
+          <li><strong>Desktop, narrowed (≤ 600px):</strong> all twelve, flowed onto two rows (<code>wrap</code>).</li>
           <li><strong>Tablet:</strong> all twelve wrapped — a single row would run beyond the edge.</li>
           <li><strong>Phone:</strong> the three essentials only, wrapped.</li>
         </ul>
@@ -682,182 +297,21 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
             <code id="adaptive-device">…</code>
             <span class="form-text" style="display:inline;">— resize the window (cross 600px) or toggle the device toolbar (DevTools) to see the toolbar re-shape.</span>
           </label>
-          <.web_multiselect id="layout-adaptive" multiple={true} />
-          <.output_panel id="output-adaptive" label="Selected:" placeholder="[]" />
+          <.web_multiselect id="ab-adaptive" multiple={true} />
+          <.output_panel id="out-adaptive" label="Selected:" placeholder="[]" />
         </.form_group>
         <.code_block lang="js">{@code_adaptive}</.code_block>
-        <.note title="Device class and width, together">
-          <code>classifyDevice(env)</code> keys off capability + physical size (orientation-robust —
-          a landscape phone still reads as <code>mobile</code>), which is the right axis for the
-          phone/tablet split. But whether twelve buttons <em>fit one row</em> is a width question, so
-          the desktop branch also consults <code>env.viewportWidth</code> for the 600px rule.
-          <code>observeViewport</code> (vs. <code>observeEnvironment</code>) is what makes that
-          threshold react continuously as you drag the window, not just on discrete breakpoint flips.
-        </.note>
       </.card>
 
-      <.card title="AB11 · Font Awesome Icons in Buttons">
-        <.tip>Icon HTML in a button's <code>text</code> (JS <code>el.actionButtons</code>) · font-face at document level + rules via <code>el.customStylesCallback</code></.tip>
-        <p class="description">
-          Action buttons accept HTML, so Font Awesome icons work — but Font Awesome is
-          <strong>font-based</strong>, which needs <strong>two</strong> things in a
-          Shadow DOM component: <strong>(1)</strong> the <code>@font-face</code> must be
-          registered at the <em>document</em> level (a normal <code>&lt;link&gt;</code>
-          in the page <code>&lt;head&gt;</code>) — a shadow-scoped <code>@font-face</code>
-          is ignored by browsers, so the glyphs would render as empty boxes; and
-          <strong>(2)</strong> the icon <em>class rules</em>
-          (<code>.fas</code>, <code>.fa-*::before</code>) must be injected <em>into</em>
-          the Shadow DOM via <code>customStylesCallback</code>, because page CSS can't
-          cross the shadow boundary. Prefer SVG icons (§12) when you want zero setup.
-        </p>
-        <.form_group>
-          <label class="demo-label">Select Technologies:</label>
-          <.web_multiselect id="icon-buttons" multiple={true} />
-          <.output_panel id="output-icons" label="Selected:" placeholder="[]" />
-        </.form_group>
-        <.code_block lang="js">{@code_fa}</.code_block>
-        <.note title="⚠️ Shadow DOM + font icons — you need both halves:">
-          <ul>
-            <li>
-              <strong>Font at document level (required):</strong>
-              Keep the Font Awesome <code>&lt;link&gt;</code> in the page
-              <code>&lt;head&gt;</code>. The <code>@font-face</code> must live in the
-              document — a browser will <em>not</em> apply a <code>@font-face</code>
-              declared inside a shadow root, so loading FA only via
-              <code>customStylesCallback</code> renders the glyphs as empty
-              <code>□</code> boxes.
-            </li>
-            <li>
-              <strong>Class rules in the shadow (required):</strong>
-              The <code>.fas</code> / <code>.fa-*::before</code> rules must be injected
-              into the Shadow DOM with <code>customStylesCallback</code>, because page
-              CSS doesn't cross the shadow boundary. The <code>@import</code> above does
-              this (or inject just the few <code>::before &lbrace; content &rbrace;</code> rules you
-              use to avoid the async fetch).
-            </li>
-            <li>
-              <strong>Prefer SVG icons (zero setup):</strong>
-              Inline SVG (e.g. Lucide — see §12) renders natively in Shadow DOM with no
-              <code>@font-face</code> and no CSS injection at all.
-            </li>
-            <li>
-              <strong>HTML is supported:</strong>
-              The <code>text</code> property and <code>getTextCallback</code> both
-              accept HTML strings.
-            </li>
-            <li>
-              <strong>Accessibility:</strong>
-              Icon-only buttons should always include descriptive tooltips for screen readers.
-            </li>
-            <li>
-              <strong>Any font-icon library works the same way:</strong>
-              Material Icons, Bootstrap Icons, etc. — font at document level, class
-              rules in the shadow.
-            </li>
-          </ul>
-        </.note>
-      </.card>
-
-      <.card title="AB12 · Lucide (SVG) Icons in Buttons">
-        <.tip>Inline SVG in a button's <code>text</code> (JS <code>el.actionButtons</code>) — no <code>customStylesCallback</code>, renders natively in Shadow DOM</.tip>
-        <p class="description">
-          Unlike font icons, <strong>inline SVG icons render natively inside Shadow DOM</strong>
-          — no <code>@font-face</code>, no <code>&lt;head&gt;</code> link, no
-          <code>customStylesCallback</code>. You just put the SVG markup in the button
-          <code>text</code>. These are Lucide icons; they use
-          <code>stroke="currentColor"</code>, so they automatically match the button's
-          text color (including dark mode).
-        </p>
-        <.form_group>
-          <label class="demo-label">Select Technologies:</label>
-          <.web_multiselect id="lucide-buttons" multiple={true} />
-          <.output_panel id="output-lucide" label="Selected:" placeholder="[]" />
-        </.form_group>
-        <.code_block lang="js">{@code_lucide}</.code_block>
-        <.note title="✅ Why SVG is the easy path in Shadow DOM:">
-          <ul>
-            <li>
-              <strong>Zero setup:</strong>
-              No font registration, no CSS injection, no async <code>@import</code>
-              race — the markup is self-contained.
-            </li>
-            <li>
-              <strong>Themes for free:</strong>
-              <code>stroke="currentColor"</code> (Lucide) / <code>fill="currentColor"</code>
-              means the icon follows the button's text color, so dark mode and custom
-              <code>--ms-*</code> colors just work.
-            </li>
-            <li>
-              <strong>Sizing:</strong>
-              Set <code>width</code>/<code>height</code> on the <code>&lt;svg&gt;</code>
-              (here <code>16</code>) and a small <code>vertical-align</code> to sit it on
-              the text baseline.
-            </li>
-            <li>
-              <strong>Security:</strong>
-              <code>text</code>/<code>getTextCallback</code> render raw HTML — only
-              inline SVG you control, never untrusted strings.
-            </li>
-          </ul>
-        </.note>
-      </.card>
-
-      <.card title="AB13 · Positioning, Rows & Alignment">
-        <.tip><code>actions_position="top | bottom"</code> · <code>actions_align="right | space-between"</code> · per-button <code>row</code> (JS)</.tip>
-        <p class="description">
-          Place the actions block at the <code>top</code> (default) or <code>bottom</code> of the
-          dropdown, arrange buttons across multiple rows with the per-button <code>row</code>
-          property, and control horizontal alignment with <code>actions_align</code>.
-        </p>
-
-        <div class="grid-2">
-          <div>
-            <h3><code>actions_position="top"</code> — 2 rows</h3>
-            <p class="description">Row 1 is the topmost line, row 2 below it.</p>
-            <div class="demo-area">
-              <.web_multiselect id="pos-top-rows" multiple={true} actions_position="top" />
-            </div>
-          </div>
-
-          <div>
-            <h3><code>actions_position="bottom"</code> — 2 rows</h3>
-            <p class="description">Row 1 is the bottommost line, row 2 above it.</p>
-            <div class="demo-area">
-              <.web_multiselect id="pos-bottom-rows" multiple={true} actions_position="bottom" />
-            </div>
-          </div>
-        </div>
-
-        <h3 style="margin-top:1.5rem;">Alignment (<code>actions_align</code>)</h3>
-        <div class="grid-2">
-          <div>
-            <div class="demo-area">
-              <label class="demo-label"><code>actions_align="right"</code></label>
-              <.web_multiselect id="align-right" multiple={true} actions_align="right" />
-            </div>
-          </div>
-          <div>
-            <div class="demo-area">
-              <label class="demo-label"><code>actions_align="space-between"</code></label>
-              <.web_multiselect id="align-between" multiple={true} actions_align="space-between" />
-            </div>
-          </div>
-        </div>
-
-        <.code_block lang="js">{@code_positioning}</.code_block>
-        <.note title="Row ordering:">
-          Row 1 always sits at the panel's outer edge; higher rows stack inward toward the options
-          list. So <code>top</code> renders row 1 first (top), and <code>bottom</code> renders row 1
-          last (bottom).
-        </.note>
-      </.card>
-
-      <.card title="AB14 · Summary">
+      <.card title="AB07 · Summary">
         <h3>Static Properties</h3>
         <.code_block lang="js">{@code_summary_static}</.code_block>
 
         <h3>Dynamic Callbacks</h3>
         <.code_block lang="js">{@code_summary_dynamic}</.code_block>
+
+        <h3>Layout attributes</h3>
+        <.code_block lang="js">{@code_summary_layout}</.code_block>
 
         <h3>Priority Rules</h3>
         <.note title="When both static and callback are defined:">
@@ -871,8 +325,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
         </.note>
       </.card>
 
-      <.card title="🧩 Wrapper-specific extras (not in upstream)">
-        <h3>Actions Layout - Wrap Mode</h3>
+      <.keen_card title="🧩 Actions Layout — Wrap Mode (side-by-side)">
         <.tip><code>actions_layout="wrap"</code> · <code>actions_layout="nowrap"</code> (default)</.tip>
         <p class="description">
           When you have many action buttons, use <code>actions-layout="wrap"</code>
@@ -885,7 +338,7 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
             <.form_group>
               <label class="demo-label">12 buttons squeezed into one row:</label>
               <.web_multiselect id="layout-nowrap" multiple={true} actions_layout="nowrap" />
-              <.output_panel id="output-nowrap" label="Selected:" placeholder="[]" />
+              <.output_panel id="out-nowrap" label="Selected:" placeholder="[]" />
             </.form_group>
           </div>
           <div>
@@ -893,17 +346,17 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
             <.form_group>
               <label class="demo-label">12 buttons wrap naturally across rows:</label>
               <.web_multiselect id="layout-wrap" multiple={true} actions_layout="wrap" />
-              <.output_panel id="output-wrap" label="Selected:" placeholder="[]" />
+              <.output_panel id="out-wrap" label="Selected:" placeholder="[]" />
             </.form_group>
           </div>
         </.grid_2>
-        <.code_block lang="js">{@code_layout}</.code_block>
+        <.code_block lang="html">{@code_layout}</.code_block>
         <.note title="Visual Difference:">
           With 12 buttons, the difference is clear: <strong>nowrap</strong> forces all
           buttons into one row (they become very narrow), while <strong>wrap</strong>
           allows them to flow naturally across multiple rows with comfortable sizing.
         </.note>
-      </.card>
+      </.keen_card>
 
       <script type="module">
         import { observeViewport, classifyDevice } from 'keen_web_multiselect';
@@ -917,499 +370,276 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
           check();
         });
 
+        // ── Datasets (tuple [value, label]) ──────────────────────────────
         const languageOptions = [
-          ['js', 'JavaScript'],
-          ['ts', 'TypeScript'],
-          ['py', 'Python'],
-          ['java', 'Java'],
-          ['go', 'Go'],
-          ['rust', 'Rust'],
-          ['cpp', 'C++'],
-          ['ruby', 'Ruby']
+          ['js', 'JavaScript'], ['ts', 'TypeScript'], ['py', 'Python'], ['java', 'Java'],
+          ['go', 'Go'], ['rust', 'Rust'], ['cpp', 'C++'], ['ruby', 'Ruby']
         ];
-
         const colorOptions = [
-          ['red', 'Red'],
-          ['blue', 'Blue'],
-          ['green', 'Green'],
-          ['yellow', 'Yellow'],
-          ['purple', 'Purple']
+          ['red', 'Red'], ['blue', 'Blue'], ['green', 'Green'], ['yellow', 'Yellow'], ['purple', 'Purple']
         ];
-
-        const numberOptions = [
-          ['1', 'One'],
-          ['2', 'Two'],
-          ['3', 'Three'],
-          ['4', 'Four'],
-          ['5', 'Five'],
-          ['6', 'Six']
-        ];
-
-        const fruitOptions = [
-          ['apple', 'Apple'],
-          ['banana', 'Banana'],
-          ['orange', 'Orange'],
-          ['grape', 'Grape'],
-          ['mango', 'Mango']
-        ];
-
         const itemOptions = [
-          ['item1', 'Item 1'],
-          ['item2', 'Item 2'],
-          ['item3', 'Item 3'],
-          ['item4', 'Item 4'],
-          ['item5', 'Item 5'],
-          ['item6', 'Item 6'],
-          ['item7', 'Item 7'],
-          ['item8', 'Item 8']
+          ['item1', 'Item 1'], ['item2', 'Item 2'], ['item3', 'Item 3'], ['item4', 'Item 4'],
+          ['item5', 'Item 5'], ['item6', 'Item 6'], ['item7', 'Item 7'], ['item8', 'Item 8']
+        ];
+        const techOptions = [
+          ['js', 'JavaScript'], ['ts', 'TypeScript'], ['py', 'Python'], ['java', 'Java'],
+          ['cpp', 'C++'], ['go', 'Go'], ['rust', 'Rust'], ['php', 'PHP'], ['ruby', 'Ruby'], ['swift', 'Swift']
         ];
 
-        // Example 1: Basic Built-in Actions
-        wait('basic-actions').then((basicActions) => {
-          basicActions.options = languageOptions;
-          basicActions.actionButtons = [
-            {
-              action: 'select-all',
-              text: 'Select All'
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All'
-            }
-          ];
-          basicActions.addEventListener('change', () => {
-            document.getElementById('output-basic').textContent = JSON.stringify(basicActions.getValue(), null, 2);
+        // Custom-button CSS lives in Shadow DOM — page CSS can't cross the boundary.
+        const BTN_STYLES = `
+          .custom-select-btn { background:#667eea !important; color:#fff !important; font-weight:600; }
+          .success-btn  { background:#48bb78 !important; color:#fff !important; }
+          .warning-btn  { background:#ed8936 !important; color:#fff !important; }
+          .danger-btn   { background:#f56565 !important; color:#fff !important; }
+          .active-state { border:2px solid #667eea !important; }
+          .inactive-state { opacity:0.6; }
+        `;
+
+        const wireOutput = (el, preId) => {
+          const pre = document.getElementById(preId);
+          const render = () => { if (pre) pre.textContent = JSON.stringify(el.getValue(), null, 2); };
+          el.addEventListener('change', render);
+          render();
+        };
+
+        // ── AB01 · Built-in & static properties ──────────────────────────
+        wait('ab-static').then((abStatic) => {
+          abStatic.options = colorOptions;
+          abStatic.customStylesCallback = () => BTN_STYLES;
+          const chk = (id) => { const c = document.getElementById(id); return !!(c && c.checked); };
+          const buildStatic = () => {
+            const btns = [];
+            if (chk('st-selall')) btns.push({
+              action: 'select-all', text: 'Select All',
+              ...(chk('st-tooltips') ? { tooltip: 'Select all available colors' } : {}),
+              ...(chk('st-style') ? { cssClass: 'custom-select-btn' } : {})
+            });
+            if (chk('st-clrall')) btns.push({
+              action: 'clear-all', text: 'Clear All',
+              ...(chk('st-tooltips') ? { tooltip: 'Remove all selections' } : {})
+            });
+            if (chk('st-hidden')) btns.push({ action: 'custom', text: 'Hidden Button', isVisible: false, onClick: () => {} });
+            if (chk('st-disabled')) btns.push({ action: 'custom', text: 'Disabled Button', tooltip: 'This button is always disabled', isDisabled: true, onClick: () => {} });
+            abStatic.actionButtons = btns;
+          };
+          const STATIC_IDS = ['st-selall', 'st-clrall', 'st-tooltips', 'st-style', 'st-hidden', 'st-disabled'];
+          document.addEventListener('change', (e) => {
+            if (e.target && STATIC_IDS.includes(e.target.id)) buildStatic();
           });
+          buildStatic();
+          wireOutput(abStatic, 'out-static');
         });
 
-        // Example 2: Static Properties
-        wait('static-props').then((staticProps) => {
-          staticProps.options = colorOptions;
-
-          // Inject custom CSS for custom-select-btn class
-          staticProps.customStylesCallback = () => `
-            .custom-select-btn {
-              background: #667eea !important;
-              color: white !important;
-              font-weight: 600;
-            }
-          `;
-
-          staticProps.actionButtons = [
-            {
-              action: 'select-all',
-              text: 'Select All',
-              tooltip: 'Select all available colors',
-              cssClass: 'custom-select-btn',
-              isVisible: true,
-              isDisabled: false
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All',
-              tooltip: 'Remove all selections',
-              isVisible: true,
-              isDisabled: false
-            },
-            {
-              action: 'custom',
-              text: 'Hidden Button',
-              isVisible: false,
-              onClick: (ms) => console.log('Hidden button clicked')
-            },
-            {
-              action: 'custom',
-              text: 'Disabled Button',
-              tooltip: 'This button is always disabled',
-              isDisabled: true,
-              onClick: (ms) => console.log('Disabled button clicked')
-            }
-          ];
-          staticProps.addEventListener('change', () => {
-            document.getElementById('output-static').textContent = JSON.stringify(staticProps.getValue(), null, 2);
+        // ── AB02 · Dynamic callbacks ──────────────────────────────────────
+        wait('ab-dynamic').then((abDyn) => {
+          abDyn.options = itemOptions;
+          abDyn.customStylesCallback = () => BTN_STYLES;
+          const dynSets = {
+            none: () => [
+              { action: 'select-all', text: 'Select All', tooltip: 'Select all items' },
+              { action: 'clear-all', text: 'Clear All', tooltip: 'Clear selection' }
+            ],
+            visibility: () => [
+              { action: 'select-all', text: 'Select All', tooltip: 'Select all items',
+                getIsVisibleCallback: (ms) => ms.getSelected().length < (ms.options.options?.length || 0) },
+              { action: 'clear-all', text: 'Clear All', tooltip: 'Clear selection',
+                getIsVisibleCallback: (ms) => ms.getSelected().length > 0 }
+            ],
+            disabled: () => [
+              { action: 'select-all', text: 'Select All',
+                getIsDisabledCallback: (ms) => ms.getSelected().length >= (ms.options.options?.length || 0) },
+              { action: 'clear-all', text: 'Clear All',
+                getIsDisabledCallback: (ms) => ms.getSelected().length === 0 },
+              { action: 'custom', text: 'Select First 3',
+                getIsDisabledCallback: (ms) => (ms.options.options?.length || 0) < 3,
+                onClick: (ms) => ms.setSelected(ms.options.options.slice(0, 3).map((o) => o[0])) }
+            ],
+            text: () => [
+              { action: 'select-all', text: 'Select All',
+                getTextCallback: (ms) => `Select All (${ms.options.options?.length || 0})` },
+              { action: 'clear-all', text: 'Clear All',
+                getTextCallback: (ms) => { const c = ms.getSelected().length; return c > 0 ? `Clear ${c} Selected` : 'Clear All'; } },
+              { action: 'custom', text: 'Toggle',
+                getTextCallback: (ms) => ms.getSelected().length === (ms.options.options?.length || 0) ? 'Deselect All' : 'Select All',
+                onClick: (ms) => ms.getSelected().length === (ms.options.options?.length || 0) ? ms.setSelected([]) : ms.selectAll() }
+            ],
+            class: () => [
+              { action: 'select-all', text: 'Select All', cssClass: 'default-class',
+                getClassCallback: (ms) => ms.getSelected().length === 0 ? 'success-btn' : 'warning-btn' },
+              { action: 'clear-all', text: 'Clear All',
+                getClassCallback: (ms) => ms.getSelected().length > 0 ? ['danger-btn', 'active-state'] : 'inactive-state' }
+            ],
+            tooltip: () => [
+              { action: 'select-all', text: 'Select All', tooltip: 'Default tooltip',
+                getTooltipCallback: (ms) => { const t = ms.options.options?.length || 0; const s = ms.getSelected().length; return `Select all ${t} items (${t - s} remaining)`; } },
+              { action: 'clear-all', text: 'Clear All',
+                getTooltipCallback: (ms) => { const c = ms.getSelected().length; return c > 0 ? `Remove ${c} selected item${c !== 1 ? 's' : ''}` : 'Nothing to clear'; } },
+              { action: 'custom', text: 'Random Select',
+                getTooltipCallback: (ms) => `Randomly select 3 items from ${ms.options.options?.length || 0} available`,
+                onClick: (ms) => { const sh = [...(ms.options.options || [])].sort(() => Math.random() - 0.5); ms.setSelected(sh.slice(0, 3).map((o) => o[0])); } }
+            ],
+            all: () => [
+              { action: 'select-all',
+                text: 'Static Text', tooltip: 'Static Tooltip', cssClass: 'static-class', isVisible: false, isDisabled: true,
+                getTextCallback: (ms) => `Select All (${ms.getSelected().length}/${ms.options.options?.length || 0})`,
+                getTooltipCallback: (ms) => ms.getSelected().length >= 5 ? 'Maximum 5 items allowed' : 'Click to select all items',
+                getClassCallback: (ms) => ms.getSelected().length >= 5 ? 'danger-btn' : 'success-btn',
+                getIsVisibleCallback: (ms) => ms.getSelected().length < (ms.options.options?.length || 0),
+                getIsDisabledCallback: (ms) => ms.getSelected().length >= 5 },
+              { action: 'clear-all', text: 'Clear',
+                getTextCallback: (ms) => `Clear (${ms.getSelected().length})`,
+                getClassCallback: (ms) => ms.getSelected().length > 0 ? ['danger-btn', 'active-state'] : 'inactive-state',
+                getIsVisibleCallback: (ms) => ms.getSelected().length > 0,
+                getIsDisabledCallback: (ms) => ms.getSelected().length === 0 }
+            ]
+          };
+          document.addEventListener('change', (e) => {
+            if (e.target && e.target.name === 'dyn-cb' && e.target.checked) abDyn.actionButtons = dynSets[e.target.value]();
           });
+          abDyn.actionButtons = dynSets.none();
+          wireOutput(abDyn, 'out-dynamic');
         });
 
-        // Example 3: Dynamic Visibility
-        wait('dynamic-visibility').then((dynamicVisibility) => {
-          dynamicVisibility.options = numberOptions;
-          dynamicVisibility.actionButtons = [
-            {
-              action: 'select-all',
-              text: 'Select All',
-              tooltip: 'Select all numbers',
-              getIsVisibleCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                const selected = ms.getSelected().length;
-                return selected < total;
-              }
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All',
-              tooltip: 'Clear selection',
-              getIsVisibleCallback: (ms) => ms.getSelected().length > 0
-            }
+        // ── AB03 · Custom actions ─────────────────────────────────────────
+        wait('ab-custom').then((abCustom) => {
+          abCustom.options = languageOptions;
+          abCustom.actionButtons = [
+            { action: 'custom', text: 'Select Popular', tooltip: 'Select JS, Python, and TypeScript',
+              onClick: (ms) => ms.setSelected(['js', 'py', 'ts']) },
+            { action: 'custom', text: 'Invert Selection', tooltip: 'Invert current selection',
+              onClick: (ms) => { const all = (ms.options.options || []).map((o) => o[0]); const sel = ms.getValue(); ms.setSelected(all.filter((v) => !sel.includes(v))); } },
+            { action: 'custom', text: 'Select Random', tooltip: 'Select 2 random languages',
+              onClick: (ms) => { const sh = [...(ms.options.options || [])].sort(() => Math.random() - 0.5); ms.setSelected(sh.slice(0, 2).map((o) => o[0])); } },
+            { action: 'clear-all', text: 'Clear All' }
           ];
-          dynamicVisibility.addEventListener('change', () => {
-            document.getElementById('output-visibility').textContent = JSON.stringify(dynamicVisibility.getValue(), null, 2);
-          });
+          wireOutput(abCustom, 'out-custom');
         });
 
-        // Example 4: Dynamic Disabled State
-        wait('dynamic-disabled').then((dynamicDisabled) => {
-          dynamicDisabled.options = fruitOptions;
-          dynamicDisabled.actionButtons = [
-            {
-              action: 'select-all',
-              text: 'Select All',
-              tooltip: 'Select all fruits',
-              getIsDisabledCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                return ms.getSelected().length >= total;
-              }
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All',
-              tooltip: 'Clear selection',
-              getIsDisabledCallback: (ms) => ms.getSelected().length === 0
-            },
-            {
-              action: 'custom',
-              text: 'Select First 3',
-              tooltip: 'Select first 3 items',
-              getIsDisabledCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                return total < 3;
-              },
-              onClick: (ms) => {
-                const firstThree = ms.options.options.slice(0, 3).map(opt => opt[0]);
-                ms.setSelected(firstThree);
-              }
-            }
+        // ── AB04 · Icon buttons (Font Awesome vs Lucide) ──────────────────
+        wait('ab-icons').then((abIcons) => {
+          abIcons.options = techOptions;
+
+          const faButtons = () => [
+            { action: 'select-all', text: '<i class="fas fa-check-double"></i> Select All', tooltip: 'Select all available technologies' },
+            { action: 'clear-all', text: '<i class="fas fa-times"></i> Clear', tooltip: 'Clear all selections' },
+            { action: 'custom', text: '<i class="fas fa-random"></i> Random', tooltip: 'Select 3 random technologies',
+              onClick: (ms) => { const sh = [...techOptions].sort(() => Math.random() - 0.5); ms.setSelected(sh.slice(0, 3).map((o) => o[0])); } },
+            { action: 'custom', text: '<i class="fas fa-sync-alt"></i>', tooltip: 'Invert Selection',
+              onClick: (ms) => { const all = techOptions.map((o) => o[0]); const sel = ms.getValue(); ms.setSelected(all.filter((v) => !sel.includes(v))); } },
+            { action: 'custom', text: 'Toggle',
+              getTextCallback: (ms) => { const c = ms.getSelected().length; const t = techOptions.length; return `${c === t ? '<i class="fas fa-toggle-on"></i>' : '<i class="fas fa-toggle-off"></i>'} ${c}/${t}`; },
+              getTooltipCallback: (ms) => ms.getSelected().length === techOptions.length ? 'Deselect all' : 'Select all',
+              onClick: (ms) => ms.getSelected().length === techOptions.length ? ms.setSelected([]) : ms.selectAll() }
           ];
-          dynamicDisabled.addEventListener('change', () => {
-            document.getElementById('output-disabled').textContent = JSON.stringify(dynamicDisabled.getValue(), null, 2);
+
+          const lucide = (paths) => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" `
+            + `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" `
+            + `stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px">${paths}</svg>`;
+          const luCheck = lucide('<path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/>');
+          const luX = lucide('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>');
+          const luShuffle = lucide('<path d="m18 14 4 4-4 4"/><path d="m18 2 4 4-4 4"/><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"/><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"/><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"/>');
+          const luRefresh = lucide('<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>');
+          const luToggleOn = lucide('<circle cx="15" cy="12" r="3"/><rect width="20" height="14" x="2" y="5" rx="7"/>');
+          const luToggleOff = lucide('<circle cx="9" cy="12" r="3"/><rect width="20" height="14" x="2" y="5" rx="7"/>');
+          const luButtons = () => [
+            { action: 'select-all', text: `${luCheck} Select All`, tooltip: 'Select all available technologies' },
+            { action: 'clear-all', text: `${luX} Clear`, tooltip: 'Clear all selections' },
+            { action: 'custom', text: `${luShuffle} Random`, tooltip: 'Select 3 random technologies',
+              onClick: (ms) => { const sh = [...techOptions].sort(() => Math.random() - 0.5); ms.setSelected(sh.slice(0, 3).map((o) => o[0])); } },
+            { action: 'custom', text: luRefresh, tooltip: 'Invert Selection',
+              onClick: (ms) => { const all = techOptions.map((o) => o[0]); const sel = ms.getValue(); ms.setSelected(all.filter((v) => !sel.includes(v))); } },
+            { action: 'custom', text: 'Toggle',
+              getTextCallback: (ms) => { const c = ms.getSelected().length; const t = techOptions.length; return `${c === t ? luToggleOn : luToggleOff} ${c}/${t}`; },
+              getTooltipCallback: (ms) => ms.getSelected().length === techOptions.length ? 'Deselect all' : 'Select all',
+              onClick: (ms) => ms.getSelected().length === techOptions.length ? ms.setSelected([]) : ms.selectAll() }
+          ];
+
+          const applyIcons = (lib) => {
+            if (lib === 'fa') {
+              // Inject Font Awesome class rules into the Shadow DOM (the <link> in <head> provides the font).
+              abIcons.customStylesCallback = () => `@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css'); .ms__action-btn i { margin-right:0.35rem; }`;
+              abIcons.actionButtons = faButtons();
+            } else {
+              // Inline SVG needs no shadow-DOM style injection — clear it.
+              abIcons.customStylesCallback = () => '';
+              abIcons.actionButtons = luButtons();
+            }
+          };
+          document.addEventListener('change', (e) => {
+            if (e.target && e.target.name === 'ico-lib' && e.target.checked) applyIcons(e.target.value);
           });
+          applyIcons('lucide');
+          wireOutput(abIcons, 'out-icons');
         });
 
-        // Example 5: Dynamic Text
-        wait('dynamic-text').then((dynamicText) => {
-          dynamicText.options = itemOptions;
-          dynamicText.actionButtons = [
-            {
-              action: 'select-all',
-              text: 'Select All',
-              getTextCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                return `Select All (${total})`;
-              }
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All',
-              getTextCallback: (ms) => {
-                const count = ms.getSelected().length;
-                return count > 0 ? `Clear ${count} Selected` : 'Clear All';
-              }
-            },
-            {
-              action: 'custom',
-              text: 'Toggle',
-              getTextCallback: (ms) => {
-                const selected = ms.getSelected().length;
-                const total = ms.options.options?.length || 0;
-                return selected === total ? 'Deselect All' : 'Select All';
-              },
-              onClick: (ms) => {
-                const selected = ms.getSelected().length;
-                const total = ms.options.options?.length || 0;
-                if (selected === total) {
-                  ms.setSelected([]);
-                } else {
-                  ms.selectAll();
-                }
-              }
-            }
+        // ── AB05 · Positioning, rows & alignment ──────────────────────────
+        wait('ab-layout').then((abLayout) => {
+          abLayout.options = itemOptions;
+          const twoRowButtons = [
+            { action: 'select-all', text: 'Select All', row: 1 },
+            { action: 'clear-all', text: 'Clear All', row: 1 },
+            { action: 'custom', text: 'First 3', row: 2, onClick: (ms) => ms.setSelected(itemOptions.slice(0, 3).map((o) => o[0])) },
+            { action: 'custom', text: 'Invert', row: 2, onClick: (ms) => { const all = itemOptions.map((o) => o[0]); const sel = ms.getValue(); ms.setSelected(all.filter((v) => !sel.includes(v))); } }
           ];
-          dynamicText.addEventListener('change', () => {
-            document.getElementById('output-text').textContent = JSON.stringify(dynamicText.getValue(), null, 2);
+          const oneRowButtons = [
+            { action: 'select-all', text: 'Select All' },
+            { action: 'clear-all', text: 'Clear All' }
+          ];
+          const applyLayout = () => {
+            const rows = document.getElementById('lay-rows');
+            abLayout.actionButtons = (rows && rows.checked) ? twoRowButtons : oneRowButtons;
+          };
+          document.addEventListener('change', (e) => {
+            const t = e.target;
+            if (!t) return;
+            if (t.name === 'lay-pos' && t.checked) abLayout.setAttribute('actions-position', t.value);
+            else if (t.name === 'lay-align' && t.checked) abLayout.setAttribute('actions-align', t.value);
+            else if (t.id === 'lay-rows') applyLayout();
           });
+          applyLayout();
         });
 
-        // Example 6: Dynamic CSS Classes
-        wait('dynamic-classes').then((dynamicClasses) => {
-          dynamicClasses.options = itemOptions;
-          dynamicClasses.customStylesCallback = () => `
-            .success-btn { background: #48bb78 !important; color: white !important; }
-            .warning-btn { background: #ed8936 !important; color: white !important; }
-            .danger-btn { background: #f56565 !important; color: white !important; }
-            .active-state { border: 2px solid #667eea !important; }
-            .inactive-state { opacity: 0.6; }
-          `;
-          dynamicClasses.actionButtons = [
-            {
-              action: 'select-all',
-              text: 'Select All',
-              cssClass: 'default-class',
-              getClassCallback: (ms) => {
-                const selected = ms.getSelected().length;
-                return selected === 0 ? 'success-btn' : 'warning-btn';
-              }
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All',
-              getClassCallback: (ms) => {
-                const selected = ms.getSelected().length;
-                const classes = [];
-                if (selected > 0) {
-                  classes.push('danger-btn', 'active-state');
-                } else {
-                  classes.push('inactive-state');
-                }
-                return classes;
-              }
-            }
-          ];
-          dynamicClasses.addEventListener('change', () => {
-            document.getElementById('output-classes').textContent = JSON.stringify(dynamicClasses.getValue(), null, 2);
-          });
-        });
-
-        // Example 7: Dynamic Tooltip
-        wait('dynamic-tooltip').then((dynamicTooltip) => {
-          dynamicTooltip.options = itemOptions;
-          dynamicTooltip.actionButtons = [
-            {
-              action: 'select-all',
-              text: 'Select All',
-              tooltip: 'Default tooltip',
-              getTooltipCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                const selected = ms.getSelected().length;
-                const remaining = total - selected;
-                return `Select all ${total} items (${remaining} remaining)`;
-              }
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All',
-              getTooltipCallback: (ms) => {
-                const count = ms.getSelected().length;
-                return count > 0
-                  ? `Remove ${count} selected item${count !== 1 ? 's' : ''}`
-                  : 'Nothing to clear';
-              }
-            },
-            {
-              action: 'custom',
-              text: 'Random Select',
-              getTooltipCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                return `Randomly select 3 items from ${total} available`;
-              },
-              onClick: (ms) => {
-                const allOptions = ms.options.options || [];
-                const shuffled = [...allOptions].sort(() => Math.random() - 0.5);
-                const randomThree = shuffled.slice(0, 3).map(opt => opt[0]);
-                ms.setSelected(randomThree);
-              }
-            }
-          ];
-          dynamicTooltip.addEventListener('change', () => {
-            document.getElementById('output-tooltip').textContent = JSON.stringify(dynamicTooltip.getValue(), null, 2);
-          });
-        });
-
-        // Example 8: Custom Actions
-        wait('custom-actions').then((customActions) => {
-          customActions.options = languageOptions;
-          customActions.actionButtons = [
-            {
-              action: 'custom',
-              text: 'Select Popular',
-              tooltip: 'Select JS, Python, and TypeScript',
-              onClick: (ms) => {
-                ms.setSelected(['js', 'py', 'ts']);
-              }
-            },
-            {
-              action: 'custom',
-              text: 'Invert Selection',
-              tooltip: 'Invert current selection',
-              onClick: (ms) => {
-                const allOptions = ms.options.options || [];
-                const allValues = allOptions.map(opt => opt[0]);
-                const selectedValues = ms.getValue();
-                const inverted = allValues.filter(v => !selectedValues.includes(v));
-                ms.setSelected(inverted);
-              }
-            },
-            {
-              action: 'custom',
-              text: 'Select Random',
-              tooltip: 'Select 2 random languages',
-              onClick: (ms) => {
-                const allOptions = ms.options.options || [];
-                const shuffled = [...allOptions].sort(() => Math.random() - 0.5);
-                const random = shuffled.slice(0, 2).map(opt => opt[0]);
-                ms.setSelected(random);
-              }
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear All'
-            }
-          ];
-          customActions.addEventListener('change', () => {
-            document.getElementById('output-custom').textContent = JSON.stringify(customActions.getValue(), null, 2);
-          });
-        });
-
-        // Example 9: Combined Features
-        wait('combined').then((combined) => {
-          combined.options = itemOptions;
-          combined.actionButtons = [
-            {
-              action: 'select-all',
-              // Static properties (will be overridden by callbacks)
-              text: 'Static Text',
-              tooltip: 'Static Tooltip',
-              cssClass: 'static-class',
-              isVisible: false,
-              isDisabled: true,
-              // Dynamic callbacks (take priority)
-              getTextCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                const selected = ms.getSelected().length;
-                return `Select All (${selected}/${total})`;
-              },
-              getTooltipCallback: (ms) => {
-                const selected = ms.getSelected().length;
-                return selected >= 5
-                  ? 'Maximum 5 items allowed'
-                  : 'Click to select all items';
-              },
-              getClassCallback: (ms) => {
-                const selected = ms.getSelected().length;
-                return selected >= 5 ? 'danger-btn' : 'success-btn';
-              },
-              getIsVisibleCallback: (ms) => {
-                const total = ms.options.options?.length || 0;
-                const selected = ms.getSelected().length;
-                return selected < total;
-              },
-              getIsDisabledCallback: (ms) => {
-                return ms.getSelected().length >= 5;
-              }
-            },
-            {
-              action: 'clear-all',
-              text: 'Clear',
-              getTextCallback: (ms) => {
-                const count = ms.getSelected().length;
-                return `Clear (${count})`;
-              },
-              getClassCallback: (ms) => {
-                return ms.getSelected().length > 0 ? ['danger-btn', 'active-state'] : 'inactive-state';
-              },
-              getIsVisibleCallback: (ms) => ms.getSelected().length > 0,
-              getIsDisabledCallback: (ms) => ms.getSelected().length === 0
-            }
-          ];
-          combined.addEventListener('change', () => {
-            document.getElementById('output-combined').textContent = JSON.stringify(combined.getValue(), null, 2);
-          });
-        });
-
-        // Example 10: Actions Layout - Wrap Mode
+        // ── AB06 · Device-adaptive actions ────────────────────────────────
         const manyButtons = [
           { action: 'select-all', text: 'Select All Items' },
           { action: 'clear-all', text: 'Clear Selection' },
-          { action: 'custom', text: 'First 3 Items', onClick: (ms) => ms.setSelected(itemOptions.slice(0, 3).map(o => o[0])) },
-          { action: 'custom', text: 'Last 3 Items', onClick: (ms) => ms.setSelected(itemOptions.slice(-3).map(o => o[0])) },
-          { action: 'custom', text: 'Even Positions', onClick: (ms) => ms.setSelected(itemOptions.filter((o, i) => i % 2 === 0).map(o => o[0])) },
-          { action: 'custom', text: 'Odd Positions', onClick: (ms) => ms.setSelected(itemOptions.filter((o, i) => i % 2 === 1).map(o => o[0])) },
-          { action: 'custom', text: 'Random Selection', onClick: (ms) => {
-            const shuffled = [...itemOptions].sort(() => Math.random() - 0.5);
-            ms.setSelected(shuffled.slice(0, 3).map(o => o[0]));
-          }},
-          { action: 'custom', text: 'First Half', onClick: (ms) => ms.setSelected(itemOptions.slice(0, Math.ceil(itemOptions.length / 2)).map(o => o[0])) },
-          { action: 'custom', text: 'Second Half', onClick: (ms) => ms.setSelected(itemOptions.slice(Math.ceil(itemOptions.length / 2)).map(o => o[0])) },
-          { action: 'custom', text: 'Invert', onClick: (ms) => {
-            const allValues = itemOptions.map(o => o[0]);
-            const selectedValues = ms.getValue();
-            const inverted = allValues.filter(v => !selectedValues.includes(v));
-            ms.setSelected(inverted);
-          }},
-          { action: 'custom', text: 'Every Third', onClick: (ms) => ms.setSelected(itemOptions.filter((o, i) => i % 3 === 0).map(o => o[0])) },
-          { action: 'custom', text: 'Shuffle All', onClick: (ms) => {
-            const shuffled = [...itemOptions].sort(() => Math.random() - 0.5);
-            ms.setSelected(shuffled.slice(0, 5).map(o => o[0]));
-          }}
+          { action: 'custom', text: 'First 3 Items', onClick: (ms) => ms.setSelected(itemOptions.slice(0, 3).map((o) => o[0])) },
+          { action: 'custom', text: 'Last 3 Items', onClick: (ms) => ms.setSelected(itemOptions.slice(-3).map((o) => o[0])) },
+          { action: 'custom', text: 'Even Positions', onClick: (ms) => ms.setSelected(itemOptions.filter((o, i) => i % 2 === 0).map((o) => o[0])) },
+          { action: 'custom', text: 'Odd Positions', onClick: (ms) => ms.setSelected(itemOptions.filter((o, i) => i % 2 === 1).map((o) => o[0])) },
+          { action: 'custom', text: 'Random Selection', onClick: (ms) => { const sh = [...itemOptions].sort(() => Math.random() - 0.5); ms.setSelected(sh.slice(0, 3).map((o) => o[0])); } },
+          { action: 'custom', text: 'First Half', onClick: (ms) => ms.setSelected(itemOptions.slice(0, Math.ceil(itemOptions.length / 2)).map((o) => o[0])) },
+          { action: 'custom', text: 'Second Half', onClick: (ms) => ms.setSelected(itemOptions.slice(Math.ceil(itemOptions.length / 2)).map((o) => o[0])) },
+          { action: 'custom', text: 'Invert', onClick: (ms) => { const all = itemOptions.map((o) => o[0]); const sel = ms.getValue(); ms.setSelected(all.filter((v) => !sel.includes(v))); } },
+          { action: 'custom', text: 'Every Third', onClick: (ms) => ms.setSelected(itemOptions.filter((o, i) => i % 3 === 0).map((o) => o[0])) },
+          { action: 'custom', text: 'Shuffle All', onClick: (ms) => { const sh = [...itemOptions].sort(() => Math.random() - 0.5); ms.setSelected(sh.slice(0, 5).map((o) => o[0])); } }
         ];
-
-        wait('layout-nowrap').then((layoutNowrap) => {
-          layoutNowrap.options = itemOptions;
-          layoutNowrap.actionButtons = manyButtons;
-          layoutNowrap.addEventListener('change', () => {
-            document.getElementById('output-nowrap').textContent = JSON.stringify(layoutNowrap.getValue(), null, 2);
-          });
-        });
-
-        wait('layout-wrap').then((layoutWrap) => {
-          layoutWrap.options = itemOptions;
-          layoutWrap.actionButtons = manyButtons;
-          layoutWrap.addEventListener('change', () => {
-            document.getElementById('output-wrap').textContent = JSON.stringify(layoutWrap.getValue(), null, 2);
-          });
-        });
-
-        // Example AB10: Device-Adaptive Actions
         const desktopActions = manyButtons;
         const mobileActions = [
           { action: 'select-all', text: 'All' },
           { action: 'clear-all', text: 'Clear' },
-          { action: 'custom', text: 'Invert', onClick: (ms) => {
-            const allValues = itemOptions.map(o => o[0]);
-            const selectedValues = ms.getValue();
-            ms.setSelected(allValues.filter(v => !selectedValues.includes(v)));
-          }}
+          { action: 'custom', text: 'Invert', onClick: (ms) => { const all = itemOptions.map((o) => o[0]); const sel = ms.getValue(); ms.setSelected(all.filter((v) => !sel.includes(v))); } }
         ];
 
-        wait('layout-adaptive').then((adaptive) => {
-          adaptive.options = itemOptions;
-          adaptive.addEventListener('change', () => {
-            document.getElementById('output-adaptive').textContent = JSON.stringify(adaptive.getValue(), null, 2);
-          });
+        wait('ab-adaptive').then((abAdaptive) => {
+          abAdaptive.options = itemOptions;
+          wireOutput(abAdaptive, 'out-adaptive');
 
-          // React to the viewport signal: pick the action set + layout granularly by
-          // BOTH device class (capability) and width. observeViewport fires on every
-          // (throttled) width change, so the ≤600px desktop rule reacts continuously
-          // as the window is dragged — not just on discrete breakpoint flips.
           const deviceReadout = document.getElementById('adaptive-device');
           let lastKey = '';
           observeViewport((env) => {
-            const device = classifyDevice(env);          // 'mobile' | 'tablet' | 'desktop'
+            const device = classifyDevice(env);
             let actions, layout;
-            if (device === 'mobile') {
-              actions = mobileActions;  layout = 'wrap';           // phone: essentials, two rows
-            } else if (device === 'tablet') {
-              actions = desktopActions; layout = 'wrap';           // tablet: full set, wrapped (won't fit one row)
-            } else {
-              actions = desktopActions;
-              layout = env.viewportWidth <= 600 ? 'wrap' : 'nowrap'; // desktop: two rows once narrow
-            }
-            // Only touch the component when the resolved config actually changes —
-            // observeViewport ticks on every resize, but actionButtons/actionsLayout
-            // are reinit inputs, so re-assigning identical values would rebuild needlessly.
+            if (device === 'mobile') { actions = mobileActions; layout = 'wrap'; }
+            else if (device === 'tablet') { actions = desktopActions; layout = 'wrap'; }
+            else { actions = desktopActions; layout = env.viewportWidth <= 600 ? 'wrap' : 'nowrap'; }
             const key = `${device}|${layout}|${actions.length}`;
             if (key !== lastKey) {
               lastKey = key;
-              adaptive.actionButtons = actions;
-              adaptive.actionsLayout = layout;
+              abAdaptive.actionButtons = actions;
+              abAdaptive.actionsLayout = layout;
             }
             if (deviceReadout) {
               const rows = layout === 'wrap' ? 'two rows' : 'one row';
@@ -1418,205 +648,16 @@ defmodule TestAppWeb.Examples.ActionButtonsLive do
           });
         });
 
-        // Example 11: Font Awesome Icons
-        const techOptions = [
-          ['js', 'JavaScript'],
-          ['ts', 'TypeScript'],
-          ['py', 'Python'],
-          ['java', 'Java'],
-          ['cpp', 'C++'],
-          ['go', 'Go'],
-          ['rust', 'Rust'],
-          ['php', 'PHP'],
-          ['ruby', 'Ruby'],
-          ['swift', 'Swift']
-        ];
-
-        wait('icon-buttons').then((iconButtons) => {
-          iconButtons.options = techOptions;
-
-          // CRITICAL: Inject Font Awesome into Shadow DOM
-          iconButtons.customStylesCallback = () => `
-            @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
-
-            /* Optional: Style the icons */
-            .ms__action-btn i {
-              margin-right: 0.35rem;
-            }
-          `;
-
-          iconButtons.actionButtons = [
-            {
-              action: 'select-all',
-              text: '<i class="fas fa-check-double"></i> Select All',
-              tooltip: 'Select all available technologies'
-            },
-            {
-              action: 'clear-all',
-              text: '<i class="fas fa-times"></i> Clear',
-              tooltip: 'Clear all selections'
-            },
-            {
-              action: 'custom',
-              text: '<i class="fas fa-random"></i> Random',
-              tooltip: 'Select 3 random technologies',
-              onClick: (ms) => {
-                const shuffled = [...techOptions].sort(() => Math.random() - 0.5);
-                ms.setSelected(shuffled.slice(0, 3).map(o => o[0]));
-              }
-            },
-            {
-              action: 'custom',
-              text: '<i class="fas fa-sync-alt"></i>',
-              tooltip: 'Invert Selection',
-              onClick: (ms) => {
-                const allValues = techOptions.map(o => o[0]);
-                const selectedValues = ms.getValue();
-                const inverted = allValues.filter(v => !selectedValues.includes(v));
-                ms.setSelected(inverted);
-              }
-            },
-            {
-              action: 'custom',
-              text: 'Toggle',  // Fallback text
-              getTextCallback: (ms) => {
-                const count = ms.getSelected().length;
-                const total = techOptions.length;
-                const icon = count === total
-                  ? '<i class="fas fa-toggle-on"></i>'
-                  : '<i class="fas fa-toggle-off"></i>';
-                return `${icon} ${count}/${total}`;
-              },
-              getTooltipCallback: (ms) => {
-                const count = ms.getSelected().length;
-                const total = techOptions.length;
-                return count === total ? 'Deselect all' : 'Select all';
-              },
-              onClick: (ms) => {
-                const count = ms.getSelected().length;
-                const total = techOptions.length;
-                if (count === total) {
-                  ms.setSelected([]);
-                } else {
-                  ms.selectAll();
-                }
-              }
-            }
-          ];
-          iconButtons.addEventListener('change', () => {
-            document.getElementById('output-icons').textContent = JSON.stringify(iconButtons.getValue(), null, 2);
-          });
-        });
-
-        // Example 12: Lucide (SVG) Icons — no font, no @font-face, no CSS injection.
-        // Lucide SVGs use stroke="currentColor", so they inherit the button's text color.
-        const lucide = (paths) => `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" `
-          + `viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" `
-          + `stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px">${paths}</svg>`;
-        const luCheck   = lucide('<path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/>');
-        const luX       = lucide('<path d="M18 6 6 18"/><path d="m6 6 12 12"/>');
-        const luShuffle = lucide('<path d="m18 14 4 4-4 4"/><path d="m18 2 4 4-4 4"/><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"/><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"/><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"/>');
-        const luRefresh = lucide('<path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/>');
-        const luToggleOn  = lucide('<circle cx="15" cy="12" r="3"/><rect width="20" height="14" x="2" y="5" rx="7"/>');
-        const luToggleOff = lucide('<circle cx="9" cy="12" r="3"/><rect width="20" height="14" x="2" y="5" rx="7"/>');
-
-        wait('lucide-buttons').then((lucideButtons) => {
-          lucideButtons.options = techOptions;
-          // NOTE: no customStylesCallback — inline SVG needs no Shadow DOM style injection.
-          lucideButtons.actionButtons = [
-            {
-              action: 'select-all',
-              text: `${luCheck} Select All`,
-              tooltip: 'Select all available technologies'
-            },
-            {
-              action: 'clear-all',
-              text: `${luX} Clear`,
-              tooltip: 'Clear all selections'
-            },
-            {
-              action: 'custom',
-              text: `${luShuffle} Random`,
-              tooltip: 'Select 3 random technologies',
-              onClick: (ms) => {
-                const shuffled = [...techOptions].sort(() => Math.random() - 0.5);
-                ms.setSelected(shuffled.slice(0, 3).map(o => o[0]));
-              }
-            },
-            {
-              action: 'custom',
-              text: luRefresh, // icon-only
-              tooltip: 'Invert Selection',
-              onClick: (ms) => {
-                const allValues = techOptions.map(o => o[0]);
-                const selectedValues = ms.getValue();
-                const inverted = allValues.filter(v => !selectedValues.includes(v));
-                ms.setSelected(inverted);
-              }
-            },
-            {
-              action: 'custom',
-              text: 'Toggle',
-              getTextCallback: (ms) => {
-                const count = ms.getSelected().length;
-                const total = techOptions.length;
-                const icon = count === total ? luToggleOn : luToggleOff;
-                return `${icon} ${count}/${total}`;
-              },
-              getTooltipCallback: (ms) => {
-                const count = ms.getSelected().length;
-                return count === techOptions.length ? 'Deselect all' : 'Select all';
-              },
-              onClick: (ms) => {
-                const count = ms.getSelected().length;
-                if (count === techOptions.length) {
-                  ms.setSelected([]);
-                } else {
-                  ms.selectAll();
-                }
-              }
-            }
-          ];
-          lucideButtons.addEventListener('change', () => {
-            document.getElementById('output-lucide').textContent = JSON.stringify(lucideButtons.getValue(), null, 2);
-          });
-        });
-
-        // Example 13: Positioning, Rows & Alignment
-        const rowButtons = [
-          { action: 'select-all', text: 'Select All', row: 1 },
-          { action: 'clear-all',  text: 'Clear All',  row: 1 },
-          { action: 'custom', text: 'First 3', row: 2, onClick: (ms) => ms.setSelected(itemOptions.slice(0, 3).map(o => o[0])) },
-          { action: 'custom', text: 'Invert',  row: 2, onClick: (ms) => {
-            const allValues = itemOptions.map(o => o[0]);
-            const selectedValues = ms.getValue();
-            ms.setSelected(allValues.filter(v => !selectedValues.includes(v)));
-          }}
-        ];
-
-        wait('pos-top-rows').then((el) => {
+        // ── Wrapper extra · nowrap vs wrap (12 buttons) ───────────────────
+        wait('layout-nowrap').then((el) => {
           el.options = itemOptions;
-          el.actionButtons = rowButtons;
+          el.actionButtons = manyButtons;
+          wireOutput(el, 'out-nowrap');
         });
-
-        wait('pos-bottom-rows').then((el) => {
+        wait('layout-wrap').then((el) => {
           el.options = itemOptions;
-          el.actionButtons = rowButtons;
-        });
-
-        const alignButtons = [
-          { action: 'select-all', text: 'Select All' },
-          { action: 'clear-all', text: 'Clear All' }
-        ];
-
-        wait('align-right').then((el) => {
-          el.options = itemOptions;
-          el.actionButtons = alignButtons;
-        });
-
-        wait('align-between').then((el) => {
-          el.options = itemOptions;
-          el.actionButtons = alignButtons;
+          el.actionButtons = manyButtons;
+          wireOutput(el, 'out-wrap');
         });
       </script>
     </.example_page>
