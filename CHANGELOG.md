@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [2.0.0] - 2026-09-30
+
+_First **stable** release of the wrapper — consolidates everything from the `2.0.0-rc.1` and
+`2.0.0-rc.2` pre-releases (below) plus the `data-fetch-*` client-side REST loading added since.
+Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.2.0` (first stable of the 2.2 line).
+This package is versioned **independently** of upstream (see "Versioning" in the README), and
+`Keenmate.WebMultiselect.upstream_version/0` reports the bundled upstream version._
 
 ### Added
 
@@ -34,6 +40,20 @@
   (jsonplaceholder) with a custom request header; EO07 loads an authenticated same-origin
   `/api/products?q=price>100` via the session cookie. A tiny `TestAppWeb.Api.ProductsController`
   (+ `:api` pipeline) backs EO07 and shows where a real session-auth gate lives.
+
+### Changed
+
+- **Bundled `@keenmate/web-multiselect` upgraded `2.2.0-rc02` → `2.2.0`** — the first stable of the
+  2.2 line. The final release **standardizes callback context**: the action-button callbacks
+  (`getIsVisible` / `getIsDisabled` / `getText` / `getClass` / `getTooltip` / `onClick`) now receive a
+  typed `ActionContext` as an additive second argument, and the display `get*` callbacks
+  (`getBadgeDisplayCallback` / `getBadgeClassCallback` / `getBadgeTooltipCallback` /
+  `getRemoveButtonTooltipCallback` / `getSelectedItemClassCallback` / `getOptionTooltipCallback`) now
+  get the same render context their `render*` twin already receives. Fully additive — every existing
+  one-argument callback keeps working. `ActionContext`, `MultiSelectController`,
+  `MultiSelectKeyboardController`, and `ActionButton` are now exported from the package entry.
+  `priv/static/multiselect.{js,d.ts}` re-bundled (the CSS was byte-identical to rc02);
+  `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.2.0"`.
 
 ## [2.0.0-rc.2] - 2026-09-28 [PUBLISHED]
 

@@ -6352,7 +6352,7 @@ ps = function() {
   var l, c, d, u;
   const t = h(this, Q).querySelector(".ms__debug-stats");
   if (!t || !h(this, C)) return;
-  const o = "2.2.0-rc02", i = typeof window < "u" && ((c = (l = window.components) == null ? void 0 : l["web-multiselect"]) == null ? void 0 : c.getInstances().length) || 0, r = h(this, C).getSelected().length, n = ((d = this.config.options) == null ? void 0 : d.length) || 0, a = h(this, C);
+  const o = "2.2.0", i = typeof window < "u" && ((c = (l = window.components) == null ? void 0 : l["web-multiselect"]) == null ? void 0 : c.getInstances().length) || 0, r = h(this, C).getSelected().length, n = ((d = this.config.options) == null ? void 0 : d.length) || 0, a = h(this, C);
   t.innerHTML = `
       <span>Version: ${o}</span>
       <span>Total Instances: ${i}</span>
@@ -6372,7 +6372,7 @@ typeof customElements < "u" && !customElements.get("web-multiselect") && customE
 Ei("web-multiselect", it, {
   config: {
     name: "@keenmate/web-multiselect",
-    version: "2.2.0-rc02",
+    version: "2.2.0",
     author: "Keenmate s.r.o.",
     license: "MIT",
     repository: "git+https://github.com/keenmate/web-multiselect.git",

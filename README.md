@@ -4,10 +4,11 @@ Phoenix LiveView wrapper for [`@keenmate/web-multiselect`](https://github.com/ke
 
 One package covers both plain HEEx and LiveView. The upstream JS + CSS are bundled, so no `npm install` is required.
 
-## What's New in v2.0.0-rc.2
+## What's New in v2.0.0
 
-_Aligned with upstream `@keenmate/web-multiselect` `2.2.0-rc02`. This pre-release consolidates everything added since the published `2.0.0-rc.1` — the wrapper is versioned **independently** of upstream (see [Versioning](#versioning)); `Keenmate.WebMultiselect.upstream_version/0` reports the bundled upstream version._
+_First stable release of the wrapper, aligned with upstream `@keenmate/web-multiselect` `2.2.0`. Consolidates everything from the `2.0.0-rc.1`/`2.0.0-rc.2` pre-releases — the wrapper is versioned **independently** of upstream (see [Versioning](#versioning)); `Keenmate.WebMultiselect.upstream_version/0` reports the bundled upstream version._
 
+- **Declarative client-side REST loading — `data-fetch-*` attributes** — point a picker at an HTTP endpoint and it fetches its **own** options, bypassing the LiveView process (a public API, or a same-origin API authed by the session cookie). Pure HEEx, no per-instance JavaScript: `data-fetch-url` (+ optional `data-fetch-mode`, `data-fetch-headers`, `data-fetch-credentials`, `data-fetch-query-param`, `data-fetch-results-path`). Header values render server-side, so secrets stay in Elixir and never land in the JS bundle. For cases the attributes don't cover, import and call the exported `wireRestOptions(el, opts)` escape hatch.
 - **Theme every picker from one place, flash-free — `<.shadow_styles/>` + `defer`** — point `:shadow_styles` at CSS (inline string, `{:file, path}`, or a function / `{mod, fun, args}`) and drop `<Keenmate.WebMultiselect.Components.shadow_styles/>` once in your root layout; the client registry adopts it into every element's shadow root (`adoptedStyleSheets`) — one shared sheet, not duplicated per instance, with `:host(.your-class) …` opt-in via a plain `class`. When it's configured the wrapper also emits upstream's `defer` render gate automatically, so the element builds nothing until the sheet is adopted, then paints themed badges in **one shot** (no default-style flash). See the [Theming guide](guides/theming.md).
 - **Server-driven imperative control — `Keenmate.WebMultiselect.push_command/3`** — drive a mounted picker from the LiveView process without touching options or selection: `open` / `close` / `toggle`, `search` / `clear_search`, or `scroll_to_value` / `scroll_to_group` / `scroll_to_index`. Pair with the new **`ready_event`** (a one-shot "the element is ready" trigger) for an "open + scroll" on page entry.
 - **"Add new" creation, inline clear, single-active overlays** — `allow_add_new` shows a clickable "Add new …" prompt on an empty search (commit it with or without a JS `addNewCallback`; with a hook attached the choice fires `"web_multiselect:add"`); `show_clear` renders an inline ✕ that wipes the selection; `overlay_group` makes pickers dismiss each other when one opens.
@@ -15,7 +16,7 @@ _Aligned with upstream `@keenmate/web-multiselect` `2.2.0-rc02`. This pre-releas
 - **Grouped select-all + selection ordering** — `group_select_mode="cascade"` gives each flat-list group header a tristate select-all checkbox and a per-group `[N]` count (the group name is never a selected value); `selected_order` (+ `selected_order_member`) orders the *chosen* items across badges, "+N more", and the popover, display-only (the submitted form value keeps as-selected order).
 - **`custom-styles` — static shadow-DOM CSS without JS** — the element now takes a `custom-styles` attribute (a raw CSS string dropped verbatim into the same slot `customStylesCallback` targets). No dedicated wrapper attr, but the component's `:global` passthrough carries it — `custom-styles={"..."}` on `<.web_multiselect>` reaches the element verbatim.
 - **Tree `checkbox_mode` now defaults to `cascade`** — checking a branch checks its whole subtree and the emitted selection follows `cascade_select_policy` (default `rolled-up`). **Behavior change** for existing tree consumers — set `checkbox_mode="independent"` to keep the old per-node toggling. Flat and single-select lists are unaffected.
-- **Bundled `@keenmate/web-multiselect` upgraded `2.0.0-rc02` → `2.2.0-rc02`** — one bundle jump across the whole 2.0.x/2.1.0/2.2.0 span (imperative API, field-shell input, single-active overlays, mobile/fullscreen, `defer`, groups/cascade). Headline fixes worth calling out: single-select no longer keeps a stale multi-selection when seeded with more than one value, single-select no longer clears on re-click, async-search dropdowns no longer overflow the viewport when results grow the panel, and the per-group count chip now scales in the phone fullscreen overlay. `priv/static/multiselect.{js,css,d.ts}` re-bundled; `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.2.0-rc02"`.
+- **Bundled `@keenmate/web-multiselect` upgraded `2.0.0-rc02` → `2.2.0`** — one bundle jump across the whole 2.0.x/2.1.0/2.2.0 span (imperative API, field-shell input, single-active overlays, mobile/fullscreen, `defer`, groups/cascade), landing on the first stable `2.2.0`. The final release standardizes callback context — the action-button and display `get*` callbacks now receive a typed second argument (`ActionContext` / render context), fully additive so existing one-argument callbacks keep working. Headline fixes worth calling out: single-select no longer keeps a stale multi-selection when seeded with more than one value, single-select no longer clears on re-click, async-search dropdowns no longer overflow the viewport when results grow the panel, and the per-group count chip now scales in the phone fullscreen overlay. `priv/static/multiselect.{js,css,d.ts}` re-bundled; `Keenmate.WebMultiselect.upstream_version/0` now reports `"2.2.0"`.
 
 ## Install
 
@@ -237,7 +238,7 @@ See the **[Theming guide](guides/theming.md)** for the three integration paths:
 
 ```elixir
 Keenmate.WebMultiselect.upstream_version()
-#=> "2.2.0-rc02"
+#=> "2.2.0"
 ```
 
 ## For LLMs and coding agents
