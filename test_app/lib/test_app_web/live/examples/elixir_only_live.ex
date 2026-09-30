@@ -5,6 +5,10 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
   theme configured once (the `shadow_styles/1` feature), per-instance theming via CSS
   variables, and server-driven data through the hook (`push_event`, `{:reply, …}`).
 
+  Even client-side REST loading stays declarative: EO06/EO07 point the element at an HTTP
+  endpoint with `data-fetch-*` attributes (URL, headers, mode) passed through `:rest`, so it
+  fetches its own options with no per-instance JavaScript at all.
+
   The one exception is EO05's action button: action buttons carry function callbacks
   (`onClick`) that can't be serialized as HEEx attributes, so that card uses a small inline
   `<script>`. Even there, though, the click's real work — the customer lookup — routes back
@@ -168,6 +172,69 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
   end
   """
 
+  # -- EO06 · Client-side REST from an external public API (declarative) --------
+
+  @rest_external_code """
+  # HEEx — fully declarative. hook={true} installs the data-fetch-* wiring, and the
+  # element fetches its OWN options from the public API on mount. No <script>, no callback.
+  <.web_multiselect
+    id="rest-users"
+    hook={true}
+    multiple
+    value_member="id"
+    display_value_member="name"
+    subtitle_member="email"
+    placeholder="Loading users…"
+    data-fetch-url="https://jsonplaceholder.typicode.com/users"
+    data-fetch-headers={Jason.encode!(%{"X-Demo-Header" => "hello-from-elixir"})} />
+
+  # The header value is rendered SERVER-SIDE (from assigns/config), so an API key is
+  # minted in Elixir and never hardcoded in a JS asset:
+  #   data-fetch-headers={Jason.encode!(%{"Authorization" => "Bearer " <> @api_token})}
+  """
+
+  # -- EO07 · Client-side REST from an authenticated same-origin API ------------
+
+  @rest_api_code """
+  # router.ex — a same-origin JSON API. :fetch_session makes the cookie available.
+  pipeline :api do
+    plug :accepts, ["json"]
+    plug :fetch_session
+  end
+
+  scope "/api", TestAppWeb.Api do
+    pipe_through :api
+    get "/products", ProductsController, :index
+  end
+
+  # controller — the browser's fetch used credentials: "same-origin" (the wrapper's
+  # default), so the Phoenix session cookie arrived with the request. authorize/1 can
+  # gate on the logged-in user; NO token is exposed in the DOM.
+  def index(conn, params) do
+    case authorize(conn) do
+      :ok -> json(conn, filter(@products, params["q"]))
+      :unauthorized -> conn |> put_status(:unauthorized) |> json(%{error: "unauthorized"})
+    end
+  end
+
+  # HEEx — declarative, hitting our own authed endpoint with a fixed ?q= filter.
+  <.web_multiselect
+    id="rest-products"
+    hook={true}
+    multiple
+    value_member="value"
+    display_value_member="label"
+    subtitle_member="subtitle"
+    placeholder="Loading products over $100…"
+    data-fetch-url="/api/products?q=price>100"
+    data-fetch-credentials="same-origin" />
+
+  # Turn the same endpoint into a live typeahead by switching modes — the hook then
+  # installs a searchCallback that hits /api/products?q=<typed text>:
+  #   data-fetch-mode="search"  (query param defaults to "q"; override with
+  #   data-fetch-query-param="…")
+  """
+
   def mount(_params, _session, socket) do
     {:ok,
      socket
@@ -185,7 +252,9 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
      |> assign(:departments, [])
      |> assign(:customers, @customers)
      |> assign(:issue_round, 0)
-     |> assign(:payment_code, @payment_code)}
+     |> assign(:payment_code, @payment_code)
+     |> assign(:rest_external_code, @rest_external_code)
+     |> assign(:rest_api_code, @rest_api_code)}
   end
 
   # -- EO03 · LiveView-driven cascade (change → push_event options back) -------
@@ -554,6 +623,93 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
             renderOut();
           });
         </script>
+      </.card>
+
+      <.card title="EO06 · Client-side REST — fetch options from an external API (with a header)">
+        <.tip>
+          <code>hook={true}</code> · <code>data-fetch-url="…"</code> · <code>data-fetch-headers={"{Jason.encode!(%{…})}"}</code> — no <code>&lt;script&gt;</code>
+        </.tip>
+        <p>
+          Sometimes the options live behind a plain HTTP endpoint and there's no reason to relay
+          them through the LiveView. Point the element at the URL with <code>data-fetch-url</code>
+          and the hook fetches it on mount, assigning the JSON straight to <code>options</code>
+          (raw rows are consumed as-is via <code>value_member</code>/<code>display_value_member</code>).
+          It stays <strong>fully declarative</strong> — the attributes pass through the component's
+          <code>:rest</code>, so there's no per-instance JavaScript.
+        </p>
+        <p>
+          To add an HTTP header — an API key, an <code>Authorization: Bearer …</code>, a custom
+          <code>X-*</code> — pass <code>data-fetch-headers</code> a JSON object. Crucially the value is
+          rendered <strong>server-side</strong> from <code>@assigns</code>/config, so a secret is minted
+          in Elixir and never hardcoded into a JS bundle. Here we send a demo <code>X-Demo-Header</code>.
+        </p>
+
+        <.form_group>
+          <label>Users (browser → jsonplaceholder.typicode.com, with a custom header)</label>
+          <.web_multiselect
+            id="rest-users"
+            hook={true}
+            multiple
+            value_member="id"
+            display_value_member="name"
+            subtitle_member="email"
+            placeholder="Loading users…"
+            data-fetch-url="https://jsonplaceholder.typicode.com/users"
+            data-fetch-headers={Jason.encode!(%{"X-Demo-Header" => "hello-from-elixir"})}
+          />
+        </.form_group>
+
+        <.code_block lang="heex">{@rest_external_code}</.code_block>
+
+        <.note>
+          Cross-origin note: a custom request header (anything beyond the CORS "simple" set) makes
+          the browser send a <strong>preflight</strong> <code>OPTIONS</code> first — the API must
+          answer it with a matching <code>Access-Control-Allow-Headers</code>, or the fetch is
+          blocked. jsonplaceholder reflects requested headers, so the demo works; your own API needs
+          the CORS headers configured. For any endpoint that <em>doesn't</em> allow browser CORS,
+          route the fetch through the LiveView instead (see EO04).
+        </.note>
+      </.card>
+
+      <.card title="EO07 · Client-side REST — an authenticated same-origin API (cookie auth)">
+        <.tip>
+          <code>data-fetch-url="/api/products?q=price&gt;100"</code> · <code>data-fetch-credentials="same-origin"</code> — the session cookie authenticates it
+        </.tip>
+        <p>
+          When the endpoint is your <strong>own</strong> app, authentication is free. The wrapper's
+          fetch defaults to <code>credentials: "same-origin"</code>, so the Phoenix
+          <strong>session cookie rides along automatically</strong> — the same cookie every other
+          request carries. The API's ordinary session/auth plug pipeline gates it server-side, and
+          <strong>no token is ever placed in the DOM</strong>. The <code>?q=price&gt;100</code> filter
+          is just part of the URL; the controller applies it and returns the matching rows.
+        </p>
+
+        <.form_group>
+          <label>Products over $100 (browser → /api/products, authenticated by the session cookie)</label>
+          <.web_multiselect
+            id="rest-products"
+            hook={true}
+            multiple
+            value_member="value"
+            display_value_member="label"
+            subtitle_member="subtitle"
+            placeholder="Loading products over $100…"
+            data-fetch-url="/api/products?q=price>100"
+            data-fetch-credentials="same-origin"
+          />
+        </.form_group>
+
+        <.code_block lang="elixir">{@rest_api_code}</.code_block>
+
+        <.note>
+          Same-origin cookie auth is the simple, safe default for your own API. For a <em>separate</em>
+          service (different origin, token-based), don't ship a long-lived secret to the browser —
+          mint a short-lived, scoped token server-side with <code>Phoenix.Token.sign/4</code>, inject
+          it into <code>data-fetch-headers</code> as an <code>Authorization: Bearer</code>, and verify
+          it on the API with <code>Phoenix.Token.verify/4</code>. Switch this card to a live typeahead
+          by adding <code>data-fetch-mode="search"</code> — the hook then queries
+          <code>/api/products?q=&lt;typed text&gt;</code> on each keystroke.
+        </.note>
       </.card>
 
       <.note title="Opting in, overriding &amp; extending">

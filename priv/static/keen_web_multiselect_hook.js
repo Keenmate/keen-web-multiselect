@@ -81,6 +81,35 @@
 // Server:  handle_event("payment_issues", %{"id" => id}, socket)
 //            -> {:reply, %{values: [...]}, socket}
 // `id` is always merged into the payload so multi-picker pages can route.
+//
+// CLIENT-SIDE REST LOADING (bypasses the LiveView process). Sometimes the options
+// live behind a plain HTTP endpoint — a public API, or a same-origin API that
+// authenticates via the session cookie — and there's no reason to relay them through
+// the LV. The hook wires that declaratively from `data-fetch-*` attributes, so an
+// Elixir dev stays in pure HEEx (pass them through the component's `:rest`):
+//
+//   <.web_multiselect id="users" hook={true}
+//     value_member="id" display_value_member="name" subtitle_member="email"
+//     data-fetch-url="https://jsonplaceholder.typicode.com/users"
+//     data-fetch-headers={Jason.encode!(%{"X-Api-Key" => @api_key})} />
+//
+// Recognized attributes (all optional except data-fetch-url, which activates it):
+//   data-fetch-url          endpoint URL (relative or absolute)
+//   data-fetch-mode         "eager" (default) load once now → el.options
+//                           "search"          install el.searchCallback; fetch per query
+//   data-fetch-query-param  query-string key for search mode (default "q")
+//   data-fetch-headers      JSON object of extra request headers
+//   data-fetch-credentials  fetch credentials mode (default "same-origin" — sends the
+//                           Phoenix session cookie to a same-origin API, so an authed
+//                           endpoint needs NO token in the DOM; use "include" cross-site,
+//                           "omit" to drop cookies)
+//   data-fetch-results-path dot-path to the array inside a JSON envelope, e.g. "data"
+//
+// Option SHAPE is left to the element's own value-member/display-value-member/etc., so
+// raw API rows usually need no transform. For the ~5% that need custom fetch logic (a
+// computed URL, a body, response reshaping) skip the attributes and call the exported
+// `wireRestOptions(el, {...})` from a trailing <script>, or set `el.searchCallback` /
+// `el.options` yourself.
 
 // Install the shared shadow-styles registry (window.KeenWebMultiselect) as a side
 // effect of importing the hook, so an app that wires up the hook can also register
@@ -100,6 +129,72 @@ export const getShadowStyles = () =>
   typeof window !== "undefined" && window.KeenWebMultiselect
     ? window.KeenWebMultiselect.getShadowStyles()
     : undefined;
+
+// Client-side REST option loading. Wires an element to fetch its OWN options from an
+// HTTP endpoint, bypassing the LiveView process (for public APIs, or a same-origin API
+// authenticated by the session cookie). The hook calls this automatically for any element
+// carrying data-fetch-url (see the header note); export it too so the ~5% of cases that
+// need custom fetch logic can call it from a trailing <script>.
+//
+//   opts.url          endpoint (required; relative resolves against location.origin)
+//   opts.mode         "eager" (default) fetch once → el.options
+//                     "search"          install el.searchCallback; fetch per query
+//   opts.param        query-string key for search mode          (default "q")
+//   opts.headers      extra request headers object              (default {})
+//   opts.credentials  fetch credentials mode                    (default "same-origin")
+//   opts.resultsPath  dot-path to the array in a JSON envelope  (e.g. "data")
+//   opts.map          (row) => option        optional per-row shape transform
+//   opts.onError      (err) => void          optional; default console.error
+//
+// Returns a cleanup function (clears the searchCallback in search mode; a no-op otherwise).
+export function wireRestOptions(el, opts = {}) {
+  const {
+    url, mode = "eager", param = "q", headers = {},
+    credentials = "same-origin", resultsPath, map, onError
+  } = opts;
+  if (!el || !url) return () => {};
+
+  const fail = onError || ((err) => console.error("[wireRestOptions]", err));
+
+  // Dig the option array out of the JSON body: a bare array is used as-is; with
+  // resultsPath we walk the dotted keys (envelope like {data: [...]}); anything else
+  // degrades to []. `map` (if given) reshapes each row.
+  const extract = (json) => {
+    let rows = json;
+    if (resultsPath) {
+      for (const key of String(resultsPath).split(".")) rows = rows == null ? rows : rows[key];
+    }
+    if (!Array.isArray(rows)) rows = Array.isArray(json) ? json : [];
+    return map ? rows.map(map) : rows;
+  };
+
+  const request = async (query, signal) => {
+    const u = new URL(url, window.location.origin);
+    if (mode === "search" && query != null && query !== "") u.searchParams.set(param, query);
+    const res = await fetch(u, {
+      signal,
+      credentials,
+      headers: { Accept: "application/json", ...headers }
+    });
+    if (!res.ok) throw new Error(`REST ${res.status} ${res.statusText} — ${u}`);
+    return extract(await res.json());
+  };
+
+  if (mode === "search") {
+    el.searchCallback = (query, signal) =>
+      request(query, signal).catch((err) => {
+        // A superseded search aborts the fetch — that's not an error, just yield [].
+        if (signal && signal.aborted) return [];
+        fail(err);
+        return [];
+      });
+    return () => { if (el.searchCallback) el.searchCallback = null; };
+  }
+
+  // Eager: fetch once now and hand the rows to the element.
+  request().then((rows) => { el.options = rows; }).catch((err) => { fail(err); el.options = []; });
+  return () => {};
+}
 
 // Ensure <web-multiselect> exposes a .form getter so Phoenix LV's phx-change
 // delegation can resolve the parent form. LV's form change handler does
@@ -218,9 +313,34 @@ const KeenWebMultiselectHook = {
     this.el.pushToServer = (event, payload = {}, onReply) => {
       this.pushEventTo(this.el, event, { id: this.el.id, ...payload }, onReply);
     };
+
+    // Declarative client-side REST loading — data-fetch-url turns the element into a
+    // self-fetching picker (bypasses the LV; for public APIs or a same-origin API
+    // authenticated by the session cookie). All knobs are data-attributes so it stays
+    // fully declarative from HEEx. See wireRestOptions() for the imperative escape hatch.
+    if (this.el.dataset.fetchUrl) {
+      const ds = this.el.dataset;
+      let headers = {};
+      if (ds.fetchHeaders) {
+        try {
+          headers = JSON.parse(ds.fetchHeaders);
+        } catch (e) {
+          console.error("[KeenWebMultiselect] invalid data-fetch-headers JSON — ignoring", e);
+        }
+      }
+      this._restCleanup = wireRestOptions(this.el, {
+        url: ds.fetchUrl,
+        mode: ds.fetchMode || "eager",
+        param: ds.fetchQueryParam || "q",
+        credentials: ds.fetchCredentials || "same-origin",
+        resultsPath: ds.fetchResultsPath || undefined,
+        headers
+      });
+    }
   },
 
   destroyed() {
+    if (this._restCleanup) { this._restCleanup(); this._restCleanup = null; }
     if (!this._handlers) return;
     this.el.removeEventListener("select", this._handlers.select);
     this.el.removeEventListener("deselect", this._handlers.deselect);

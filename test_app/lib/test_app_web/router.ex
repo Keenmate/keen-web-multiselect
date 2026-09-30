@@ -19,6 +19,14 @@ defmodule TestAppWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  # JSON API consumed by the browser (EO07's client-side REST demo). `:fetch_session`
+  # makes the session cookie available so a same-origin `fetch(..., {credentials:
+  # "same-origin"})` authenticates without any token in the DOM.
+  pipeline :api do
+    plug :accepts, ["json"]
+    plug :fetch_session
+  end
+
   scope "/", TestAppWeb do
     pipe_through :demos_browser
 
@@ -51,6 +59,12 @@ defmodule TestAppWeb.Router do
     get "/examples/search-index", RedirectController, :external_search
     get "/examples/performance", RedirectController, :virtual_scrolling
     get "/examples/templating", RedirectController, :custom_rendering
+  end
+
+  scope "/api", TestAppWeb.Api do
+    pipe_through :api
+
+    get "/products", ProductsController, :index
   end
 
   scope "/test", TestAppWeb do

@@ -1,5 +1,40 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- **Declarative client-side REST loading — `data-fetch-*` attributes.** The element can now
+  fetch its **own** options from an HTTP endpoint, bypassing the LiveView process — for a public
+  API, or a same-origin API that authenticates via the session cookie. Point it at a URL and the
+  hook wires the fetch on mount; it stays pure HEEx (the attributes ride the component's `:global`
+  passthrough), so there's **no per-instance JavaScript**:
+
+  ```heex
+  <.web_multiselect id="users" hook={true}
+    value_member="id" display_value_member="name"
+    data-fetch-url="https://api.example.com/users"
+    data-fetch-headers={Jason.encode!(%{"Authorization" => "Bearer " <> @token})} />
+  ```
+
+  Recognized attributes (only `data-fetch-url` is required): `data-fetch-mode`
+  (`eager` default → load once into `options`, or `search` → install a per-query `searchCallback`),
+  `data-fetch-query-param` (search mode; default `q`), `data-fetch-headers` (a JSON object of extra
+  request headers), `data-fetch-credentials` (default `same-origin` — sends the Phoenix session
+  cookie, so an authed same-origin API needs **no token in the DOM**), and `data-fetch-results-path`
+  (dot-path to the array inside a JSON envelope). Option shape is left to the element's own
+  `value_member`/`display_value_member`/etc., so raw API rows usually need no transform. Because the
+  header value is rendered **server-side** from assigns/config, secrets are minted in Elixir and
+  never hardcoded into a JS bundle.
+- **`wireRestOptions(el, opts)` — exported imperative escape hatch.** For the cases the declarative
+  attributes don't cover (a computed URL, a request body, response reshaping via `map`/`resultsPath`,
+  a custom `onError`), import it from the hook module and call it from a trailing `<script>`. It's
+  the same function the `data-fetch-*` path uses; returns a cleanup function.
+- **EO06 / EO07 demos on the "Elixir Only" example page.** EO06 eager-loads a public API
+  (jsonplaceholder) with a custom request header; EO07 loads an authenticated same-origin
+  `/api/products?q=price>100` via the session cookie. A tiny `TestAppWeb.Api.ProductsController`
+  (+ `:api` pipeline) backs EO07 and shows where a real session-auth gate lives.
+
 ## [2.0.0-rc.2] - 2026-09-28 [PUBLISHED]
 
 _Aligns the wrapper with upstream `@keenmate/web-multiselect` `2.2.0-rc02`. Consolidates every

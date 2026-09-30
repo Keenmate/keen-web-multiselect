@@ -7,7 +7,7 @@ defmodule TestAppWeb.Examples.IndexLive do
       icon: "💧",
       title: "Elixir Only",
       description:
-        "The declarative surface: options, selection, a shared shadow-DOM theme from `config`, and CSS-variable theming — pure HEEx + config, no per-instance JavaScript."
+        "The declarative surface: options, selection, a shared shadow-DOM theme from `config`, CSS-variable theming, and client-side REST loading via `data-fetch-*` — pure HEEx + config, no per-instance JavaScript."
     },
     %{
       href: "/examples/basic",
