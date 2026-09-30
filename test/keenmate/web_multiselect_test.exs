@@ -1,6 +1,8 @@
 defmodule Keenmate.WebMultiselectTest do
   use ExUnit.Case, async: true
 
+  doctest Keenmate.WebMultiselect
+
   alias Phoenix.LiveView.Utils
 
   defp events(socket), do: Utils.get_push_events(socket)

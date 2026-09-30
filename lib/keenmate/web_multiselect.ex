@@ -11,6 +11,12 @@ defmodule Keenmate.WebMultiselect do
 
   @doc """
   The version of `@keenmate/web-multiselect` bundled with this release.
+
+  ## Example
+
+      iex> Keenmate.WebMultiselect.upstream_version()
+      "2.2.0"
+
   """
   @spec upstream_version() :: String.t()
   def upstream_version, do: @upstream_version
