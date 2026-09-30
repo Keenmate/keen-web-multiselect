@@ -1,9 +1,14 @@
 defmodule TestAppWeb.Examples.ElixirOnlyLive do
   @moduledoc """
-  "Elixir Only" — the wrapper's declarative surface. Everything here is done with pure
-  HEEx attributes and application config: options, selection, a shared shadow-DOM theme
-  configured once (the `shadow_styles/1` feature), and per-instance theming via CSS
-  variables. No inline `<script>`, no `wait(id).then(el => …)`, no per-instance JS callbacks.
+  "Elixir Only" — the wrapper's declarative surface. Almost everything here is done with
+  pure HEEx attributes and application config: options, selection, a shared shadow-DOM
+  theme configured once (the `shadow_styles/1` feature), per-instance theming via CSS
+  variables, and server-driven data through the hook (`push_event`, `{:reply, …}`).
+
+  The one exception is EO05's action button: action buttons carry function callbacks
+  (`onClick`) that can't be serialized as HEEx attributes, so that card uses a small inline
+  `<script>`. Even there, though, the click's real work — the customer lookup — routes back
+  to Elixir through the hook's `pushToServer` bridge, so the *logic* stays server-side.
   """
   use TestAppWeb, :live_view
 
@@ -121,6 +126,48 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
     ]
   }
 
+  # -- EO05 · Action button → server bridge (fetch a selection) ----------------
+
+  @customers [
+    %{value: "c-1001", label: "Acme Corp", subtitle: "billing@acme.example"},
+    %{value: "c-1002", label: "Globex", subtitle: "ap@globex.example"},
+    %{value: "c-1003", label: "Initech", subtitle: "finance@initech.example"},
+    %{value: "c-1004", label: "Umbrella Co", subtitle: "accounts@umbrella.example"},
+    %{value: "c-1005", label: "Stark Industries", subtitle: "billing@stark.example"},
+    %{value: "c-1006", label: "Wayne Enterprises", subtitle: "ap@wayne.example"},
+    %{value: "c-1007", label: "Wonka Ltd", subtitle: "finance@wonka.example"},
+    %{value: "c-1008", label: "Cyberdyne", subtitle: "accounts@cyberdyne.example"},
+    %{value: "c-1009", label: "Soylent Corp", subtitle: "billing@soylent.example"},
+    %{value: "c-1010", label: "Hooli", subtitle: "ap@hooli.example"},
+    %{value: "c-1011", label: "Pied Piper", subtitle: "finance@piedpiper.example"},
+    %{value: "c-1012", label: "Vandelay Industries", subtitle: "accounts@vandelay.example"}
+  ]
+
+  @payment_code """
+  # HEEx — options declarative; hook={true} installs the pushToServer bridge:
+  <.web_multiselect id="customers" hook={true} multiple options={@customers} />
+
+  // JS — the ONE callback on this page. Action-button onClick can't be an attribute
+  // (it's a function), but the work it triggers is a plain LiveView round-trip:
+  el.actionButtons = [
+    { action: 'custom', text: '⚠️ Payment issues',
+      onClick: (_ms, ctx) => {
+        ctx.controller.showMessage('Loading recent payment issues…', { duration: 0 }); // loader
+        ctx.element.pushToServer('payment_issues', {}, (reply) => {
+          ctx.controller.hideMessage();
+          ctx.controller.setSelected(reply.values, { notify: true });                   // select
+        });
+      } },
+    { action: 'clear-all', text: 'Clear' },
+  ];
+
+  # Elixir — the logic lives here: simulate a 1–2s upstream call, reply with ids:
+  def handle_event("payment_issues", %{"id" => "customers"}, socket) do
+    Process.sleep(1500)
+    {:reply, %{values: recent_issue_ids()}, socket}
+  end
+  """
+
   def mount(_params, _session, socket) do
     {:ok,
      socket
@@ -135,7 +182,10 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
      |> assign(:selected_org, nil)
      |> assign(:business_units, [])
      |> assign(:selected_unit, nil)
-     |> assign(:departments, [])}
+     |> assign(:departments, [])
+     |> assign(:customers, @customers)
+     |> assign(:issue_round, 0)
+     |> assign(:payment_code, @payment_code)}
   end
 
   # -- EO03 · LiveView-driven cascade (change → push_event options back) -------
@@ -199,9 +249,32 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
     {:reply, %{results: results}, socket}
   end
 
+  # EO05 · Action-button server bridge. The button's onClick calls
+  # `ctx.element.pushToServer("payment_issues", {}, cb)`, which tunnels here through the
+  # hook. We simulate a slow upstream (payment gateway / reporting DB) and reply with the
+  # customer ids to select; the browser callback hides the loader and selects them.
+  #
+  # NOTE: Process.sleep blocks THIS LiveView process — fine for a single-user demo (it's
+  # what makes the client-side loader worth showing). A real app would run the lookup async
+  # (start_async / Task) so the process stays responsive.
+  def handle_event("payment_issues", %{"id" => "customers"}, socket) do
+    Process.sleep(1500)
+    round = socket.assigns.issue_round
+    {:reply, %{values: recent_issue_ids(round)}, assign(socket, :issue_round, round + 1)}
+  end
+
   # The hooked widgets forward select/deselect/change; drain any we don't act on
   # so an unhandled event can't crash the page (see ai/server-updates.txt).
   def handle_event("web_multiselect:" <> _, _params, socket), do: {:noreply, socket}
+
+  # A rotating 4-customer window so repeated clicks return a different "recent" set —
+  # the demo feels live rather than canned.
+  defp recent_issue_ids(round) do
+    ids = Enum.map(@customers, & &1.value)
+    n = length(ids)
+    start = rem(round * 3, n)
+    Enum.map(0..3, fn i -> Enum.at(ids, rem(start + i, n)) end)
+  end
 
   # Hits the GitHub public user-search API. Unauthenticated requests are
   # rate-limited to ~10/min; the demo accepts that. Returns a list of
@@ -236,11 +309,14 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
       title="Elixir Only"
       subtitle="Pure HEEx + config. No inline scripts, no per-instance JS callbacks — the wrapper's declarative surface."
     >
-      <.note title="Everything on this page is declarative">
+      <.note title="Declarative first — server logic, not client logic">
         The Custom Rendering and Data &amp; API pages wire the element from an inline
-        <code>&lt;script&gt;</code> (<code>wait(id).then(el => …)</code>). Here it's all HEEx and
+        <code>&lt;script&gt;</code> (<code>wait(id).then(el => …)</code>). Here it's HEEx and
         config: options and selection as attributes, a shared shadow-DOM theme from
-        <code>config</code>, and one-off tweaks via CSS variables.
+        <code>config</code>, one-off tweaks via CSS variables, and server-driven data through the
+        hook. The lone exception is <strong>EO05</strong>'s action button — <code>onClick</code> is a
+        function, so it can't be an attribute — but even there the actual work is a LiveView
+        round-trip (<code>pushToServer</code> → <code>handle_event</code>), so the logic stays in Elixir.
       </.note>
 
       <.card title="EO01 · Theme every select from config (no per-instance JS)">
@@ -389,6 +465,95 @@ defmodule TestAppWeb.Examples.ElixirOnlyLive do
         <.note>
           Why route through the server? (1) attach an auth token without leaking it to the client, (2) transform the response (filter, cache, enrich), (3) reach any backend API that doesn't allow CORS from the browser.
         </.note>
+      </.card>
+
+      <.card title="EO05 · Action button → server → selection (with a loader)">
+        <.tip>
+          <code>hook={true}</code> · action-button <code>onClick</code> uses <code>ctx.element.pushToServer</code> · reply → <code>{"ctx.controller.setSelected(reply.values, { notify: true })"}</code>
+        </.tip>
+        <p>
+          A real-world shape: customers pay online, so statuses settle with a delay. The
+          <strong>⚠️ Payment issues</strong> action button doesn't know the answer — it asks the
+          server. Because the lookup takes a second or two, the callback shows a <strong>loader</strong>
+          (<code>ctx.controller.showMessage(…, &lbrace; duration: 0 &rbrace;)</code>) while it waits, then
+          selects whatever the reply returns. The button reaches the server through
+          <code>ctx.element.pushToServer</code> — the bridge the hook installs — since action callbacks
+          can't call <code>pushEventTo</code> themselves.
+        </p>
+
+        <.note>
+          This is the page's one bit of per-instance JS: action buttons carry function callbacks
+          (<code>onClick</code>), which can't be serialized as HEEx attributes. But it's the same
+          server round-trip as EO03/EO04 under the hood — the <code>handle_event/3</code> below does
+          the work and replies with <code>{"{:reply, %{values: ids}, socket}"}</code>.
+        </.note>
+
+        <.form_group>
+          <label class="demo-label">Open the picker, then click <strong>⚠️ Payment issues</strong> in the action bar:</label>
+          <.web_multiselect
+            id="customers"
+            hook={true}
+            multiple={true}
+            options={@customers}
+            value_member="value"
+            display_value_member="label"
+            subtitle_member="subtitle"
+            search_placeholder="Search customers…"
+          />
+          <.output_panel id="out-customers" label="Selected customers:" placeholder="[]" />
+        </.form_group>
+
+        <.code_block lang="elixir">{@payment_code}</.code_block>
+
+        <script type="module">
+          const wait = (id) => new Promise((resolve) => {
+            const check = () => {
+              const el = document.getElementById(id);
+              if (el && el.tagName.toLowerCase() === 'web-multiselect') resolve(el);
+              else requestAnimationFrame(check);
+            };
+            check();
+          });
+
+          wait('customers').then((el) => {
+            el.actionButtons = [
+              {
+                action: 'custom',
+                text: '⚠️ Payment issues',
+                cssClass: 'js-issues',
+                tooltip: 'Fetch customers with recent payment issues from the server',
+                onClick: (_ms, ctx) => {
+                  // Loader: a sticky toast via the shared controller (visible even in the
+                  // fullscreen overlay). duration:0 keeps it up until we hide it.
+                  ctx.controller.showMessage('⏳ Loading recent payment issues…', { variant: 'info', duration: 0 });
+
+                  // The bridge lives on the element (installed by the hook). Guard so the
+                  // demo degrades gracefully if the element wasn't hooked.
+                  if (typeof ctx.element.pushToServer !== 'function') {
+                    ctx.controller.hideMessage();
+                    ctx.controller.showMessage('Server bridge unavailable — add hook={true}.', { variant: 'error' });
+                    return;
+                  }
+
+                  // Ask the server; the reply carries the customer ids to select.
+                  ctx.element.pushToServer('payment_issues', {}, (reply) => {
+                    ctx.controller.hideMessage();
+                    const values = (reply && reply.values) || [];
+                    ctx.controller.setSelected(values, { notify: true });
+                    ctx.controller.showMessage(`Selected ${values.length} customer(s) with recent issues`, { variant: 'success', duration: 2500 });
+                  });
+                }
+              },
+              { action: 'clear-all', text: 'Clear' }
+            ];
+
+            // Mirror the live selection into the output panel.
+            const pre = document.getElementById('out-customers');
+            const renderOut = () => { if (pre) pre.textContent = JSON.stringify(el.getValue(), null, 2); };
+            el.addEventListener('change', renderOut);
+            renderOut();
+          });
+        </script>
       </.card>
 
       <.note title="Opting in, overriding &amp; extending">

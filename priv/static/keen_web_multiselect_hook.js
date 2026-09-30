@@ -62,6 +62,25 @@
 //                    scroll_to_value?, scroll_to_group?, scroll_to_index? }
 // Each key maps to the matching element method (open/close/toggle/search/clearSearch/
 // scrollToValue/scrollToGroup/scrollToIndex). Unknown/absent keys are ignored.
+//
+// Finally, the hook hangs an ACTION BRIDGE on the element: `el.pushToServer(event,
+// payload?, onReply?)`. An action button's `onClick(ms, ctx)` runs in the browser and
+// can't call the hook's `pushEventTo` directly, so it reaches this via `ctx.element`.
+// It tunnels a consumer-named event to the LiveView, with an optional reply callback —
+// the request→await→act shape behind server-driven selection ("fetch the matching rows,
+// show a loader while it runs, then select them"):
+//
+//   onClick: (ms, ctx) => {
+//     ctx.controller.showMessage("Loading…", { duration: 0 });   // loader
+//     ctx.element.pushToServer("payment_issues", {}, (reply) => {
+//       ctx.controller.hideMessage();
+//       ctx.controller.setSelected(reply.values, { notify: true });
+//     });
+//   }
+//
+// Server:  handle_event("payment_issues", %{"id" => id}, socket)
+//            -> {:reply, %{values: [...]}, socket}
+// `id` is always merged into the payload so multi-picker pages can route.
 
 // Install the shared shadow-styles registry (window.KeenWebMultiselect) as a side
 // effect of importing the hook, so an app that wires up the hook can also register
@@ -191,6 +210,14 @@ const KeenWebMultiselectHook = {
         });
       });
     }
+
+    // Action bridge — see the header note. Reached from an action button's
+    // onClick(ms, ctx) via `ctx.element.pushToServer(...)`, since callbacks can't call
+    // pushEventTo themselves. The optional reply callback receives the {:reply, map, socket}
+    // payload, enabling request→await→act (e.g. select a server-computed set).
+    this.el.pushToServer = (event, payload = {}, onReply) => {
+      this.pushEventTo(this.el, event, { id: this.el.id, ...payload }, onReply);
+    };
   },
 
   destroyed() {
@@ -200,6 +227,7 @@ const KeenWebMultiselectHook = {
     this.el.removeEventListener("change", this._handlers.change);
     this.el.removeEventListener("add", this._handlers.add);
     this.el.removeEventListener("ready", this._handlers.ready);
+    delete this.el.pushToServer;
   },
 
   _forward(name, event) {
