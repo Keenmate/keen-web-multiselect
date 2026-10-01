@@ -789,11 +789,15 @@ defmodule TestAppWeb.Examples.BasicLive do
                 options={@grouped_techs}
                 allow_groups={true}
                 ready_event="web_multiselect:ready"
+                mobile_presentation="floating"
               />
             </div>
             <small class="form-text">
               Opened and scrolled to group "database" by the server when its
               <code>ready</code> event fired — no click. (Reset by reloading the page.)
+              Pinned to <code>mobile_presentation="floating"</code> so the automatic
+              open-on-entry stays a dismissible dropdown on phones instead of taking over
+              the screen with the fullscreen sheet.
             </small>
           </.form_group>
         </.grid>
